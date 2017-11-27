@@ -36,108 +36,124 @@
 program profilescore
 syntax , param(string asis) 
 	
-qui { // introduce program
-	di in white"#########################################################################"
-	di in white"# profilescore                                                             "
-	di in white"# version:       0.2                                                     "
-	di in white"# Creation Date: 5September2017                                              "
-	di in white"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-	di in white"#########################################################################"
-	di in white""
-	}
-	qui { // confirm dependencies are correctly defined
-		noi di in white"#########################################################################"
-		noi di in white"# checking necessary files exist and are set as globals"
-		qui { // plink v1.9
-			capture confirm file "$plink"
-			if _rc==0 {
-				noi di in green"# plink v1.9+ exists and is correctly assigned as  $plink"
-				}
-			else {
-				noi di in red"# plink v1.9 does not exists; download executable from https://www.cog-genomics.org/plink2 "
-				noi di in red"# set plink v1.9 location using;  "
-				noi di in red`"# global plink "folder\file"  "'
-				exit
-				}
-			}
-		qui { // tabbed
- 			clear
-			set obs 1
-			gen a = "$tabbed"
-			replace a = subinstr(a,"perl ","capture confirm file ",.)
-			outsheet a using _ooo.do, non noq replace
-			do _ooo.do
-			if _rc==0 {
-				noi di in white"# the tabbed.pl script exists and is correctly assigned as  $tabbed"
-				noi di in white"# ensure perl is working on your system and can be called from the command-line"
-				}
-			else {
-				noi di in red"# tabbed.pl does not exists; download executable from https://github.com/ricanney/perl "
-				noi di in red"# set tabbed.pl location using;  "
-				noi di in red`"# global tabbed "folder\file"  "'
-				exit
-				}
-			erase _ooo.do
-			}
-		di in white"#########################################################################"
-		}	
-	qui { // parameters
-		global ldPrune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
-		do `param'
-		}
-	qui { // check presence of gwas data files
-		noi di in white "| prs will be calculated from the gwas .................  ${gwas}.gz"
-		capture confirm file "${gwas}.gz"
+di in white"#########################################################################"
+di in white"# profilescore                                                           "
+di in white"# version:       0.2                                                     "
+di in white"# Creation Date: 5September2017                                          "
+di in white"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+di in white"#########################################################################"
+di in white"# Started: $S_DATE $S_TIME                                               "
+di in white"#########################################################################"
+
+di in white"# > checking dependencies are correctly defined"
+qui { 
+	qui { // plink v1.9
+		capture confirm file "$plink"
 		if _rc==0 {
-	 	noi di in yellow "- found ................................................  ${gwas}.gz  "
-		}
+			noi di in green"# plink v1.9+ exists and is correctly assigned as  $plink"
+			}
 		else {
-		noi di in red   "- absent ...............................................  ${gwas}.gz  "
-		exit
+			noi di in red"# plink v1.9 does not exists; download executable from https://www.cog-genomics.org/plink2 "
+			noi di in red"# set plink v1.9 location using;  "
+			noi di in red`"# global plink "folder\file"  "'
+			exit
+			}
 		}
-		}
-	qui { // check presence of genotype datasets
-		di in white "| prs will be calculated in ${Ndata} independent set of genotypes""
-		foreach data of num 1 / $Ndata {
-		di in white "| data`data' ................................................  ${data`data'}"
-  	foreach file in bed bim fam hg-buildmatch arraymatch keep-ceuLike {
-		capture confirm file "${data`data'}.`file'"
-		if _rc==0 {
-	 	noi di in yellow "- found ................................................  ${data`data'}.`file'  "
-		}
-		else {
-	 	noi di in red   "- absent ................................................  ${data`data'}.`file'  "
-		exit
-		}
-		}				
-		}
-		di in white"#########################################################################"
-		}
-	qui { // define the temporary working directory (using ralpha)
+	qui { // tabbed
 		clear
 		set obs 1
-		ralpha folderRandom, range(A/z) l(10)
-		gen a = "global wd  " + folderRandom
-		outsheet a using _setwd.do, non noq replace
-		do _setwd.do
-		!del _setwd.do
-		!mkdir ${wd}
-		cd     ${wd}
-		di in white "#########################################################################"
-		di in white "# data will be processed in the temp folder ......  ${wd}"
-		di in white "#########################################################################"
+		gen a = "$tabbed"
+		replace a = subinstr(a,"perl ","capture confirm file ",.)
+		outsheet a using _ooo.do, non noq replace
+		do _ooo.do
+		if _rc==0 {
+			noi di in white"# the tabbed.pl script exists and is correctly assigned as  $tabbed"
+			noi di in white"# ensure perl is working on your system and can be called from the command-line"
+			}
+		else {
+			noi di in red"# tabbed.pl does not exists; download executable from https://github.com/ricanney/perl "
+			noi di in red"# set tabbed.pl location using;  "
+			noi di in red`"# global tabbed "folder\file"  "'
+			exit
+			}
+		erase _ooo.do
 		}
-	qui { // import gwas data
-		di in white "#########################################################################"
-		di in white " processing the gwas data "
-		di in white "#########################################################################"			
-		di in white "- unzipping archive"
+		
+	}
+di in white"# > importing parameter file"
+qui { 
+	do `param'
+	di in white"# > checking parameters are correctly defined"
+	qui { // input gwas
+		capture confirm file "$gwas"
+		if _rc==0 {
+			di in green"# > the input gwas is $input_gwas and was located at $gwas"
+			}
+		else {
+			di in red"# > the input gwas is $input_gwas and was not located at $gwas"
+			exit
+			}
+		}
+	qui { // datasets
+		di in white"# > $Ndata datasets are to be used to calculate PRS"
+		foreach data of num 1 / $Ndata {
+			foreach file in bed bim fam meta-log {
+				capture confirm file "${data`data'}.`file'"
+				if _rc==0 {
+					di in green"# > dataset #`data' *.`file' is located at ${data`data'}.`file'"
+					}
+				else {
+					di in red"# > dataset #`data' *.`file' was not located at ${data`data'}.`file'"
+					exit
+					}
+				}
+			}
+		}
+	qui { // reference data
+		foreach file in bed bim fam meta-log {
+			capture confirm file "${kg_ref}.`file'"
+			if _rc==0 {
+				di in green"# > the reference genotypes are located at $kg_ref`.file'"
+				}
+			else {
+				di in red"# > the reference genotypes are not located at $kg_ref`.file'"
+				exit
+				}
+			}
+		}
+	di in white"# > all files located - ready to proceed"
+	}
+
+
+di in white"# > checking dependencies are correctly - define working directory"
+qui { // 
+	clear
+	set obs 1
+	ralpha folderRandom, range(A/z) l(10)
+	gen a = "global wd  " + folderRandom
+	outsheet a using _setwd.do, non noq replace
+	do _setwd.do
+	erase _setwd.do
+	!mkdir ${wd}
+	cd     ${wd}
+	}	
+	
+	
+
+
+
+di in white"# > processing gwas data"
+qui { 
+	di in white"# >> unzipping archive"
+	qui { 
 		!$gunzip ${gwas}.gz
-		di in white "- importing file"
+		}
+	di in white"# >> importing prePRS format file"
+	qui {
 		import delim using ${gwas}, clear
-		di in white "- re-zipping archive"
-		!$gzip ${gwas}
-		di in white "- create risk allele, riskOR and weight"
+		}
+	di in white"# >> create risk allele, riskOR and weight"
+	qui {
 		gen flip = .
 		replace flip = 1 if or < 1
 		gen risk_or  = or
@@ -154,57 +170,66 @@ qui { // introduce program
 		keep  chr bp rsid risk alt gt weight p risk_frq
 		order chr bp rsid risk alt gt weight p risk_frq
 		for var risk alt gt weight p risk_frq: rename X gwas_X
-		di in white "- saving tempfile"
-		save tempfile-1.dta,replace	
-		di in white "#########################################################################"			
-		}		
-	qui { // process genotpes
-		di in white "#########################################################################"
-		di in white "# processing the genotype data "
-		di in white "#########################################################################"		
-		foreach data of num 1 / $Ndata {
-			di in white `"- processing ${data`data'}"'
-			di in white "- create mac5 dataset for ceu-like individuals"
-			!$plink --bfile ${data`data'} --mac 5 --keep ${data`data'}.keep-ceuLike --make-bed --out data`data'-2001
-			di in white "- importing genotype data"
-			bim2dta, bim(data`data'-2001)
-			di in white "- limit to autosomes"
+		di in white"# >>> removing duplicates"
+		duplicates drop
+		duplicates tag rsid, gen(dups)
+		keep if dups == 0
+		drop dups
+		}
+	di in white"# >> saving tempfile"
+	qui {
+		save tempfile-gwas.dta,replace	
+		}
+	di in white"# >> zipping back to archive"
+	qui { 
+		!$gzip ${gwas}
+		}
+	}
+di in white"# > processing genotype data"
+di in green"# as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
+di in green"# pruning based on ancestry is to be performed after calculations"
+qui { 
+	foreach data of num 1 / $Ndata {
+		di in white"# >> processing ${data`data'} (`data' of ${Ndata})"
+		qui {
+			di in white"# >>> import plink *.bim file"
+			bim2dta, bim(${data`data'})
+			di in white"# >>>> limit to autosomes"
 			for var chr bp: tostring X,replace
 			drop if chr == "23" | chr == "24" | chr == "25"
-			drop chr bp
-			di in white "- drop problematic SNPs (ID/ W/ S)"
+			drop chr bp		
+			di in white "# >>>> drop problematic SNPs (ID/ W/ S)"
 			drop if gt == "ID" | gt == "W" | gt == "S"
-			save tempfile-2001-data`data'.dta, replace
-			di in white "- calculate allele-frequencies"
-			!$plink --bfile data`data'-2001 --freq --out data`data'-2001
-			!$tabbed data`data'-2001.frq
-			import delim using data`data'-2001.frq.tabbed, clear
-			keep snp a1 maf
-			di in white "- merge allele-frequencies to genotype file"
-			merge 1:1 snp a1 using tempfile-2001-data`data'.dta
-			keep if _m == 3
-			drop _m
-			di in white "- rename variables and save tempfile-2002-data`data'.dta"
-			rename (snp maf) (rsid a1_frq)
-			for var a1 a2 gt a1_frq: rename X data`data'_X
-			save tempfile-2002-data`data'.dta, replace
+			di in green"# as of 27-November-2017, the profilescore does not rename to rsid"
+			di in green"# this should have been applied in Module #3 of genoytpeqc"	
+			rename snp rsid
+			for var a1 a2 gt: rename X data`data'_X
+			di in white"# >>> removing duplicates"
+			duplicates drop
+			duplicates tag rsid, gen(dups)
+			keep if dups == 0
+			drop dups
+			di in white"# >>> save processed file"
+			save tempfile-data`data'.dta, replace
+			di in white"# >>> save processed file"
+
 			}
 		}
-	qui { // merge over intersect
-		di in white "#########################################################################"
-		di in white "# defining overlapping SNPs in the GWAS and genotyped datasets "
-		di in white "#########################################################################"		
-		di in white "- open processed gwas dataset"
-		use tempfile-1.dta, clear
-		foreach data of num 1 / $Ndata {
-			di in white "- merge against genotype data`data'"
-			merge 1:1 rsid using tempfile-2002-data`data'.dta
-			keep if _m ==3
-			drop _m
-			di in white "- save combined file"
-			save tempfile-2004-combined.dta, replace
-			}
+	}
+di in white"# > merging rsid over files"
+qui { 
+	di in white"# >> open tempfile-gwas.dta"
+	use tempfile-gwas.dta, clear
+	foreach data of num 1 / $Ndata {
+		di in white "# >> merge 1:1 rsid against tempfile-data`data'.dta"
+		merge 1:1 rsid using tempfile-data`data'.dta
+		keep if _m ==3
+		drop _m
+		save tempfile-combined.dta, replace
 		}
+	di in white "# >> merge 1:1 rsid against tempfile-data`data'.dta"
+
+	}
 	qui { // map to common strand
 		di in white "#########################################################################"
 		di in white "# map to strand of risk/ alt alleles  "
@@ -522,3 +547,7 @@ qui { // introduce program
 		}
 	noi di"finito and goodnight!"
 	end;
+	
+		qui { // parameters
+		global ldPrune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
+		}

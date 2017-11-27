@@ -1,0 +1,3 @@
+d bim2dta -  a command to create _frq.dta (plink-format marker files) from plink binaries 
+d Richard Anney, Cardiff University
+f bim2frq.ado

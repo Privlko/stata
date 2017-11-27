@@ -2,6 +2,7 @@ net install _sub_genotypeqc_meta,   from(https://raw.github.com/ricanney/stata/m
 net install _sub_genotypeqc_report, from(https://raw.github.com/ricanney/stata/master/code/_/) replace
 net install bim2dta,                from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2eigenvec,           from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2frq     ,           from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2ldexclude,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install datestamp,              from(https://raw.github.com/ricanney/stata/master/code/d/) replace
 net install ensembl2symbol,         from(https://raw.github.com/ricanney/stata/master/code/e/) replace
