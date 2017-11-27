@@ -85,12 +85,12 @@ qui {
 	do `param'
 	di in white"# > checking parameters are correctly defined"
 	qui { // input gwas
-		capture confirm file "$gwas"
+		capture confirm file "$gwas.gz"
 		if _rc==0 {
-			di in green"# > the input gwas is $input_gwas and was located at $gwas"
+			di in green"# > the input gwas is $input_gwas and was located at $gwas.gz"
 			}
 		else {
-			di in red"# > the input gwas is $input_gwas and was not located at $gwas"
+			di in red"# > the input gwas is $input_gwas and was not located at $gwas.gz"
 			exit
 			}
 		}
