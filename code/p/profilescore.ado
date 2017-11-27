@@ -137,11 +137,6 @@ qui { //
 	!mkdir ${wd}
 	cd     ${wd}
 	}	
-	
-	
-
-
-
 di in white"# > processing gwas data"
 qui { 
 	di in white"# >> unzipping archive"
@@ -186,13 +181,14 @@ qui {
 		}
 	}
 di in white"# > processing genotype data"
-di in green"# as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
-di in green"# pruning based on ancestry is to be performed after calculations"
+di in green"#   as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
+di in green"#   pruning based on ancestry is to be performed after calculations"
 qui { 
 	foreach data of num 1 / $Ndata {
 		di in white"# >> processing ${data`data'} (`data' of ${Ndata})"
 		qui {
 			di in white"# >>> import plink *.bim file"
+			bim2frq, bim(${data`data'})
 			bim2dta, bim(${data`data'})
 			di in white"# >>>> limit to autosomes"
 			for var chr bp: tostring X,replace
@@ -203,7 +199,11 @@ qui {
 			di in green"# as of 27-November-2017, the profilescore does not rename to rsid"
 			di in green"# this should have been applied in Module #3 of genoytpeqc"	
 			rename snp rsid
-			for var a1 a2 gt: rename X data`data'_X
+			di in white"# >>> merge frq.dta"
+			merge 1:1 rsid a1 using ${data`data'}_frq.dta
+			keep if _m == 3
+			drop _m
+			for var a1 a2 gt a1_frq: rename X data`data'_X
 			di in white"# >>> removing duplicates"
 			duplicates drop
 			duplicates tag rsid, gen(dups)
@@ -212,7 +212,6 @@ qui {
 			di in white"# >>> save processed file"
 			save tempfile-data`data'.dta, replace
 			di in white"# >>> save processed file"
-
 			}
 		}
 	}
@@ -227,152 +226,157 @@ qui {
 		drop _m
 		save tempfile-combined.dta, replace
 		}
-	di in white "# >> merge 1:1 rsid against tempfile-data`data'.dta"
-
 	}
-	qui { // map to common strand
-		di in white "#########################################################################"
-		di in white "# map to strand of risk/ alt alleles  "
-		di in white "#########################################################################"				
-		use tempfile-2004-combined.dta, clear
-		foreach data of num 1 / $Ndata {
-			di in white "- cross-tabulate gwas allele coding with data`data'"
-			noi ta gwas_gt data`data'_gt
-			drop data`data'_gt
-			recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
-			di in white "- recode allele from data`data' where there are strand flips"
-			replace data`data'_a1 = _tmpb1 if _tmpflip == 1
-			replace data`data'_a2 = _tmpb2 if _tmpflip == 1
-			di in white "- export list of SNPs to flip strand in data`data' plink binaries"
-			outsheet rsid if _tmpflip == 1 using tempfile-2-data`data'.flip, non noq replace
-			drop _tmpflip -_tmpb1 _tmpb2
-			order chr bp rsid gwas_risk gwas_alt gwas_gt gwas_weight gwas_p gwas_risk_frq data`data'_a1 data`data'_a2 data`data'_a1_frq
-			}
-		di in white "#########################################################################"
-		di in white "# check allele-frequencies between datasets  "
-		di in white "#########################################################################"	
-		drop gwas_gt
-		global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
-		foreach data of num 1 / $Ndata {
-			di in white "- two-way scatter plot of allele frq betweeen gwas and data`data'"
-			gen data`data'_risk_frq = .
-			replace data`data'_risk_frq =    data`data'_a1_frq if data`data'_a1 == gwas_risk
-			replace data`data'_risk_frq = 1- data`data'_a1_frq if data`data'_a1 == gwas_alt
-			tw scatter gwas_risk_frq data`data'_risk_frq, ${format} saving(tempfile-2-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
-			drop data`data'_a1 data`data'_a2 data`data'_a1_frq
-			}
-		di in white "- rename variables and save tempfile"
-		rename (gwas_risk gwas_alt) (risk alt)
-		aorder
-		order chr bp rsid risk alt gwas_weight gwas_p gwas_risk_frq
-		sort chr bp
-		save tempfile-2.dta, replace
-		di in white "#########################################################################"
-		di in white "# process intersect/ and flips on the plink binaries  "
-		di in white "#########################################################################"	
-		outsheet rsid using minimal.extract, non noq replace
-		foreach data of num 1 / $Ndata {
-			di in white `"- processing ${data`data'}"'
-			di in white "- create intersect dataset"
-			!$plink --bfile data`data'-2001 --extract minimal.extract --make-bed --out data`data'-2002
-			di in white "- flips strands"
-			!$plink --bfile data`data'-2002 --flip tempfile-2-data`data'.flip --make-bed --out data`data'-final
-			}
-		di in white "#########################################################################"
-		di in white "# clean up temp files  "
-		di in white "#########################################################################"	
-		!del tempfile-20* *.frq *.tabbed tempfile-overlap* tempfile-data* *.flip tempfile-1.dta *.extract
-		foreach data of num 1 / $Ndata {
-			!del data`data'-2*
-			}
-		}			
-	qui { // define ld-independent (clumped) sets of SNPs
-		di in white "#########################################################################"
-		di in white "# define (clumped) gwas based on reference genotypes  "
-		di in white "#########################################################################"	
-		di in white "| reference genotypes ..................................  ${kg_ref}"
-		qui { // check presence of kg_ref
-		foreach file in bed bim fam  {
-			capture confirm file "${kg_ref}.`file'"
-			if _rc==0 {
-				noi di in yellow "- found ................................................  ${kg_ref}.`file'  "
-				}
-			else {
-				noi di in red   "- absent ................................................  ${kg_ref}.`file'  "
-				exit
-				}
-			}				
+di in white"# > mapping to a common strand [risk - alt]"
+qui { 
+	foreach data of num 1 / $Ndata {
+		di in white "# >> cross-tabulate gwas genotype coding with data`data'"
+		noi ta gwas_gt data`data'_gt
+		drop data`data'_gt
+		recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
+		di in white "# >> recode allele from data`data' where there are strand flips"
+		replace data`data'_a1 = _tmpb1 if _tmpflip == 1
+		replace data`data'_a2 = _tmpb2 if _tmpflip == 1
+		di in white "# >> export list of SNPs to flip strand in data`data' plink binaries"
+		outsheet rsid if _tmpflip == 1 using tempfile-data`data'.flip, non noq replace
+		drop _tmpflip -_tmpb1 _tmpb2
+		order chr bp rsid gwas_risk gwas_alt gwas_gt gwas_weight gwas_p gwas_risk_frq data`data'_a1 data`data'_a2 data`data'_a1_frq
 		}
-		qui { // define the overlap subset of the kg_ref 
-			di in white "- define overlapping SNPs between reference and gwas/ test subsets"
-			use tempfile-2.dta, clear
-			outsheet rsid using tempfile-3001.extract, non noq replace
-			!$plink --bfile ${kg_ref} --extract tempfile-3001.extract --make-bed --out tempfile-3001
-			rename (rsid gwas_p) (SNP P)
-			keep SNP P
-			preserve
-			sum P
-			gen min = `r(min)'
-			gen threshold = ""
-			replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4"  if min < 1E-4
-			replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5" if min < 1E-5
-			replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6"  if min < 1E-6
-			replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7"  if min < 1E-7
-			replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8" if min < 1E-8
-			outsheet threshold in 1 using _tmp.do, non noq replace
-			do _tmp.do
-			restore
-			foreach threshold in $thresholds {
-				di in white "- define SNPs at P < `threshold' for clumping"
-				outsheet SNP P if P < `threshold' using tempfile-3002-P`threshold'.input-clump, noq replace
-				di in white "-  clump SNPs at P < `threshold' to identify ld-independent set for scoring"
-				!${plink} --bfile tempfile-3001 --clump tempfile-3002-P`threshold'.input-clump ${ldPrune} --out tempfile-3002-P`threshold'
-				}
-			!del tempfile-3001.* *.input-clump
+	}
+di in white"# > plot allele-frequencies between datasets"
+qui {
+	drop gwas_gt
+	global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
+	foreach data of num 1 / $Ndata {
+		di in white "# >> two-way scatter plot of allele frq betweeen gwas and data`data'"
+		gen data`data'_risk_frq = .
+		replace data`data'_risk_frq =    data`data'_a1_frq if data`data'_a1 == gwas_risk
+		replace data`data'_risk_frq = 1- data`data'_a1_frq if data`data'_a1 == gwas_alt
+		tw scatter gwas_risk_frq data`data'_risk_frq, ${format} saving(tempfile-2-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
+		drop data`data'_a1 data`data'_a2 data`data'_a1_frq
+		}
+	}
+di in white"# > rename variables / save tempfile / create intersect.extract"
+qui {
+	rename (gwas_risk gwas_alt) (risk alt)
+	aorder
+	order chr bp rsid risk alt gwas_weight gwas_p gwas_risk_frq
+	sort chr bp
+	save tempfile-combined-flipped.dta, replace
+	outsheet rsid using intersect.extract, non noq replace
+	}
+di in white"# > extract intersect and flip alleles"
+qui {
+	foreach data of num 1 / $Ndata {
+		di in white "# >> extract intersect for ${data`data'}"
+		qui { 
+			!$plink --bfile ${data`data'} --extract minimal.extract --make-bed --out data`data'-intersect
+			}
+		di in white "# >> flips strands"
+		qui{ 
+			!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out data`data'-intersect-flipped
 			}
 		}
-	qui { // create *.score\ *.q-score file
-		di in white "#########################################################################"
-		di in white "# create *.score\ *.q-score file for each threshold  "
-		di in white "#########################################################################"		
+	}
+di in white"# > extract intersect on ${kg_ref}"
+qui { 
+	!$plink --bfile ${kg_ref} --extract minimal.extract --make-bed --out tempfile-ref
+	}
+di in white"# > clean up intermediate files"
+qui {
+	foreach data of num 1 / $Ndata {
+		foreach file  in bim bed fam log {
+			erase data`data'-intersect.`file'
+			}
+		}
+	}
+di in white"# > clump gwas intersect"
+qui { 
+	use tempfile-combined-flipped.dta, replace
+	rename (rsid gwas_p) (SNP P)
+	keep SNP P
+	preserve
+	di in white"# >> define minimum p"
+	qui {
+		sum P
+		gen min = `r(min)'
+		gen threshold = ""
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4"  if min < 1E-4
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5" if min < 1E-5
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6"  if min < 1E-6
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7"  if min < 1E-7
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8" if min < 1E-8
+		outsheet threshold in 1 using _tmp.do, non noq replace
+		do _tmp.do
+		}
+
+	di in white "# >> clump SNPs at ${threshold}"
+	qui {
+		global ldprune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		foreach threshold in $thresholds {
-			!${tabbed} tempfile-3002-P`threshold'.clumped
-			import delim using 	tempfile-3002-P`threshold'.clumped.tabbed, clear
+			di in white "# >> define SNPs at P < `threshold' for clumping"
+			outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
+			di in white "-  clump SNPs at P < `threshold' to identify ld-independent set for scoring"
+			!${plink} --bfile tempfile-ref --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
+			}
+		}
+	}
+di in white"# > create *.score\ *.q-score file for each threshold"
+qui {	
+		foreach threshold in $thresholds {
+			!${tabbed} tempfile-P`threshold'.clumped
+			import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
 			keep snp
 			rename (snp) (rsid)
-			merge 1:1 rsid using tempfile-2.dta 
+			merge 1:1 rsid using tempfile-gwas.dta 
 			keep if _m == 3
-			di in white "- create *.score for P< `threshold'  "
-			outsheet rsid risk gwas_weight using tempfile-3002-P`threshold'.score, non noq replace
-			!copy "tempfile-3002-P`threshold'.score"          "..\\${project_name}_P`threshold'.score"
-			di in white "- create *.q-score-file for P< `threshold'  "
-			outsheet rsid gwas_p           using tempfile-3002-P`threshold'.q-score-file, non noq replace
-			!copy "tempfile-3002-P`threshold'.q-score-file"   "..\\${project_name}_P`threshold'.q-score-file"
-			di in white "- create *.q-score-file-range for P< `threshold'  "
-			clear
-			set obs 1
-			gen a = "P`threshold'	0	`threshold'"
-			outsheet a using  tempfile-3002-P`threshold'.q-score-range, non noq replace
-			!del tempfile-3002-P`threshold'.clumped tempfile-3002-P`threshold'.clumped.tabbed 
-			}
-		}
-	qui { // calculate profiles for each data-set
-		di in white "#########################################################################"
-		di in white "# create *.profile file for each threshold for each dataset "
-		di in white "#########################################################################"			
-		foreach data of num 1 / $Ndata {
-			foreach threshold in $thresholds {
-				di in white "- create *.profile for P< `threshold' for data`data'"
-				!${plink} --bfile         data`data'-final ///
-									--score         tempfile-3002-P`threshold'.score ///
-									--q-score-file  tempfile-3002-P`threshold'.q-score-file ///
-									--q-score-range tempfile-3002-P`threshold'.q-score-range ///
-									--out           data`data'-final
+			di in white "# >> create *.score for P< `threshold'  "
+			qui {
+				outsheet rsid risk gwas_weight using tempfile-P`threshold'.score, non noq replace
+				!copy "tempfile-P`threshold'.score"          "..\\${project_name}_P`threshold'.score"
 				}
-			!del data`data'-final.bed data`data'-final.bim 
+			di in white "# >> create *.q-score-file for P< `threshold'  "
+			qui { 
+				outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
+				!copy "tempfile-P`threshold'.q-score-file"   "..\\${project_name}_P`threshold'.q-score-file"
+				}
+			di in white "# >> create *.q-score-file-range for P< `threshold'  "
+			qui { 
+				clear
+				set obs 1
+				gen a = "P`threshold'	0	`threshold'"
+				outsheet a using  tempfile-P`threshold'.q-score-range, non noq replace
+				erase tempfile-P`threshold'.clumped
+				erase tempfile-P`threshold'.clumped.tabbed 
+				}
 			}
-		!del *.score *.q-score-file *.q-score-range *.log
 		}
+di in white"# > create *.profile file for each threshold for each dataset "
+qui {	
+	foreach data of num 1 / $Ndata {
+		foreach threshold in $thresholds {
+			di in white "- create *.profile for P< `threshold' for data`data'"
+			!${plink} --bfile         data`data'-intersect-flippedl ///
+								--score         tempfile-P`threshold'.score ///
+								--q-score-file  tempfile-P`threshold'.q-score-file ///
+								--q-score-range tempfile-P`threshold'.q-score-range ///
+								--out           data`data'-intersect-flipped
+				}
+		erase data`data'-intersect-flipped.bed
+		erase data`data'-intersect-flipped.bim
+		}
+	foreach threshold in $thresholds {
+		erase tempfile-P`threshold'.score
+		erase tempfile-P`threshold'.q-score-file
+		erase tempfile-P`threshold'.q-score-range
+		}
+	foreach data of num 1 / $Ndata {
+		data`data'-intersect-flipped.log
+		}
+	}
+x
+	
+	
 	qui { // combine profile scores (per data-set)
 		di in white "#########################################################################"
 		di in white "# combine *.profile file for each threshold for each dataset "
@@ -549,5 +553,4 @@ qui {
 	end;
 	
 		qui { // parameters
-		global ldPrune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		}
