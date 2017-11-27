@@ -38,7 +38,7 @@ syntax , param(string asis)
 	
 di in white"#########################################################################"
 di in white"# profilescore                                                           "
-di in white"# version:       0.2                                                     "
+di in white"# version:       0.3                                                     "
 di in white"# Creation Date: 5September2017                                          "
 di in white"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
 di in white"#########################################################################"
@@ -85,7 +85,7 @@ qui {
 	do `param'
 	di in white"# > checking parameters are correctly defined"
 	qui { // input gwas
-		capture confirm file "$gwas.gz"
+		capture confirm file "${gwas}.gz"
 		if _rc==0 {
 			di in green"# > the input gwas is $input_gwas and was located at $gwas.gz"
 			}
@@ -123,8 +123,6 @@ qui {
 		}
 	di in white"# > all files located - ready to proceed"
 	}
-
-
 di in white"# > checking dependencies are correctly - define working directory"
 qui { // 
 	clear
