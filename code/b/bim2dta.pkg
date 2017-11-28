@@ -1,4 +1,5 @@
 d bim2dta -  convert *.bim plink marker file to *.dta (converts indel codes and creates gt variable)
 d Richard Anney, Cardiff University
+d Distribution-Date: 22nov2017
 f bim2dta.ado
 f ../r/recodegenotype.ado

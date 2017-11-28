@@ -1,3 +1,4 @@
 d graphqq command to draw a simple qq plot to tmpQQ.gph
 d Richard Anney, Cardiff University
+d Distribution-Date: 22nov2017
 f graphqq.ado

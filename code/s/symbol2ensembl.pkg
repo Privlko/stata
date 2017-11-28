@@ -1,3 +1,4 @@
-d symbol2ensembl - command to conver gene-symbols to enseml identifiers
+d symbol2ensembl - command to convert gene-symbols to enseml identifiers
 d Richard Anney, Cardiff University
+d Distribution-Date: 22nov2017
 f symbol2ensembl.ado

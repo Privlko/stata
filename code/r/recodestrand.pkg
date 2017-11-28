@@ -1,3 +1,4 @@
 d recodestrand - command to flip alleles to a refrence strand
 d Richard Anney, Cardiff University
+d Distribution-Date: 28nov2017
 f recodegenotype.ado

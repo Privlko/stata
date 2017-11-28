@@ -1,5 +1,6 @@
 d graphmiami - command to draw a miami plot at a region for 2 gwas datasets to tmpMiami.gph
 d Richard Anney, Cardiff University
+d Distribution-Date: 24nov2017
 f graphmiami.ado
 f graphgene.ado
 

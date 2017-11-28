@@ -1,3 +1,4 @@
 d graphmanhattan command to draw a simple manhattan plot to tmpManhattan.gph
 d Richard Anney, Cardiff University
+d Distribution-Date: 28nov2017
 f graphmanhattan.ado
