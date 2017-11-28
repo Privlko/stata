@@ -67,8 +67,24 @@ qui {
 		outsheet a using _ooo.do, non noq replace
 		do _ooo.do
 		if _rc==0 {
-			noi di in white"# the tabbed.pl script exists and is correctly assigned as  $tabbed"
-			noi di in white"# ensure perl is working on your system and can be called from the command-line"
+			noi di in green"# the tabbed.pl script exists and is correctly assigned as  $tabbed"
+			noi di in green"# ..... ensuring perl is working on your system and can be called from the command-line"
+			clear 
+			set obs 10
+			gen a = "a b c d"
+			outsheet a using test_pl.txt, noq replace
+			!$tabbed test_pl.txt
+			capture confirm file "test_pl.txt.tabbed"
+			if _rc==0 {
+				noi di in green"# ..... the tabbed.pl script is working"
+				}
+			else {
+				noi di in red"# ..... the tabbed.pl script did not work"
+				noi di in red"# download and install active perl on your computer https://www.activestate.com/activeperl/downloads"
+				exit
+				}
+			erase test_pl.txt
+			erase test_pl.txt.tabbed
 			}
 		else {
 			noi di in red"# tabbed.pl does not exists; download executable from https://github.com/ricanney/perl "
@@ -78,53 +94,88 @@ qui {
 			}
 		erase _ooo.do
 		}
-		
 	}
-di in white"# > importing parameter file"
+	
+	
+di in white"# > checking all parameters are set"
 qui { 
-	do `param'
-	di in white"# > checking parameters are correctly defined"
-	qui { // input gwas
-		capture confirm file "${gwas}.gz"
-		if _rc==0 {
-			di in green"# > the input gwas is $input_gwas and was located at $gwas.gz"
-			}
-		else {
-			di in red"# > the input gwas is $input_gwas and was not located at $gwas.gz"
-			exit
-			}
+	di in green"# >> The parameter file should include the following information as globals"
+	di in green"#    e.g. global project_folder E:\data"
+	di in white"# >> running `param'"
+	qui {
+		do `param'
 		}
-	qui { // datasets
-		di in white"# > $Ndata datasets are to be used to calculate PRS"
+	di in green"# >> define project_folder = working folder"
+	di in white"# >>                         ${project_folder}"
+	di in green"# >> define project_name   = project name"
+	di in white"# >>                         ${project_name}"
+	di in green"# >> define kg_ref         = reference genotypes (1000-genomes phase3 hg19 european ancestry"
+	di in white"# >>                         ${kg_ref}"
+	di in green"# >> define Ndata          = number of input genotype files"
+	di in white"# >>                         ${Ndata}"
+	di in green"# >> define data<n>        = location of genotypes for dataset<n>"
+	foreach data of num 1 / $Ndata {
+		di in white"# >>                 data`data' = ${data`data'}"
+		}
+	di in green"# >> define gwas_short     = short name of gwas"
+	di in white"# >>                         ${gwas_short}"
+	di in green"# >> define gwas_prePRS    = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
+	di in white"# >>                         ${gwas_prePRS}"
+	}	
+di in white"# > checking parameters are correctly defined"
+di in white"# > checking if ${gwas_prePRS}.gz / ${gwas_prePRS} is present"
+qui { 
+	capture confirm file "${gwas_prePRS}.gz"
+	if _rc==0 {
+			noi di in green"# > the input gwas is $gwas_short and was located at $gwas.gz"
+			}
+	else {
+			capture confirm file "${gwas_prePRS}"
+			if _rc==0 {
+				noi di in green"# > the input gwas is $gwas_short and was located at $gwas"
+				}
+			else {
+				noi di in red"# > the input gwas is $gwas_short and was not located at $gwas.gz"
+				noi di in red"# > the input gwas is $gwas_short and was not located at $gwas"
+				exit
+				}
+			}
+	}
+di in white"# > checking if genotypes files are present"
+qui { 
+		di in white"# >> $Ndata datasets are to be used to calculate PRS"
 		foreach data of num 1 / $Ndata {
 			foreach file in bed bim fam meta-log {
 				capture confirm file "${data`data'}.`file'"
 				if _rc==0 {
-					di in green"# > dataset #`data' *.`file' is located at ${data`data'}.`file'"
+					noi di in green"# >> dataset #`data' *.`file' is located at ${data`data'}.`file'"
 					}
 				else {
-					di in red"# > dataset #`data' *.`file' was not located at ${data`data'}.`file'"
+					noi di in red"# >> dataset #`data' *.`file' was not located at ${data`data'}.`file'"
 					exit
 					}
 				}
 			}
 		}
-	qui { // reference data
-		foreach file in bed bim fam  {
-			capture confirm file "${kg_ref}.`file'"
-			if _rc==0 {
-				di in green"# > the reference genotypes are located at $kg_ref.`file'"
-				}
-			else {
-				di in red"# > the reference genotypes are not located at $kg_ref.`file'"
-				exit
-				}
+di in white"# > checking if ${kg_ref} files are present"
+qui { 
+	foreach file in bed bim fam  {
+		capture confirm file "${kg_ref}.`file'"
+		if _rc==0 {
+			noi di in green"# >> the reference genotypes are located at $kg_ref.`file'"
+			}
+		else {
+			noi di in red"# >> the reference genotypes are not located at $kg_ref.`file'"
+			exit
 			}
 		}
-	di in white"# > all files located - ready to proceed"
 	}
-di in white"# > checking dependencies are correctly - define working directory"
-qui { // 
+di in white"# > the working directory is ${project_folder}"
+qui { 
+	cd ${project_folder}
+	}
+di in white"# > creating a temp folder in ${project_folder}"
+qui { 
 	clear
 	set obs 1
 	ralpha folderRandom, range(A/z) l(10)
@@ -143,7 +194,7 @@ qui {
 		}
 	di in white"# >> importing prePRS format file"
 	qui {
-		import delim using ${gwas}, clear
+		import delim using ${gwas_prePRS}, clear
 		}
 	di in white"# >> create risk allele, riskOR and weight"
 	qui {
@@ -175,12 +226,12 @@ qui {
 		}
 	di in white"# >> zipping back to archive"
 	qui { 
-		!$gzip ${gwas}
+		!$gzip ${gwas_prePRS}
 		}
 	}
 di in white"# > processing genotype data"
 di in green"#   as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
-di in green"#   pruning based on ancestry is to be performed after calculations "
+di in green"#   exclusion based on ancestry is to be performed after calculations "
 di in red  "#   caveat : ld clumping is based on ${kg_ref}"
 qui { 
 	foreach data of num 1 / $Ndata {
@@ -303,9 +354,9 @@ qui {
 	qui {
 		global ldprune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		foreach threshold in $thresholds {
-			di in white "# >> define SNPs at P < `threshold' for clumping"
+			di in white "# >>> define SNPs at P < `threshold' for clumping"
 			outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
-			di in white "-  clump SNPs at P < `threshold' to identify ld-independent set for scoring"
+			di in white "# >>>  clump SNPs at P < `threshold' to identify ld-independent set for scoring"
 			!${plink} --bfile tempfile-ref --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
 			}
 		}
@@ -407,7 +458,7 @@ qui {
 	noi di"# missing genotypes contribute an amount proportional to the loaded (via  "
 	noi di"# --read-freq) or imputed allele frequency.                               "
 	noi di"#########################################################################"
-	noi di"# risk scores based on ..... ${gwas} "
+	noi di"# risk scores based on ..... ${gwas_prePRS} "
 	qui { 
 		foreach data of num 1 / $Ndata {
 			noi di"# data`data'  ................... ${data`data'}"
@@ -415,7 +466,7 @@ qui {
 		}
 	noi di"#########################################################################"
 	qui { // calculate number of SNPs in datasets / gwas
-		!$zcat ${gwas}.gz | $wc -l > gwas-input.count
+		!$zcat ${gwas_prePRS}.gz | $wc -l > gwas-input.count
 		insheet using gwas-input.count, clear
 		sum v1
 		global N_snps_gwas_input `r(max)'
@@ -489,7 +540,7 @@ di in white"# > plotting manhattan for intersect"
 qui {
 	use tempfile-combined.dta, clear
 	graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
-	graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas}",	size(tiny))
+	graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
 	graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
 	window manage close graph
 	}	

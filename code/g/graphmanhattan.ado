@@ -87,7 +87,7 @@ qui {
 	qui count
 	di in white"# >> `r(N)' unique association signals were uploaded "
 	sum `p'
-	di in white">> # the minimum P-value observed in this dataset is P = `r(min)' "
+	di in white"# >> the minimum P-value observed in this dataset is P = `r(min)' "
 	}
 di in white"# > create -log10 variable"
 qui {
