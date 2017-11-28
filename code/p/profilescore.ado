@@ -97,27 +97,27 @@ qui {
 	}
 di in white"# > checking all parameters are set"
 qui { 
-	di in green"# >> The parameter file should include the following information as globals"
-	di in green"#    e.g. global project_folder E:\data"
+	di in white"# >> The parameter file should include the following information as globals"
+	di in white"#    e.g. global project_folder E:\data"
 	di in white"# >> running `param'"
 	qui {
 		do `param'
 		}
-	di in green"# >> define project_folder = working folder"
+	di in white"# >> define project_folder = working folder"
 	di in white"# >>                         ${project_folder}"
-	di in green"# >> define project_name   = project name"
+	di in white"# >> define project_name   = project name"
 	di in white"# >>                         ${project_name}"
-	di in green"# >> define kg_ref         = reference genotypes (1000-genomes phase3 hg19 european ancestry"
+	di in white"# >> define kg_ref         = reference genotypes (1000-genomes phase3 hg19 european ancestry"
 	di in white"# >>                         ${kg_ref}"
-	di in green"# >> define Ndata          = number of input genotype files"
+	di in white"# >> define Ndata          = number of input genotype files"
 	di in white"# >>                         ${Ndata}"
-	di in green"# >> define data<n>        = location of genotypes for dataset<n>"
+	di in white"# >> define data<n>        = location of genotypes for dataset<n>"
 	foreach data of num 1 / $Ndata {
 		di in white"# >>                 data`data' = ${data`data'}"
 		}
-	di in green"# >> define gwas_short     = short name of gwas"
+	di in white"# >> define gwas_short     = short name of gwas"
 	di in white"# >>                         ${gwas_short}"
-	di in green"# >> define gwas_prePRS    = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
+	di in white"# >> define gwas_prePRS    = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
 	di in white"# >>                         ${gwas_prePRS}"
 	}	
 di in white"# > checking parameters are correctly defined"
@@ -177,12 +177,12 @@ qui {
 	clear
 	set obs 1
 	ralpha folderRandom, range(A/z) l(10)
-	gen a = "global wd  " + folderRandom
+	gen a = "global tmp_wd  " + folderRandom
 	outsheet a using _setwd.do, non noq replace
 	do _setwd.do
 	erase _setwd.do
-	!mkdir ${wd}
-	cd     ${wd}
+	!mkdir ${tmp_wd}
+	cd     ${tmp_wd}
 	}	
 di in white"# > processing gwas data"
 qui { 
@@ -557,7 +557,7 @@ qui {
 di in white"# > removing temporary folder"
 qui {
 	cd ..
-	!rmdir ${wd} /s /q 
+	!rmdir ${tmp_wd} /s /q 
 	}
 di in white"#########################################################################"
 di in white"# Completed: $S_DATE $S_TIME"

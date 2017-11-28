@@ -31,9 +31,6 @@ di in white"# - this script flags all indel, ambiguous, missing, monomorphic mar
 di in white"#   in the variable _tmpflag (1 = error)"
 di in white"# - this script creates new allele codes for the data (_tmpb1 and _tmpb2)"
 di in white"# - this script creates flip code for all markers that were flipped (_tmpflip)"
-di in white"#"
-di in white"# this is still beta and need to be fully checked - approx 90% satisfied "
-di in white"# that the code is error-free"
 di in white"#########################################################################"
 di in white"# Started: $S_DATE $S_TIME"
 di in white"#########################################################################"
@@ -51,7 +48,7 @@ di in white"# > checking for incompatible genotypes"
 qui {
 	noi di in white"# >> tabulating genotypes"
 	noi ta temp_ref_gt temp_alt_gt
-	noi di in white"# >> dropping none R Y M K genotypes"
+	noi di in white"# >> dropping non- R Y M K genotypes"
 	foreach xx in A C G T ID DI W S {
 		drop if temp_ref_gt == "`xx'"
 		drop if temp_alt_gt == "`xx'"
