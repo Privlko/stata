@@ -97,10 +97,14 @@ di in white"# > importing file"
 qui { 
 	import delim using tmp-bim2frq.frq.tabbed, clear
 	}
+di in white"# > create genotype variable"
+qui { 
+	recodegenotype, a1(a1) a2(a2)
+	}
 di in white"# > naming variables"
 qui { 
-	keep snp a1 maf
-	rename (snp maf) (rsid a1_frq)
+	rename (maf _gt) (a1_frq gt)
+	keep snp a1 a2 gt maf
 	}
 di in white"# > saving file as `bim'_frq.dta"
 qui {

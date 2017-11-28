@@ -237,6 +237,9 @@ qui {
 		qui {
 			di in white"# >> import plink *.bim file"
 			bim2frq, bim(${data`data'})
+			rename (snp maf) (rsid a1_freq)
+			keep rsid a1 a1_freq
+			save ${data`data'}_frq2.dta,replace
 			bim2dta, bim(${data`data'})
 			di in white"# >> limit to autosomes"
 			for var chr bp: tostring X,replace
@@ -248,7 +251,8 @@ qui {
 			di in green"# this should have been applied in Module #3 of genoytpeqc"	
 			rename snp rsid
 			di in white"# >> merge frq.dta"
-			merge 1:1 rsid a1 using ${data`data'}_frq.dta
+			merge 1:1 rsid a1 using ${data`data'}_frq2.dta
+			erase ${data`data'}_frq2.dta
 			keep if _m == 3
 			drop _m
 			for var a1 a2 gt a1_frq: rename X data`data'_X
