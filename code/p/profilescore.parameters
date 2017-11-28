@@ -1,9 +1,0 @@
-global project_folder	D:\github\projects\autism\national-centre-mental-health\data\3-generate-polygenic-risk-score
-global project_name		ripke-neale-corvin-2014-ncmh-asd 
-global gwas             E:\data\summary\ripke-neale-corvin-2014\data\daner-pgc-scz52-0513a-preprs.tsv
-global kg_ref           E:\data\genotypes\ref\1000-genomes\phase3\data\hg19\eur_1000g_phase3_chrall_impute_macgt5
-global gwas	            E:\data\summary\ripke-neale-corvin-2014\data\daner-pgc-scz52-0513a-preprs.tsv
-global data1  		    D:\github\projects\autism\national-centre-mental-health\data\2-perform-quality-control\ipmcn-chip-qc-v4
-global data2  		    D:\github\projects\autism\national-centre-mental-health\data\2-perform-quality-control\psych-chip-qc-v4
-global Ndata	        2
-global thresholds       5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 5E-8
