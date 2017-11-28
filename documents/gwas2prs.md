@@ -4,8 +4,14 @@
 ```net install gwas2prs,                from(https://raw.github.com/ricanney/stata/master/code/g/) replace```
 # Syntax
 ```gwas2prs, name(filename) reference(filename)```
+
+- ```name``` is the output name for the file 
+- ```reference``` is the location of the allele frequency file ```reference```_frq.dta file. note, do not include "_frq.dta" in the filename location - this is assumed. To create *_frq.dta, use ```bim2frq``` 
+
 # Description
-This program formats GWAS summary data ready for use in the PRS program ```profilescore```. The GWAS summary data requires the following variables;
+This program formats GWAS summary data ready for use in the PRS program ```profilescore```. GWAS summary files come in all shapes and sizes. Therefore, we are not able to provide a one-size-fits-all. Some user interaction is required. The GWAS summary file needs to be imported and the following variables identifued and renamed (where applicable).
+The GWAS summary data requires the following variables;
+
 1. ```chr``` - chromosome code
 2. ```bp``` - chromosome location (hg19 +1)
 3. ```a1``` - allele 1 variable
@@ -13,14 +19,12 @@ This program formats GWAS summary data ready for use in the PRS program ```profi
 5. ```or``` - odds ratio 
 6. ```p``` - association p-value
 7. ```rsid``` - marker name
-8. ``info``` - imputation info-score
-9. ```direction``` - imputation direction variable 
-10. ```a1_frq``` - allele frequency of allelel a1
+8. ```info``` - imputation info-score <OPTIONAL>
+9. ```direction``` - imputation direction variable <OPTIONAL>
+10. ```a1_frq``` - allele frequency of allelel a1 <OPTIONAL> **ideally, include sample based allele frequency if possible**
 
+Briefly, ```gwas2prs``` is doing a number of simple qc checks, removing some difficult SNPS and formatting ready for ```profilescore```
 
-
-
-## brief overview of the gwas2prs
 1. checks whether ```chr``` exists, then limits to autosomes, removes missing and stored as <string>
 1. checks whether ```bp``` exists, stores as <string>
 1. checks whether ```a1``` and ```a2``` exist, then perform ```recodegenotypes``` to generate UIPAC genotype variable
@@ -28,34 +32,45 @@ This program formats GWAS summary data ready for use in the PRS program ```profi
 1. checks whether ```info``` available, if present limits SNPS to ```info```> 0.8
 1. checks whether ```direction``` available, if present limits SNPS to those observed in atleast N-1 of included studies
 1. removes and duplicate observations at any ```rsid```
-1. checks whether ```a1_frq``` exists, if not assigns and matches ```a1_frq``` from teh reference genotypes
+1. checks whether ```a1_frq``` exists, if not it assigns and aligns ```a1_frq``` from the reference genotypes
 1. keeps ```chr``` ```bp``` ```rsid``` ```a1``` ```a2``` ```a1_frq``` ```or``` ```p``` 
 1. saves as tab-seperated-variable text file to *-prePRS.tsv and archives using gzip
 1. reports details of file to  *.meta-log
 
-
-Import your gwas summary data into ``STATA```, select (and rename where appropriate) the variables.
-
-this program can be called 
-The plink binary marker file contains information on marker identifiers, chromosome location and allele coding. It is often necessary to import these files into stata. This one line command imports the data, renames the variables, creates a genotype variable ```gt``` using the ```recodegenotype``` program and saves a copy of this coversion in the same directory as filename_bim.dta.
-
-
-
-# Title
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh.
-# Installation
-```net install xxxxx,                from(https://raw.github.com/ricanney/stata/master/code/x/) replace```
-# Syntax
-```xxxxxx, xxxxx(filename)```
-# Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh. Donec gravida quam est, at aliquam ex facilisis vel. Etiam quis ex sapien. Nulla sapien sem, auctor et neque egestas, scelerisque aliquet nunc. Vivamus venenatis massa velit, suscipit scelerisque nisi dapibus eget. Morbi commodo elementum ante, vel condimentum purus consectetur vel. Pellentesque efficitur risus in mauris elementum pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet sem urna, sit amet varius leo tristique eu. Ut ultricies bibendum mi, vel convallis nulla egestas at. Integer fermentum nibh eget purus ornare pulvinar. Suspendisse a felis ac elit molestie consequat. Donec ac dui nunc. Vestibulum dapibus lorem non ante sagittis fringilla.
-
 # Examples
+An example of bespoke code for processing GWAS summary files from data downloaded from https://www.med.unc.edu/pgc/results-and-downloads
 ```
-example
+qui { // duncan-ratanatharathorn-aiello-2017 (ptsd)
+	global ref        E:\data\genotypes\ref\1000-genomes\phase3\data\hg19\eur_1000g_phase3_chrall_impute_macgt5
+	global input      E:\data\summary\duncan-ratanatharathorn-aiello-2017\data\sorted-ptsd-ea9-all-study-specific-pcs1.txt 
+	global output     duncan-ratanatharathorn-aiello-2017-eur-ptsd
+	qui { // extracting GWAS data and making tab-delimited
+		!$gunzip ${input}.gz
+		!$tabbed ${input}
+		}
+	qui { // convert to prePRS
+		bim2dta, bim(${ref})
+		import delim using ${input}.tabbed, clear 
+		rename (markername allele1 allele2 effect pvalue) (snp b1 b2 effect p)
+		gen or = exp(effect)
+		merge 1:1 snp using ${ref}_bim.dta // created from bim2dta
+		drop a1 a2
+		keep if _m == 3
+		rename (snp b1 b2) (rsid a1 a2)
+		for var a1 a2: replace X = strupper(X)
+		keep  chr bp rsid a1 a2 or p direction
+		order chr bp rsid a1 a2 or p	
+		gwas2prs , name(${output}) reference(${ref}) 
+		}
+	qui { // clean-up and re-archive data
+		!del ${input}.tabbed
+		!$gzip ${input}
+		}
+	}
 ```
 
 # Dependencies
 | Program | Installation Command
 | :----- | :------
-|```program``` | ```ssc install program```
+|```recodegenotypes``` | automatic installation with package
+|```recodestrand``` | automatic installation with package
