@@ -67,7 +67,7 @@ qui { // p
 		exit
 		}
 	}
-qui { //bp
+qui { // bp
 	capture confirm numeric var `bp' 
 	if _rc==0 {
 		noi di in green"# >> the chromosome location variable `bp' is numeric ... continue"
@@ -118,8 +118,6 @@ qui {
 	}
 di in white"# > plotting to tmpManhattan.gph"
 qui { 
-	global gws red 
-	global str midgreen
 	colorscheme 8, palette(Blues)
 	global color3	"mlc("`r(color7)'") mfc("`r(color7)'")"
 	global color4	"mlc("`r(color8)'") mfc("`r(color8)'")"
@@ -131,36 +129,34 @@ qui {
 	gen tmpmin = `min'
 	global tmp_symbol "msymbol(o) msize(small)"
 	#delimit;
-	tw scatter tmpp tmpbp if (`chr' == 1 & tmpp < `str'),  ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 2 & tmpp < `str'),  ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 3 & tmpp < `str'),  ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 4 & tmpp < `str'),  ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 5 & tmpp < `str'),  ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 6 & tmpp < `str'),  ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 7 & tmpp < `str'),  ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 8 & tmpp < `str'),  ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 9 & tmpp < `str'),  ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 10 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 11 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 12 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 13 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 14 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 15 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 16 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 17 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 18 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 19 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 20 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 21 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (`chr' == 22 & tmpp < `str'), ${tmp_symbol} ${color4}
-	|| scatter tmpp tmpbp if (`chr' == 23 & tmpp < `str'), ${tmp_symbol} ${color3}
-	|| scatter tmpp tmpbp if (tmpp >= `str' & tmpp < `gws'), ${tmp_symbol} mlcolor(${str}) mfcolor(${str})
-	|| scatter tmpp tmpbp if (tmpp >= `gws'), ${tmp_symbol} mlcolor(${gws}) mfcolor(${gws})
-	ytitle("-log10(p)"" ")
-	ylabel(`min'(2)${tmpmax})
+	tw scatter tmpp tmpbp if `chr' == 1 ,  ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 2 ,  ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 3 ,  ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 4 ,  ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 5 ,  ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 6 ,  ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 7 ,  ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 8 ,  ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 9 ,  ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 10 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 11 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 12 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 13 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 14 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 15 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 16 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 17 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 18 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 19 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 20 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 21 , ${tmp_symbol} ${color3}
+	|| scatter tmpp tmpbp if `chr' == 22 , ${tmp_symbol} ${color4}
+	|| scatter tmpp tmpbp if `chr' == 23 , ${tmp_symbol} ${color3}
+	ytitle("-log10(p)"" ")  ylabel(`min'(2)${tmpmax})
+	xtitle(" ""Chromosome")	xlabel(none)
+	yline(`gws', lp(dash) lc("203 024 029") lw(thin)) 
+	yline(`str', lp(dash) lc("065 171 093") lw(thin)) 
 	xmlabel(${mtick1} "1" ${mtick2} "2" ${mtick3} "3" ${mtick4} "4" ${mtick5} "5" ${mtick6} "6" ${mtick7} "7" ${mtick8} "8" ${mtick9} "9" ${mtick10} "10" ${mtick11} "11" ${mtick12} "12" ${mtick13} "13" ${mtick14} "14" ${mtick15} "15" ${mtick16} "16" ${mtick17} "17" ${mtick18} "18" ${mtick19} "19" ${mtick20} "20" ${mtick21} "21" ${mtick22} "22" , nogrid)
-	xlabel(none)
-	xtitle(" ""Chromosome") 
 	fysize(100) fxsize(500)
 	legend(off)
 	nodraw saving(tmpManhattan.gph, replace)
