@@ -95,8 +95,6 @@ qui {
 		erase _ooo.do
 		}
 	}
-	
-	
 di in white"# > checking all parameters are set"
 qui { 
 	di in green"# >> The parameter file should include the following information as globals"
@@ -373,12 +371,12 @@ qui {
 			di in white "# >> create *.score for P< `threshold'  "
 			qui {
 				outsheet rsid gwas_risk gwas_weight using tempfile-P`threshold'.score, non noq replace
-				!copy "tempfile-P`threshold'.score"          "..\\${project_name}_P`threshold'.score"
+				!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
 				}
 			di in white "# >> create *.q-score-file for P< `threshold'  "
 			qui { 
 				outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
-				!copy "tempfile-P`threshold'.q-score-file"   "..\\${project_name}_P`threshold'.q-score-file"
+				!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
 				}
 			di in white "# >> create *.q-score-file-range for P< `threshold'  "
 			qui { 
@@ -530,7 +528,7 @@ qui {
 			noi di"# > data`data' N SNPs is original ........................... N = ${data`data'_SNPs}"
 			noi di"# > number of SNPs intrecepting all datasets and gwas .. N = ${N_snps_gwas_output}"
 			noi di"# > data`data' N individuals is ............................. N = ${data`data'_ind}"
-			noi di"# > data`data' profiles stored in ........................... ${project_name}_data`data'_profiles.dta"
+			noi di"# > data`data' profiles stored in ........................... ${gwas_short}-by-${project_name}_data`data'_profiles.dta"
 			}
 	}
 	noi di"#########################################################################"	
@@ -547,21 +545,20 @@ qui {
 di in white"# > copy file from working folder to project folder  "
 qui {
 	foreach data of num 1 / $Ndata {	
-		!copy "data`data'-final-profiles.dta"   "..\\${project_name}_data`data'_profiles.dta"
-		!copy "data`data'-final-profiles.csv"   "..\\${project_name}_data`data'_profiles.csv"
+		!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
+		!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
 		graph use "tempfile-2-gwas_risk_frq_x_data`data'_risk_frq.gph" 
-		graph export "..\\${project_name}_sanity-check-gwas-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
+		graph export "..\\${gwas_short}-by-${project_name}_sanity-check-gwas-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
 		window manage close graph
 		}
-	!copy "tempfile-4.log"               "..\\${project_name}.meta-log"
-	!copy "gwas-processed-mahhattan.png" "..\\${project_name}_intersect_manhattan.png"
+	!copy "tempfile-4.log"               "..\\${gwas_short}-by-${project_name}.meta-log"
+	!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-by-${project_name}_intersect_manhattan.png"
 	}
 di in white"# > removing temporary folder"
 qui {
 	cd ..
 	!rmdir ${wd} /s /q 
 	}
-
 di in white"#########################################################################"
 di in white"# Completed: $S_DATE $S_TIME"
 di in white"#########################################################################"
