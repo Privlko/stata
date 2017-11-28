@@ -125,7 +125,7 @@ di in white"# > checking if ${gwas_prePRS}.gz / ${gwas_prePRS} is present"
 qui { 
 	capture confirm file "${gwas_prePRS}.gz"
 	if _rc==0 {
-			noi di in green"# > the input gwas is $gwas_short and was located at $gwas.gz"
+			noi di in green"# > the input gwas is $gwas_short and was located at ${gwas_prePRS}.gz"
 			}
 	else {
 			capture confirm file "${gwas_prePRS}"
@@ -188,7 +188,7 @@ di in white"# > processing gwas data"
 qui { 
 	di in white"# >> unzipping archive"
 	qui { 
-		!$gunzip ${gwas}.gz
+		!$gunzip ${gwas_prePRS}.gz
 		}
 	di in white"# >> importing prePRS format file"
 	qui {
