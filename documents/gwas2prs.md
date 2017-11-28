@@ -21,7 +21,7 @@ The GWAS summary data requires the following variables;
 7. ```rsid``` - marker name
 8. ```info``` - imputation info-score <OPTIONAL>
 9. ```direction``` - imputation direction variable <OPTIONAL>
-10. ```a1_frq``` - allele frequency of allelel a1 <OPTIONAL> **ideally, include sample based allele frequency if possible**
+10. ```a1_frq``` - allele frequency of allelel a1 <OPTIONAL>  - ideally, you will want to include sample-based allele frequency if possible
 
 Briefly, ```gwas2prs``` is doing a number of simple qc checks, removing some difficult SNPS and formatting ready for ```profilescore```
 
