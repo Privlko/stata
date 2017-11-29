@@ -1,4 +1,5 @@
 v 1
 d Richard Anney, Cardiff University
 p checkfile a command to check the presence of a file
+p checktabbed a command to check the presence of tabbed.pl and that it is working correctly
 
