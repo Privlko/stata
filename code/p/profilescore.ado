@@ -135,38 +135,40 @@ qui {
 		noi di as text"#########################################################################"
 		}
 	foreach data of num 1 / $Ndata {
-		noi di as text"# >> processing " as input "${data`data'} (`data' of ${Ndata})"
-		qui di as text"# >> define a1_freq in dataset"
-		bim2frq, bim(${data`data'})
-		rename (snp maf) (rsid a1_frq)
-		keep rsid a1 a1_freq
-		save ${data`data'}_frq2.dta,replace
-		qui di as text"# >> import plink *.bim file"
-		bim2dta, bim(${data`data'})
-		qui di as text"# >> limit to autosomes"
-		for var chr bp: tostring X,replace
-		drop if chr == "23" | chr == "24" | chr == "25"
-		drop chr bp		
-		qui di as text "# >> drop problematic SNPs (ID/ W/ S)"
-		drop if gt == "ID" | gt == "W" | gt == "S"
-		noi di as text"#########################################################################"
-		noi di in text"# As of 27-November-2017, the profilescore does not rename to rsid. This "
-		noi	di in text"# should have previously been corrected in Module #3 of genoytpeqc       "	
-		noi di as text"#########################################################################"
-		rename snp rsid
-		qui di as text"# >> merge frq.dta"
-		merge 1:1 rsid a1 using ${data`data'}_frq2.dta
-		erase ${data`data'}_frq2.dta
-		keep if _m == 3
-		drop _m
-		for var a1 a2 gt a1_frq: rename X data`data'_X
-		qui di as text"# >> removing duplicates"
-		duplicates drop
-		duplicates tag rsid, gen(dups)
-		keep if dups == 0
-		drop dups
-		qui di as text"# >> save processed file - tempfile-data`data'.dta"
-		save tempfile-data`data'.dta, replace
+		noi di as text"# >> processing " as result "${data`data'} (`data' of ${Ndata})"
+		qui {
+			noi di as text"# >> define a1_frq in " as result "${data`data'}"
+			bim2frq, bim(${data`data'})
+			rename (snp maf) (rsid a1_frq)
+			keep rsid a1 a1_frq
+			save ${data`data'}_frq2.dta,replace
+			noi di as text"# >> processing data in "as result "${data`data'}.bim"
+			bim2dta, bim(${data`data'})
+			noi di as text"# >> limit to autosomes"
+			for var chr bp: tostring X,replace
+			drop if chr == "23" | chr == "24" | chr == "25"
+			drop chr bp		
+			noi di as text "# >> drop problematic SNPs (ID/ W/ S)"
+			drop if gt == "ID" | gt == "W" | gt == "S"
+			noi di as text"#########################################################################"
+			noi di in text"# As of 27-November-2017, the profilescore does not rename to rsid. This "
+			noi	di in text"# should have previously been corrected in Module #3 of genoytpeqc       "	
+			noi di as text"#########################################################################"
+			rename snp rsid
+			noi di as text"# >> merge frq.dta"
+			merge 1:1 rsid a1 using ${data`data'}_frq2.dta
+			erase ${data`data'}_frq2.dta
+			keep if _m == 3
+			drop _m
+			for var a1 a2 gt a1_frq: rename X data`data'_X
+			noi di as text"# >> removing duplicates"
+			duplicates drop
+			duplicates tag rsid, gen(dups)
+			keep if dups == 0
+			drop dups
+			noi di as text"# >> save processed file - tempfile-data`data'.dta"
+			save tempfile-data`data'.dta, replace
+			}
 		}
 	}
 noi di as text"# > merging rsid over files (define intersect)"
