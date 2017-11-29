@@ -130,9 +130,12 @@ qui {
 		noi di as text"#########################################################################"
 		noi di in text"# As of 27-November-2017, the profilescore calculates scores for all     "
 		noi di in text"# individuals in dataset  exclusion based on ancestry is to be performed "
-		noi di in text"# after calculations "
-		noi di in error"# caveat : ld clumping is based on \${kg_ref}"
+		noi di in text"# after calculations                                                     "
+		noi di in error"# caveat : ld clumping is based on \${kg_ref}                           "
 		noi di as text"#########################################################################"
+		noi di in text"# As of 27-November-2017, the profilescore does not rename markers to an "
+		noi	di in text"# rsid. This should be corrected in Module #3 of genoytpeqc              "	
+		noi di as text"#########################################################################"		
 		}
 	foreach data of num 1 / $Ndata {
 		noi di as text"# >> processing " as result "${data`data'} (`data' of ${Ndata})"
@@ -150,10 +153,7 @@ qui {
 			drop chr bp		
 			noi di as text "# >> drop problematic SNPs (ID/ W/ S)"
 			drop if gt == "ID" | gt == "W" | gt == "S"
-			noi di as text"#########################################################################"
-			noi di in text"# As of 27-November-2017, the profilescore does not rename to rsid. This "
-			noi	di in text"# should have previously been corrected in Module #3 of genoytpeqc       "	
-			noi di as text"#########################################################################"
+
 			rename snp rsid
 			noi di as text"# >> merge frq.dta"
 			merge 1:1 rsid a1 using ${data`data'}_frq2.dta
@@ -375,11 +375,11 @@ qui {
 	noi di as text"# P#E_#_cnt2 ........... total number of named alleles observed ........ numeric"
 	noi di as text"# P#E_#_score .......... weighted score ................................ numeric"
 	noi di as text"#########################################################################"
-	noi di as text"# Scores were calculated using PLINK. Scores are created using weights    "
-	noi di as text"# (log(OR)). Final scores are averages of valid per-allele scores. By     "
-	noi di as text"# default, copies of the unnamed allele contribute zero to score, while   "
-	noi di as text"# missing genotypes contribute an amount proportional to the loaded (via  "
-	noi di as text"# --read-freq) or imputed allele frequency.                               "
+	noi di as text"# Scores were calculated using PLINK. Scores are created using weights   "
+	noi di as text"# (log(OR)). Final scores are averages of valid per-allele scores. By    "
+	noi di as text"# default, copies of the unnamed allele contribute zero to score, while  "
+	noi di as text"# missing genotypes contribute an amount proportional to the loaded (via "
+	noi di as text"# --read-freq) or imputed allele frequency.                              "
 	noi di as text"#########################################################################"
 	noi di as text"# risk scores based on ..... "as input "${gwas_prePRS} "
 	qui { 
