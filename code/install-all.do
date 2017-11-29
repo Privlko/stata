@@ -6,6 +6,7 @@ net install bim2frq     ,           from(https://raw.github.com/ricanney/stata/m
 net install bim2ldexclude,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install checkfile,              from(https://raw.github.com/ricanney/stata/master/code/c/) replace
 net install checktabbed,            from(https://raw.github.com/ricanney/stata/master/code/c/) replace
+net install create_temp_dir,        from(https://raw.github.com/ricanney/stata/master/code/c/) replace
 net install datestamp,              from(https://raw.github.com/ricanney/stata/master/code/d/) replace
 net install ensembl2symbol,         from(https://raw.github.com/ricanney/stata/master/code/e/) replace
 net install fam2dta,                from(https://raw.github.com/ricanney/stata/master/code/f/) replace
