@@ -18,24 +18,24 @@
 program checkfile
 syntax , file(string asis) 
 	
-di as text"#########################################################################"
-di as text"# checkfile                                                              "
-di as text"# version:       0.1                                                     "
-di as text"# Creation Date: 29nov2017                                               "
-di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-di as text"#########################################################################"
-di as text"# Started: $S_DATE $S_TIME                                               "
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# checkfile                                                              "
+qui di as text"# version:       0.1                                                     "
+qui di as text"# Creation Date: 29nov2017                                               "
+qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME                                               "
+qui di as text"#########################################################################"
 capture confirm file "`file'"
 if _rc==0 {
-	di as input"# > check for the presence of `file' ........ "as result"located "
+	di as text"# > checkfile - checking for the presence of `file' ........ " as result "located "
 	}
 else {
-	di as input"# > check for the presence of `file' ........ "as error"not found "
+	di as text"# > checkfile - checking for the presence of `file' ........ " as error "not found "
 	exit
 	}
-di as text"#########################################################################"
-di as text"# Completed: $S_DATE $S_TIME"
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;
 	

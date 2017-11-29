@@ -18,19 +18,18 @@
 program checktabbed
 syntax 
 	
-di as text"#########################################################################"
-di as text"# checktabbed                                                              "
-di as text"# version:       0.1                                                     "
-di as text"# Creation Date: 29nov2017                                               "
-di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-di as text"#########################################################################"
-di as text"# Started: $S_DATE $S_TIME                                               "
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# checktabbed                                                            "
+qui di as text"# version:       0.1                                                     "
+qui di as text"# Creation Date: 29nov2017                                               "
+qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME                                               "
+qui di as text"#########################################################################"
 clear
-set obs 3
+set obs 2
 gen a = "checkfile, file(" + "${tabbed}" + ")"
-replace a = `"di as input"# > check for the presence of ${tabbed} ""' in 1
-replace a = `"di as input"# > check that " as input " ${tabbed} is working""' in 3
+replace a = `"di as input"# > check that " as input " ${tabbed} is working""' in 2
 replace a = subinstr(a,"perl ","",.)
 outsheet a using _x.do, non noq replace
 do _x.do
@@ -38,13 +37,13 @@ erase _x.do
 replace a = "a b c d"
 outsheet a using test_pl.txt, noq replace
 !$tabbed test_pl.txt
-di as text"# > active perl should be downloaded/installed on your computer https://www.activestate.com/activeperl/downloads"
-di as text"# > check that test_pl.txt.tabbed has been created"
+qui di as text"# > active perl should be downloaded/installed on your computer https://www.activestate.com/activeperl/downloads"
+qui di as text"# > check that test_pl.txt.tabbed has been created"
 checkfile, file(test_pl.txt.tabbed)
 erase test_pl.txt
 erase test_pl.txt.tabbed
-di as text"#########################################################################"
-di as text"# Completed: $S_DATE $S_TIME"
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;
 	
