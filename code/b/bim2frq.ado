@@ -103,7 +103,7 @@ qui {
 	}
 di in white"# > naming variables"
 qui { 
-	rename (maf _gt) (a1_frq gt)
+	rename _gt gt
 	keep snp a1 a2 gt maf
 	}
 di in white"# > saving file as `bim'_frq.dta"
