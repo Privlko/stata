@@ -46,15 +46,14 @@ di as text"# Started: $S_DATE $S_TIME                                           
 di as text"#########################################################################"
 di as text"# User Defined Parameter"
 di as text"#########################################################################"
-di as result"# >> project_folder     = working folder"
-di as result"# >> project_name       = project name"
-di as result"# >> define kg_ref      = reference genotypes (1000-genomes phase3 hg19 european ancestry"
-di as result"# >> define Ndata       = number of input genotype files "
-di as result"# >> define data<#>     = location of genotypes for dataset<#>"
-di as result"# >> define gwas_short  = short name of gwas"
-di as result"# >> define gwas_prePRS = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
+di as text"# >> project_folder     = working folder"
+di as text"# >> project_name       = project name"
+di as text"# >> define kg_ref      = reference genotypes (1000-genomes phase3 hg19 european ancestry"
+di as text"# >> define Ndata       = number of input genotype files "
+di as text"# >> define data<#>     = location of genotypes for dataset<#>"
+di as text"# >> define gwas_short  = short name of gwas"
+di as text"# >> define gwas_prePRS = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
 di as text"# > checking dependencies are correctly defined"
-
 qui {
 	checktabbed
 	checkfile, file(${plink})
