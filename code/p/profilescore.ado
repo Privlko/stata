@@ -127,15 +127,21 @@ noi di as text"# > processing genotype data"
 qui {
 	noi di as text"# >> notes"
 	qui {
-		noi di as text"#########################################################################"
-		noi di in text"# As of 27-November-2017, the profilescore calculates scores for all     "
-		noi di in text"# individuals in dataset  exclusion based on ancestry is to be performed "
-		noi di in text"# after calculations                                                     "
-		noi di in error"# caveat : ld clumping is based on \${kg_ref}                           "
-		noi di as text"#########################################################################"
-		noi di in text"# As of 27-November-2017, the profilescore does not rename markers to an "
-		noi	di in text"# rsid. This should be corrected in Module #3 of genoytpeqc              "	
-		noi di as text"#########################################################################"		
+		noi di as text"     #########################################################################"
+		noi di in text"     # UPDATE 27nov2017"
+		noi di as text"     #########################################################################"
+		noi di as text"     # 1- The profilescore calculates PRS for all individuals in the dataset. "
+		noi di as text"     #    Exclusion based on ancestry is not performed and should be applied  "
+		noi di as text"     #    (where appropriate) by the end-user                                 "
+		noi di as text"     # 2- The profilescore does not convert markers to rs#. This is necessary "
+		noi di as text"     #    and should be performed prior to running script.                    "
+		noi di as text"     #    - this is part of the genotypeqc pipeline (module#3) for genotypes  "
+		noi di as text"     #    - this is part of the bespoke script for gwas summary prior to      "
+		noi di as text"     #      gwas2prs program                                                  "
+		noi di as text"     #########################################################################"
+		noi di in error"     # Please note that the ld clumping is based on \${kg_ref} and is ancestry"
+		noi di in error"     # specific. Select appropriate reference genotypes for clumping          "
+		noi di as text"     #########################################################################"		
 		}
 	foreach data of num 1 / $Ndata {
 		noi di as text"# >> processing " as result "${data`data'} (`data' of ${Ndata})"
@@ -166,7 +172,7 @@ qui {
 			duplicates tag rsid, gen(dups)
 			keep if dups == 0
 			drop dups
-			noi di as text"# >> save processed file - tempfile-data`data'.dta"
+			noi di as text"# >> save processed file as " as result "tempfile-data`data'.dta"
 			save tempfile-data`data'.dta, replace
 			}
 		}
@@ -176,7 +182,7 @@ qui {
 	noi di as text"# >> open tempfile-gwas.dta"
 	use tempfile-gwas.dta, clear
 	foreach data of num 1 / $Ndata {
-		noi di as text "# >> merge 1:1 rsid against " as input "tempfile-data`data'.dta"
+		noi di as text "# >> merge 1:1 rsid against " as result "tempfile-data`data'.dta"
 		merge 1:1 rsid using tempfile-data`data'.dta
 		keep if _m ==3
 		drop _m
@@ -187,14 +193,14 @@ qui {
 noi di as text"# > mapping to a common strand [risk - alt]"
 qui { 
 	foreach data of num 1 / $Ndata {
-		noi di as text "# >> cross-tabulate gwas genotype coding with "as input "data`data'"
+		noi di as text "# >> cross-tabulate gwas genotype coding with "as result "data`data'"
 		noi ta gwas_gt data`data'_gt
 		drop data`data'_gt
 		qui recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
-		noi di as text "# >> recode allele from "as input "data`data' "as text "where there are strand flips"
+		noi di as text "# >> recode allele from "as result "data`data' "as text "where there are strand flips"
 		replace data`data'_a1 = _tmpb1 if _tmpflip == 1
 		replace data`data'_a2 = _tmpb2 if _tmpflip == 1
-		noi di as text "# >> export list of SNPs to flip strand in "as input "data`data' "as text "plink binaries"
+		noi di as text "# >> export list of SNPs to flip strand in "as result "data`data' "as text "plink binaries"
 		outsheet rsid if _tmpflip == 1 using tempfile-data`data'.flip, non noq replace
 		drop _tmpflip -_tmpb1 _tmpb2
 		order chr bp rsid gwas_risk gwas_alt gwas_gt gwas_weight gwas_p gwas_risk_frq data`data'_a1 data`data'_a2 data`data'_a1_frq
@@ -205,7 +211,7 @@ qui {
 	drop gwas_gt
 	global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
 	foreach data of num 1 / $Ndata {
-		noi di as text "# >> two-way scatter plot of allele frq betweeen gwas and "as input "data`data'"
+		noi di as text "# >> two-way scatter plot of allele frq betweeen gwas and "as result "data`data'"
 		gen data`data'_risk_frq = .
 		replace data`data'_risk_frq =    data`data'_a1_frq if data`data'_a1 == gwas_risk
 		replace data`data'_risk_frq = 1- data`data'_a1_frq if data`data'_a1 == gwas_alt
@@ -230,7 +236,7 @@ qui {
 		qui { 
 			!$plink --bfile ${data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
 			}
-		noi di as text "# >> flips strands for "as result "${data`data'}"
+		noi di as text "# >> flip strands for "as result "${data`data'}"
 		qui{ 
 			!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out data`data'-intersect-flipped
 			}
@@ -264,7 +270,7 @@ qui {
 		do _tmp.do
 		erase _tmp.do
 		}
-	noi di as text"# >> clump SNPs at "as results `"${thresholds}"'
+	noi di as text"# >> clump SNPs at " as result `"${thresholds}"'
 	qui {
 		global ldprune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		foreach threshold in $thresholds {
