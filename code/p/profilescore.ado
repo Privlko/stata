@@ -237,7 +237,7 @@ qui {
 		qui {
 			di in white"# >> import plink *.bim file"
 			bim2frq, bim(${data`data'})
-			rename (snp maf) (rsid a1_freq)
+			rename (snp maf) (rsid a1_frq)
 			keep rsid a1 a1_freq
 			save ${data`data'}_frq2.dta,replace
 			bim2dta, bim(${data`data'})
