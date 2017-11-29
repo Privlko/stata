@@ -290,17 +290,17 @@ qui {
 		rename (snp) (rsid)
 		merge 1:1 rsid using tempfile-gwas.dta 
 		keep if _m == 3
-		noi di as text"# >> create *.score for P< `threshold'  "
+		noi di as text"# >> create *.score for "as input "P< `threshold'  "
 		qui {
 			outsheet rsid gwas_risk gwas_weight using tempfile-P`threshold'.score, non noq replace
 			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
 			}
-		noi di as text"# >> create *.q-score-file for P< `threshold'  "
+		noi di as text"# >> create *.q-score-file for "as input "P< `threshold'  "
 		qui { 
 			outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
 			!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
 			}
-		noi di as text"# >> create *.q-score-file-range for P< `threshold'  "
+		noi di as text"# >> create *.q-score-file-range for "as input "P< `threshold'  "
 		qui { 
 			clear
 			set obs 1
@@ -313,7 +313,7 @@ noi di as text"# > create *.profile file for each threshold for each dataset "
 qui {	
 	foreach data of num 1 / $Ndata {
 		foreach threshold in $thresholds {
-			noi di as text ">> create data`data'-intersect-flipped.P`threshold'.profile"
+			noi di as text ">> create "as input "data`data'-intersect-flipped.P`threshold'.profile"
 			!${plink} --bfile         data`data'-intersect-flipped ///
 								--score         tempfile-P`threshold'.score  ///
 								--q-score-file  tempfile-P`threshold'.q-score-file ///
@@ -343,22 +343,20 @@ qui {
 				outsheet a using tempfile.do, non noq replace
 				do tempfile.do
 				erase tempfile.do
+				noi di as text"# >> import data for data`data'-intersect-flipped.P`threshold'.profile"
+				!$tabbed           data`data'-intersect-flipped.P`threshold'.profile
+				import delim using data`data'-intersect-flipped.P`threshold'.profile.tabbed, case(lower) clear
+				*erase data`data'-intersect-flipped.P`threshold'.profile
+				*erase data`data'-intersect-flipped.P`threshold'.profile.tabbed
+				keep fid - score
+				for var fid iid: tostring X, replace
+				for var cnt cnt2 score: rename X ${tag}_X
+				merge 1:1 fid iid using data`data'-final-profiles.dta
+				drop _m
+				order fid iid sex 
+				save data`data'-final-profiles.dta, replace
+				outsheet using data`data'-final-profiles.csv, comma noq replace
 				}
-			}
-		noi di as text"# >> import data for data`data'-intersect-flipped.P`threshold'.profile"
-		qui {
-			!$tabbed           data`data'-intersect-flipped.P`threshold'.profile
-			import delim using data`data'-intersect-flipped.P`threshold'.profile.tabbed, case(lower) clear
-			erase data`data'-intersect-flipped.P`threshold'.profile
-			erase data`data'-intersect-flipped.P`threshold'.profile.tabbed
-			keep fid - score
-			for var fid iid: tostring X, replace
-			for var cnt cnt2 score: rename X ${tag}_X
-			merge 1:1 fid iid using data`data'-final-profiles.dta
-			drop _m
-			order fid iid sex 
-			save data`data'-final-profiles.dta, replace
-			outsheet using data`data'-final-profiles.csv, comma noq replace
 			}
 		}
 	}
@@ -415,10 +413,11 @@ qui {
 		outsheet d using tempfile.do, non noq replace
 		do tempfile.do
 		erase tempfile.do
-		use data1-final-profiles.dta, clear		
-		foreach threshold in $tempThreshold { 
-			sum p`threshold'_cnt
-			noi di as text"# number of ld-independent SNPs in model " as input" (at P < `threshold') .... N = "as result `r(N)'
+		foreach threshold in $thresholds { 
+			!$cat tempfile-P`threshold'.q-score-file | $wc -l > tmp.count
+			insheet using tmp.count, clear
+			sum v1
+			noi di as text"# number of ld-independent SNPs in model " as input" (at P < `threshold') " as text".... N = "as result `r(max)'
 			}
 		}
 	qui { // calculate data specific information 
