@@ -16,19 +16,19 @@
 program recodegenotype
 syntax , a1(string asis)  a2(string asis) 
 
-di in white"#########################################################################"
-di in white "recodegenotype - version 0.1a - 28may2014 richard anney "
-di in white"#########################################################################"
-di in white"# A command to convert allele codes into genotype codes (varname _gt_tmp)"
-di in white"# allele 1 is `a1'"
-di in white"# allele 2 is `a2'"
-di in white"# genotype varname is _gt_tmp"
-di in white"# allele codes must be A C G T I or D "
-di in white"# genotype codes will be A C G T I D + R Y W S K M ID "
-di in white"#########################################################################"
-di in white"# Started: $S_DATE $S_TIME"
-di in white"#########################################################################"
-di in white"# > converting complex indels to ID (by length)"
+di as text"#########################################################################"
+di as text "recodegenotype - version 0.1a - 28may2014 richard anney "
+di as text"#########################################################################"
+di as text"# A command to convert allele codes into genotype codes (varname _gt_tmp)"
+di as text"# allele 1 is `a1'"
+di as text"# allele 2 is `a2'"
+di as text"# genotype varname is _gt_tmp"
+di as text"# allele codes must be A C G T I or D "
+di as text"# genotype codes will be A C G T I D + R Y W S K M ID "
+di as text"#########################################################################"
+di as text"# Started: $S_DATE $S_TIME"
+di as text"#########################################################################"
+di as text"# > converting complex indels to ID (by length)"
 qui {
 	gen counta1 = length(`a1')
 	gen counta2 = length(`a2')
@@ -45,7 +45,7 @@ qui {
 	replace `a2' = "" if `a2' == "0"
 	compress
 	}
-di in white"# > creating _gt_tmp from `a1' and `a2'"
+di as text"# > creating _gt_tmp from `a1' and `a2'"
 qui {
 	gen _gt_tmp = ""
 	replace _gt_tmp = "A" if  (`a1' =="A" & `a2' =="")
@@ -93,7 +93,7 @@ qui {
 	replace _gt_tmp = "Y" if  (`a1' =="C" & `a2' =="T")
 	replace _gt_tmp = "Y" if  (`a1' =="T" & `a2' =="C")
 	}
-di in white"#########################################################################"
-di in white"# Completed: $S_DATE $S_TIME"
-di in white"#########################################################################"
+di as text"#########################################################################"
+di as text"# Completed: $S_DATE $S_TIME"
+di as text"#########################################################################"
 end;

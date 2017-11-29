@@ -26,13 +26,13 @@ di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                
 di as text"#########################################################################"
 di as text"# Started: $S_DATE $S_TIME                                               "
 di as text"#########################################################################"
-di as text"# > check for the presence of `file'"
+di as text"# > check for the presence of " as input "`file'"
 capture confirm file "`file'"
 if _rc==0 {
-	di as result"# >> located"
+	di as text "# >> located" as result "`file'"
 	}
 else {
-	di as error"# >> cannot locate file"
+	di as text"# >> cannot locate"  as result "`file'"
 	exit
 	}
 di as text"#########################################################################"

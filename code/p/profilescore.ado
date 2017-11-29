@@ -35,7 +35,7 @@
 */
 program profilescore
 syntax , param(string asis) 
-	
+
 di as text"#########################################################################"
 di as text"# profilescore                                                           "
 di as text"# version:       0.3                                                     "
@@ -54,6 +54,7 @@ di as result"# >> define data<#>     = location of genotypes for dataset<#>"
 di as result"# >> define gwas_short  = short name of gwas"
 di as result"# >> define gwas_prePRS = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
 di as text"# > checking dependencies are correctly defined"
+
 qui {
 	checktabbed
 	checkfile, file(${plink})
@@ -78,16 +79,9 @@ qui {
 	}
 di as text"# > creating a temp folder in ${project_folder}"
 qui { 
-	clear
-	set obs 1
-	ralpha folderRandom, range(A/z) l(10)
-	gen a = "global tmp_wd  " + folderRandom
-	outsheet a using _setwd.do, non noq replace
-	do _setwd.do
-	erase _setwd.do
-	!mkdir ${tmp_wd}
-	cd     ${tmp_wd}
-	}	
+	cd ${project_folder}
+	create_temp_dir
+	}
 di as text"# > processing gwas data"
 qui { 
 	di as text"# >> unzipping archive"
@@ -111,7 +105,7 @@ qui {
 		replace alt        = a1     if flip == 1
 		replace risk_frq = 1-a1_frq if flip == 1
 		gen weight = log(risk_or)
-		recodegenotype, a1(risk) a2(alt)
+		qui recodegenotype, a1(risk) a2(alt)
 		rename _gt gt
 		keep  chr bp rsid risk alt gt weight p risk_frq
 		order chr bp rsid risk alt gt weight p risk_frq
@@ -132,12 +126,12 @@ qui {
 		}
 	}
 di as text"# > processing genotype data"
-di in green"#   as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
-di in green"#   exclusion based on ancestry is to be performed after calculations "
-di in red  "#   caveat : ld clumping is based on ${kg_ref}"
+di in text"#   as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
+di in text"#   exclusion based on ancestry is to be performed after calculations "
+di in text"#   caveat : ld clumping is based on " as input "${kg_ref}"
 qui { 
 	foreach data of num 1 / $Ndata {
-		di as text"# >> processing ${data`data'} (`data' of ${Ndata})"
+		di as text"# >> processing " as input "${data`data'} (`data' of ${Ndata})"
 		qui {
 			di as text"# >> import plink *.bim file"
 			bim2frq, bim(${data`data'})
@@ -151,8 +145,8 @@ qui {
 			drop chr bp		
 			di as text "# >> drop problematic SNPs (ID/ W/ S)"
 			drop if gt == "ID" | gt == "W" | gt == "S"
-			di in green"# as of 27-November-2017, the profilescore does not rename to rsid"
-			di in green"# this should have been applied in Module #3 of genoytpeqc"	
+			di in text"# as of 27-November-2017, the profilescore does not rename to rsid"
+			di in text"# this should have been applied in Module #3 of genoytpeqc"	
 			rename snp rsid
 			di as text"# >> merge frq.dta"
 			merge 1:1 rsid a1 using ${data`data'}_frq2.dta
@@ -176,7 +170,7 @@ qui {
 	di as text"# >> open tempfile-gwas.dta"
 	use tempfile-gwas.dta, clear
 	foreach data of num 1 / $Ndata {
-		di as text "# >> merge 1:1 rsid against tempfile-data`data'.dta"
+		di as text "# >> merge 1:1 rsid against " as input "tempfile-data`data'.dta"
 		merge 1:1 rsid using tempfile-data`data'.dta
 		keep if _m ==3
 		drop _m
@@ -186,14 +180,14 @@ qui {
 di as text"# > mapping to a common strand [risk - alt]"
 qui { 
 	foreach data of num 1 / $Ndata {
-		di as text "# >> cross-tabulate gwas genotype coding with data`data'"
+		di as text "# >> cross-tabulate gwas genotype coding with "as input "data`data'"
 		noi ta gwas_gt data`data'_gt
 		drop data`data'_gt
 		recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
-		di as text "# >> recode allele from data`data' where there are strand flips"
+		di as text "# >> recode allele from "as input "data`data' "as text "where there are strand flips"
 		replace data`data'_a1 = _tmpb1 if _tmpflip == 1
 		replace data`data'_a2 = _tmpb2 if _tmpflip == 1
-		di as text "# >> export list of SNPs to flip strand in data`data' plink binaries"
+		di as text "# >> export list of SNPs to flip strand in "as input "data`data' "as text "plink binaries"
 		outsheet rsid if _tmpflip == 1 using tempfile-data`data'.flip, non noq replace
 		drop _tmpflip -_tmpb1 _tmpb2
 		order chr bp rsid gwas_risk gwas_alt gwas_gt gwas_weight gwas_p gwas_risk_frq data`data'_a1 data`data'_a2 data`data'_a1_frq
@@ -204,7 +198,7 @@ qui {
 	drop gwas_gt
 	global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
 	foreach data of num 1 / $Ndata {
-		di as text "# >> two-way scatter plot of allele frq betweeen gwas and data`data'"
+		di as text "# >> two-way scatter plot of allele frq betweeen gwas and "as input "data`data'"
 		gen data`data'_risk_frq = .
 		replace data`data'_risk_frq =    data`data'_a1_frq if data`data'_a1 == gwas_risk
 		replace data`data'_risk_frq = 1- data`data'_a1_frq if data`data'_a1 == gwas_alt
@@ -224,7 +218,7 @@ qui {
 di as text"# > extract intersect and flip alleles"
 qui {
 	foreach data of num 1 / $Ndata {
-		di as text "# >> extract intersect for ${data`data'}"
+		di as text "# >> extract intersect for "as input "${data`data'}"
 		qui { 
 			!$plink --bfile ${data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
 			}
@@ -234,7 +228,7 @@ qui {
 			}
 		}
 	}
-di as text"# > extract intersect on ${kg_ref}"
+di as text"# > extract intersect on "as input "${kg_ref}"
 qui { 
 	!$plink --bfile ${kg_ref} --extract intersect.extract --make-bed --out tempfile-ref
 	}
@@ -256,13 +250,13 @@ qui {
 		outsheet threshold in 1 using _tmp.do, non noq replace
 		do _tmp.do
 		}
-	di as text "# >> clump SNPs at ${thresholds}"
+	di as text "# >> clump SNPs at "as input "${thresholds}"
 	qui {
 		global ldprune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		foreach threshold in $thresholds {
-			di as text "# >>> define SNPs at P < `threshold' for clumping"
+			di as text "# >>> define SNPs at "as input "P < `threshold' "as text "for clumping"
 			outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
-			di as text "# >>>  clump SNPs at P < `threshold' to identify ld-independent set for scoring"
+			di as text "# >>>  clump SNPs at "as input "P < `threshold' "as text "to identify ld-independent set for scoring"
 			!${plink} --bfile tempfile-ref --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
 			}
 		}
@@ -276,17 +270,17 @@ qui {
 			rename (snp) (rsid)
 			merge 1:1 rsid using tempfile-gwas.dta 
 			keep if _m == 3
-			di as text "# >> create *.score for P< `threshold'  "
+			di as text "# >> create *.score for "as input "P< `threshold'  "
 			qui {
 				outsheet rsid gwas_risk gwas_weight using tempfile-P`threshold'.score, non noq replace
 				!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
 				}
-			di as text "# >> create *.q-score-file for P< `threshold'  "
+			di as text "# >> create *.q-score-file for "as input "P< `threshold'  "
 			qui { 
 				outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
 				!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
 				}
-			di as text "# >> create *.q-score-file-range for P< `threshold'  "
+			di as text "# >> create *.q-score-file-range for "as input "P< `threshold'  "
 			qui { 
 				clear
 				set obs 1
@@ -299,7 +293,7 @@ di as text"# > create *.profile file for each threshold for each dataset "
 qui {	
 	foreach data of num 1 / $Ndata {
 		foreach threshold in $thresholds {
-			di as text "- create *.profile for P< `threshold' for data`data'"
+			di as text "- create *.profile for "as input "P< `threshold' "as text "for "as input "data`data'"
 			!${plink} --bfile         data`data'-intersect-flipped ///
 								--score         tempfile-P`threshold'.score  ///
 								--q-score-file  tempfile-P`threshold'.q-score-file ///
@@ -324,7 +318,7 @@ qui {
 			outsheet a using tempfile.do, non noq replace
 			do tempfile.do
 			erase tempfile.do
-			di as text"# >>import data for P`threshold'.profile"
+			di as text"# >>import data for "as input "P`threshold'.profile"
 			!$tabbed           data`data'-intersect-flipped.P`threshold'.profile
 			import delim using data`data'-intersect-flipped.P`threshold'.profile.tabbed, case(lower) clear
 			erase data`data'-intersect-flipped.P`threshold'.profile
@@ -351,12 +345,12 @@ qui {
 	noi di as text"#########################################################################"			
 	noi di as text"# codebook for *profile.dta "
 	noi di as text"#########################################################################"
-	noi di as result"# fid .................. family identifier ............................. string"
-	noi di as result"# iid .................. individual identifier ......................... string"
-	noi di as result"# sex .................. sex ........................................... 1 = male; 2= female"
-	noi di as result"# P#E_#_cnt ............ number of alleles present in the model ........ numeric"
-	noi di as result"# P#E_#_cnt2 ........... total number of named alleles observed ........ numeric"
-	noi di as result"# P#E_#_score .......... weighted score ................................ numeric"
+	noi di as text"# fid .................. family identifier ............................. string"
+	noi di as text"# iid .................. individual identifier ......................... string"
+	noi di as text"# sex .................. sex ........................................... 1 = male; 2= female"
+	noi di as text"# P#E_#_cnt ............ number of alleles present in the model ........ numeric"
+	noi di as text"# P#E_#_cnt2 ........... total number of named alleles observed ........ numeric"
+	noi di as text"# P#E_#_score .......... weighted score ................................ numeric"
 	noi di as text"#########################################################################"
 	noi di as text"# Scores were calculated using PLINK. Scores are created using weights    "
 	noi di as text"# (log(OR)). Final scores are averages of valid per-allele scores. By     "
@@ -364,10 +358,10 @@ qui {
 	noi di as text"# missing genotypes contribute an amount proportional to the loaded (via  "
 	noi di as text"# --read-freq) or imputed allele frequency.                               "
 	noi di as text"#########################################################################"
-	noi di as text"# risk scores based on ..... ${gwas_prePRS} "
+	noi di as text"# risk scores based on ..... "as input "${gwas_prePRS} "
 	qui { 
 		foreach data of num 1 / $Ndata {
-			noi di as text"# data`data'  ................... ${data`data'}"
+			noi di as text"# data`data'  ................... "as input "${data`data'}"
 			}
 		}
 	noi di as text"#########################################################################"
@@ -375,15 +369,12 @@ qui {
 		!$zcat ${gwas_prePRS}.gz | $wc -l > gwas-input.count
 		insheet using gwas-input.count, clear
 		sum v1
-		global N_snps_gwas_input `r(max)'
-		noi di as result"# number of SNPs in original gwas file ........................ N = ${N_snps_gwas_input}"
+		noi di as text"# number of SNPs in original gwas file ........................ N = "as result `r(max)'
 		use tempfile-combined.dta, clear
 		count 
-		global N_snps_gwas_output `r(N)'
-		noi di as result"# number of SNPs intrecepting all datasets and gwas  .......... N = ${N_snps_gwas_output}"
+		noi di as text"# number of SNPs intrecepting all datasets and gwas  .......... N = "as result `r(N)'
 		count if gwas_p < 5e-8
-		global N_snps_gws_output `r(N)'
-		noi di as result"# number of genome-wide-significant SNPs in input file ........ N = ${N_snps_gws_output}"
+		noi di as text"# number of genome-wide-significant SNPs in input file ........ N = "as result `r(N)'
 		noi di as text"#########################################################################"	
 		clear
 		set obs 1
@@ -398,8 +389,7 @@ qui {
 		use data1-final-profiles.dta, clear		
 		foreach threshold in $tempThreshold { 
 			sum p`threshold'_cnt
-			global N_snps_model_p`threshold' `r(max)'
-			noi di as result"# number of ld-independent SNPs in model (P < `threshold') .... N = ${N_snps_model_p`threshold'}"
+			noi di as text"# number of ld-independent SNPs in model " as input" (at P < `threshold') .... N = "as result `r(N)'
 			}
 		}
 	qui { // calculate data specific information 
@@ -430,13 +420,12 @@ qui {
 				erase tempfile.do
 				}
 			noi di as text"#########################################################################"	
-			noi di as text"# data`data'  ............................................... ${data`data'_file}"
-			noi di as text"# > data`data' array is ..................................... ${data`data'_array}"
-			noi di as text"# > data`data' build is ..................................... ${data`data'_build}"
-			noi di as text"# > data`data' N SNPs is original ........................... N = ${data`data'_SNPs}"
-			noi di as text"# > number of SNPs intrecepting all datasets and gwas .. N = ${N_snps_gwas_output}"
-			noi di as text"# > data`data' N individuals is ............................. N = ${data`data'_ind}"
-			noi di as text"# > data`data' profiles stored in ........................... ${gwas_short}-by-${project_name}_data`data'_profiles.dta"
+			noi di as text"# " as input "data`data'  " as text "............................................. " as result "${data`data'_file}"
+			noi di as text"# " as input "data`data' " as text "array is ..................................... " as result "${data`data'_array}"
+			noi di as text"# " as input "data`data' " as text "build is ..................................... " as result "${data`data'_build}"
+			noi di as text"# " as input "data`data' " as text "N SNPs is original ........................... N = " as result "${data`data'_SNPs}"
+			noi di as text"# " as input "data`data' " as text "N individuals is ............................. N = " as result "${data`data'_ind}"
+			noi di as text"# " as input "data`data' " as text "profiles stored in ........................... " as result "${gwas_short}-by-${project_name}_data`data'_profiles.dta"
 			}
 	}
 	noi di as text"#########################################################################"	
@@ -465,7 +454,7 @@ qui {
 di as text"# > removing temporary folder"
 qui {
 	cd ..
-	!rmdir ${tmp_wd} /s /q 
+	!rmdir ${temp_dir} /s /q 
 	}
 di as text"#########################################################################"
 di as text"# Completed: $S_DATE $S_TIME"

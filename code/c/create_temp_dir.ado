@@ -29,7 +29,7 @@ di as text"#####################################################################
 di as text"# Started: $S_DATE $S_TIME                                               "
 di as text"#########################################################################"
 di as text"# > creating a temporary folder within current directory"
-di as result`"# >> current directory is : "`c(pwd)'""'
+di as text"# >> current directory is : " as result `"`c(pwd)'""'
 clear
 set obs 1
 ralpha folderRandom, range(A/z) l(10)
@@ -40,9 +40,9 @@ do _x.do
 erase _x.do
 di as result"# >> creating random folder"
 !mkdir ${temp_dir}
-cd     ${temp_dir}
-di as result`"# >> new temporary directory is : "`c(pwd)'""'
-di as text"# > folder name stored as \${temp_dir}"
+qui cd ${temp_dir}
+di as text"# >> new temporary directory is : " as result `"`c(pwd)'""'
+di as text"# >> folder name stored as " as result "\${temp_dir}"
 di as text"#########################################################################"
 di as text"# Completed: $S_DATE $S_TIME"
 di as text"#########################################################################"
