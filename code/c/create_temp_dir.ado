@@ -1,9 +1,11 @@
 /*
 #########################################################################
-# checkfile
-# a command to check the presence of a file
+# create_temp_dir
+# to create a random named temporary directory in the current directory
 #
-# command: checkfile, file(<location>)
+# command: create_temp_dir
+# dependencies: ralpha
+# https://ideas.repec.org/c/boc/bocode/s457277.html
 #
 #########################################################################
 
@@ -15,26 +17,32 @@
 #########################################################################
 */
 
-program checkfile
-syntax , file(string asis) 
-	
+program create_temp_dir
+syntax 
+
 di as text"#########################################################################"
-di as text"# checkfile                                                              "
+di as text"# create_temp_dir                                                       "
 di as text"# version:       0.1                                                     "
 di as text"# Creation Date: 29nov2017                                               "
 di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
 di as text"#########################################################################"
 di as text"# Started: $S_DATE $S_TIME                                               "
 di as text"#########################################################################"
-di as text"# > check for the presence of `file'"
-capture confirm file "`file'"
-if _rc==0 {
-	di as result"# >> located"
-	}
-else {
-	di as error"# >> cannot locate file"
-	exit
-	}
+di as text"# > creating a temporary folder within current directory"
+di as result`"# >> current directory is : "`c(pwd)'""'
+clear
+set obs 1
+ralpha folderRandom, range(A/z) l(10)
+replace folderRandom  = "`c(pwd)'" + "\" + folderRandom
+gen a = "global temp_dir  " + folderRandom
+outsheet a using _x.do, non noq replace
+do _x.do
+erase _x.do
+di as result"# >> creating random folder"
+!mkdir ${temp_dir}
+cd     ${temp_dir}
+di as result`"# >> new temporary directory is : "`c(pwd)'""'
+di as text"# > folder name stored as \${temp_dir}"
 di as text"#########################################################################"
 di as text"# Completed: $S_DATE $S_TIME"
 di as text"#########################################################################"
