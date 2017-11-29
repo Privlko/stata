@@ -16,19 +16,19 @@
 program recodegenotype
 syntax , a1(string asis)  a2(string asis) 
 
-di as text"#########################################################################"
-di as text "recodegenotype - version 0.1a - 28may2014 richard anney "
-di as text"#########################################################################"
-di as text"# A command to convert allele codes into genotype codes (varname _gt_tmp)"
-di as text"# allele 1 is `a1'"
-di as text"# allele 2 is `a2'"
-di as text"# genotype varname is _gt_tmp"
-di as text"# allele codes must be A C G T I or D "
-di as text"# genotype codes will be A C G T I D + R Y W S K M ID "
-di as text"#########################################################################"
-di as text"# Started: $S_DATE $S_TIME"
-di as text"#########################################################################"
-di as text"# > converting complex indels to ID (by length)"
+qui di as text"#########################################################################"
+qui di as text"# recodegenotype - version 0.1a - 28may2014 richard anney "
+qui di as text"#########################################################################"
+qui di as text"# A command to convert allele codes into genotype codes (varname _gt_tmp)"
+qui di as text"# allele 1 is `a1'"
+qui di as text"# allele 2 is `a2'"
+qui di as text"# genotype varname is _gt_tmp"
+qui di as text"# allele codes must be A C G T I or D "
+qui di as text"# genotype codes will be A C G T I D + R Y W S K M ID "
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
+qui di as text"# > converting complex indels to ID (by length)"
 qui {
 	gen counta1 = length(`a1')
 	gen counta2 = length(`a2')
@@ -45,7 +45,7 @@ qui {
 	replace `a2' = "" if `a2' == "0"
 	compress
 	}
-di as text"# > creating _gt_tmp from `a1' and `a2'"
+qui di as text"# > creating _gt_tmp from `a1' and `a2'"
 qui {
 	gen _gt_tmp = ""
 	replace _gt_tmp = "A" if  (`a1' =="A" & `a2' =="")
@@ -93,7 +93,7 @@ qui {
 	replace _gt_tmp = "Y" if  (`a1' =="C" & `a2' =="T")
 	replace _gt_tmp = "Y" if  (`a1' =="T" & `a2' =="C")
 	}
-di as text"#########################################################################"
-di as text"# Completed: $S_DATE $S_TIME"
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;

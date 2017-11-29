@@ -18,99 +18,42 @@
 program bim2frq
 syntax , bim(string asis)
 
-di in white"#########################################################################"
-di in white"# bim2frq - version 0.1a 21Nov2017 richard anney "
-di in white"#########################################################################"
-di in white"# a command to create _frq.dta (plink-format marker files) from plink binaries"
-di in white"#########################################################################"
-di in white"# Started: $S_DATE $S_TIME"
-di in white"#########################################################################"
-di in white"# > check path of plink *.bim file is true"
-qui { 
-	capture confirm file "`bim'.bim"
-	if _rc==0 {
-		noi di in green"# >> `bim'.bim found and will be imported"
-		}
-	else {
-		noi di in red"# >> `bim'.bim not found "
-		noi di in red"# >> help: do not include .bim in filename  "
-		noi di in red"# >> exiting "
-		exit
-		}
-	}
-di in white"# > check path of dependencies"
-qui { // plink v1.9
-	capture confirm file "$plink"
-	if _rc==0 {
-		noi di in green"# plink v1.9+ exists and is correctly assigned as  $plink"
-		}
-	else {
-		noi di in red"# plink v1.9 does not exists; download executable from https://www.cog-genomics.org/plink2 "
-		noi di in red"# set plink v1.9 location using;  "
-		noi di in red`"# global plink "folder\file"  "'
-		exit
-		}
-	}
-qui { // tabbed
-	clear
-	set obs 1
-	gen a = "$tabbed"
-	replace a = subinstr(a,"perl ","capture confirm file ",.)
-	outsheet a using _ooo.do, non noq replace
-	do _ooo.do
-	if _rc==0 {
-	noi di in green"# the tabbed.pl script exists and is correctly assigned as  $tabbed"
-		noi di in green"# ..... ensuring perl is working on your system and can be called from the command-line"
-		clear 
-		set obs 10
-		gen a = "a b c d"
-		outsheet a using test_pl.txt, noq replace
-		!$tabbed test_pl.txt
-		capture confirm file "test_pl.txt.tabbed"
-		if _rc==0 {
-			noi di in green"# ..... the tabbed.pl script is working"
-			}
-		else {
-			noi di in red"# ..... the tabbed.pl script did not work"
-			noi di in red"# download and install active perl on your computer https://www.activestate.com/activeperl/downloads"
-			exit
-			}
-		!del test_pl.*
-		}
-	else {
-		noi di in red"# tabbed.pl does not exists; download executable from https://github.com/ricanney/perl "
-		noi di in red"# set tabbed.pl location using;  "
-		noi di in red`"# global tabbed "folder\file"  "'
-		exit
-		}
-	erase _ooo.do
-	}
-di in white"# > running plink --freq"
+qui di as text"#########################################################################"
+qui di as text"# bim2frq - version 0.1a 21Nov2017 richard anney "
+qui di as text"#########################################################################"
+qui di as text"# a command to create _frq.dta (plink-format marker files) from plink binaries"
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
+noi checkfile, file(`bim'.bim)
+noi checkfile, file(${plink})
+noi checktabbed
+qui di as text"# > running plink --freq"
 qui { 
 	!${plink} --bfile `bim' --freq --out tmp-bim2frq
 	}
-di in white"# > processing file"
+qui di as text"# > processing file"
 qui { 
 	!${tabbed} tmp-bim2frq.frq
 	}
-di in white"# > importing file"
+qui di as text"# > importing file"
 qui { 
 	import delim using tmp-bim2frq.frq.tabbed, clear
 	}
-di in white"# > create genotype variable"
+qui di as text"# > create genotype variable"
 qui { 
 	recodegenotype, a1(a1) a2(a2)
 	}
-di in white"# > naming variables"
+qui di as text"# > naming variables"
 qui { 
 	rename _gt gt
 	keep snp a1 a2 gt maf
 	}
-di in white"# > saving file as `bim'_frq.dta"
+qui di as text"# > saving file as `bim'_frq.dta"
 qui {
 	save `bim'_frq.dta, replace
 	}
-di in white"#########################################################################"
-di in white"# Completed: $S_DATE $S_TIME"
-di in white"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;	

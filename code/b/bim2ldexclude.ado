@@ -17,38 +17,27 @@
 program bim2ldexclude
 syntax , bim(string asis) 
 
-di in white"#########################################################################"
-di in white"# bim2ldexclude                                                          "
-di in white"# version:  1a                                                           "
-di in white"# Creation Date: 25may2017                                               "
-di in white"# Author:  Richard Anney (anneyr@cardiff.ac.uk)                          "
-di in white"#########################################################################"
-di in white"# A command to identifies long-ld-regions from *.bim files (plink-format "
-di in white"# marker files). The regions excluded are identified in; "
-di in white"# Long-Range LD Can Confound Genome Scans in Admixed Populations. Alkes "
-di in white"# Price, Mike Weale et al., The American Journal of Human Genetics 83, "
-di in white"# 127 - 147, July 2008              "
-di in white"#########################################################################"
-di in white"# Started: $S_DATE $S_TIME"
-di in white"#########################################################################"
-di in white"# > check path of plink *.bim file is true"
-qui { 
-	capture confirm file "`bim'.bim"
-	if _rc==0 {
-		noi di in green"# >> `bim'.bim found and will be imported"
-		}
-	else {
-		noi di in red"# >> `bim'.bim not found "
-		noi di in red"# >> help: do not include .bim in filename  "
-		noi di in red"# >> exiting "
-		exit
-		}
-	}
-di in white"# > importing *.bim file"
+
+qui di as text"#########################################################################"
+qui di as text"# bim2ldexclude                                                          "
+qui di as text"# version:  1a                                                           "
+qui di as text"# Creation Date: 25may2017                                               "
+qui di as text"# Author:  Richard Anney (anneyr@cardiff.ac.uk)                          "
+qui di as text"#########################################################################"
+qui di as text"# A command to identifies long-ld-regions from *.bim files (plink-format "
+qui di as text"# marker files). The regions excluded are identified in; "
+qui di as text"# Long-Range LD Can Confound Genome Scans in Admixed Populations. Alkes "
+qui di as text"# Price, Mike Weale et al., The American Journal of Human Genetics 83, "
+qui di as text"# 127 - 147, July 2008              "
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
+noi checkfile, file(`bim'.bim)
+qui di as text"# > importing *.bim file"
 qui { 
 	import delim using `bim'.bim, clear 
 	}
-di in white"# > identifying regions to exclude"
+qui di as text"# > identifying regions to exclude"
 qui { 
 	gen drop = .
 	replace drop = 1 if (v1 == 1  & v4 >= 48000000  & v4 <= 52000000)
@@ -76,13 +65,13 @@ qui {
 	replace drop = 1 if (v1 == 12 & v4 >= 109500000 & v4 <= 112000000)
 	replace drop = 1 if (v1 == 20 & v4 >= 32000000  & v4 <= 34500000)	
 	}
-di in white`"# > exporting snp-list to file "long-range-ld.exclude""'
+qui di as text`"# > exporting snp-list to file "long-range-ld.exclude""'
 qui { 
 	outsheet v2 if drop == 1 using "long-range-ld.exclude", replace non noq
 	}
-di in white"#########################################################################"
-di in white"# Completed: $S_DATE $S_TIME"
-di in white"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;	
 	
 

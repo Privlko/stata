@@ -24,29 +24,29 @@
 program graphmanhattan
 syntax , chr(string asis) bp(string asis) p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6)]
 
-di in white"#########################################################################"
-di in white"# graphmanhattan - version 1.0 04Aug2016 richard anney                  #"
-di in white"#########################################################################"
-di in white"# A command to create a publication quality manhattan plot from gwas    #"
-di in white"# summary data.                                                         #"
-di in white"# All chromosomes must be numeric 1-22, X = 23                          #"
-di in white"# (XY and Y are not plotted)                                            #"
-di in white"# All positions must numeric and in bp                                  #"
-di in white"# The following thresholds are applied to the plot;                     #"
-di in white"# maximum plotted -log(10) p-value displayed; P = 1E-`min'              #"
-di in white"# minimum plotted -log(10) p-value displayed; P = 1E-`max'              #"
-di in white"# Genomewide significance threshold line as P = 1E-`gws'                #"
-di in white"# Strong associations threshold (Highlighted) as P < 1E-`str'           #"
-di in white"#########################################################################"
-di in white"# Started: $S_DATE $S_TIME"
-di in white"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# graphmanhattan - version 1.0 04Aug2016 richard anney                  #"
+qui di as text"#########################################################################"
+qui di as text"# A command to create a publication quality manhattan plot from gwas    #"
+qui di as text"# summary data.                                                         #"
+qui di as text"# All chromosomes must be numeric 1-22, X = 23                          #"
+qui di as text"# (XY and Y are not plotted)                                            #"
+qui di as text"# All positions must numeric and in bp                                  #"
+qui di as text"# The following thresholds are applied to the plot;                     #"
+qui di as text"# maximum plotted -log(10) p-value displayed; P = 1E-`min'              #"
+qui di as text"# minimum plotted -log(10) p-value displayed; P = 1E-`max'              #"
+qui di as text"# Genomewide significance threshold line as P = 1E-`gws'                #"
+qui di as text"# Strong associations threshold (Highlighted) as P < 1E-`str'           #"
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 net install colorscheme, from(https://github.com/matthieugomez/stata-colorscheme/raw/master/)
 preserve
-di in white"# > retaining working variables"
+qui di as text"# > retaining working variables"
 qui { 
 	keep `chr' `p' `bp'
 	}
-di in white"# > checking variable in correct format"
+qui di as text"# > checking variable in correct format"
 qui { // chr
 	capture confirm numeric var `chr' 
 	if _rc==0 {
@@ -77,31 +77,31 @@ qui { // bp
 		exit
 		}
 	}
-di in white"# > processing variables (drop if chr > 23 and duplicate observations"
+qui di as text"# > processing variables (drop if chr > 23 and duplicate observations"
 qui {
 	drop if `chr' > 23			// drop chromosomes > X (X- XY and other)
 	duplicates drop			 	// drop any duplicate observations
 	}
-di in white"# > report metrics"
+qui di as text"# > report metrics"
 qui {
 	qui count
-	di in white"# >> `r(N)' unique association signals were uploaded "
+	qui di as text"# >> "as result "`r(N)' "as text" unique association signals were uploaded "
 	sum `p'
-	di in white"# >> the minimum P-value observed in this dataset is P = `r(min)' "
+	qui di as text"# >> the minimum P-value observed in this dataset is P = "as result `r(min)'
 	}
-di in white"# > create -log10 variable"
+qui di as text"# > create -log10 variable"
 qui {
 	gen tmpp = -log10(`p')
 	drop if tmpp == .
 	}
-di in white"# > pruning dataset for plotting"
+qui di as text"# > pruning dataset for plotting"
 qui {
-	di in white"# >> pruning if p > 1E-`min'"
+	qui di as text"# >> pruning if p > 1E-`min'"
 	drop if tmpp < `min'
-	di in white"# >> applying ceiling to data for p < 1E-`max'"
+	qui di as text"# >> applying ceiling to data for p < 1E-`max'"
 	replace tmpp = `max' if tmpp > `max'
 	}
-di in white"# >> preparing bp for plotting "
+qui di as text"# > preparing bp for plotting "
 qui { 
 	foreach i of num 1 / 22 {
 		sum `bp' if `chr' == `i'
@@ -116,7 +116,7 @@ qui {
 		di ${mtick`i'}
 		}
 	}
-di in white"# > plotting to tmpManhattan.gph"
+qui di as text"# > plotting to tmpManhattan.gph"
 qui { 
 	colorscheme 8, palette(Blues)
 	global color3	"mlc("`r(color7)'") mfc("`r(color7)'")"
@@ -163,9 +163,9 @@ qui {
 	;
 	#delimit cr
 	}
-di in white"#########################################################################"
-di in white"# Completed: $S_DATE $S_TIME"
-di in white"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 restore
 end;
 	

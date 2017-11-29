@@ -36,62 +36,59 @@
 program profilescore
 syntax , param(string asis) 
 
-di as text"#########################################################################"
-di as text"# profilescore                                                           "
-di as text"# version:       0.3                                                     "
-di as text"# Creation Date: 5September2017                                          "
-di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-di as text"#########################################################################"
-di as text"# Started: $S_DATE $S_TIME                                               "
-di as text"#########################################################################"
-di as text"# User Defined Parameter"
-di as text"#########################################################################"
-di as text"# >> project_folder     = working folder"
-di as text"# >> project_name       = project name"
-di as text"# >> define kg_ref      = reference genotypes (1000-genomes phase3 hg19 european ancestry"
-di as text"# >> define Ndata       = number of input genotype files "
-di as text"# >> define data<#>     = location of genotypes for dataset<#>"
-di as text"# >> define gwas_short  = short name of gwas"
-di as text"# >> define gwas_prePRS = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
-di as text"# > checking dependencies are correctly defined"
-qui {
-	checktabbed
-	checkfile, file(${plink})
-	}
-di as text"# > checking parameters are correctly defined"
-qui {
+qui di as text"#########################################################################"
+qui di as text"# profilescore                                                           "
+qui di as text"# version:       0.3                                                     "
+qui di as text"# Creation Date: 5September2017                                          "
+qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME                                               "
+qui di as text"#########################################################################"
+qui di as text"# User Defined Parameter"
+qui di as text"#########################################################################"
+qui di as text"# \${project_folder}     = working folder"
+qui di as text"# \${project_name}       = project name"
+qui di as text"# \${kg_ref}             = reference genotypes (1000-genomes phase3 hg19 european ancestry"
+qui di as text"# \${Ndata}              = number of input genotype files "
+qui di as text"# \${data<#>}            = location of genotypes for dataset<#>"
+qui di as text"# \${gwas_short}         = short name of gwas"
+qui di as text"# \${gwas_prePRS}        = location of *-prePRS.tsv file corresponding to gwas_short (do not include .gz on filename)"
+qui di as text"#########################################################################"
+** preamble
+noi di as text"# > checking dependencies"
+qui { 
 	do `param'
-	checkfile, file(${gwas_prePRS}.gz)
+	noi checkfile, file(${plink})
+	noi checktabbed
+	noi checkfile, file(${gwas_prePRS}.gz)
 	foreach data of num 1 / $Ndata {
-		foreach file in bed bim fam meta-log {
-			checkfile, file(${data`data'}.`file')
-			}
+		noi checkfile, file(${data`data'}.bed)
+		noi checkfile, file(${data`data'}.bim)
+		noi checkfile, file(${data`data'}.fam)
+		noi checkfile, file(${data`data'}.meta-log)
 		}
-
-	foreach file in bed bim fam  {
-		checkfile, file(${kg_ref}.`file')
-		}
+	noi checkfile, file(${kg_ref}.bed)
+	noi checkfile, file(${kg_ref}.bim)
+	noi checkfile, file(${kg_ref}.fam)
 	}
-di as text"# > the working directory is ${project_folder}"
+qui di as text"# > creating a temp folder in ${project_folder}"
 qui { 
 	cd ${project_folder}
+	noi create_temp_dir
 	}
-di as text"# > creating a temp folder in ${project_folder}"
+	
+** pre-processing
+noi di as text"# > processing gwas data"
 qui { 
-	cd ${project_folder}
-	create_temp_dir
-	}
-di as text"# > processing gwas data"
-qui { 
-	di as text"# >> unzipping archive"
+	noi di as text"# >> unzipping " as result "${gwas_prePRS}.gz"
 	qui { 
 		!$gunzip ${gwas_prePRS}.gz
 		}
-	di as text"# >> importing prePRS format file"
+	noi di as text"# >> importing " as result "${gwas_prePRS}"
 	qui {
 		import delim using ${gwas_prePRS}, clear
 		}
-	di as text"# >> create risk allele, riskOR and weight"
+	noi di as text"# >> create risk allele, riskOR and weight"
 	qui {
 		gen flip = .
 		replace flip = 1 if or < 1
@@ -104,108 +101,118 @@ qui {
 		replace alt        = a1     if flip == 1
 		replace risk_frq = 1-a1_frq if flip == 1
 		gen weight = log(risk_or)
-		qui recodegenotype, a1(risk) a2(alt)
+		noi recodegenotype, a1(risk) a2(alt)
 		rename _gt gt
 		keep  chr bp rsid risk alt gt weight p risk_frq
 		order chr bp rsid risk alt gt weight p risk_frq
 		for var risk alt gt weight p risk_frq: rename X gwas_X
-		di as text"# >> removing duplicates"
+		}
+	noi di as text"# >> removing duplicates"
+	qui {
 		duplicates drop
 		duplicates tag rsid, gen(dups)
 		keep if dups == 0
 		drop dups
 		}
-	di as text"# >> saving tempfile"
+	qui di as text"# >> saving as " as result "tempfile-gwas.dta"
 	qui {
 		save tempfile-gwas.dta,replace	
 		}
-	di as text"# >> zipping back to archive"
+	qui di as text"# >> zipping as result "${gwas_prePRS}"
 	qui { 
 		!$gzip ${gwas_prePRS}
 		}
 	}
-di as text"# > processing genotype data"
-di in text"#   as of 27-November-2017, the profilescore calculates scores for all individuals in dataset"
-di in text"#   exclusion based on ancestry is to be performed after calculations "
-di in text"#   caveat : ld clumping is based on " as input "${kg_ref}"
-qui { 
+noi di as text"# > processing genotype data"
+qui {
+	noi di as text"# >> notes"
+	qui {
+		noi di as text"#########################################################################"
+		noi di in text"# As of 27-November-2017, the profilescore calculates scores for all     "
+		noi di in text"# individuals in dataset  exclusion based on ancestry is to be performed "
+		noi di in text"# after calculations "
+		noi di in error"# caveat : ld clumping is based on \${kg_ref}"
+		noi di as text"#########################################################################"
+		}
 	foreach data of num 1 / $Ndata {
-		di as text"# >> processing " as input "${data`data'} (`data' of ${Ndata})"
-		qui {
-			di as text"# >> import plink *.bim file"
-			bim2frq, bim(${data`data'})
-			rename (snp maf) (rsid a1_frq)
-			keep rsid a1 a1_freq
-			save ${data`data'}_frq2.dta,replace
-			bim2dta, bim(${data`data'})
-			di as text"# >> limit to autosomes"
-			for var chr bp: tostring X,replace
-			drop if chr == "23" | chr == "24" | chr == "25"
-			drop chr bp		
-			di as text "# >> drop problematic SNPs (ID/ W/ S)"
-			drop if gt == "ID" | gt == "W" | gt == "S"
-			di in text"# as of 27-November-2017, the profilescore does not rename to rsid"
-			di in text"# this should have been applied in Module #3 of genoytpeqc"	
-			rename snp rsid
-			di as text"# >> merge frq.dta"
-			merge 1:1 rsid a1 using ${data`data'}_frq2.dta
-			erase ${data`data'}_frq2.dta
-			keep if _m == 3
-			drop _m
-			for var a1 a2 gt a1_frq: rename X data`data'_X
-			di as text"# >> removing duplicates"
-			duplicates drop
-			duplicates tag rsid, gen(dups)
-			keep if dups == 0
-			drop dups
-			di as text"# >> save processed file"
-			save tempfile-data`data'.dta, replace
-			di as text"# >> save processed file"
-			}
+		noi di as text"# >> processing " as input "${data`data'} (`data' of ${Ndata})"
+		qui di as text"# >> define a1_freq in dataset"
+		bim2frq, bim(${data`data'})
+		rename (snp maf) (rsid a1_frq)
+		keep rsid a1 a1_freq
+		save ${data`data'}_frq2.dta,replace
+		qui di as text"# >> import plink *.bim file"
+		bim2dta, bim(${data`data'})
+		qui di as text"# >> limit to autosomes"
+		for var chr bp: tostring X,replace
+		drop if chr == "23" | chr == "24" | chr == "25"
+		drop chr bp		
+		qui di as text "# >> drop problematic SNPs (ID/ W/ S)"
+		drop if gt == "ID" | gt == "W" | gt == "S"
+		noi di as text"#########################################################################"
+		noi di in text"# As of 27-November-2017, the profilescore does not rename to rsid. This "
+		noi	di in text"# should have previously been corrected in Module #3 of genoytpeqc       "	
+		noi di as text"#########################################################################"
+		rename snp rsid
+		qui di as text"# >> merge frq.dta"
+		merge 1:1 rsid a1 using ${data`data'}_frq2.dta
+		erase ${data`data'}_frq2.dta
+		keep if _m == 3
+		drop _m
+		for var a1 a2 gt a1_frq: rename X data`data'_X
+		qui di as text"# >> removing duplicates"
+		duplicates drop
+		duplicates tag rsid, gen(dups)
+		keep if dups == 0
+		drop dups
+		qui di as text"# >> save processed file - tempfile-data`data'.dta"
+		save tempfile-data`data'.dta, replace
 		}
 	}
-di as text"# > merging rsid over files"
+noi di as text"# > merging rsid over files (define intersect)"
 qui { 
-	di as text"# >> open tempfile-gwas.dta"
+	noi di as text"# >> open tempfile-gwas.dta"
 	use tempfile-gwas.dta, clear
 	foreach data of num 1 / $Ndata {
-		di as text "# >> merge 1:1 rsid against " as input "tempfile-data`data'.dta"
+		noi di as text "# >> merge 1:1 rsid against " as input "tempfile-data`data'.dta"
 		merge 1:1 rsid using tempfile-data`data'.dta
 		keep if _m ==3
 		drop _m
 		save tempfile-combined.dta, replace
 		}
+	noi di as text"# >> save combined file - tempfile-combined'.dta"
 	}
-di as text"# > mapping to a common strand [risk - alt]"
+noi di as text"# > mapping to a common strand [risk - alt]"
 qui { 
 	foreach data of num 1 / $Ndata {
-		di as text "# >> cross-tabulate gwas genotype coding with "as input "data`data'"
+		noi di as text "# >> cross-tabulate gwas genotype coding with "as input "data`data'"
 		noi ta gwas_gt data`data'_gt
 		drop data`data'_gt
-		recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
-		di as text "# >> recode allele from "as input "data`data' "as text "where there are strand flips"
+		qui recodestrand, ref_a1(gwas_risk) ref_a2(gwas_alt) alt_a1(data`data'_a1) alt_a2(data`data'_a2)
+		noi di as text "# >> recode allele from "as input "data`data' "as text "where there are strand flips"
 		replace data`data'_a1 = _tmpb1 if _tmpflip == 1
 		replace data`data'_a2 = _tmpb2 if _tmpflip == 1
-		di as text "# >> export list of SNPs to flip strand in "as input "data`data' "as text "plink binaries"
+		noi di as text "# >> export list of SNPs to flip strand in "as input "data`data' "as text "plink binaries"
 		outsheet rsid if _tmpflip == 1 using tempfile-data`data'.flip, non noq replace
 		drop _tmpflip -_tmpb1 _tmpb2
 		order chr bp rsid gwas_risk gwas_alt gwas_gt gwas_weight gwas_p gwas_risk_frq data`data'_a1 data`data'_a2 data`data'_a1_frq
 		}
 	}
-di as text"# > plot allele-frequencies between datasets"
+noi di as text"# > plot allele-frequencies between datasets"
 qui {
 	drop gwas_gt
 	global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
 	foreach data of num 1 / $Ndata {
-		di as text "# >> two-way scatter plot of allele frq betweeen gwas and "as input "data`data'"
+		noi di as text "# >> two-way scatter plot of allele frq betweeen gwas and "as input "data`data'"
 		gen data`data'_risk_frq = .
 		replace data`data'_risk_frq =    data`data'_a1_frq if data`data'_a1 == gwas_risk
 		replace data`data'_risk_frq = 1- data`data'_a1_frq if data`data'_a1 == gwas_alt
-		tw scatter gwas_risk_frq data`data'_risk_frq, ${format} saving(tempfile-2-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
+		tw scatter gwas_risk_frq data`data'_risk_frq, ${format} saving(tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
 		drop data`data'_a1 data`data'_a2 data`data'_a1_frq
+		window manage close graph
 		}
 	}
-di as text"# > rename variables / save tempfile / create intersect.extract"
+noi di as text"# > rename variables / save tempfile / create intersect.extract"
 qui {
 	rename (gwas_risk gwas_alt) (risk alt)
 	aorder
@@ -214,33 +221,38 @@ qui {
 	save tempfile-combined-flipped.dta, replace
 	outsheet rsid using intersect.extract, non noq replace
 	}
-di as text"# > extract intersect and flip alleles"
+noi di as text"# > extract intersect and flip alleles using plink"
 qui {
 	foreach data of num 1 / $Ndata {
-		di as text "# >> extract intersect for "as input "${data`data'}"
+		noi di as text "# >> extract intersect on "as result "${data`data'}"
 		qui { 
 			!$plink --bfile ${data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
 			}
-		di as text "# >> flips strands"
+		noi di as text "# >> flips strands for "as result "${data`data'}"
 		qui{ 
 			!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out data`data'-intersect-flipped
 			}
 		}
 	}
-di as text"# > extract intersect on "as input "${kg_ref}"
+noi di as text"# > extract intersect on "as result "${kg_ref}"
 qui { 
 	!$plink --bfile ${kg_ref} --extract intersect.extract --make-bed --out tempfile-ref
 	}
-di as text"# > clump gwas intersect"
+** create profile files
+noi di as text"# > clumping gwas intersect over each P-value threshold"
 qui { 
 	use tempfile-combined-flipped.dta, replace
 	rename (rsid gwas_p) (SNP P)
 	keep SNP P
-	di as text"# >> define minimum p"
+	noi di as text"# >> define thresholds based on gwas data"
 	qui {
 		sum P
+		noi di as text"# >> define minimum p = " as result `r(min)'
 		gen min = `r(min)'
 		gen threshold = ""
+		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 "  if min < 1E-1
+		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 "  if min < 1E-2
+		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 1E-3 "  if min < 1E-3
 		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4"  if min < 1E-4
 		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5" if min < 1E-5
 		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6"  if min < 1E-6
@@ -248,51 +260,52 @@ qui {
 		replace threshold =  "global thresholds 1E-0 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8" if min < 1E-8
 		outsheet threshold in 1 using _tmp.do, non noq replace
 		do _tmp.do
+		erase _tmp.do
 		}
-	di as text "# >> clump SNPs at "as input "${thresholds}"
+	noi di as text"# >> clump SNPs at "as results `"${thresholds}"'
 	qui {
 		global ldprune        "--clump-p1 1 --clump-p2 1 --clump-r2 0.2 --clump-kb 1000" 
 		foreach threshold in $thresholds {
-			di as text "# >>> define SNPs at "as input "P < `threshold' "as text "for clumping"
+			noi di as text "# >>> define SNPs at "as input "P < `threshold' "as text "for clumping"
 			outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
-			di as text "# >>>  clump SNPs at "as input "P < `threshold' "as text "to identify ld-independent set for scoring"
+			noi di as text "# >>>  clump SNPs at "as input "P < `threshold' "as text "to identify ld-independent set for scoring"
 			!${plink} --bfile tempfile-ref --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
 			}
 		}
 	}
-di as text"# > create *.score\ *.q-score file for each threshold"
+noi di as text"# > create *.score\ *.q-score file for each threshold"
 qui {	
-		foreach threshold in $thresholds {
-			!${tabbed} tempfile-P`threshold'.clumped
-			import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
-			keep snp
-			rename (snp) (rsid)
-			merge 1:1 rsid using tempfile-gwas.dta 
-			keep if _m == 3
-			di as text "# >> create *.score for "as input "P< `threshold'  "
-			qui {
-				outsheet rsid gwas_risk gwas_weight using tempfile-P`threshold'.score, non noq replace
-				!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
-				}
-			di as text "# >> create *.q-score-file for "as input "P< `threshold'  "
-			qui { 
-				outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
-				!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
-				}
-			di as text "# >> create *.q-score-file-range for "as input "P< `threshold'  "
-			qui { 
-				clear
-				set obs 1
-				gen a = "P`threshold'	0	`threshold'"
-				outsheet a using  tempfile-P`threshold'.q-score-range, non noq replace
-				}
+	foreach threshold in $thresholds {
+		!${tabbed} tempfile-P`threshold'.clumped
+		import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
+		keep snp
+		rename (snp) (rsid)
+		merge 1:1 rsid using tempfile-gwas.dta 
+		keep if _m == 3
+		noi di as text"# >> create *.score for P< `threshold'  "
+		qui {
+			outsheet rsid gwas_risk gwas_weight using tempfile-P`threshold'.score, non noq replace
+			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
+			}
+		noi di as text"# >> create *.q-score-file for P< `threshold'  "
+		qui { 
+			outsheet rsid gwas_p           using tempfile-P`threshold'.q-score-file, non noq replace
+			!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
+			}
+		noi di as text"# >> create *.q-score-file-range for P< `threshold'  "
+		qui { 
+			clear
+			set obs 1
+			gen a = "P`threshold'	0	`threshold'"
+			outsheet a using  tempfile-P`threshold'.q-score-range, non noq replace
 			}
 		}
-di as text"# > create *.profile file for each threshold for each dataset "
+	}
+noi di as text"# > create *.profile file for each threshold for each dataset "
 qui {	
 	foreach data of num 1 / $Ndata {
 		foreach threshold in $thresholds {
-			di as text "- create *.profile for "as input "P< `threshold' "as text "for "as input "data`data'"
+			noi di as text ">> create data`data'-intersect-flipped.P`threshold'.profile"
 			!${plink} --bfile         data`data'-intersect-flipped ///
 								--score         tempfile-P`threshold'.score  ///
 								--q-score-file  tempfile-P`threshold'.q-score-file ///
@@ -301,23 +314,31 @@ qui {
 				}
 		}
 	}
-di as text"# > process *.profile files"
+** processing profile files
+noi di as text"# > process *.profile files"
 qui {
 	foreach data of num 1 / $Ndata {
-		fam2dta, fam(data`data'-intersect-flipped)
-		keep fid iid sex
-		save data`data'-final-profiles.dta, replace
-		di as text" # >> converting thresholds to varnames"
-		foreach threshold in $thresholds {
-			clear
-			set obs 1
-			gen a = "`threshold'"
-			replace a = subinstr(a, "-", "_",.)
-			replace a = "global tag p" + a
-			outsheet a using tempfile.do, non noq replace
-			do tempfile.do
-			erase tempfile.do
-			di as text"# >>import data for "as input "P`threshold'.profile"
+		noi di as text"# >> import fam-file"
+		qui { 
+			fam2dta, fam(data`data'-intersect-flipped)
+			keep fid iid sex
+			save data`data'-final-profiles.dta, replace
+			}
+		noi di as text"# >> converting thresholds to varnames"
+		qui { 
+			foreach threshold in $thresholds {
+				clear
+				set obs 1
+				gen a = "`threshold'"
+				replace a = subinstr(a, "-", "_",.)
+				replace a = "global tag p" + a
+				outsheet a using tempfile.do, non noq replace
+				do tempfile.do
+				erase tempfile.do
+				}
+			}
+		noi di as text"# >> import data for data`data'-intersect-flipped.P`threshold'.profile"
+		qui {
 			!$tabbed           data`data'-intersect-flipped.P`threshold'.profile
 			import delim using data`data'-intersect-flipped.P`threshold'.profile.tabbed, case(lower) clear
 			erase data`data'-intersect-flipped.P`threshold'.profile
@@ -333,9 +354,10 @@ qui {
 			}
 		}
 	}
-di as text"# > make *.meta-log"
+** make a meta-log file
+noi di as text"# > make *.meta-log"
 qui { 
-	log using tempfile-4.log, replace
+	log using tempfile.log, replace
 	noi di as text"#########################################################################"
 	noi di as text"# Polygenic Risk Score Processing Report - from GWAS + GENOTYPE > PROFILE"                                                                
 	noi di as text"#########################################################################"
@@ -430,7 +452,8 @@ qui {
 	noi di as text"#########################################################################"	
 	log close
 	}
-di as text"# > plotting manhattan for intersect"
+** make manhattan plot or intersect
+noi di as text"# > plotting manhattan for intersect"
 qui {
 	use tempfile-combined.dta, clear
 	graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
@@ -438,25 +461,26 @@ qui {
 	graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
 	window manage close graph
 	}	
-di as text"# > copy file from working folder to project folder  "
+** make clean up
+noi di as text"# > moving files from working folder to project folder  "
 qui {
 	foreach data of num 1 / $Ndata {	
 		!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
 		!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
-		graph use "tempfile-2-gwas_risk_frq_x_data`data'_risk_frq.gph" 
+		graph use "tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph" 
 		graph export "..\\${gwas_short}-by-${project_name}_sanity-check-gwas-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
 		window manage close graph
 		}
-	!copy "tempfile-4.log"               "..\\${gwas_short}-by-${project_name}.meta-log"
+	!copy "tempfile.log"               "..\\${gwas_short}-by-${project_name}.meta-log"
 	!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-by-${project_name}_intersect_manhattan.png"
 	}
-di as text"# > removing temporary folder"
+qui di as text"# > removing temporary folder"
 qui {
 	cd ..
 	!rmdir ${temp_dir} /s /q 
 	}
-di as text"#########################################################################"
-di as text"# Completed: $S_DATE $S_TIME"
-di as text"#########################################################################"
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;
 	

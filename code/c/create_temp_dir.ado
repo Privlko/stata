@@ -21,7 +21,7 @@ program create_temp_dir
 syntax 
 
 qui di as text"#########################################################################"
-qui di as text"# create_temp_dir                                                       "
+qui di as text"# create_temp_dir                                                        "
 qui di as text"# version:       0.1                                                     "
 qui di as text"# Creation Date: 29nov2017                                               "
 qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
