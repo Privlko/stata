@@ -2,3 +2,5 @@ d bim2dta -  a command to create _frq.dta (plink-format marker files) from plink
 d Richard Anney, Cardiff University
 d Distribution-Date: 29nov2017
 f bim2frq.ado
+f ../c/checkfile.ado
+f ../c/checktabbed.ado
