@@ -118,7 +118,7 @@ qui {
 	qui {
 		save tempfile-gwas.dta,replace	
 		}
-	qui di as text"# >> zipping as result "${gwas_prePRS}"
+	noi di as text"# >> zipping " as result "${gwas_prePRS}"
 	qui { 
 		!$gzip ${gwas_prePRS}
 		}

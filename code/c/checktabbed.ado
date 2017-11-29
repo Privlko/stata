@@ -29,10 +29,10 @@ qui di as text"#################################################################
 qui {
 	clear
 	set obs 1
-	gen a = "checkfile, file(" + "${tabbed}" + ")"
+	gen a = "noi checkfile, file(" + "${tabbed}" + ")"
 	replace a = subinstr(a,"perl ","",.)
 	outsheet a using _x.do, non noq replace
-	noi do _x.do
+	do _x.do
 	erase _x.do
 	replace a = "a b c d"
 	outsheet a using test_pl.txt, noq replace
