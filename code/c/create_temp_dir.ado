@@ -36,7 +36,7 @@ ralpha folderRandom, range(A/z) l(10)
 replace folderRandom  = "`c(pwd)'" + "\" + folderRandom
 gen a = "global temp_dir  " + folderRandom
 outsheet a using _x.do, non noq replace
-do _x.do
+qui do _x.do
 erase _x.do
 qui di as text"# >> creating random folder"
 !mkdir ${temp_dir}
