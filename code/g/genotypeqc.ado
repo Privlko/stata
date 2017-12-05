@@ -100,9 +100,9 @@ qui { // preamble
 		noi checkfile, file(${hapmap_data}.bed)
 		noi checkfile, file(${hapmap_data}.bim)
 		noi checkfile, file(${hapmap_data}.fam)
-		noi checkfile, file(${`input'}.bed)
-		noi checkfile, file(${`input'}.bim)
-		noi checkfile, file(${`input'}.fam)
+		noi checkfile, file(${input}.bed)
+		noi checkfile, file(${input}.bim)
+		noi checkfile, file(${input}.fam)
 		}
 	noi di as text"# > create new globals"
 	qui { 
@@ -1145,7 +1145,7 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 				foreach num of num 1/ 999 {
 					capture confirm file _x_.stop
 					if _rc==0 {
-						exit
+						continue
 						}
 					else {
 						noi di as text"# >>> prune on filter with kinship > " as result "`kin_threshold'"
