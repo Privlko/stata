@@ -1,0 +1,6 @@
+d Richard Anney, Cardiff University
+p kin0filter a command that uses *.kin0 files and identifies one of each pair to filter.- a program that scans the $init_unix folder for executables and creates a global link to the executable. 
+ 
+
+
+

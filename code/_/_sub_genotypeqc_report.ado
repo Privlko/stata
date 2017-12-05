@@ -46,13 +46,13 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# Run Date ..................... $S_DATE $S_TIME")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# Quality Control Version: ..... version-5")
+	_docx_paragraph_add_text(dh, "# Quality Control Version: ..... version-6")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# Input File: .................. ${data_input}")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# Input Array: ................. $arrayType")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# Output File ($buildType): ....... ${data_input}-qc-v4")
+	_docx_paragraph_add_text(dh, "# Output File ($buildType): ....... ${data_input}-qc-v6")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# Input Total Markers: ......... $count_markers_1")
 	_docx_paragraph_add_linebreak(dh)
@@ -104,7 +104,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# GENOME BUILD OF ${data_input}-qc-v4")
+	_docx_paragraph_add_text(dh, "# GENOME BUILD OF ${data_input}-qc-v6")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 	_docx_image_add(dh,"${output}.hg-buildmatch.png")
@@ -173,7 +173,7 @@ end
 	_docx_paragraph_add_text(dh, "# consistent. This also helps with assumptions about ancestry (i.e. compare to EUR) #")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
-	_docx_image_add(dh,"tempfile-module-2-allele-frequency-check.png")
+	_docx_image_add(dh,"tempfile-module2-allele-frequency-check.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
 
 	// DISPLAYING ANCESTRY DISTRIBUTIONS   
@@ -207,9 +207,9 @@ end
 	_docx_paragraph_add_text(dh, "# focuses on the European-like regions around the CEU and TSI populations.          #")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
-	_docx_image_add(dh,"tempfile-module-7-pca.png")
+	_docx_image_add(dh,"bim2hapmap_pca.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
-	_docx_image_add(dh,"tempfile-module-7-pca-eur.png")
+	_docx_image_add(dh,"bim2hapmap_pca-${like}.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
 
 	// DISPLAYING CHROMOSOME DISTRIBUTION  
@@ -229,7 +229,7 @@ end
 	_docx_paragraph_add_text(dh, "# final report.                                                                     #")	
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")		
-	_docx_image_add(dh,"tempfile-module-8-final-chromosomes.png")
+	_docx_image_add(dh,"${sub_mod_output}-chromosomes.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")		
 
 	// REPORTING RELATEDNESS
@@ -255,9 +255,9 @@ end
 	_docx_paragraph_add_text(dh, "# child and sibling-pairs) are retained.                                            #")
 	_docx_paragraph_add_linebreak(dh)	
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-KIN0_1.png")
+	_docx_image_add(dh,"${sub_mod_output}-KIN0_1.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-KIN0_2.png")
+	_docx_image_add(dh,"${sub_mod_output}-KIN0_2.png")
 
 	// REPORTING HETEROZYGOSITY
 	_docx_paragraph_new(dh, "")
@@ -298,7 +298,7 @@ end
 	_docx_paragraph_add_text(dh, "# only extreme deviations.                                                          #")
 	_docx_paragraph_new(dh, "")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-HET.png")
+	_docx_image_add(dh,"${sub_mod_output}-HET.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 
 	// REPORTING HARDY-WEINBERG EQUILIBRIUM
@@ -320,7 +320,7 @@ end
 	_docx_paragraph_add_text(dh, "# as case samples, by design, may incur HW bias due to disease selection.           #")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-HWE.png")
+	_docx_image_add(dh,"${sub_mod_output}-HWE.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 		
 	// REPORTING MISSINGNESS (BY-INDIVIDUAL)
@@ -338,7 +338,7 @@ end
 	_docx_paragraph_add_text(dh, "# produces sample-based and variant-based missing data reports.                     #")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-IMISS.png")	
+	_docx_image_add(dh,"${sub_mod_output}-IMISS.png")	
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 	
 	// REPORTING MISSINGNESS (BY-VARIANT)
@@ -360,7 +360,7 @@ end
 	_docx_paragraph_add_text(dh, "# completing the pipeline with a stricter limit                                     #")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-LMISS.png")	
+	_docx_image_add(dh,"${sub_mod_output}-LMISS.png")	
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 	
 	// REPORTING MISSINGNESS (BY-VARIANT)
@@ -378,11 +378,11 @@ end
 	_docx_paragraph_add_text(dh, "# added to version 5 of the QC report                                               #")
 	_docx_paragraph_add_linebreak(dh)	
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"tempfile-module-8-FRQ.png")
+	_docx_image_add(dh,"${sub_mod_output}-FRQ.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
 
 	// SAVING DOCX
-	_docx_save(dh, "tempfile-module-8-quality-control-report.docx", 1)
+	_docx_save(dh, "${sub_mod_output}-quality-control-report.docx", 1)
 	_docx_close(dh)
 	end
 	

@@ -448,12 +448,12 @@ qui {
 				erase tempfile.do
 				}
 			noi di as text"#########################################################################"	
-			noi di as text"# " as input "data`data'  " as text "............................................. " as result "${data`data'_file}"
-			noi di as text"# " as input "data`data' " as text "array is ..................................... " as result "${data`data'_array}"
-			noi di as text"# " as input "data`data' " as text "build is ..................................... " as result "${data`data'_build}"
-			noi di as text"# " as input "data`data' " as text "N SNPs is original ........................... N = " as result "${data`data'_SNPs}"
-			noi di as text"# " as input "data`data' " as text "N individuals is ............................. N = " as result "${data`data'_ind}"
-			noi di as text"# " as input "data`data' " as text "profiles stored in ........................... " as result "${gwas_short}-by-${project_name}_data`data'_profiles.dta"
+			noi di as text"# " as input "data`data' " as text "............................................. " as result "${data`data'_file}"
+			noi di as text"# " as input "data`data' " as text "array is .................................... " as result "${data`data'_array}"
+			noi di as text"# " as input "data`data' " as text "build is .................................... " as result "${data`data'_build}"
+			noi di as text"# " as input "data`data' " as text "N SNPs is original .......................... N = " as result "${data`data'_SNPs}"
+			noi di as text"# " as input "data`data' " as text "N individuals is ............................ N = " as result "${data`data'_ind}"
+			noi di as text"# " as input "data`data' " as text "profiles stored in .......................... " as result "${gwas_short}-by-${project_name}_data`data'_profiles.dta"
 			}
 	}
 	noi di as text"#########################################################################"	
