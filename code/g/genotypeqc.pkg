@@ -4,7 +4,6 @@ d Distribution-Date: 05dec2017
 f ../b/bim2hapmap.ado
 f ../b/bim2ld_subset.ado
 f ../b/bim2build.ado
-f ../b/bim2duplicate.ado
 f ../b/bim2frq.ado
 f ../b/bim2dta.ado
 f ../b/bim2eigenvec.ado
