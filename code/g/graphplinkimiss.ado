@@ -52,6 +52,8 @@ qui {
 	global nINDlow `r(N)'
 	global mind_tmp `mind'
 	noi di as text"# >> "as result"${nINDlow}"as text" individuals with missingess > "as result"${mind_tmp}"
+	replace f_miss = 0.05 if f_miss >0.05 & f_miss !=.
+
 	}
 qui di as text"# > plotting missingness to tmpIMISS.gph"
 qui{

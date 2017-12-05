@@ -209,7 +209,7 @@ end
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
 	_docx_image_add(dh,"bim2hapmap_pca.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
-	_docx_image_add(dh,"bim2hapmap_pca-${like}.png")
+	_docx_image_add(dh,"bim2hapmap_pca-${like}-like.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
 
 	// DISPLAYING CHROMOSOME DISTRIBUTION  
