@@ -1,5 +1,5 @@
-d bim2dta -  a command to create check genome build from plink binaries
+d bim2build -  a command to create check genome build from plink binaries
 d Richard Anney, Cardiff University
 d Distribution-Date: 06dec2017
-f bim2frq.ado
+f bim2dta.ado
 f ../c/checkfile.ado
