@@ -27,7 +27,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME                                               "
 qui di as text"#########################################################################"
 
-capture confirm folder `folder'
+capture confirm folder "`folder'"
 if _rc==0 {
 	noi di as text"# > "as input"checkfolder "as text"................................. located" as result" `folder'"
 	}
