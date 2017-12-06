@@ -38,6 +38,8 @@ qui di as text"# > check path of plink *.frq.counts file is true"
 
 noi checkfile, file(`frq'.frq.counts)
 noi checktabbed
+
+noi di as text"# > "as input"graphplinkfrq "as text"....................................... "as result"`frq'.frq.counts"
 qui di as text"# > processing *.frq.counts"
 qui {
 	!$tabbed `frq'.frq.counts
@@ -49,10 +51,10 @@ qui {
 	for var maf : lab var X "minor allele frequency"
 	count
 	global nSNPs `r(N)'
-	noi di as text"# >> "as result" ${nSNPs} "as text" snps imported from "as result`"`frq'.frq.counts"'
+	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
 	count if c1 < 5
 	global nSNPlow `r(N)'
-	noi di as text"# >> "as result" ${nSNPlow} "as text" snps  with frequency counts (> 5) in "as result" `frq'.frq.counts"
+	noi di as text"# >> number of SNPs in file with mac < 5 ................ "as result `r(N)'
 	gen total = c1 + c2
 	sum total
 	global mac5 = 5/`r(max)'
