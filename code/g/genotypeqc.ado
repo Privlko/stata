@@ -1080,7 +1080,7 @@ qui { // Module #5 - apply quality control to genotypes
 	qui {
 		!del *.exclude *.remove *.relPairs *.snplist *.indlist *.hwe *.het *.hh *.irem
 		}
-	qui di as text"#########################################################################"
+	noi di as text"#########################################################################"
 	}
 qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives 
 	noi di as text" "
@@ -1159,12 +1159,12 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 		!del "${sub_mod_output}_KIN0_2_noRel.gph"
 		!rename "tmpKIN0_2.gph" "${sub_mod_output}_KIN0_2_noRel.gph"
 		}
-	noi di as text"#########################################################################"
-	noi	di as text"# > clean "
 	qui { 
 		!del ${sub_mod_output}.kin0 *.remove *.exclude tmpK* *.kin0 *.extract
 		!del ${sub_mod_input}_subset*
 		}
+	noi di as text"#########################################################################"
+
 	}
 
 qui { // Module #7 - define european (ceu-tsi-like) subset 
@@ -1289,6 +1289,8 @@ qui { // Module #9 - rename and clean
 		!copy "${output}.quality-control-report.docx"   "${output_2}.quality-control-report.docx"
 		!del  ${output}*
 		}
+	noi di as text"#########################################################################"
+	noi di as text" "
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
