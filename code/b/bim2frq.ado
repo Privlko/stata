@@ -25,6 +25,8 @@ qui di as text"# a command to create _frq.dta (plink-format marker files) from p
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"bim2frq "as text"............................................. "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(${plink})
 noi checktabbed
