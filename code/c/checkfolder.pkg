@@ -1,0 +1,4 @@
+d checkfolder - a command to check the presence of a folder
+d Richard Anney, Cardiff University
+d Distribution-Date: 06dec2017
+f checkfolder.ado

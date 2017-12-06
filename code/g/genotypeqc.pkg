@@ -11,6 +11,7 @@ f ../b/bim2ld_subset.ado
 f ../b/bim2ldexclude.ado
 f ../c/checktabbed.ado
 f ../c/checkfile.ado
+f ../c/checkfolder.ado
 f ../c/create_temp_dir.ado
 f ../f/fam2dta.ado
 f genotypeqc.ado
