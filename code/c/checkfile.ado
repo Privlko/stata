@@ -28,10 +28,10 @@ qui di as text"# Started: $S_DATE $S_TIME                                       
 qui di as text"#########################################################################"
 capture confirm file "`file'"
 if _rc==0 {
-	noi di as text"# > checkfile ...." as result "located ........."as text" `file'"
+	noi di as text"# > checkfile .................................... " as result"located"as result" `file'"
 	}
 else {
-	noi di as text"# > checkfile ...." as error  "cannot locate ..."as text" `file'"
+	noi di as text"# > checkfile .............................. " as result"cannot locate"as result" `file'"
 	exit
 	}
 qui di as text"#########################################################################"
