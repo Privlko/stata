@@ -26,7 +26,7 @@ qui di as text"#################################################################
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(`build_ref')
 qui {
-	bim2dta, bim(`bim')
+	noi bim2dta, bim(`bim')
 	erase `bim'_bim.dta
 	rename snp rsid
 	keep rsid chr bp
@@ -72,7 +72,7 @@ qui {
 	replace a = "global buildType " + build
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
-	noi di as input"# > bim2build "as text"... " as result"${buildType} ......... "as text"`bim'.bim"
+	noi di as text"# > "as input"bim2build "as text" ........................... build (" as result"${buildType}"as text") "as result"`bim'.bim"
 	erase _tmp.do
 	}
 qui di as text"#########################################################################"
