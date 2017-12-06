@@ -34,7 +34,7 @@ qui {
 	outsheet a using _x.do, non noq replace
 	do _x.do
 	erase _x.do
-	checkfile, file(${checktabbed_file})
+	noi checkfile, file(${checktabbed_file})
 	replace a = "a b c d"
 	outsheet a using test_pl.txt, noq replace
 	!$tabbed test_pl.txt
