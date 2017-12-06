@@ -27,9 +27,11 @@ qui di as text"# most individuals"
 qui di as text"#########################################################################"
 qui di as text"# kin_started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"kin0filter "as text".......................................... "as result"`kin0'.kin0"
+noi di as text"# > saving individuals to exclude to ....................................... "as result"`kin0'_filter_`filter'.remove"
 noi checkfile, file(`kin0'.kin0)
 
-qui di as text"# > define range"
 qui di as text"# > process/import "as result "`kin0'.kin0"
 qui {
 	import delim using `kin0'.kin0, clear case(lower)
@@ -43,7 +45,7 @@ qui {
 qui di as text"# > count observations > threshold"
 qui {
 	count  
-	noi di as text"# >> "as result `r(N)' as text" pairs with kinship > "as result `filter'
+	noi di as text"# > pairs with pairs with kinship > threshold ........... "as result `r(N)'
 	if `r(N)' > 0 {
 		keep fid1 id1 fid2 id2
 		gen pair = _n
@@ -54,20 +56,22 @@ qui {
 		gsort -obs_by_id random
 		sum obs_by_id
 		if `r(max)' == 1 {
-			noi di as text"# all individuals are observed only once"
+			noi di as text"# >> all individuals in pairs are observed only once"
 			count
-			noi di as text"# >> "as result `r(N)' as text" individual/s saved to "as result"`kin0'_filter_`filter'.remove"
+			noi di as text"# >> "as result `r(N)' as text" individual/s saved to file"
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		else {
 			keep in 1
-			noi di as text"# some individuals are in > 1 pair"
-			noi di as text"# >> 1 individual saved to "as result"`kin0'_filter_`filter'.remove"
+			noi di as text"# some individuals are in more than 1 pair"
+			count
+			noi di as text"# >> "as result `r(N)' as text" individual saved to file"
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		}
 	else {
-		noi di as text"# >> "as result "0" as text" pairs with kinship > "as result `filter'
+		noi di as text"# no pairs observed"
+		noi di as text"# >> "as result `r(N)' as text" individual saved to file"
 		}
 	}
 qui di as text"#########################################################################"

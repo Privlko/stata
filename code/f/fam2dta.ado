@@ -24,6 +24,9 @@ qui di as text"# (stata-format).                                                
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"fam2dta "as text"............................................. "as result"`fam'.fam"
+
 qui di as text"# > check path of plink *.fam file is true"
 noi checkfile, file(`fam'.fam)
 qui {
