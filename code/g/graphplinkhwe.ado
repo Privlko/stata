@@ -54,7 +54,7 @@ qui {
 	global nSNPslow `r(N)'
 	global threshold_tmp `threshold'
 	noi di as text"# >> HWE threshold .................................. p < "as result "1e-`threshold'"
-	noi di as text"# >> number of SNPs in file with P < threshold .......... "as result "${nSNPslow}"
+	noi di as text"# >> number of SNPs with P < threshold .................. "as result "${nSNPslow}"
 	}
 qui di as text"# > plotting HWE (P) deviation to tmpHWE.gph"
 qui{

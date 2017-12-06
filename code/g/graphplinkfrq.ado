@@ -54,7 +54,7 @@ qui {
 	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
 	count if c1 < 5
 	global nSNPlow `r(N)'
-	noi di as text"# >> number of SNPs in file with mac < 5 ................ "as result `r(N)'
+	noi di as text"# >> number of SNPs with mac < 5 ........................ "as result `r(N)'
 	gen total = c1 + c2
 	sum total
 	global mac5 = 5/`r(max)'

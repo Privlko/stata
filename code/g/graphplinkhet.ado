@@ -74,7 +74,8 @@ qui {
 	count if threshold == 1
 	global nINDlow `r(N)'
 	global sd_tmp `sd'
-	noi di as text"# >> number of individuals in file with het > "as result"`sd'"as text" x ....... "as result "${nINDlow}"
+	noi di as text"# >> heterozygosity threshold +/- standard deviations ... "as result"`sd'x"
+	noi di as text"# >> number of individuals with het > threshold ......... "as result"${nINDlow}"
 	}
 qui di as text"# > plotting heterozygosity to tmpHET.gph"
 qui{

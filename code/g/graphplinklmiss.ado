@@ -36,6 +36,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
+noi di as text"# > "as input"graphplinklmiss "as text"..................................... "as result"`lmiss'.lmiss"
 noi checkfile, file(`lmiss'.lmiss)
 noi checktabbed
 
@@ -48,12 +49,13 @@ qui {
 	for var f_miss : lab var X "Frequency of Missing Genotypes per SNP"
 	count
 	global nSNPs `r(N)'
-	noi di as text"# >> "as result"${nSNPs}"as text" SNPs imported from "as result"`lmiss'.lmiss"
+	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
     count if f_miss > `geno'
 	global nSNPlow `r(N)'
 	global geno_tmp `geno'
-	noi di as text"# >> "as result"${nSNPlow}"as text" SNPs with missingess > "as result"${geno_tmp}"
-	replace f_miss = 0.1 if f_miss >0.1 & f_miss !=.
+	noi di as text"# >> missingness (by variant) threshold ................. "as result`geno'
+	noi di as text"# >> number of variants with missingness > threshold .... "as result"${nSNPlow}"
+		replace f_miss = 0.1 if f_miss >0.1 & f_miss !=.
 	}
 qui di as text"# > plotting missingness to tmpLMISS.gph"
 qui {
