@@ -1,16 +1,17 @@
 d genotypeqc - genotype-array quality-control pipeline
 d Richard Anney, Cardiff University
 d Distribution-Date: 05dec2017
-f ../b/bim2hapmap.ado
-f ../b/bim2ld_subset.ado
 f ../b/bim2build.ado
-f ../b/bim2frq.ado
+f ../b/bim2count.ado
 f ../b/bim2dta.ado
+f ../b/bim2frq.ado
+f ../b/bim2hapmap.ado
 f ../b/bim2eigenvec.ado
+f ../b/bim2ld_subset.ado
 f ../b/bim2ldexclude.ado
 f ../c/checktabbed.ado
-f ../c/create_temp_dir.ado
 f ../c/checkfile.ado
+f ../c/create_temp_dir.ado
 f ../f/fam2dta.ado
 f genotypeqc.ado
 f graphplinkfrq.ado

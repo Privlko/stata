@@ -1,6 +1,7 @@
 v 1
 d Richard Anney, Cardiff University
 p bim2build a command to create check genome build from plink binaries
+p bim2count a command to count observations in a plink dataset
 p bim2dta command to convert *.bim plink marker file to *.dta 
 p bim2eigenvec command to generate *.dta eigenval calculations from plink binaries
 p bim2dta  a command to create _frq.dta (plink-format marker files) from plink binaries 
