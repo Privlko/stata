@@ -89,8 +89,6 @@ qui {
 	qui { 
 		bim2eigenvec, bim(_combined)
 		}
-		
-		
 	}
 qui di as text"# > plot scree of eigenvalues"
 qui { 
@@ -265,8 +263,7 @@ qui {
 		graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
 		window manage close graph
 			}
-	}
-	
+	}	
 qui di as text"# > clean files"
 qui {
 	foreach i of num 1/3 {
