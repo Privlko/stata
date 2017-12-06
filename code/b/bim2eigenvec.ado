@@ -50,7 +50,7 @@ noi checktabbed
 
 qui di as text"# > run bim2ldexclude                           "
 qui { 
-	bim2ldexclude, bim(`bim') 
+	noi bim2ldexclude, bim(`bim') 
 	}
 qui di as text"# > excluding long-distance-ld-ranges using ${plink}"
 qui { 	

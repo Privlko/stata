@@ -191,8 +191,6 @@ qui {
 		count if pop == "nr"
 		noi di as text"# >> similarity to ancestries ........................... "as result "`like'"	
 	    noi di as text"# >> number of individuals identified as similar ........ "as result `r(N)'		
-
-		noi di as text"# > "as result `r(N)' as text" test samples defined as "as result"`like'"
 		gen a = "`like'"
 		replace  a = subinstr(a, " ", "_",.)
 		replace  a = subinstr(a, " ", "_",.)
