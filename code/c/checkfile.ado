@@ -26,6 +26,7 @@ qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)            
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME                                               "
 qui di as text"#########################################################################"
+
 capture confirm file "`file'"
 if _rc==0 {
 	noi di as text"# > "as input"checkfile "as text"................................... located" as result" `file'"
