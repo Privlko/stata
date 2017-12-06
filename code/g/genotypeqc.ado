@@ -54,12 +54,15 @@ noi di as text"#################################################################
 noi di as text"# genotypeqc                                                             "
 noi di as text"# version:       1.1                                                     "
 noi di as text"# Creation Date: 17July2017                                              "
-noi di as text"# Version Date:  01Dec2017                                               "
+noi di as text"# Version Date:  06Dec2017                                               "
 noi di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
 noi di as text"#########################################################################"
 noi di as text"# > see " as result "https://github.com/ricanney/stata/edit/master/documents/genotypeqc.md "
-noi di as text"# > for details of new parameter file structure"
+noi di as text"# > for details of how to set up parameters"
 noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+
 qui { // Module #0 - preamble
 	noi di as text" "
 	noi di as text"#########################################################################"
