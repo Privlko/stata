@@ -29,6 +29,8 @@ qui di as text"# subset of ld independent snps (_subset#.extract)               
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"bim2ld_subset "as text"....................................... "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(${plink})
 
@@ -51,7 +53,8 @@ qui {
 	sort x
 	drop if _n > `n'
 	outsheet v1 using _subset`n'.extract, non noq replace
-	noi di as text"# > "as input"bim2ld_subset"as text" - exporting "as result `n' as text" randomly selected ld-independent snps to"as result" _subset`n'.extract"
+	noi di as text"# >> number of random ld-independent snps selected ...... "as result `n'
+	noi di as text"# >> exported to ........................................ "as result " _subset`n'.extract"
 	}
 qui di as text"# > clean"
 qui {
