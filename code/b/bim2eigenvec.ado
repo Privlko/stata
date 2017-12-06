@@ -39,12 +39,15 @@ qui di as text"# Dependencies : bim2ldexclude       "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"bim2eigenvec "as text"........................................ "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(`bim'.bed)
 noi checkfile, file(`bim'.fam)
 noi checkfile, file(${plink})
 noi checkfile, file(${plink2})
 noi checktabbed
+
 qui di as text"# > run bim2ldexclude                           "
 qui { 
 	bim2ldexclude, bim(`bim') 

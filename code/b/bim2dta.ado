@@ -26,7 +26,10 @@ qui di as text"# (stata-format).                                                
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"bim2dta "as text"............................................. "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
+
 qui di as text"# > importing *.bim file"
 qui { 
 	import delim  using `bim'.bim, clear

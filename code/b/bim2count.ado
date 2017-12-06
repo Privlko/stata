@@ -23,9 +23,11 @@ qui di as text"# a command to count observations in a plink dataset  "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
-noi checkfile, file(`bim'.bim)
-qui di as text"# > importing *.bim file"
+
 noi di as text"# > "as input"bim2count "as text"........................................... "as result"`bim'"
+noi checkfile, file(`bim'.bim)
+
+qui di as text"# > importing *.bim file"
 qui { 
 	!$wc -l ${sub_mod_output}.bim  > ${sub_mod_output}.count
 	import delim using ${sub_mod_output}.count, clear varnames(nonames)

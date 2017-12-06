@@ -17,7 +17,6 @@
 program bim2ldexclude
 syntax , bim(string asis) 
 
-
 qui di as text"#########################################################################"
 qui di as text"# bim2ldexclude                                                          "
 qui di as text"# version:  1a                                                           "
@@ -32,6 +31,8 @@ qui di as text"# 127 - 147, July 2008              "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"bim2ldexclude "as text"....................................... "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 qui di as text"# > importing *.bim file"
 qui { 
@@ -68,6 +69,7 @@ qui {
 qui di as text`"# > exporting snp-list to file "long-range-ld.exclude""'
 qui { 
 	outsheet v2 if drop == 1 using "long-range-ld.exclude", replace non noq
+	noi di as text"# >> snps in regions of extended ld exported to ......... "as result "long-range-ld.exclude"
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
