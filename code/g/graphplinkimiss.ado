@@ -35,6 +35,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
+noi di as text"# > "as input"graphplinkimiss "as text"..................................... "as result"`imiss'.imiss"
 noi checkfile, file(`imiss'.imiss)
 noi checktabbed
 
@@ -47,11 +48,12 @@ qui {
 	for var f_miss : destring X, replace force
 	count
 	global nIND `r(N)'
-	noi di as text"# >> "as result"${nIND}"as text" individuals imported from "as result"`imiss'.imiss"
+	noi di as text"# >> number of individuals in file ...................... "as result `r(N)'		
 	count if f_miss > `mind'
 	global nINDlow `r(N)'
 	global mind_tmp `mind'
-	noi di as text"# >> "as result"${nINDlow}"as text" individuals with missingess > "as result"${mind_tmp}"
+	noi di as text"# >> missingness (by individual) threshold .............. "as result `mind'
+	noi di as text"# >> number of individual with missingness > threshold .. "as result "${nINDlow}"
 	replace f_miss = 0.05 if f_miss >0.05 & f_miss !=.
 
 	}
