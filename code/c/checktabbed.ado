@@ -40,7 +40,9 @@ qui {
 	qui di as text"# > active perl should be downloaded/installed on your computer https://www.activestate.com/activeperl/downloads"
 	qui di as text"# > check that test_pl.txt.tabbed has been created"
 	noi checkfile, file(test_pl.txt.tabbed)
-	noi di as text"# > checktabbed - checking that \${tabbed} is working ........ " as result "working"
+	noi di as text"# > checkfile ...." as result "located ........."as text" `file'"
+	noi di as text"# > checktabbed .." as result "located ........."as text" tabbed.pl"
+	noi di as text"# > checktabbed .." as result "working ........."as text" tabbed.pl and perl are working"
 	erase test_pl.txt
 	erase test_pl.txt.tabbed
 	}
