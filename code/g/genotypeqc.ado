@@ -274,12 +274,14 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			capture confirm file ${sub_mod_output}.dupvar
 			if !_rc {
 				import delim using ${sub_mod_output}.dupvar, clear
-				erase ${sub_mod_output}.dupvar
-				drop if chr == 0
-				compress
-				split ids,p(" ")
-				gen keep   = ""
-				foreach i of num 1/999 {
+				count
+				if `r(N)' > 0 {
+					erase ${sub_mod_output}.dupvar
+					drop if chr == 0
+					compress
+					split ids,p(" ")
+					gen keep   = ""
+					foreach i of num 1/999 {
 					capture confirm variable ids`i'
 					if !_rc {
 						generate tmp`i' = substr(ids`i',1,2)	
@@ -288,32 +290,39 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 						drop tmp`i'
 						}
 					}
-				drop if keep == ""
-				preserve
-				keep ids1
-				save ${sub_mod_output}_dupvar.dta, replace
-				restore
-				foreach i of num 2/999 {
-					capture confirm variable ids`i'
-					if !_rc {
-						preserve
-						keep ids`i'
-						ren ids`i' ids1
-						append using ${sub_mod_output}_dupvar.dta
-						save ${sub_mod_output}_dupvar.dta, replace
-						restore
+					drop if keep == ""
+					preserve
+					keep ids1
+					save ${sub_mod_output}_dupvar.dta, replace
+					restore
+					foreach i of num 2/999 {
+						capture confirm variable ids`i'
+						if !_rc {
+							preserve
+							keep ids`i'
+							ren ids`i' ids1
+							append using ${sub_mod_output}_dupvar.dta
+							save ${sub_mod_output}_dupvar.dta, replace
+							restore
+							}
 						}
+					use ${sub_mod_output}_dupvar.dta, clear
+					erase ${sub_mod_output}_dupvar.dta
+					drop if ids1 == ""
+					duplicates drop
+					outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
+					!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
+					foreach file in bim bed fam  {
+						erase "${sub_mod_input}.`file'"
+						}
+					erase ${sub_mod_output}.exclude
 					}
-				use ${sub_mod_output}_dupvar.dta, clear
-				erase ${sub_mod_output}_dupvar.dta
-				drop if ids1 == ""
-				duplicates drop
-				outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
-				!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
-				foreach file in bim bed fam  {
-					erase "${sub_mod_input}.`file'"
+				else {
+					foreach file in bim bed fam {
+						!del "${sub_mod_output}.`file'"
+						!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
+						}		
 					}
-				erase ${sub_mod_output}.exclude
 				}
 			else {
 				foreach file in bim bed fam {
@@ -367,57 +376,66 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		qui {
 			global sub_mod_input  tempfile-module2-04
 			global sub_mod_output tempfile-module2-05
-			!$plink --bfile ${sub_mod_input} --list-duplicate-vars --out ${sub_mod_output}
+						!$plink --bfile ${sub_mod_input} --list-duplicate-vars --out ${sub_mod_output}
 			capture confirm file ${sub_mod_output}.dupvar
 			if !_rc {
 				import delim using ${sub_mod_output}.dupvar, clear
-				erase ${sub_mod_output}.dupvar
-				drop if chr == 0
-				compress
-				split ids,p(" ")
-				gen keep   = ""
-				foreach i of num 1/999 {
+				count
+				if `r(N)' > 0 {
+					erase ${sub_mod_output}.dupvar
+					drop if chr == 0
+					compress
+					split ids,p(" ")
+					gen keep   = ""
+					foreach i of num 1/999 {
 					capture confirm variable ids`i'
 					if !_rc {
-						generate tmp`i' = substr(ids`i',1,2)
+						generate tmp`i' = substr(ids`i',1,2)	
 						replace keep = ids`i' if tmp`i' == "rs"
 						replace ids`i' = "" if ids`i' == keep
 						drop tmp`i'
 						}
 					}
-				drop if keep == ""
-				preserve
-				keep ids1
-				save ${sub_mod_output}_dupvar.dta, replace
-				restore
-				foreach i of num 2/999 {
-					capture confirm variable ids`i'
-					if !_rc {
-						preserve
-						keep ids`i'
-						ren ids`i' ids1
-						append using ${sub_mod_output}_dupvar.dta
-						save ${sub_mod_output}_dupvar.dta, replace
-						restore
+					drop if keep == ""
+					preserve
+					keep ids1
+					save ${sub_mod_output}_dupvar.dta, replace
+					restore
+					foreach i of num 2/999 {
+						capture confirm variable ids`i'
+						if !_rc {
+							preserve
+							keep ids`i'
+							ren ids`i' ids1
+							append using ${sub_mod_output}_dupvar.dta
+							save ${sub_mod_output}_dupvar.dta, replace
+							restore
+							}
 						}
-					}
-				use ${sub_mod_output}_dupvar.dta, clear
-				erase ${sub_mod_output}_dupvar.dta
-				drop if ids1 == ""
-				duplicates drop
-				outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
-				!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
-				foreach file in bim bed fam  {
+					use ${sub_mod_output}_dupvar.dta, clear
+					erase ${sub_mod_output}_dupvar.dta
+					drop if ids1 == ""
+					duplicates drop
+					outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
+					!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
+					foreach file in bim bed fam  {
 						erase "${sub_mod_input}.`file'"
 						}
-				erase ${sub_mod_output}.exclude
+					erase ${sub_mod_output}.exclude
+					}
+				else {
+					foreach file in bim bed fam {
+						!del "${sub_mod_output}.`file'"
+						!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
+						}		
+					}
 				}
 			else {
 				foreach file in bim bed fam {
 					!del "${sub_mod_output}.`file'"
 					!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
 					}		
-				}				
+				}
 			}
 		noi di as text"# >> rename duplicates "
 		qui {
