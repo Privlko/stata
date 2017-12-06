@@ -52,11 +52,11 @@ qui di as text"# > align _test_ to _hapmap_strand"
 qui { 
 	qui di as text"# >> merge bim files"
 	qui {
-		bim2dta, bim(_test)
+		noi bim2dta, bim(_test)
 		keep snp a1 a2 gt
 		rename (a1 a2 gt) (_test_a1 _test_a2 _test_gt)
 		save _test_bim.dta,replace
-		bim2dta, bim(_hapmap)
+		noi bim2dta, bim(_hapmap)
 		keep snp a1 a2 gt
 		rename (a1 a2 gt) (_hapmap_a1 _hapmap_a2 _hapmap_gt)
 		merge 1:1 snp using _test_bim.dta
@@ -87,7 +87,7 @@ qui {
 		}
 	qui di as text"# >> calculate eigenvec/ eigenval"
 	qui { 
-		bim2eigenvec, bim(_combined)
+		noi bim2eigenvec, bim(_combined)
 		}
 	}
 qui di as text"# > plot scree of eigenvalues"
@@ -169,7 +169,7 @@ qui {
 	qui di as text"# >> define individuals as -like- "
 	qui { 
 		count if pop == "TEST"
-		noi di as text"# > "as result `r(N)' as text" test samples included in analysis"
+	    noi di as text"# >> number of test individuals included in analysis .... "as result `r(N)'		
 		gen like = .
 		foreach i in `like'  {
 			replace like = 1 if pop =="`i'"
@@ -189,6 +189,9 @@ qui {
 			}
 		replace pop = "nr" if pop == "TEST" & nr1 == 1 & nr2 == 1 & nr3 == 1
 		count if pop == "nr"
+		noi di as text"# >> similarity to ancestries ........................... "as result "`like'"	
+	    noi di as text"# >> number of individuals identified as similar ........ "as result `r(N)'		
+
 		noi di as text"# > "as result `r(N)' as text" test samples defined as "as result"`like'"
 		gen a = "`like'"
 		replace  a = subinstr(a, " ", "_",.)
