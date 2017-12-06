@@ -1,4 +1,6 @@
 d graphplinklmiss command to plot plink output *.lmiss
 d Richard Anney, Cardiff University
-d Distribution-Date: 04dec2017
+d Distribution-Date: 06dec2017
+f ../c/checkfile.ado
+f ../c/checktabbed.ado
 f graphplinklmiss.ado
