@@ -36,6 +36,8 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
 noi checkfile, file(`hwe'.hwe)
+noi di as text"# > "as input"graphplinkhwe "as text"....................................... "as result"`hwe'.hwe"
+
 qui di as text"# > processing `hwe'.hwe"
 qui {
 	!$tabbed `hwe'.hwe
@@ -47,11 +49,12 @@ qui {
 	for var p : lab var X "HWE (p)"
 	count
 	global nSNPs `r(N)'
-	noi di as text"# >> "as result"${nSNPs} "as text"snps imported from "as result"`hwe'.hwe"
+	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
 	count if p <1e-`threshold' 
 	global nSNPslow `r(N)'
 	global threshold_tmp `threshold'
-	noi di as text"# >> "as result"${nSNPslow} "as text"snps with HWE deviation p < "as result"1e-${threshold_tmp}"
+	noi di as text"# >> HWE threshold .................................. p < "as result `threshold'
+	noi di as text"# >> number of SNPs in file with P < threshold .......... "as result "${nSNPslow}"
 	}
 qui di as text"# > plotting HWE (P) deviation to tmpHWE.gph"
 qui{
