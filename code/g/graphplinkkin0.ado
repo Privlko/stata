@@ -47,9 +47,10 @@ qui di as text"#    duplicate  if kinship > `d'"
 qui di as text"#  WARNING : this may not be the case for non-standard arrays e.g. psychchip/ immunochip"
 qui di as text"#########################################################################"
 
-
+noi di as text"# > "as input"graphplinkkin0 "as text"..................................... "as result"`kin0'.kin0"
 noi checkfile, file(`kin0'.kin0)
 noi checktabbed 
+
 qui di as text"# > processing `kin0'.kin0"
 qui { 
 	!$tabbed `kin0'.kin0
