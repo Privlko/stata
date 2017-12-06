@@ -6,26 +6,11 @@
 # command: genotypeqc, param(parameter-file)
 #
 #########################################################################
-# additional files
-# download the following archive;
-#  https://www.dropbox.com/s/u7s9su44beda710/sandbox.tar.gz?dl=0 - archive
-#  https://www.dropbox.com/s/4q1oh1nsxhnoww5/sandbox.tar.gz.md5?dl=0 - md5
-#
-# this archive contains 
-# 1- an example parameter file
-#  ** adjust parameter file according to location of unpacked archive **
-#  ** adjust parameter file according to quality-control appropriateness **
-# 2- the genotype-array archive
-# 3- the genome-build file
-# 4- reference genotypes from 1000-genomes-phase-1 and hapmap3
-# 5- reference frequency data from 1000-genomes-phase-1
-# 6- subset of hapmap3 ancestry-informative markers
-# 7- population tag for hapmap3
 #
 # prior to implementation, run the install-all.do file from
 # https://github.com/ricanney/stata-genomics-ado
 #
-#download the following executables from
+# download the following executables from
 # plink1.9+ from https://www.cog-genomics.org/plink2
 # plink2.+  from https://www.cog-genomics.org/plink/2.0/
 #
@@ -58,34 +43,27 @@
 #########################################################################
 */
 program genotypeqc
-syntax , param(string asis) 
+syntax
 
-di as text"#########################################################################"
-di as text"# genotypeqc                                                             "
-di as text"# version:       1.1                                                     "
-di as text"# Creation Date: 17July2017                                              "
-di as text"# Version Date:  01Dec2017                                               "
-di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-di as text"#########################################################################"
-di as error" as of 16th November - the parameter file has become streamlined, "
-di as error" removing annotation and becoming in essence a \*.do file"
-di as error" - all globals can be assigned prior to running genotyeqc and a dummy"
-di as error"   parameter file can be created in lieu."
-di as error"   see " as result "https://github.com/ricanney/stata/edit/master/documents/genotypeqc.md "
-di as error"   for details of new parameter file structure"
-di as text"#########################################################################"
+qui di as text"# > create temp directory"
+qui {
+	create_temp_dir
+	}
 
-qui { // preamble
+noi di as text"#########################################################################"
+noi di as text"# genotypeqc                                                             "
+noi di as text"# version:       1.1                                                     "
+noi di as text"# Creation Date: 17July2017                                              "
+noi di as text"# Version Date:  01Dec2017                                               "
+noi di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+noi di as text"#########################################################################"
+noi di as text"# > see " as result "https://github.com/ricanney/stata/edit/master/documents/genotypeqc.md "
+noi di as text"# > for details of new parameter file structure"
+noi di as text"#########################################################################"
+qui { // Module #0 - preamble
+	noi di as text" "
 	noi di as text"#########################################################################"
-	noi di as text"# Preamble"
-	noi di as text"# > run parameters file"   
-	qui {
-		do `param'
-		}
-	noi di as text"# > create temporary working directory" 
-  qui {
-		noi create_temp_dir
-		}
+	noi di as text"# Module #0 - preamble"
 	noi di as text"# > check path of dependent software is true"
 	qui { 
 		noi checkfile, file(${plink})
@@ -104,39 +82,42 @@ qui { // preamble
 		noi checkfile, file(${input}.bim)
 		noi checkfile, file(${input}.fam)
 		}
-	noi di as text"# > create new globals"
+	qui di as text"# > create new globals"
 	qui { 
 		global input    "${data_folder}\\${data_input}"
 		global output   "${data_folder}\\${data_input}-qc-v6"
 		global output_2 "${data_input}-qc-v6"
 		}
+	noi di as text"#"
 	noi di as text"# > display output file and thresholds                                  "
 	noi di as text"#########################################################################"
-  noi	di as text"# >> processed and deposited as ......................."as result" ${output}"
-	noi di as text"# >> minimum minor-allele-frequency retained .........."as result" mac5"
-	noi di as text"# >> maximum genotype-missingness ....................."as result" ${geno2} (sub_mod_input = ${geno1})"
-	noi di as text"# >> maximum individual-missingness ..................."as result" ${mind}"
-	noi di as text"# >> maximum tolerated heterozygosity outliers (by-sd) "as result" ${hetsd}"
-	noi di as text"# >> maximum tolerated hardy-weinberg deviation ....... p < "as result"1E-${hwep}"
-	noi di as text"# >> minimum kinship score for duplicates is  ........ "as result"${kin_d}"  
-	noi di as text"# >> minimum kinship score for 1st degree relatives is "as result"${kin_f}"  
-	noi di as text"# >> minimum kinship score for 2nd degree relatives is "as result"${kin_s}"  
-	noi di as text"# >> minimum kinship score for 3rd degree relatives is "as result"${kin_t}"  
+  noi	di as text"# >> input .............................................. "as result"${data_input}"
+  noi	di as text"# >> output ............................................. "as result"${output_2}"
+	noi di as text"# >> minimum minor-allele-frequency retained ............ "as result"mac5"
+	noi di as text"# >> maximum genotype-missingness ....................... "as result"${geno2}" as text " (" as result"${geno1}"as text ")"
+	noi di as text"# >> maximum individual-missingness ..................... "as result"${mind}"
+	noi di as text"# >> maximum tolerated heterozygosity outliers (by-sd) .. "as result"${hetsd}"
+	noi di as text"# >> maximum tolerated hardy-weinberg deviation ..... p < "as result"1E-${hwep}"
+	noi di as text"# >> minimum kinship score for duplicates is  ........... "as result"${kin_d}"  
+	noi di as text"# >> minimum kinship score for 1st degree relatives is .. "as result"${kin_f}"  
+	noi di as text"# >> minimum kinship score for 2nd degree relatives is .. "as result"${kin_s}"  
+	noi di as text"# >> minimum kinship score for 3rd degree relatives is .. "as result"${kin_t}"  
 	noi di as text"#########################################################################"
 	}
 qui { // Module #1 - determining the original genotyping array 
+	noi di as text" "
 	noi di as text"#########################################################################"
-	noi	di as text"# Module #1 - determing most likely genotyping array from *.bim"
-	noi di as text"# > importing "as result"${input}.bim"
+	noi	di as text"# Module #1 - determing most likely genotyping array from "as result"${input}.bim"
+	qui di as text"# > importing ........................................... "as result"${input}.bim"
 	qui {
 		global sub_mod_output tempfile-module1-01
-		bim2dta,bim(${input})
+		noi bim2dta,bim(${input})
 		rename snp rsid
 		keep rsid
 		sort rsid
 		save ${sub_mod_output}.dta, replace
 		}
-	noi di as text"# > calculate overlap with references and reporting to "as result"${output}.arraymatch"
+	qui di as text"# > calculate overlap with references and reporting to .. "as result"${output}.arraymatch"
 	qui {
 		global sub_mod_input  tempfile-module1-01
 		global sub_mod_output tempfile-module1-02
@@ -146,7 +127,7 @@ qui { // Module #1 - determining the original genotyping array
 		clear
 		set obs 1								
 		gen folder = ""							
-		save ${sub_mod_output}.dta,replace							
+		save ${sub_mod_output}.dta,replace
 		local myfiles: dir "${array_ref}" dirs "*" 	, respectcase				
 		foreach folder of local myfiles {
 			clear								
@@ -186,7 +167,7 @@ qui { // Module #1 - determining the original genotyping array
 		replace MostLikely = "++" if J > 0.9 & MostLikely == ""
 		replace MostLikely = "+" if J > 0.8 & MostLikely == ""
 		outsheet using ${input}.arraymatch, replace noq
-		noi di as text"# > determining most likely array"
+		qui di as text"# > determining most likely array"
 		keep in 1
 		gen a = ""
 		replace a = "global arrayType "
@@ -196,26 +177,27 @@ qui { // Module #1 - determining the original genotyping array
 		replace a = "global Jaccard "
 		outsheet a J using ${sub_mod_input}.do, non noq replace
 		do ${sub_mod_input}.do
-		erase ${sub_mod_input}.do 
-		noi di as text"# > plotting most likely arrays to ................... "as result"${output}.arraymatch.png"
-		qui {
-			import delim using ${output}.arraymatch, clear delim(":") case(preserve)
-			keep if _n <10
-			graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) fxsize(200) fysize(100) ///
-			caption("Based on overlap with our reference data (derived from http://www.well.ox.ac.uk/~wrayner/strand/) the best matched ARRAY is ${arrayType}" ///
-							"Jaccard Index of  ${arrayType} = ${Jaccard}")
-			graph export ${output}.arraymatch.png, height(1000) width(4000) as(png) replace 
-			graph export  ${input}.arraymatch.png, height(1000) width(4000) as(png) replace 
-			window manage close graph
-			}
-		noi di as text"# > most likely array (best match) is ................ "as result"${arrayType}"
-		noi di as text"# > based on jaccard index of ........................ "as result"${Jaccard}"
+		erase ${sub_mod_input}.do
 		}
+	qui di as text"# > plotting most likely arrays to ...................... "as result"${output}.arraymatch.png"
+	qui {
+		import delim using ${output}.arraymatch, clear delim(":") case(preserve)
+		keep if _n <10
+		graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) fxsize(200) fysize(100) ///
+		caption("Based on overlap with our reference data (derived from http://www.well.ox.ac.uk/~wrayner/strand/) the best matched ARRAY is ${arrayType}" ///
+						"Jaccard Index of  ${arrayType} = ${Jaccard}")
+		graph export ${output}.arraymatch.png, height(1000) width(4000) as(png) replace 
+		graph export  ${input}.arraymatch.png, height(1000) width(4000) as(png) replace 
+		window manage close graph
+		}
+	noi di as text"# > most likely array (best match) is ................... "as result"${arrayType}" as text " (based on jaccard index = "as result"${Jaccard}"as text")"
+	noi di as text"#########################################################################"
 	}
 qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #2 - update marker identifiers to 1000-genomes compatible rsid"
-	noi di as text"# > count observations in "as result" ${input}"
+	noi di as text"# > count observations in ............................... "as result"${input}"
 	qui { 
 		!$wc -l ${input}.bim  > ${input}.count
 		import delim using ${input}.count, clear varnames(nonames)
@@ -223,46 +205,33 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		split v1,p(" ")
 		destring v11, replace
 		sum v11
-		noi di as text"# >> number of SNPs in "as result"${input}.bim" as text" ... N = "as result" `r(max)'		
+		noi di as text"# >> number of SNPs in file ............................. "as result `r(max)'		
 		!$wc -l ${input}.fam  > ${input}.count
 		import delim using ${input}.count, clear varnames(nonames)
 		erase ${input}.count
 		split v1,p(" ")
 		destring v11, replace
 		sum v11
-		noi di as text"# >> number of individuals in "as result"${input}.fam" as text" ... N = "as result" `r(max)'
+		noi di as text"# >> number of individuals in file ...................... "as result `r(max)'		
 		}
-	noi di as text"#########################################################################"
-	noi di as text"# > pre-process plink files to mac 5 / geno 0.99 / mind 0.99"
+	qui di as text"#########################################################################"
+	noi di as text"# > pre-process plink files (mac 5 / geno 0.99 / mind 0.99)"
 	qui {
 		global sub_mod_output tempfile-module2-01
 		!$plink --bfile ${input} --mac 5 --geno 0.99 --mind 0.99 --make-bed --out ${sub_mod_output} 
 		}
-	noi di as text"#########################################################################"
-	noi di as text"# > count observations in "as result" ${sub_mod_output}"
-	qui { 
-			!$wc -l ${sub_mod_output}.bim  > ${sub_mod_output}.count
-			import delim using ${sub_mod_output}.count, clear varnames(nonames)
-			erase ${sub_mod_output}.count
-			split v1,p(" ")
-			destring v11, replace
-			sum v11
-			noi di as text"# >> number of SNPs in "as result"${sub_mod_output}.bim" as text" ... N = "as result" `r(max)'		
-			!$wc -l ${sub_mod_output}.fam  > ${sub_mod_output}.count
-			import delim using ${sub_mod_output}.count, clear varnames(nonames)
-			erase ${sub_mod_output}.count
-			split v1,p(" ")
-			destring v11, replace
-			sum v11
-			noi di as text"# >> number of individuals in "as result"${sub_mod_output}.fam" as text" ... N = "as result" `r(max)'
-			}	
-	noi di as text"#########################################################################"
-	noi di as text"# > update build to hg19+1"
+	qui di as text"#########################################################################"
+	noi di as text"# > count observations in ............................... "as result"${sub_mod_output}"
+	qui {
+		noi bim2count, bim(${sub_mod_output})
+		}	
+	qui di as text"#########################################################################"
+	noi di as text"# > update build to ..................................... "as result"hg19+1"
 	qui {
 		global sub_mod_input  tempfile-module2-01
 		global sub_mod_output tempfile-module2-02
-		noi di as text"# >> based on markernames - this array is most likely " as result"${arrayType}"
-		noi di as text"# >> using " as result"${arrayType}" as text " as reference"
+		qui di as text"# >> based on markernames - this array is most likely " as result"${arrayType}"
+		qui di as text"# >> using " as result"${arrayType}" as text " as reference"
 		use ${array_ref}\\${arrayType}\\${arrayType}.dta, clear
 		replace chr = "23" if chr == "X"
 		replace chr = "24" if chr == "Y"
@@ -283,7 +252,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		replace _v4 = v4 if _v4 == ""
 		outsheet _v1 rsid v3 _v4 v5 v6 using ${sub_mod_input}_update.bim, non noq replace
 		keep if _m == 3
-		noi di as text"# >> limit to overlap via --extract "as result"${sub_mod_output}.extract"
+		qui di as text"# >> limit to overlap via --extract "as result"${sub_mod_output}.extract"
 		qui { 
 			outsheet rsid   using ${sub_mod_output}.extract, non noq replace
 			!$plink --bim ${sub_mod_input}_update.bim --bed ${sub_mod_input}.bed --fam ${sub_mod_input}.fam  --extract ${sub_mod_output}.extract --make-bed --out ${sub_mod_output} 
@@ -294,10 +263,10 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			erase ${sub_mod_output}.extract
 			}
 		}	
-	noi di as text"#########################################################################"
+	qui di as text"#########################################################################"
 	noi di as text"# > process varnames"
 	qui {
-		noi di as text"# >> remove duplicates if one of dupvars is an rs# (keep rs#)"
+		noi di as text"# >> remove duplicates (prioritise keep of rs# containing vars)"
 		qui {
 			global sub_mod_input  tempfile-module2-02
 			global sub_mod_output tempfile-module2-03
@@ -363,7 +332,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			split snp,p("rs")
 			capture confirm variable snp2
 			if !_rc {
-				di as text "# >> the variable snp contains markers with rs in name"
+				qui di as text "# >> the variable snp contains markers with rs in name"
 				destring snp2, replace
 				tostring snp2, replace
 				gen rename_snp = "rs" + snp2
@@ -394,7 +363,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 					}		
 				}	
 			}	
-		noi di as text"# >> remove duplicates if one of dupvars is an rs# (keep rs#)"
+		noi di as text"# >> remove duplicates (prioritise keep of rs# containing vars)"
 		qui {
 			global sub_mod_input  tempfile-module2-04
 			global sub_mod_output tempfile-module2-05
@@ -462,11 +431,11 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			replace v2 = v2 + dup
 			outsheet v1 - v6 using ${sub_mod_input}_update.bim, non noq replace
 			}
-		noi di as text"# >> update names to rsid using reference array "as result"${kg_ref_frq}"
+		noi di as text"# >> update names to rsid using reference array ......... "as result"${kg_ref_frq}"
 		qui {
 			global sub_mod_input  tempfile-module2-05
 			global sub_mod_output tempfile-module2-06
-			bim2dta, bim(${sub_mod_input}_update)
+		  noi bim2dta, bim(${sub_mod_input}_update)
 			gen rs = substr(snp`i',1,2)	
 			drop if rs == "rs"
 			count
@@ -500,7 +469,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 				replace rsid = rsid + "_loc"
 				keep snp rsid
 				outsheet snp rsid using  ${sub_mod_output}.update-name, non noq replace 
-				di as text"# >> update name via --update-name "as result"${sub_mod_output}.update-name"
+				qui di as text"# >> update name via --update-name "as result"${sub_mod_output}.update-name"
 				!$plink --bed ${sub_mod_input}.bed --bim ${sub_mod_input}_update.bim --fam ${sub_mod_input}.fam --update-name ${sub_mod_output}.update-name --make-bed --out ${sub_mod_output} 
 				foreach file in bim bed fam  {
 					erase "${sub_mod_input}.`file'"
@@ -537,9 +506,9 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			global sub_mod_input  tempfile-module2-06
 			global sub_mod_output tempfile-module2-processed	
 			!$plink --bed ${sub_mod_input}.bed --bim ${sub_mod_input}_update.bim --fam ${sub_mod_input}.fam  --freq --out ${sub_mod_input}
-			bim2dta, bim(${sub_mod_input}_update)
+			noi bim2dta, bim(${sub_mod_input}_update)
 			count
-			noi di as text"# >>> "as result `r(N)' as text " varaints present in "as result"${sub_mod_input}_update.bim"
+			qui di as text"# >>> "as result `r(N)' as text " varaints present in "as result"${sub_mod_input}_update.bim"
 			!$tabbed ${sub_mod_input}.frq
 			import delim using ${sub_mod_input}.frq.tabbed, clear	
 			destring maf, replace force
@@ -552,11 +521,11 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			rename snp rsid
 			merge 1:1 rsid using ${kg_ref_frq}
 			count if _m == 1
-			noi di as text"# >>> "as result `r(N)' as text " variants not observed in "as result"${kg_ref_frq}"
+			qui di as text"# >>> "as result `r(N)' as text " variants not observed in "as result"${kg_ref_frq}"
 			count if _m == 3
-			noi di as text"# >>> "as result `r(N)' as text " variants observed in "as result"${kg_ref_frq}"
+			qui di as text"# >>> "as result `r(N)' as text " variants observed in "as result"${kg_ref_frq}"
 			drop if _m == 2
-			di as text"# >>> checking allele-frequencies with reference (W/S excluded)"
+			qui di as text"# >>> checking allele-frequencies with reference (W/S excluded)"
 			gen drop = .
 			drop if _m == 1
 			replace drop = 1 if array_gt == "M"  & (kg_gt == "R" | kg_gt == "Y" | kg_gt == "S" | kg_gt == "W") 
@@ -568,9 +537,9 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			replace drop = 2 if array_gt == "W"
 			replace drop = 2 if array_gt == "S"
 			sum if drop == 1
-			noi di as text"# >>> "as result `r(N)' as text " variants dropped due to incompatible UIPAC codes"
+			qui di as text"# >>> "as result `r(N)' as text " variants dropped due to incompatible UIPAC codes"
 			sum if drop == 2
-			noi di as text"# >>> "as result `r(N)' as text " variants not examined due to W/S UIPAC codes"
+			qui di as text"# >>> "as result `r(N)' as text " variants not examined due to W/S UIPAC codes"
 			gen ref_maf = .
 			replace ref_maf = kg_maf if (kg_gt == array_gt & kg_a1 == array_a1)
 			replace ref_maf = kg_maf if (kg_gt != array_gt & kg_a1 == "A" & array_a1 == "T")
@@ -606,39 +575,30 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 			!del *.nosex
 			}
 		}
+	qui di as text"#########################################################################"
+	noi di as text"# > count observations in ............................... "as result"${sub_mod_output}"
+	qui {
+		noi bim2count, bim(${sub_mod_output})
+		}	
 	noi di as text"#########################################################################"
-	noi di as text"# > count observations in "as result"${sub_mod_output}"
-	qui { 
-		!$wc -l ${sub_mod_output}.bim  > ${sub_mod_output}.count
-		import delim using ${sub_mod_output}.count, clear varnames(nonames)
-		erase ${sub_mod_output}.count
-		split v1,p(" ")
-		destring v11, replace
-		sum v11
-		noi di as text"# >> number of SNPs in "as result"${sub_mod_output}.bim" as text" ... N = "as result" `r(max)'		
-		!$wc -l ${sub_mod_output}.fam  > ${sub_mod_output}.count
-		import delim using ${sub_mod_output}.count, clear varnames(nonames)
-		erase ${sub_mod_output}.count
-		split v1,p(" ")
-		destring v11, replace
-		sum v11
-		noi di as text"# >> number of individuals in "as result"${sub_mod_output}.fam" as text" ... N = "as result" `r(max)'
-		}
 	}
 qui { // Module #3 - report the genome build
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #3 - report the genome build to file"
-	noi di as text"# > check build for "as result"${input}"
+	noi di as text"# > check build for ..................................... "as result"${input}"
 	qui {
 		noi bim2build, bim(${input}) build_ref(${build_ref})
 		}
 	noi di as text"#########################################################################"
-	noi di as text"# > check build for "as result"${sub_mod_output}"
+	noi di as text"# > check build for ..................................... "as result"${sub_mod_output}"
 	qui {
 		noi bim2build, bim(${sub_mod_output}) build_ref(${build_ref})
 		}
+	noi di as text"#########################################################################"
 	}
 qui { // Module #4 - prepare the plink binaries for QC
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #4 - prepare the plink binaries for QC"
 	noi	di as text"# > restrict binaries to chromosomes 1 through 23 and make founders"
@@ -646,23 +606,22 @@ qui { // Module #4 - prepare the plink binaries for QC
 		global sub_mod_input  tempfile-module2-processed	
 		global sub_mod_output tempfile-module4-01		
 		import delim using ${sub_mod_input}.bim, clear 
-		count 
-		noi di as text"# >> " as result `r(N)' as text " variants loaded"
 		keep if v1 >=1 & v1 < 24
-		count 
-		noi di as text"# >> " as result `r(N)' as text " markers remaining after limit"
 		outsheet v2 using ${sub_mod_output}.extract, non noq replace
 		!$plink --bfile ${sub_mod_input} --extract ${sub_mod_output}.extract --make-founders --make-bed --out ${sub_mod_output}
 		foreach file in bim bed fam  {
 			erase "${sub_mod_input}.`file'"
 			}
 		erase ${sub_mod_output}.extract
+		noi bim2count, bim(${sub_mod_output})
 		}
-	noi di as text"#########################################################################"
+	qui di as text"#########################################################################"
 	noi	di as text"# > impute sex from genotype data"
 	qui {
 		global sub_mod_input  tempfile-module4-01		
 		global sub_mod_output tempfile-module4-processed
+		import delim using ${sub_mod_input}.bim, clear 
+		keep if v1 == 23
 		sum v1
 		if `r(max)' == 23 {
 			noi di as text"# >> chromosome 23 is present - imputing sex"
@@ -681,43 +640,45 @@ qui { // Module #4 - prepare the plink binaries for QC
 			}	
 		!del *.nosex
 		}
+	noi di as text"#########################################################################"
 	}	
 qui { // Module #5 - apply quality control to genotypes
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #5 - apply quality control to genotypes"
 	noi di as text"# > round #1 of quality control pipeline"
 	qui { 
-		noi di as text"#########################################################################"
+		qui di as text"#########################################################################"
 		noi	di as text"# >> calculating pre-quality-control metrics"
 		qui { 
 			global sub_mod_input  tempfile-module4-processed
 			global sub_mod_output tempfile-module5-round0
-			noi	di as text"# >>> calculating frequency counts"
+			qui	di as text"# >>> calculating frequency counts"
 			qui { 
 				!$plink  --bfile ${sub_mod_input} --freq counts --out ${sub_mod_input}
 				}
-			noi	di as text"# >>> calculating heterozygosity"
+			qui	di as text"# >>> calculating heterozygosity"
 			qui { 
 				!$plink  --bfile ${sub_mod_input} --maf 0.05 --het --out ${sub_mod_input}
 				}
-			noi	di as text"# >>> calculating hardy-weinberg equilibrium"
+			qui	di as text"# >>> calculating hardy-weinberg equilibrium"
 			qui { 
 				!$plink  --bfile ${sub_mod_input} --hardy          --out ${sub_mod_input}
 				}
-			noi	di as text"# >>> calculating missingness"
+			qui	di as text"# >>> calculating missingness"
 			qui { 
 				!$plink  --bfile ${sub_mod_input} --missing        --out ${sub_mod_input}
 				}
-			noi	di as text"# >>> calculating kinship / relatedness"
+			qui	di as text"# >>> calculating kinship / relatedness"
 			qui {
-				bim2ld_subset, bim(${sub_mod_input})
+				noi bim2ld_subset, bim(${sub_mod_input})
 				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_input}
 				}
 			}
-		noi di as text"#########################################################################"
+		qui di as text"#########################################################################"
 		noi	di as text"# >> plotting pre-quality-control metrics"
 		qui { 
-			noi di as text"# >>> create blank graphs"
+			qui di as text"# >>> create blank graphs"
 			qui {
 				tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))     
 				foreach i in tmpFRQ tmpHET tmpHWE tmpIMISS tmpLMISS tmpKIN0_1 tmpKIN0_2 {
@@ -725,37 +686,37 @@ qui { // Module #5 - apply quality control to genotypes
 					}
 				window manage close graph
 				}	
-			noi	di as text"# >>> plotting frequency counts"
+			qui	di as text"# >>> plotting frequency counts"
 			qui {
-				graphplinkfrq, frq(${sub_mod_input}) 
+				noi graphplinkfrq, frq(${sub_mod_input}) 
 				erase ${sub_mod_input}.frq.counts
 				}
-			noi	di as text"# >>> plotting heterozygosity"
+			qui	di as text"# >>> plotting heterozygosity"
 			qui {
-				graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
+				noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
 				erase ${sub_mod_input}.het
 				}
-			noi	di as text"# >>> plotting hardy-weinberg equilibrium"
+			qui	di as text"# >>> plotting hardy-weinberg equilibrium"
 			qui {
-				graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep})
+				noi graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep})
 				erase ${sub_mod_input}.hwe
 				}
-			noi	di as text"# >>> plotting missingness (individual)"
+			qui	di as text"# >>> plotting missingness (individual)"
 			qui {
-				graphplinkimiss, imiss(${sub_mod_input}) mind(${mind})
+				noi graphplinkimiss, imiss(${sub_mod_input}) mind(${mind})
 				erase ${sub_mod_input}.imiss
 				}
-			noi	di as text"# >>> plotting missingness (variant)"
+			qui	di as text"# >>> plotting missingness (variant)"
 			qui {
-				graphplinklmiss, lmiss(${sub_mod_input}) geno(${geno2})	
+				noi graphplinklmiss, lmiss(${sub_mod_input}) geno(${geno2})	
 				erase ${sub_mod_input}.lmiss
 				}
-			noi	di as text"# >>> plotting kinship relationships"
+			qui	di as text"# >>> plotting kinship relationships"
 			qui {	
-				graphplinkkin0, kin0(${sub_mod_input}) d(${kin_d}) f(${kin_f}) s(${kin_s}) t(${kin_t})
+				noi graphplinkkin0, kin0(${sub_mod_input}) d(${kin_d}) f(${kin_f}) s(${kin_s}) t(${kin_t})
 				erase ${sub_mod_input}.kin0
 				}
-			noi di as text"# >>> renaming plots"
+			qui di as text"# >>> renaming plots"
 			qui { 
 				foreach graph in FRQ HET HWE IMISS LMISS KIN0_1 KIN0_2 { 
 					!del    "${sub_mod_output}_`graph'.gph"
@@ -763,10 +724,10 @@ qui { // Module #5 - apply quality control to genotypes
 					}
 				}	
 			}
-		noi di as text"#########################################################################"
+		qui di as text"#########################################################################"
 		noi	di as text"# >> apply quality-control to binaries"
 		qui {
-			noi di as text"# >>> remove individuals with heterozygosity errors"
+			qui di as text"# >>> remove individuals with heterozygosity errors"
 			qui {
 					global sub_mod_mid ${sub_mod_output}-01
 					!$wc -l tempHET.indlist  > ${sub_mod_mid}.het-count
@@ -788,7 +749,7 @@ qui { // Module #5 - apply quality control to genotypes
 						}
 					}
 				}
-			noi di as text"# >>> remove snps with hardy-weinberg errors"
+			qui di as text"# >>> remove snps with hardy-weinberg errors"
 			qui {	
 					global sub_mod_input  ${sub_mod_output}-01
 					global sub_mod_mid    ${sub_mod_output}-02
@@ -811,7 +772,7 @@ qui { // Module #5 - apply quality control to genotypes
 						}
 					}
 					}
-			noi di as text"# >>> remove snps with missingness (first level)"
+			qui di as text"# >>> remove snps with missingness (first level)"
 			qui {	
 					global sub_mod_input  ${sub_mod_output}-02
 					global sub_mod_mid    ${sub_mod_output}-03
@@ -820,7 +781,7 @@ qui { // Module #5 - apply quality control to genotypes
 						!del "${sub_mod_input}.`file'"
 						}
 					}
-			noi di as text"# >>> remove individuals with missingness"
+			qui di as text"# >>> remove individuals with missingness"
 			qui {	
 					global sub_mod_input  ${sub_mod_output}-03
 					global sub_mod_mid    ${sub_mod_output}-04
@@ -838,55 +799,56 @@ qui { // Module #5 - apply quality control to genotypes
 						!del "${sub_mod_input}.`file'"
 						}
 					}
-			noi di as text"# >>> remove individuals with excess cryptic relatedness"
+			}
+		noi di as text"# >> remove individuals with excess cryptic relatedness"
+		qui {
+			qui di as text"# >>>> identify individuals with excess cryptic relatedness"
+			qui {	
+				global sub_mod_input  ${sub_mod_output}-05
+				global sub_mod_output tempfile-module5-round1
+				noi fam2dta, fam(${sub_mod_input})
+				count
+				global sampleSize `r(N)'
+				noi di as text"# >> number of individuals in file ...................... "as result `r(N)'	
+				noi di as text"# >> creating a kinship matrix .......................... "as result "`r(N)'" as text" x "as result "`r(N)'"
+				noi bim2ld_subset, bim(${sub_mod_input})
+				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king square --out ${sub_mod_input}			
+				import delim using ${sub_mod_input}.king, clear case(lower)
+				count
+				global countX `r(N)'
+				keep v1-v$countX
+				forvalues i=1/ $countX {
+							replace v`i' = . in `i'
+							}
+				gen obs = _n
+				aorder
+				save ${sub_mod_input}.dta,replace
+				qui di as text"# >>> merge kinship table to identifiers"
+				import delim using ${sub_mod_input}.king.id, clear case(lower)
+				rename (v1 v2) (fid iid)
+				gen obs = _n
+				aorder
+				merge 1:1 obs using ${sub_mod_input}.dta, update
+				drop obs _m
+				qui di as text"# >>> calculate by-individual metrics"
+				for var v1-v$countX: replace X = 0 if X < 0
+				egen rm = rowmean(v1-v$countX)
+				egen rx =  rowmax(v1-v$countX)
+				keep fid iid rm rx
+				qui di as text"# >>> identify individuals with excessive kinship coefficients"
+				gen excessCryptic = ""
+				sum rm
+				gen lb = `r(mean)' - 2.5 *`r(sd)'
+				gen ub = `r(mean)' + 2.5 *`r(sd)'
+				replace excessCryptic = "1" if rm < (lb)
+				replace excessCryptic = "1" if rm > (ub)
+				count if ex == "1"
+				global excessC `r(N)'
+				noi di as text"# >> individuals showing excessive kinship .............. "as result `r(N)'
+				outsheet fid iid if excessC == "1" using excessiveCryptic.remove, replace non noq
+				}
+			qui di as text"# >>>> remove individuals with excess cryptic relatedness"
 			qui {
-				noi di as text"# >>>> identify individuals with excess cryptic relatedness"
-				qui {	
-						global sub_mod_input  ${sub_mod_output}-05
-						global sub_mod_output tempfile-module5-round1
-						fam2dta, fam(${sub_mod_input})
-						count
-						global sampleSize `r(N)'
-						noi di as text"# >>> "as result `r(N)' as text" individuals are retained following preliminary quality-control"
-						noi di as text"# >>> creating "as result `r(N)' as text" x "as result `r(N)' as text" kinship matrix "
-						bim2ld_subset, bim(${sub_mod_input})
-						!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king square --out ${sub_mod_input}			
-						import delim using ${sub_mod_input}.king, clear case(lower)
-						count
-						global countX `r(N)'
-						keep v1-v$countX
-						forvalues i=1/ $countX {
-								replace v`i' = . in `i'
-								}
-						gen obs = _n
-						aorder
-						save ${sub_mod_input}.dta,replace
-						di as text"# >>> merge kinship table to identifiers"
-						import delim using ${sub_mod_input}.king.id, clear case(lower)
-						rename (v1 v2) (fid iid)
-						gen obs = _n
-						aorder
-						merge 1:1 obs using ${sub_mod_input}.dta, update
-						drop obs _m
-						di as text"# >>> calculate by-individual metrics"
-						for var v1-v$countX: replace X = 0 if X < 0
-						egen rm = rowmean(v1-v$countX)
-						egen rx =  rowmax(v1-v$countX)
-						keep fid iid rm rx
-						di as text"# >>> identify individuals with excessive kinship coefficients"
-						gen excessCryptic = ""
-						sum rm
-						gen lb = `r(mean)' - 2.5 *`r(sd)'
-						gen ub = `r(mean)' + 2.5 *`r(sd)'
-						replace excessCryptic = "1" if rm < (lb)
-						replace excessCryptic = "1" if rm > (ub)
-						count if ex == "1"
-						global excessC `r(N)'
-						noi di as text"# >>> "as result `r(N)' as text" individuals to be dropeed due to showing excessive kinship coefficients (greater than 2.5x standard-deviation from the mean)"
-						outsheet fid iid if excessC == "1" using excessiveCryptic.remove, replace non noq
-						}
-				noi di as text"# >>>> remove individuals with excess cryptic relatedness"
-				qui {
 					!$plink --bfile ${sub_mod_input} --remove excessiveCryptic.remove   --make-bed --out ${sub_mod_output}
 					foreach file in bim bed fam { 
 							!del ${sub_mod_input}.`file'
@@ -897,8 +859,8 @@ qui { // Module #5 - apply quality control to genotypes
 					erase ${sub_mod_input}.king
 					erase ${sub_mod_input}.king.id
 					}
-				noi di as text"# >>>> plot individuals with excess cryptic relatedness"
-				qui {
+			qui di as text"# >>>> plot individuals with excess cryptic relatedness"
+			qui {
 						global format "mlc(black) mlw(vvthin) m(O)"
 						tw scatter rx rm if excessCryptic != "1", $format mfc(blue)   ///
 						|| scatter rx rm if excessCryptic == "1", $format mfc(red)    ///
@@ -909,22 +871,21 @@ qui { // Module #5 - apply quality control to genotypes
 							graph export ${sub_mod_output}-relate.png, as(png) height(1000) width(2000) replace
 							window manage close graph
 							}
-				}
 			}
-		noi di as text"#########################################################################"
-		noi di as text"# >> clean up temporary files"
+		qui di as text"#########################################################################"
+		qui di as text"# >> clean up temporary files"
 		qui {
 			!del *.exclude *.remove *.relPairs *.snplist *.indlist
 			}
 		}
-	noi di as text"#########################################################################"
-	noi di as text"# > round #N of quality control pipeline"
+	qui di as text"#########################################################################"
+	qui di as text"# > round #N of quality control pipeline"
 	qui {
 		foreach round of num  2 / $rounds {	
-			noi di as text"#########################################################################"
+			qui di as text"#########################################################################"
 			noi di as text"# > round #`round' of quality control pipeline"
-			noi di as text"#########################################################################"
-			noi	di as text"# >> define input output naming conventions"
+			qui di as text"#########################################################################"
+			qui	di as text"# >> define input output naming conventions"
 			qui {
 					clear
 					set obs 2
@@ -938,38 +899,38 @@ qui { // Module #5 - apply quality control to genotypes
 					do tempfile-round.do
 					erase tempfile-round.do
 					}
-			noi di as text"#########################################################################"
+			qui di as text"#########################################################################"
 			noi	di as text"# >> calculating quality-control metrics"
 			qui { 
 					global sub_mod_input  tempfile-module5-${round1}
 					global sub_mod_output tempfile-module5-${round2}
-					noi	di as text"# >>> calculating heterozygosity"
+					qui	di as text"# >>> calculating heterozygosity"
 					qui { 
 						!$plink  --bfile ${sub_mod_input} --maf 0.05 --het --out ${sub_mod_input}
 						}
-					noi	di as text"# >>> calculating hardy-weinberg equilibrium"
+					qui	di as text"# >>> calculating hardy-weinberg equilibrium"
 					qui { 
 						!$plink  --bfile ${sub_mod_input} --hardy          --out ${sub_mod_input}
 						}
 					}
-			noi di as text"#########################################################################"
+			qui di as text"#########################################################################"
 			noi	di as text"# >> plotting pre-quality-control metrics"
 			qui { 
-					noi	di as text"# >>> plotting heterozygosity"
+					qui	di as text"# >>> plotting heterozygosity"
 					qui {
-						graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
+						noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
 						erase ${sub_mod_input}.het
 						}
 					noi	di as text"# >>> plotting hardy-weinberg equilibrium"
 					qui {
-						graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep}) 
+						noi graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep}) 
 						erase ${sub_mod_input}.hwe
 						}
 					}
-			noi di as text"#########################################################################"
+			qui di as text"#########################################################################"
 			noi	di as text"# >> apply quality-control to binaries"
 			qui {
-					noi di as text"# >>> remove individuals with heterozygosity errors"
+					qui di as text"# >>> remove individuals with heterozygosity errors"
 					qui {
 						global sub_mod_mid    ${sub_mod_output}-01
 						!$wc -l tempHET.indlist  > ${sub_mod_mid}.het-count
@@ -991,7 +952,7 @@ qui { // Module #5 - apply quality control to genotypes
 								}
 							}
 						}
-					noi di as text"# >>> remove snps with hardy-weinberg errors"
+					qui di as text"# >>> remove snps with hardy-weinberg errors"
 					qui {	
 						global sub_mod_input  ${sub_mod_output}-01
 						global sub_mod_mid    ${sub_mod_output}-02
@@ -1014,7 +975,7 @@ qui { // Module #5 - apply quality control to genotypes
 								}
 							}
 						}
-					noi di as text"# >>> remove individuals with missingness"
+					qui di as text"# >>> remove individuals with missingness"
 					qui {	
 							global sub_mod_input  ${sub_mod_output}-02
 							global sub_mod_mid    ${sub_mod_output}-03
@@ -1023,52 +984,52 @@ qui { // Module #5 - apply quality control to genotypes
 									!del "${sub_mod_input}.`file'"
 									}
 							}
-					noi di as text"# >>> remove snps with missingness (second level)"
+					qui di as text"# >>> remove snps with missingness (second level)"
 					qui {	
 						global sub_mod_input  ${sub_mod_output}-03
 						!$plink --bfile ${sub_mod_input} --geno ${geno2} --make-bed --out ${sub_mod_output}
 						foreach file in bim bed fam irem{
-									!del "${sub_mod_input}.`file'"
-									}
+							!del "${sub_mod_input}.`file'"
+							}
 						}
 					}
-			noi di as text"#########################################################################"
-			noi di as text"# >> clean up temporary files"
+			qui di as text"#########################################################################"
+			qui di as text"# >> clean up temporary files"
 			qui {
-					!del *.exclude *.remove *.relPairs *.snplist *.indlist
-					}
+				!del *.exclude *.remove *.relPairs *.snplist *.indlist
+				}
 			}
 		}
-	noi di as text"#########################################################################"
+	qui di as text"#########################################################################"
 	noi	di as text"# > calculating post-quality-control metrics"
 	qui { 
 		global sub_mod_input  tempfile-module5-${round2}
-		noi	di as text"# >> calculating frequency counts"
+		qui	di as text"# >> calculating frequency counts"
 		qui { 
 			!$plink  --bfile ${sub_mod_input} --freq counts --out ${sub_mod_input}
 			}
-		noi	di as text"# >> calculating heterozygosity"
+		qui	di as text"# >> calculating heterozygosity"
 		qui { 
 			!$plink  --bfile ${sub_mod_input} --maf 0.05 --het --out ${sub_mod_input}
 			}
-		noi	di as text"# >> calculating hardy-weinberg equilibrium"
+		qui	di as text"# >> calculating hardy-weinberg equilibrium"
 		qui { 
 			!$plink  --bfile ${sub_mod_input} --hardy          --out ${sub_mod_input}
 			}
-		noi	di as text"# >> calculating missingness"
+		qui	di as text"# >> calculating missingness"
 		qui { 
 			!$plink  --bfile ${sub_mod_input} --missing        --out ${sub_mod_input}
 			}
-		noi	di as text"# >> calculating kinship / relatedness"
+		qui	di as text"# >> calculating kinship / relatedness"
 		qui {
-			bim2ld_subset, bim(${sub_mod_input})
+			noi bim2ld_subset, bim(${sub_mod_input})
 			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_input}
 			}
 		}
-	noi di as text"#########################################################################"
+	qui di as text"#########################################################################"
 	noi	di as text"# > plotting post-quality-control metrics"
 	qui { 
-		noi di as text"# >> create blank graphs"
+		qui di as text"# >> create blank graphs"
 		qui {
 			tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))     
 			foreach i in tmpFRQ tmpHET tmpHWE tmpIMISS tmpLMISS tmpKIN0_1 tmpKIN0_2 {
@@ -1076,37 +1037,37 @@ qui { // Module #5 - apply quality control to genotypes
 				}
 			window manage close graph
 			}	
-		noi	di as text"# >> plotting frequency counts"
+		qui	di as text"# >> plotting frequency counts"
 		qui {
-			graphplinkfrq, frq(${sub_mod_input}) 
+			noi graphplinkfrq, frq(${sub_mod_input}) 
 			erase ${sub_mod_input}.frq.counts
 			}
-		noi	di as text"# >> plotting heterozygosity"
+		qui	di as text"# >> plotting heterozygosity"
 		qui {
-			graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
+			noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
 			erase ${sub_mod_input}.het
 		}
-		noi	di as text"# >> plotting hardy-weinberg equilibrium"
+		qui	di as text"# >> plotting hardy-weinberg equilibrium"
 		qui {
-			graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep}) 		
+			noi graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep}) 		
 			erase ${sub_mod_input}.hwe
 			}
-		noi	di as text"# >> plotting missingness (individual)"
+		qui	di as text"# >> plotting missingness (individual)"
 		qui {
-			graphplinkimiss, imiss(${sub_mod_input}) mind(${mind})
+			noi graphplinkimiss, imiss(${sub_mod_input}) mind(${mind})
 			erase ${sub_mod_input}.imiss
 			}
-		noi	di as text"# >> plotting missingness (variant)"
+		qui	di as text"# >> plotting missingness (variant)"
 		qui {
-			graphplinklmiss, lmiss(${sub_mod_input}) geno(${geno2})	
+			noi graphplinklmiss, lmiss(${sub_mod_input}) geno(${geno2})	
 			erase ${sub_mod_input}.lmiss
 			}
-		noi	di as text"# >> plotting kinship relationships"
+		qui	di as text"# >> plotting kinship relationships"
 		qui {	
-			graphplinkkin0, kin0(${sub_mod_input}) d(${kin_d}) f(${kin_f}) s(${kin_s}) t(${kin_t})
+			noi graphplinkkin0, kin0(${sub_mod_input}) d(${kin_d}) f(${kin_f}) s(${kin_s}) t(${kin_t})
 			erase ${sub_mod_input}.kin0
 			}
-		noi di as text"# >> renaming plots"
+		qui di as text"# >> renaming plots"
 		qui { 
 			foreach graph in FRQ HET HWE IMISS LMISS KIN0_1 KIN0_2 { 
 				!del    "${sub_mod_input}_`graph'.gph"
@@ -1114,33 +1075,35 @@ qui { // Module #5 - apply quality control to genotypes
 				}
 			}	
 		}
-	noi di as text"#########################################################################"
-	noi di as text"# > clean up temporary files"
+	qui di as text"#########################################################################"
+	qui di as text"# > clean up temporary files"
 	qui {
 		!del *.exclude *.remove *.relPairs *.snplist *.indlist *.hwe *.het *.hh *.irem
 		}
+	qui di as text"#########################################################################"
 	}
 qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives 
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #6 - remove duplicates; 2nd and 3rd degree relatives"
-	noi	di as text"# > identify duplicates; 2nd and 3rd degree relatives "
+	qui	di as text"# > identify duplicates; 2nd and 3rd degree relatives "
 	qui {
 		global sub_mod_input  tempfile-module5-${round2}
 		global sub_mod_output tempfile-module6-final
-		noi di as text"# >> create "as result "${sub_mod_input}_kinship.remove"
+		qui di as text"# >> create "as result "${sub_mod_input}_kinship.remove"
 		qui {
 				!type > ${sub_mod_input}_kinship.remove
 				}	
-		noi di as text"# >> create _subset50000.extract"
+		qui di as text"# >> create _subset50000.extract"
 		qui { 
-			bim2ld_subset, bim(${sub_mod_input})
+			noi bim2ld_subset, bim(${sub_mod_input})
 			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-bed --out ${sub_mod_input}_subset50000
 			}
-		noi di as text"# >> create kinship matrix and remove most related individual whilst looping through thresholds"
+		qui di as text"# >> create kinship matrix and remove most related individual whilst looping through thresholds"
+		noi di as text"# > ignoring first degree relatives i.e. pairs where kinship > "as result"${kin_f}"as text" & kinship < "as result"${kin_d}"
 		qui {
 			foreach kin_threshold in $kin_d $kin_s $kin_t {
-				noi di as text"#########################################################################"
-				noi di as text"# >>> thresholds > "as result "`kin_threshold'"
+				qui di as text"#########################################################################"
 				!del _x_.stop
 				foreach num of num 1/ 999 {
 					capture confirm file _x_.stop
@@ -1148,9 +1111,9 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 						continue
 						}
 					else {
-						noi di as text"# >>> prune on filter with kinship > " as result "`kin_threshold'"
+						noi di as text"# > identify pairs with kinship thresholds ............ > "as result "`kin_threshold'"
 						!$plink2 --bfile ${sub_mod_input}_subset50000 --remove ${sub_mod_input}_kinship.remove --make-king-table --king-table-filter `kin_threshold' --out ${sub_mod_input}
-						noi di as text"# >>> ignoring first degree relatives (kinship > ${kin_f} & kinship < ${kin_d})"
+						qui di as text"# >> removing first degree relatives from dataset"
 						qui {
 							import delim using ${sub_mod_input}.kin0, clear
 							gen keep = 1
@@ -1160,16 +1123,16 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 							outsheet using ${sub_mod_input}_no1dr.kin0, noq replace
 							}
 						count
-						noi di as text"# >> "as result `r(N)' as text" pairs with kinship > "as result "`kin_threshold'"
 						if `r(N)' != 0 {
-							kin0filter, kin0(${sub_mod_input}_no1dr) filter(`kin_threshold')
+							noi di as text"# > iteration ........................................... "as result"`num'"
+							noi kin0filter, kin0(${sub_mod_input}_no1dr) filter(`kin_threshold')
 							!type ${sub_mod_input}_no1dr_filter_`kin_threshold'.remove >> ${sub_mod_input}_kinship.remove
 							erase ${sub_mod_input}_no1dr_filter_`kin_threshold'.remove 
 							erase ${sub_mod_input}_no1dr.kin0 
 							erase ${sub_mod_input}.kin0 
 							}
 						else {
-							noi di as text"# >> all pairs with kinship > "as result `kin_threshold' as text" added to "as result"${sub_mod_input}_kinship.remove"
+							noi di as text"# >> all pairs with kinship > threshold identified as added to ........"as result"${sub_mod_input}_kinship.remove"
 							!type > _x_.stop
 							}
 						}
@@ -1178,7 +1141,7 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 				}
 			}	
 		}
-	noi di as text"#########################################################################"
+	qui di as text"#########################################################################"
 	noi	di as text"# > remove duplicates; 2nd and 3rd degree relatives "
 	qui {
 		!$plink --bfile ${sub_mod_input} --remove ${sub_mod_input}_kinship.remove --make-bed --out ${sub_mod_output} 
@@ -1190,9 +1153,9 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 	noi di as text"#########################################################################"
 	noi	di as text"# > plot post-removal relatedness "
 	qui { 
-		bim2ld_subset, bim(${sub_mod_output})
+		noi bim2ld_subset, bim(${sub_mod_output})
 		!$plink2 --bfile ${sub_mod_output} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_output}
-		graphplinkkin0, kin0(${sub_mod_output})	
+		noi graphplinkkin0, kin0(${sub_mod_output})	
 		!del "${sub_mod_output}_KIN0_2_noRel.gph"
 		!rename "tmpKIN0_2.gph" "${sub_mod_output}_KIN0_2_noRel.gph"
 		}
@@ -1203,29 +1166,32 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 		!del ${sub_mod_input}_subset*
 		}
 	}
+
 qui { // Module #7 - define european (ceu-tsi-like) subset 
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #7 - define / plot ancestry"
-	noi di as text"# > parse subset for analysis - based on aims"
 	qui { 
 		global sub_mod_input  tempfile-module6-final
 		global sub_mod_hapmp  ${hapmap_data} 
-		bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${sub_mod_hapmp}) aims(${aims})
+		noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${sub_mod_hapmp}) aims(${aims})
 		!rename "bim2hapmap_CEU_TSI-like.keep" "${sub_mod_output}_CEU_TSI-like.keep"
 		}
+	noi di as text"#########################################################################"
 	}
 qui { // Module #8 - create quality-control mini-log and docx-report
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #8 - create quality-control mini-log and docx-report"
 	noi di as text"# > create final plots as(png) for reports"
 	qui { 
-		noi di as text"# >> plotting markers by chromosome by input / output"
+		qui di as text"# >> plotting markers by chromosome by input / output"
 		qui { 
 			global sub_mod_input  tempfile-module6-final
-			bim2dta,bim(${input})
+			noi bim2dta,bim(${input})
 			hist chr,  xlabel(1(1)25) xtitle("Chromosome") discrete freq ylabel(#4,format(%9.0g))
 			graph save _1.gph, replace
-			bim2dta,bim(${sub_mod_input})
+			noi bim2dta,bim(${sub_mod_input})
 			hist chr,  xlabel(1(1)25) xtitle("Chromosome") discrete freq ylabel(#4,format(%9.0g))
 			graph save _2.gph, replace
 			graph combine _1.gph  _2.gph, caption("CREATED: $S_DATE $S_TIME" "INPUT: ${input}" "OUTPUT: ${output}",	size(tiny)) col(1) ycommon
@@ -1234,11 +1200,13 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 			erase _1.gph
 			erase _2.gph
 			}	
-		noi di as text"# >> plotting pre- post quality control graphs"
+		qui di as text"# >> plotting pre- post quality control graphs"
 		qui { 
 			global sub_mod_pre  tempfile-module5-round0
 			global sub_mod_post tempfile-module5-round4
 			foreach i in FRQ HET HWE IMISS LMISS KIN0_1 {
+				noi checkfile, file(${sub_mod_pre}_`i'.gph)
+				noi checkfile, file(${sub_mod_post}_`i'.gph)
 				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 
 				graph combine ${sub_mod_post}_`i'.gph, title("post-quality-control") nodraw saving(y_`i'.gph, replace)
 				graph combine x_`i'.gph y_`i'.gph, xcommon caption("CREATED: $S_DATE $S_TIME" "INPUT: ${input}" "OUTPUT: ${output}", size(tiny)) col(1) 
@@ -1247,6 +1215,9 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 				!del x_`i'* y_`i'*
 				}
 			foreach i in  KIN0_2 {
+				noi checkfile, file(${sub_mod_pre}_`i'.gph)
+				noi checkfile, file(${sub_mod_post}_`i'.gph)
+				noi checkfile, file(${sub_mod_output}_`i'_noRel.gph)
 				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 
 				graph combine ${sub_mod_post}_`i'.gph, title("post-quality-control") nodraw saving(y_`i'.gph, replace) 
 				graph combine ${sub_mod_output}_`i'_noRel.gph,    title("post-quality-control (no-relatives)") nodraw saving(z_`i'.gph, replace) 
@@ -1256,8 +1227,8 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 				window manage close graph
 				}
 			}	
-			}
-	noi di as text"# >> counting metrics and storing in memory"
+		}
+	qui di as text"# > counting metrics and storing in memory"
 	qui {
 		!$wc -l "${input}.bim"                          > "${sub_mod_output}.counts"
 		!$wc -l "${sub_mod_output}.bim"                >> "${sub_mod_output}.counts"
@@ -1276,20 +1247,22 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 		do tempfile.do
 		erase tempfile.do
 		}	
-	noi di as text"# >> create report"
+	noi di as text"# > create report"
 	qui {
 		_sub_genotypeqc_report
 		}
-	noi di as text"# >> create meta-log"
+	noi di as text"# > create meta-log"
 	qui {
 		_sub_genotypeqc_meta
 		}
+	noi di as text"#########################################################################"
 	}
 qui { // Module #9 - rename and clean
+	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #9 - move and clean"	
-	noi di as text"# > create destination folder " as result "${output_2}"
-	noi di as text"# > move files to data directory"
+	noi di as text"# > create destination folder ............................"as result "${output_2}"
+	qui di as text"# > move files to data directory"
 	qui {
 		!copy "${sub_mod_output}-quality-control-report.docx"   "${output}.quality-control-report.docx"
 		!copy "${sub_mod_output}.meta-log"                      "${output}.meta-log"
@@ -1303,6 +1276,7 @@ qui { // Module #9 - rename and clean
 		cd ..
 		!del *_bim.dta
 		!del ${output}.hg-buildmatc* ${output}.arraymatc*
+		noi di as text"# > remove temporary directory"
 		!rmdir  $wd /S /Q
 		cd ..
 		!mkdir "${output_2}"

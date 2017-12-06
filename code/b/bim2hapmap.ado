@@ -189,7 +189,7 @@ qui {
 			}
 		replace pop = "nr" if pop == "TEST" & nr1 == 1 & nr2 == 1 & nr3 == 1
 		count if pop == "nr"
-		noi di as text"# >> similarity to ancestries ........................... "as result "`like'"	
+		noi di as text"# >> selected ancestries ................................ "as result "`like'"	
 	    noi di as text"# >> number of individuals identified as similar ........ "as result `r(N)'		
 		gen a = "`like'"
 		replace  a = subinstr(a, " ", "_",.)
