@@ -53,7 +53,7 @@ qui {
     count if f_miss > `geno'
 	global nSNPlow `r(N)'
 	global geno_tmp `geno'
-	noi di as text"# >> missingness (by variant) threshold ................. "as result`geno'
+	noi di as text"# >> missingness (by variant) threshold ................. "as result"geno_tmp"
 	noi di as text"# >> number of variants with missingness > threshold .... "as result"${nSNPlow}"
 		replace f_miss = 0.1 if f_miss >0.1 & f_miss !=.
 	}
