@@ -39,6 +39,7 @@ qui di as text"#################################################################
 
 noi checkfile, file(`het'.het)
 noi checktabbed
+noi di as text"# > "as input"graphplinkhet "as text"....................................... "as result"`het'.het"
 
 qui di as text"# > processing `het'.het"
 qui { 
@@ -69,11 +70,11 @@ qui {
 		}	
 	count
 	global nIND `r(N)'
-	noi di as text"# >> "as result"${nIND}"as text" individuals imported from "as result"`het'.het"
+	noi di as text"# >> number of individuals in file ...................... "as result `r(N)'		
 	count if threshold == 1
 	global nINDlow `r(N)'
 	global sd_tmp `sd'
-	noi di as text"# >> "as result"${nINDlow}"as text" with heterozygosity outside the "as result"${sd_tmp}x"as text" threshold"
+	noi di as text"# >> number of individuals in file with het > `sd'x...... "as result "${nINDlow}"
 	}
 qui di as text"# > plotting heterozygosity to tmpHET.gph"
 qui{
