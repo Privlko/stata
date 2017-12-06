@@ -42,10 +42,10 @@ qui {
 	qui di as text"# > check that test_pl.txt.tabbed has been created"
 	capture confirm file "test_pl.txt.tabbed"
 	if _rc==0 {
-		noi di as input"# > checktabbed "as text"................................. " as result"tabbed.pl is set up correctly and working"
+		noi di as text"# > "as input"checktabbed "as text"................................. " as result"tabbed.pl is set up correctly and working"
 		}
 	else {
-		noi di as input"# > checktabbed "as text"................................. " as error"tabbed.pl is not set up correctly"
+		noi di as text"# > "as input"checktabbed "as text"................................. " as error"tabbed.pl is not set up correctly"
 		noi di as error"# > active perl should be downloaded/installed on your computer (https://www.activestate.com/activeperl/downloads)"
 		}
 	erase test_pl.txt

@@ -25,7 +25,7 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 noi checkfile, file(`bim'.bim)
 qui di as text"# > importing *.bim file"
-noi di as input"# > bim2count "as text"........................................... "as result"`bim'"
+noi di as text"# > "as input"bim2count "as text"........................................... "as result"`bim'"
 qui { 
 	!$wc -l ${sub_mod_output}.bim  > ${sub_mod_output}.count
 	import delim using ${sub_mod_output}.count, clear varnames(nonames)
