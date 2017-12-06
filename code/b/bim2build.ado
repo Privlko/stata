@@ -72,7 +72,7 @@ qui {
 	replace a = "global buildType " + build
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
-	noi di as text"# > bim2build ... " as result"${buildType} ......... "as text"`bim'.bim"
+	noi di as input"# > bim2build "as text"... " as result"${buildType} ......... "as text"`bim'.bim"
 	erase _tmp.do
 	}
 qui di as text"#########################################################################"
