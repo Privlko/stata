@@ -45,10 +45,11 @@ qui {
 	aorder
 	egen a = concat(_a-_z), p(" ")
 	outsheet a using _tmpunixreplicas.do, non noq replace
-	}
 	do _tmpunixreplicas.do
 	erase _tmpunixreplicas.do
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+	}
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+noi di as text" "
 end;
