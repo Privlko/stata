@@ -54,6 +54,6 @@ net install sxpose,      from(http://fmwww.bc.edu/RePEc/bocode/s) replace
 noi di as text"# > installing and setting graphing schemes"
 ssc install blindschemes, replace all
 set scheme plotplainblind , permanently
-
+end;
 
 
