@@ -45,7 +45,7 @@ qui {
 	aorder
 	egen a = concat(_a-_z), p(" ")
 	outsheet a using _tmpunixreplicas.do, non noq replace
-	do _tmpunixreplicas.do
+	noi do _tmpunixreplicas.do
 	erase _tmpunixreplicas.do
 	}
 noi di as text"#########################################################################"
