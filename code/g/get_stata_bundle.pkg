@@ -1,0 +1,38 @@
+d get_stata_bundle - command to get stata packages from https://github.com/ricanney/stata
+d Richard Anney  Cardiff University
+d Distribution-Date: 07dec2017
+
+f get_stata_bundle.ado
+f ../_/_sub_genotypeqc_meta.ado     
+f ../_/_sub_genotypeqc_report.ado     
+f ../b/bim2build.ado     
+f ../b/bim2count.ado     
+f ../b/bim2dta.ado     
+f ../b/bim2eigenvec.ado     
+f ../b/bim2frq.ado     
+f ../b/bim2hapmap.ado     
+f ../b/bim2ld_subset.ado     
+f ../b/bim2ldexclude.ado     
+f ../c/checkfile.ado     
+f ../c/checktabbed.ado     
+f ../c/create_temp_dir.ado     
+f ../d/datestamp.ado     
+f ../e/ensembl2symbol.ado     
+f ../f/fam2dta.ado     
+f ../g/genotypeqc.ado     
+f ../g/graphgene.ado     
+f ../g/graphmanhattan.ado     
+f ../g/graphplinkfrq.ado     
+f ../g/graphplinkhet.ado     
+f ../g/graphplinkhwe.ado     
+f ../g/graphplinkimiss.ado     
+f ../g/graphplinkkin0.ado     
+f ../g/graphplinklmiss.ado     
+f ../g/graphqq.ado     
+f ../g/gwas2prs.ado     
+f ../k/kin0filter.ado     
+f ../l/loadUnixReplicas.ado     
+f ../p/profilescore.ado     
+f ../r/recodegenotype.ado     
+f ../r/recodestrand.ado     
+f ../s/symbol2ensembl           

@@ -1,15 +1,16 @@
 d Richard Anney, Cardiff University
-t genotypeqc      command to run a full genotype-array-quality-control
-t graphmanhattan  command to draw a simple manhattan plot to tmpManhattan.gph
-t graphmiami      command to draw a miami plot at a region for 2 gwas datasets to tmpMiami.gph
-t graphqq         command to draw a simple qq plot to tmpQQ.gph
-t graphplinkfrq   command to plot plink output *.frq
-t graphplinkhet   command to plot plink output *.het
-t graphplinkhwe   command to plot plink output *.hwe
-t graphplinkimiss command to plot plink output *.imiss
-t graphplinkkin0  command to plot plink output *.kin0
-t graphplinklmiss command to plot plink output *.lmiss
-t graphgene       command to plot genes from chromosome location
-t gwas2prs 		  command to prepare gwas-summary statistics for PRS analysis
+t genotypeqc       command to run a full genotype-array-quality-control
+t get_stata_bundle command to get stata packages from https://github.com/ricanney/stata
+t graphmanhattan   command to draw a simple manhattan plot to tmpManhattan.gph
+t graphmiami       command to draw a miami plot at a region for 2 gwas datasets to tmpMiami.gph
+t graphqq          command to draw a simple qq plot to tmpQQ.gph
+t graphplinkfrq    command to plot plink output *.frq
+t graphplinkhet    command to plot plink output *.het
+t graphplinkhwe    command to plot plink output *.hwe
+t graphplinkimiss  command to plot plink output *.imiss
+t graphplinkkin0   command to plot plink output *.kin0
+t graphplinklmiss  command to plot plink output *.lmiss
+t graphgene        command to plot genes from chromosome location
+t gwas2prs 		   command to prepare gwas-summary statistics for PRS analysis
 
 
