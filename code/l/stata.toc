@@ -1,5 +1,5 @@
 d Richard Anney, Cardiff University
-t loadUnixReplicas      a program that scans the $init_unix folder for executables and creates a global link to the executable. 
+t loadunixreplicas      a program that scans the $init_unix folder for executables and creates a global link to the executable. 
 
 
 
