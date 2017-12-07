@@ -39,14 +39,21 @@ qui {
 	erase _tmpunixreplicas.do
 	keep unixreplicas1
 	sort unixreplicas1
-	sxpose, clear
-	gen _z = ""
-	egen a = concat(_var1-_z), p(" ")
-	noi di as text"# > "as input"loadUnixReplicas "as text"................................... loaded " as result a[1]
+	egen x = seq(),block(10)
+	egen y = seq(),by(x)
+	rename un a
+	reshape wide a , i(x) j(y)
+	egen a = concat(a1 - a10), p(" ")
+	noi di as text"# > "as input"loadUnixReplicas "as text"............. unix replica programs loaded " 
+	count
+	global num `r(N)'
+	foreach num of num 1/ $num {
+		noi di as text"# > ... "as result a[`num']
+		}
 	clear
 	}
-noi di as text"#########################################################################"
-noi di as text"# Completed: $S_DATE $S_TIME"
-noi di as text"#########################################################################"
-noi di as text" "
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
+qui di as text" "
 end;
