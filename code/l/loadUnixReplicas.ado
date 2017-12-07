@@ -39,16 +39,16 @@ qui {
 	erase _tmpunixreplicas.do
 	keep unixreplicas1
 	sort unixreplicas1
-	egen x = seq(),block(5)
+	egen x = seq(),block(8)
 	egen y = seq(),by(x)
 	rename un a
 	reshape wide a , i(x) j(y)
-	egen a = concat(a1 - a10), p(" ")
-	noi di as text"# > "as input"loadUnixReplicas "as text".............................loaded " as result a[1]
+	egen a = concat(a1 - a8), p(" ")
+	noi di as text"# > "as input"loadUnixReplicas "as text"............................. loaded " as result a[1]
 	count
 	global num `r(N)'
 	foreach num of num 1/ $num {
-		noi di as text"# > ................................................... " as result a[`num']
+		noi di as text"# > ..................................................... " as result a[`num']
 		}
 	clear
 	}
