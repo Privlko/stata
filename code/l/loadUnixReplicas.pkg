@@ -1,6 +1,6 @@
-d loadunixreplicas - a program that scans the $init_unix folder for executables and creates a global link to the executable. 
+d loadUnixReplicas - a program that scans the $init_unix folder for executables and creates a global link to the executable. 
 d Richard Anney, Cardiff University
 d Distribution-Date: 07dec2017
-f loadunixreplicas.ado
+f loadUnixReplicas.ado
 
 
