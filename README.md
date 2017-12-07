@@ -1,4 +1,10 @@
 # Software - Stata
+
+![1-getting started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)
+![2-packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+![3-performing genotype array quality control](https://github.com/ricanney/stata/blob/master/documents/genotype_array_quality_control.md)
+![4-performing polygenic risk scoring](https://github.com/ricanney/stata/blob/master/documents/polygenic_risk_scoring.md)
+
 ## Getting started 
 1. load the stata programs from this site (and a few important dependencies). The downloaded ```get_stata_bundle``` program will  download the programs from this site however, you will also be required to run this program to ensure download additional necessary\useful dependencies not from this site, including ```renvars``` and ```sxpose```
 
