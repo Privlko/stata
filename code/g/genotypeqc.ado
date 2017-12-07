@@ -644,21 +644,21 @@ qui { // Module #4 - prepare the plink binaries for QC
 		import delim using ${sub_mod_input}.bim, clear 
 		keep if v1 == 23
 		sum v1
-		if `r(max)' == 23 {
-			noi di as text"# >> chromosome 23 is present - imputing sex"
+		if `r(N)' > 10000 {
+			noi di as text"# >> chromosome 23 is present - and sufficient markers present - imputing sex"
 			!$plink --bfile ${sub_mod_input} --impute-sex --make-bed --out ${sub_mod_output}
 			foreach file in bim bed fam  {
 				erase "${sub_mod_input}.`file'"
 				}
-			erase ${sub_mod_output}.sexcheck
+			!del ${sub_mod_output}.sexcheck
 			}
-		else if `r(max)' != 23 {
+		else {
 			noi di as text"# >> chromosome 23 is not present"
 			foreach file in bim bed fam {
 				!del "${sub_mod_output}.`file'"
 				!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
-				}		
-			}	
+				}	
+			}
 		!del *.nosex
 		}
 	noi di as text"#########################################################################"
