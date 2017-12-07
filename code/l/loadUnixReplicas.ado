@@ -1,15 +1,16 @@
-program loadUnixReplicas
+qui di as text"#########################################################################"
+qui di as text"# loadUnixReplicas - version 0.1a 02oct2015 richard anney "
+qui di as text"#########################################################################"
+qui di as text"# Creates global link to unix executables "
+qui di as text"# as an alternative to unix executable use "as result`"!bash -c "<unix code>""'
+qui di as text"#########################################################################"
+qui di as text"# Started: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
+qui di as text"# > scan `folder' for *.exe "
 
+program loadUnixReplicas
 syntax , folder(string asis) 
-di in white"#########################################################################"
-di in white"# loadUnixReplicas - version 0.1a 02oct2015 richard anney "
-di in white"#########################################################################"
-di in white"# Creates global link to unix executables "
-di in red `"# as an alternative to unix executable use !bash -c "<unix code>""'
-di in white"#########################################################################"
-di in white"# Started: $S_DATE $S_TIME"
-di in white"#########################################################################"
-di in white"# > scan `folder' for *.exe "
+
 qui {
 	clear
 	set obs 1
@@ -24,8 +25,9 @@ qui {
 		save _tmpunixreplicas.dta,replace
 		} 
 	}
-di in white"# > creating globals for individual *.exe "
+qui di as text"# > creating globals for individual *.exe "
 qui {
+	use  _tmpunixreplicas.dta,replace
 	drop if unixreplicas == ""
 	split unixreplicas,p(".exe")
 	gen a1 = "global "
@@ -35,9 +37,18 @@ qui {
 	do _tmpunixreplicas.do
 	erase _tmpunixreplicas.dta
 	erase _tmpunixreplicas.do
-	clear
+	keep unixreplicas1
+	sort un
+	sxpose, clear
+	gen _a = `"noi di as text"# > set global as ${<name>} for following unix_replicas" as result""'
+	gen _z = `""as text""'
+	aorder
+	egen a = concat(_a-_z), p(" ")
+	outsheet a using _tmpunixreplicas.do, non noq replace
 	}
-di in white"#########################################################################"
-di in white"# Completed: $S_DATE $S_TIME"
-di in white"#########################################################################"
+	do _tmpunixreplicas.do
+	erase _tmpunixreplicas.do
+qui di as text"#########################################################################"
+qui di as text"# Completed: $S_DATE $S_TIME"
+qui di as text"#########################################################################"
 end;
