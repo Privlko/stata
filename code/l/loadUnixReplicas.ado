@@ -38,15 +38,12 @@ qui {
 	erase _tmpunixreplicas.dta
 	erase _tmpunixreplicas.do
 	keep unixreplicas1
-	sort un
+	sort unixreplicas1
 	sxpose, clear
-	gen _a = `"noi di as text"# > set global as ${<name>} for following unix_replicas" as result""'
-	gen _z = `""as text""'
-	aorder
-	egen a = concat(_a-_z), p(" ")
-	outsheet a using _tmpunixreplicas.do, non noq replace
-	noi do _tmpunixreplicas.do
-	erase _tmpunixreplicas.do
+	gen _z = ""
+	egen a = concat(_var1-_z), p(" ")
+	noi di as text"# > "as input"loadUnixReplicas "as text"................................... loaded " as result a[1]
+	clear
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
