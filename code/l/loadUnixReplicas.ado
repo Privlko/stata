@@ -47,7 +47,7 @@ qui {
 	noi di as text"# > "as input"loadUnixReplicas "as text"............................. loaded " as result a[1]
 	count
 	global num `r(N)'
-	foreach num of num 1/ $num {
+	foreach num of num 2 / $num {
 		noi di as text"# > ..................................................... " as result a[`num']
 		}
 	clear
