@@ -42,13 +42,10 @@
 # Date: 12th July 2017
 #########################################################################
 */
-program genotypeqc
+program genotypeqc, param(string asis) 
 syntax
 
-qui di as text"# > create temp directory"
-qui {
-	create_temp_dir
-	}
+
 
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc                                                             "
@@ -67,6 +64,15 @@ qui { // Module #0 - preamble
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #0 - preamble"
+	noi	di as text"# > run parameters file ................................. "as result"`param'"
+	qui {
+		noi checkfile, file(`param')
+		do `param'
+		}
+	qui di as text"# > create temp directory"
+	qui {
+		create_temp_dir
+		}		
 	noi di as text"# > check path of dependent software is true"
 	qui { 
 		noi checkfile, file(${plink})
