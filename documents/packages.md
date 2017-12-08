@@ -105,17 +105,7 @@ net install genotypeqc,         from(https://raw.github.com/ricanney/stata/maste
 
 **additional files**
 
-[```rsid-hapmap-genome-location.dta```](<add-link>)
-[```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>)
-[```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>)
-[```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
-[```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>)
-[```hapmap3-all-hg19-1.bim```](<add-link>)
-[```hapmap3-all-hg19-1.bed```](<add-link>)
-[```hapmap3-all-hg19-1.fam```](<add-link>)
-[```hapmap3-all-hg19-1.population```](<add-link>)
-[```hapmap3-all-hg19-1-aims.snp-list```](<add-link>)
-[```genotype-array.tar.gz```](<add-link)
+[```rsid-hapmap-genome-location.dta```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>) | [```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>) | [```hapmap3-all-hg19-1.bim```](<add-link>) | [```hapmap3-all-hg19-1.bed```](<add-link>) | [```hapmap3-all-hg19-1.fam```](<add-link>) | [```hapmap3-all-hg19-1.population```](<add-link>) | [```hapmap3-all-hg19-1-aims.snp-list```](<add-link>) | [```genotype-array.tar.gz```](<add-link)
 
 ## get_stata_bundle
 ## graphgene
@@ -179,9 +169,7 @@ net install profilescore,         from(https://raw.github.com/ricanney/stata/mas
 ```
 **additional files**
 
-[```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>)
-[```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>)
-[```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
 
 ## recodegenotype
 ## recodestrand
