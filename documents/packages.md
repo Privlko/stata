@@ -30,8 +30,8 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 **additional files**
 
 | File |  Link |
-| :------------------------------------- | : ------------------------------------- |
-| ```rsid-hapmap-genome-location.dta```  | via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0 |
+| -- | -- |
+| ```rsid-hapmap-genome-location.dta```  | via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0 
 
 
 ## bim2count
