@@ -5,10 +5,16 @@
 ## bim2build
 
 **description** a command to examine the genome build of a plink \*.bim file. 
+
 **remarks**
 **options**
 **examples**
-**installation*
+```
+global build_ref 
+bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
+```
+**installation**
+this command requires a reference of snps with location on various builds - available at ![link](https://db.tt/LDhiGHYEWL)
 
 
 ## bim2count
