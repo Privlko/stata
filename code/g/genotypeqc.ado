@@ -43,8 +43,8 @@
 #########################################################################
 */
 
-program genotypeqc, param(string asis) 
-syntax
+program genotypeqc
+syntax , param(string asis) 
 
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc                                                             "
