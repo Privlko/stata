@@ -58,20 +58,22 @@ qui {
 		if `r(max)' == 1 {
 			noi di as text"# >> all individuals in pairs are observed only once"
 			count
-			noi di as text"# >> "as result `r(N)' as text" individual/s saved to file"
+			noi di as text"# >> individuals saved to ......................."as result"kin0'_filter_`filter'.remove"
+			noi di as text"# >> individuals saved to ...................N = "as result"`r(N)'"
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		else {
 			keep in 1
 			noi di as text"# some individuals are in more than 1 pair"
 			count
-			noi di as text"# >> "as result `r(N)' as text" individual saved to file"
+			noi di as text"# >> individuals saved to ......................."as result"kin0'_filter_`filter'.remove"
+			noi di as text"# >> individuals saved to ...................N = "as result"`r(N)'"
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		}
 	else {
 		noi di as text"# no pairs observed"
-		noi di as text"# >> "as result `r(N)' as text" individual saved to file"
+		noi di as text"# >> individuals saved to ...................N = "as result"`r(N)'"
 		}
 	}
 qui di as text"#########################################################################"

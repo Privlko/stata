@@ -70,7 +70,7 @@ qui { // Module #0 - preamble
 		}
 	qui di as text"# > create temp directory"
 	qui {
-		create_temp_dir
+		noi create_temp_dir
 		}		
 	noi di as text"# > check path of dependent software is true"
 	qui { 
@@ -1126,7 +1126,9 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-bed --out ${sub_mod_input}_subset50000
 			}
 		qui di as text"# >> create kinship matrix and remove most related individual whilst looping through thresholds"
-		noi di as text"# > ignoring first degree relatives i.e. pairs where kinship > "as result"${kin_f}"as text" & kinship < "as result"${kin_d}"
+		noi di as text"# > ignoring first degree relatives "
+		noi di as text"# >> pairs ignored where ...................... kinship > "as result"${kin_f}"
+		noi di as text"# >> pairs ignored where .................... & kinship < "as result"${kin_d}"
 		qui {
 			foreach kin_threshold in $kin_d $kin_s $kin_t {
 				qui di as text"#########################################################################"
@@ -1158,7 +1160,7 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 							erase ${sub_mod_input}.kin0 
 							}
 						else {
-							noi di as text"# >> all pairs with kinship > threshold identified as added to ........"as result"${sub_mod_input}_kinship.remove"
+							noi di as text"# >> all pairs with kinship > threshold added to ........ "as result"${sub_mod_input}_kinship.remove"
 							!type > _x_.stop
 							}
 						}

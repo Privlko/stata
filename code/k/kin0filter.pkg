@@ -1,6 +1,6 @@
 d kin0filter - a command that uses *.kin0 files and identifies one of each pair to filter.- a program that scans the $init_unix folder for executables and creates a global link to the executable. 
 d Richard Anney, Cardiff University
-d Distribution-Date: 056ec2017
+d Distribution-Date: 08dec2017
 f kin0filter.ado
 f ../c/checkfile.ado
 
