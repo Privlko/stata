@@ -3,8 +3,19 @@
 ### b
 | Programs        | Description | Help Files | ado-file
 | :-------------- | :----------------------------------------------------------------	| :-------------- | :-------------- |
+| ```bim2build```   | a command to create check genome build from plink binaries | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2build.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2build.ado)	
+| ```bim2count```   | a command to count observations in a plink dataset | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2count.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2count.ado)	
 | ```bim2dta```   | a command to convert plink \*.bim file to stata \*.dta format | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2dta.ado)	
-| >syntax | ```bim2dta, bim(temp)``` ||
+| ```bim2eigenvec```   | command to generate \*.dta eigenval calculations from plink binaries | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2eigenvec.ado)	
+| ```bim2frq```   | a command to create \_frq.dta (plink-format marker files) from plink binaries  | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2frq.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2frq.ado)	
+| ```bim2hapmap```   | command to use plink-format genotype files to plot againsts hapmap ancestries and define ancestral similarities to a defined hapmap set | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2hapmap.ado)	
+| ```bim2ld_subset```   | a command to use \*.bim files (plink-format marker files) to generate a subset of ld independent snps (\_subset#.extract) | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2ld_subset.ado)	
+| ```bim2ldexclude```   | command to generate ld-exclude regions for plink | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2ldexclude.ado)	
+
+### c
+| Programs        | Description | Help Files | ado-file
+| :-------------- | :----------------------------------------------------------------	| :-------------- | :-------------- |
+
 
 1. 
 
