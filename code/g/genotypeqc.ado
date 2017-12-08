@@ -284,41 +284,20 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 				import delim using ${sub_mod_output}.dupvar, clear
 				count
 				if `r(N)' > 0 {
-					erase ${sub_mod_output}.dupvar
-					drop if chr == 0
-					compress
+					qui di as text"# > duplicates observed"
+					keep ids
+					gen obs = _n
 					split ids,p(" ")
-					gen keep   = ""
-					foreach i of num 1/999 {
-					capture confirm variable ids`i'
-					if !_rc {
-						generate tmp`i' = substr(ids`i',1,2)	
-						replace keep = ids`i' if tmp`i' == "rs"
-						replace ids`i' = "" if ids`i' == keep
-						drop tmp`i'
-						}
-					}
-					drop if keep == ""
-					preserve
-					keep ids1
-					save ${sub_mod_output}_dupvar.dta, replace
-					restore
-					foreach i of num 2/999 {
-						capture confirm variable ids`i'
-						if !_rc {
-							preserve
-							keep ids`i'
-							ren ids`i' ids1
-							append using ${sub_mod_output}_dupvar.dta
-							save ${sub_mod_output}_dupvar.dta, replace
-							restore
-							}
-						}
-					use ${sub_mod_output}_dupvar.dta, clear
-					erase ${sub_mod_output}_dupvar.dta
-					drop if ids1 == ""
-					duplicates drop
-					outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
+					drop ids
+					reshape long ids, i(obs) j(x)
+					gen rs = substr(ids`i',1,2)	
+					gen priority = 0
+					replace priority = 1 if rs == ""
+					sort priority obs
+					egen y = seq(), by(obs)
+					drop if y == 1
+					keep ids
+					outsheet ids using ${sub_mod_output}.exclude, non noq replace
 					!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
 					foreach file in bim bed fam  {
 						erase "${sub_mod_input}.`file'"
@@ -384,47 +363,26 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		qui {
 			global sub_mod_input  tempfile-module2-04
 			global sub_mod_output tempfile-module2-05
-						!$plink --bfile ${sub_mod_input} --list-duplicate-vars --out ${sub_mod_output}
+			!$plink --bfile ${sub_mod_input} --list-duplicate-vars --out ${sub_mod_output}
 			capture confirm file ${sub_mod_output}.dupvar
 			if !_rc {
 				import delim using ${sub_mod_output}.dupvar, clear
 				count
 				if `r(N)' > 0 {
-					erase ${sub_mod_output}.dupvar
-					drop if chr == 0
-					compress
+					qui di as text"# > duplicates observed"
+					keep ids
+					gen obs = _n
 					split ids,p(" ")
-					gen keep   = ""
-					foreach i of num 1/999 {
-					capture confirm variable ids`i'
-					if !_rc {
-						generate tmp`i' = substr(ids`i',1,2)	
-						replace keep = ids`i' if tmp`i' == "rs"
-						replace ids`i' = "" if ids`i' == keep
-						drop tmp`i'
-						}
-					}
-					drop if keep == ""
-					preserve
-					keep ids1
-					save ${sub_mod_output}_dupvar.dta, replace
-					restore
-					foreach i of num 2/999 {
-						capture confirm variable ids`i'
-						if !_rc {
-							preserve
-							keep ids`i'
-							ren ids`i' ids1
-							append using ${sub_mod_output}_dupvar.dta
-							save ${sub_mod_output}_dupvar.dta, replace
-							restore
-							}
-						}
-					use ${sub_mod_output}_dupvar.dta, clear
-					erase ${sub_mod_output}_dupvar.dta
-					drop if ids1 == ""
-					duplicates drop
-					outsheet ids1 using ${sub_mod_output}.exclude, non noq replace
+					drop ids
+					reshape long ids, i(obs) j(x)
+					gen rs = substr(ids`i',1,2)	
+					gen priority = 0
+					replace priority = 1 if rs == ""
+					sort priority obs
+					egen y = seq(), by(obs)
+					drop if y == 1
+					keep ids
+					outsheet ids using ${sub_mod_output}.exclude, non noq replace
 					!$plink --bfile ${sub_mod_input} --exclude ${sub_mod_output}.exclude --make-bed --out ${sub_mod_output}
 					foreach file in bim bed fam  {
 						erase "${sub_mod_input}.`file'"
@@ -1194,7 +1152,6 @@ qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives
 	noi di as text"#########################################################################"
 
 	}
-
 qui { // Module #7 - define european (ceu-tsi-like) subset 
 	noi di as text" "
 	noi di as text"#########################################################################"
@@ -1289,7 +1246,7 @@ qui { // Module #9 - rename and clean
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #9 - move and clean"	
-	noi di as text"# > create destination folder ............................"as result "${output_2}"
+	noi di as text"# > create destination folder ........................... "as result "${output_2}"
 	qui di as text"# > move files to data directory"
 	qui {
 		!copy "${sub_mod_output}-quality-control-report.docx"   "${output}.quality-control-report.docx"
