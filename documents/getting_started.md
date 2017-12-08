@@ -1,3 +1,5 @@
+![back to opening page](https://github.com/ricanney/stata)
+
 ## Getting started 
 1. load the stata programs from this site (and a few important dependencies). The downloaded ```get_stata_bundle``` program will  download the programs from this site however, you will also be required to run this program to ensure download additional necessary\useful dependencies not from this site, including ```renvars``` and ```sxpose```
 
