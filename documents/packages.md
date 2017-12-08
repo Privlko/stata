@@ -64,8 +64,8 @@ global kin_d                                 // kinship threshold for duplicates
 global kin_f                                 // kinship threshold for first degree relatives (default = 0.1770)
 global kin_s                                 // kinship threshold for second degree relatives (default = 0.0884)
 global kin_t                                 // kinship threshold for third degree relatives (default = 0.0442)
-global data_folder	                         // location of the genotypes to be processed
-global data_input		                         // name of genotype files (plink binaries) to be processed 
+global data_folder                           // location of the genotypes to be processed
+global data_input                            // name of genotype files (plink binaries) to be processed 
 global tabbed                                // perl + the location of the perl script tabbed.pl (e.g. perl D:/perl/code/tabbed.pl)
 global plink                                 // the location of the plink1.9.exe (e.g. D:/plink/bin/plink.exe)
 global plink2                                // the location of the plink2.exe (e.g. D:/plink/bin/plink2.exe)
