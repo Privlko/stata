@@ -10,11 +10,17 @@
 **options**
 **examples**
 ```
-global build_ref 
+
 bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
 ```
 **installation**
-this command requires a reference of snps with location on various builds - available at via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
+
+```
+net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+this command requires a reference of snps with location on various builds. this has been created and is available for download via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
+
 
 
 ## bim2count
