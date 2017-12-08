@@ -21,6 +21,7 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 ```
 
 **additional files**
+
 [```rsid-hapmap-genome-location.dta```](<add-link>)
 
 
@@ -50,7 +51,7 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 # > define the following globals in the parameter file
 global array_ref                             // the location of the genotyping array folder 
 global build_ref                             // location of the genotyping build file (rsid-hapmap-genome-location.dta)
-global kg_ref_frq                            // location of the -frq.dta file providing reference allele frequency for the 1000genome european reference datasets (eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta(hg19\eur_1000g_phase1integrated_v3_chrall_impute_macgt5.dta)
+global kg_ref_frq                            // location of the -frq.dta file providing reference allele frequency for the 1000genome european reference datasets (eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta)
 global hapmap_data                           // location of th hapmap3 (hg19+1) referenece genotype file + *.population file
 global aims                                  // location of list of ancestry informative markers (hapmap3-all-hg19-1-aims.snp-list)
 global rounds                                // number of quality control rounds to cycle through (default = 4)
@@ -102,9 +103,19 @@ genotypeqc, param(test.parameters)
 net install genotypeqc,         from(https://raw.github.com/ricanney/stata/master/code/g/) replace
 ```
 
-the data bundle for running genotypeqc is  
-```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
+**additional files**
 
+[```rsid-hapmap-genome-location.dta```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
+[```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>)
+[```hapmap3-all-hg19-1.bim```](<add-link>)
+[```hapmap3-all-hg19-1.bed```](<add-link>)
+[```hapmap3-all-hg19-1.fam```](<add-link>)
+[```hapmap3-all-hg19-1.population```](<add-link>)
+[```hapmap3-all-hg19-1-aims.snp-list```](<add-link>)
+[```genotype-array.tar.gz```](<add-link)
 
 ## get_stata_bundle
 ## graphgene
@@ -166,8 +177,11 @@ profilescore, param(test.parameters)
 ```
 net install profilescore,         from(https://raw.github.com/ricanney/stata/master/code/p/) replace
 ```
+**additional files**
 
-```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
+[```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>)
+[```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
 
 ## recodegenotype
 ## recodestrand
