@@ -42,10 +42,9 @@
 # Date: 12th July 2017
 #########################################################################
 */
+
 program genotypeqc, param(string asis) 
 syntax
-
-
 
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc                                                             "
