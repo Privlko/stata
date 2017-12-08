@@ -27,7 +27,11 @@ bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
 net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
-```rsid-hapmap-genome-location.dta``` has been created and is available for download via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
+**additional files**
+
+| File / Bundle                          | Link
+| :------------------------------------- | : -------------------------------------
+| ```rsid-hapmap-genome-location.dta```  | via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
 
 ## bim2count
 ## bim2dta    
