@@ -1,6 +1,18 @@
+![back to opening page](https://github.com/ricanney/stata)
+## information on packages
+### b
+1. ```bim2dta``` - a command to convert plink \*.bim file to stata \*.dta format
+  * ![help](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
+  * ![code](https://github.com/ricanney/stata/blob/master/code/b/bim2dta.ado)	
+```
+*example - to apply to temporary.bim
+bim2dta, bim(temporary)
+```
+1. 
+
 | Programs        | Description | Files
 | :-------------- | :----------------------------------------------------------------	| :---------	
-| ```bim2dta```         | convert plink \*.bim file to stata \*.dta format                                      | ![info](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) ![ado](https://github.com/ricanney/stata/blob/master/code/b/bim2dta.ado)	
+| ```bim2dta```         | convert plink \*.bim file to stata \*.dta format                                      | ![info](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) ![ado]
 | ```bim2eigenvec```	  | generate \*.eigenvec and \*.eigenval files from plink \*.bim file                   	| ![info](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md) ![ado](https://github.com/ricanney/stata/blob/master/code/b/bim2eigenvec.ado)	
 | ```bim2ldexclude```	  | generate the long-range linkage disequilibrium exclude region from plink \*.bim file	| ![info](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md) ![ado](https://github.com/ricanney/stata/blob/master/code/b/bim2exclude.ado)	
 | ```datestamp```	      | create a non-space datestamp in global that can be accessed via $DATA               	| ![info](https://github.com/ricanney/stata/blob/master/documents/datestamp.md) ![ado](https://github.com/ricanney/stata/blob/master/code/d/datestamp.ado)	
