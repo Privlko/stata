@@ -1,6 +1,6 @@
 ![back to opening page](https://github.com/ricanney/stata)
 ## information on packages
-[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2count```](#bim2eigenvec) [```bim2eigenvec```](#bim2count) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadUnixReplicas```](#loadUnixReplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
+[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2count```](#bim2eigenvec) [```bim2eigenvec```](#bim2count) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
 
 ## bim2build
 
@@ -105,7 +105,7 @@ net install genotypeqc,         from(https://raw.github.com/ricanney/stata/maste
 
 **additional files**
 
-[```rsid-hapmap-genome-location.dta```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>) | [```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>) | [```hapmap3-all-hg19-1.bim```](<add-link>) | [```hapmap3-all-hg19-1.bed```](<add-link>) | [```hapmap3-all-hg19-1.fam```](<add-link>) | [```hapmap3-all-hg19-1.population```](<add-link>) | [```hapmap3-all-hg19-1-aims.snp-list```](<add-link>) | [```genotype-array.tar.gz```](<add-link)
+[```rsid-hapmap-genome-location.dta```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>) | [```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>) | [```hapmap3-all-hg19-1.bim```](<add-link>) | [```hapmap3-all-hg19-1.bed```](<add-link>) | [```hapmap3-all-hg19-1.fam```](<add-link>) | [```hapmap3-all-hg19-1.population```](<add-link>) | [```hapmap3-all-hg19-1-aims.snp-list```](<add-link>) | [```genotype-array.tar.gz```](<add-link>)
 
 ## get_stata_bundle
 ## graphgene
@@ -120,7 +120,7 @@ net install genotypeqc,         from(https://raw.github.com/ricanney/stata/maste
 ## graphqq
 ## gwas2prs
 ## kin0filter
-## loadUnixReplicas
+## loadunixreplicas
 ## profilescore
 
 **description** - this program performs polygenic risk score calculation at multiple thresholds for multiple genotype files against a single GWAS input. the GWAS input file need to be preprocessed to prePRS format (see [```gwas2psr```](#gwas2prs). using input prePRS and quality controlled genotypes (via [```genotypeqc```](#genotypeqc); the program acts as a wrapper for plink to run through a pipeline of checks and balances, merges and clumping routines to generate \*.profile scores at a range of P-value thresholds from 1 to 1e-8. these profile scores are merged into a single analysis \*.dta for each genotype and a summary \*.meta-log describing key metrics from the process.
