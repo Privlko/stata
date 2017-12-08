@@ -86,7 +86,7 @@ qui { // Module #0 - preamble
 	qui di as text"# > create temp directory"
 	qui {
 		cd ${project_folder}
-		create_temp_dir
+		noi create_temp_dir
 		}
 	}
 qui { // Module #1 - processing GWAS summary data
