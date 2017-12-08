@@ -31,7 +31,7 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 
 | File |  Link |
 | -- | -- |
-| ```rsid-hapmap-genome-location.dta```  | via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0 
+| ```rsid-hapmap-genome-location.dta```  | [dropbox](https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0)
 
 
 ## bim2count
@@ -116,7 +116,7 @@ the data bundle for running genotypeqc is
 ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
 
 
-## get_stat_bundle
+## get_stata_bundle
 ## graphgene
 ## graphmanhattan
 ## graphmiami
@@ -181,5 +181,5 @@ net install profilescore,         from(https://raw.github.com/ricanney/stata/mas
 
 ## recodegenotype
 ## recodestrand
-## symbol2ensemble
+## symbol2ensembl
 
