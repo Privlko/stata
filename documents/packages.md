@@ -1,9 +1,11 @@
 ![back to opening page](https://github.com/ricanney/stata)
 ## information on packages
 ### b
-1. ```bim2dta``` - a command to convert plink \*.bim file to stata \*.dta format
-  * ![help files](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
-  / ![code](https://github.com/ricanney/stata/blob/master/code/b/bim2dta.ado)	
+| :-------------- | :----------------------------------------------------------------	
+| ```bim2dta```   | a command to convert plink \*.bim file to stata \*.dta format
+|| ![help files](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
+|| ![code](https://github.com/ricanney/stata/blob/master/code/b/bim2dta.ado)	
+
 ```
 *example - to apply to temporary.bim
 bim2dta, bim(temporary)
