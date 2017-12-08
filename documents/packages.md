@@ -13,13 +13,6 @@
 ```
 bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
 
-. bim2build, bim(temp) build_ref(rsid-hapmap-genome-location.dta)
-# > checkfile ................................... located temp.bim
-# > checkfile ................................... located rsid-hapmap-genome-location.dta
-# > bim2dta ............................................. temp.bim
-# > checkfile ................................... located temp.bim
-# > bim2build  .......... build identified as hg18 +0 for temp.bim
-
 ```
 **installation**
 
@@ -28,10 +21,7 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 ```
 
 **additional files**
-
-| File |  Link |
-| -- | -- |
-| ```rsid-hapmap-genome-location.dta```  | [dropbox](https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0)
+[```rsid-hapmap-genome-location.dta```](<add-link>)
 
 
 ## bim2count
