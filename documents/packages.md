@@ -1,6 +1,5 @@
 ![back to opening page](https://github.com/ricanney/stata)
 ## information on packages
-### b
 | Programs        | Description | Help Files | ado-file
 | :-------------- | :----------------------------------------------------------------	| :-------------- | :-------------- |
 | ```bim2build```   | a command to create check genome build from plink binaries | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2build.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2build.ado)	
@@ -11,11 +10,9 @@
 | ```bim2hapmap```   | command to use plink-format genotype files to plot againsts hapmap ancestries and define ancestral similarities to a defined hapmap set | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2hapmap.ado)	
 | ```bim2ld_subset```   | a command to use \*.bim files (plink-format marker files) to generate a subset of ld independent snps (\_subset#.extract) | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2ld_subset.ado)	
 | ```bim2ldexclude```   | command to generate ld-exclude regions for plink | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2ldexclude.ado)	
-
-### c
-| Programs        | Description | Help Files | ado-file
-| :-------------- | :----------------------------------------------------------------	| :-------------- | :-------------- |
-
+| ```checkfile```   | a command to check the presence of a file | ![link](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/checkfile.ado)	
+| ```checktabbed```   | a command to check the presence of tabbed.pl and that it is working correctly | ![link](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/checktabbed.ado)	
+| ```create_temp_dir```   | a command to create a random named temporary directory in the current directory | ![link](https://github.com/ricanney/stata/blob/master/documents/create_temp_dir.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/create_temp_dir.ado)	
 
 1. 
 
