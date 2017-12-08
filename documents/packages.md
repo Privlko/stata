@@ -1,5 +1,8 @@
 ![back to opening page](https://github.com/ricanney/stata)
 ## information on packages
+[```bim2build```](#bim2build) [```bim2count```](#bim2count) 
+
+
 | Programs        | Description | Help Files | ado-file
 | :-------------- | :----------------------------------------------------------------	| :-------------- | :-------------- |
 | ```bim2build```   | a command to create check genome build from plink binaries | ![link](https://github.com/ricanney/stata/blob/master/documents/bim2build.md) | ![link](https://github.com/ricanney/stata/blob/master/code/b/bim2build.ado)	
@@ -40,3 +43,7 @@
 | ```recodegenotype```  | converts ACGT+ID coded alleles to UIPAC genotype codes                              	| ![info](https://github.com/ricanney/stata/blob/master/documents/recodegenotype.md) ![ado](https://github.com/ricanney/stata/blob/master/code/r/recodegenotype.ado)	
 | ```recodestrand```	  | flip alleles to a refrence strand including reverse complementary coding            	| ![info](https://github.com/ricanney/stata/blob/master/documents/recodestrand.md) ![ado](https://github.com/ricanney/stata/blob/master/code/r/recodestrand.ado)	
 | ```symbol2ensembl```	| maps ensembl identifiers to gene symbols                                            	| ![info](https://github.com/ricanney/stata/blob/master/documents/symbol2ensembl.md) ![ado](https://github.com/ricanney/stata/blob/master/code/s/symbol2ensembl.ado)	
+
+
+# bim2build
+# bim2count
