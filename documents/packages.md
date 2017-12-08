@@ -83,7 +83,7 @@ global plink                                 /// the location of the plink1.9.ex
 file open myfile using test.parameters, write replace
 file write myfile "global project_folder  `c(pwd)'"                              _n 
 file write myfile "global project_name    project1"                              _n 
-file write myfile "global kg_ref          eur_1000g_phase3_chrall_impute_macgt5" _n 
+file write myfile "global kg_ref          kg_ref\eur_1000g_phase3_chrall_impute_macgt5" _n 
 file write myfile "global Ndata           3"                                     _n
 file write myfile "global data1           dataset1"                              _n
 file write myfile "global data2           dataset2"                              _n
@@ -98,10 +98,11 @@ profilescore, param(test.parameters)
 **installation**
 
 ```
-net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install profilescore,         from(https://raw.github.com/ricanney/stata/master/code/p/) replace
 ```
 
-```rsid-hapmap-genome-location.dta``` has been created and is available for download via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
+```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
+
 
 
 ## recodegenotype
