@@ -43,6 +43,74 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 ## ensembl2symbol
 ## fam2dta
 ## genotypeqc
+
+**description** - this program performs genotype quality control on plink binaries; the program acts as a wrapper for plink to run through a pipeline of checks and balances, along with a applying a range of quality controls. the program creates a bundle of qc'd plink binaries along with a summary \*.meta-log and a quality control report in \*docx format containing numerous quality metrics. as part of the pipeline the program identified the genome-build of the array as well as most likely source of array. markers are renamd to rsid and procerssed according to excessive cryptic relatedness, missingess, heterozygosity, relatedess(duplicates, second and third degree relatives are removed), minor allele frequency and hardy weinberg equilibrium. ancestry are inferred and plotted against references and files generated to allow individuals to be removed in downstream applications.   
+
+**remarks** - to run ```genotypeqc``` you will first need to set a number of global parameters. these parameters need to be saved into a flat text file e.g. test.parameters
+
+**examples**
+
+```
+/*
+# > define the following globals in the parameter file
+global array_ref                             // the location of the genotyping array folder 
+global build_ref                             // location of the genotyping build file (rsid-hapmap-genome-location.dta)
+global kg_ref_frq                            // location of the -frq.dta file providing reference allele frequency for the 1000genome european reference datasets (eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta(hg19\eur_1000g_phase1integrated_v3_chrall_impute_macgt5.dta)
+global hapmap_data                           // location of th hapmap3 (hg19+1) referenece genotype file + *.population file
+global aims                                  // location of list of ancestry informative markers (hapmap3-all-hg19-1-aims.snp-list)
+global rounds                                // number of quality control rounds to cycle through (default = 4)
+global hwep                                  // min -log10 p-value tolerated for hardy-weinberg deviation (default = 10)
+global hetsd                                 // maximum standard deviations tolerated from mean heterozygosity (default = 4)
+global mind                                  // maximum missingness by individual tolerated (default = 0.02)
+global geno1                                 // maximum missingness by marker tolerated - round 1 (default = 0.05)
+global geno2                                 // maximum missingness by marker tolerated - final (default = 0.02)
+global kin_d                                 // kinship threshold for duplicates (default =  0.3540)
+global kin_f                                 // kinship threshold for first degree relatives (default = 0.1770)
+global kin_s                                 // kinship threshold for second degree relatives (default = 0.0884)
+global kin_t                                 // kinship threshold for third degree relatives (default = 0.0442)
+global data_folder	                         // location of the genotypes to be processed
+global data_input		                         // name of genotype files (plink binaries) to be processed 
+global tabbed                                // perl + the location of the perl script tabbed.pl (e.g. perl D:/perl/code/tabbed.pl)
+global plink                                 // the location of the plink1.9.exe (e.g. D:/plink/bin/plink.exe)
+global plink2                                // the location of the plink2.exe (e.g. D:/plink/bin/plink2.exe)
+
+* plink plink2 and tabbed whould be set up via the profile.do along with loadunixreplicas (includes many other standard dependencies)
+*/
+
+file open myfile using test.parameters, write replace
+file write myfile "global array_ref		genotype-array\data" _n
+file write myfile "global build_ref		build-ref\data\rsid-hapmap-genome-location.dta" _n
+file write myfile "global kg_ref_frq	1000genomes\eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta" _n
+file write myfile "global hapmap_data	hapmap3\hapmap3-all-hg19-1" _n
+file write myfile "global aims	      hapmap3\hapmap3-all-hg19-1-aims.snp-list" _n
+file write myfile "global rounds      4" _n
+file write myfile "global hwep        10" _n
+file write myfile "global hetsd       4" _n
+file write myfile "global maf         0.01" _n
+file write myfile "global mind        0.02" _n
+file write myfile "global geno1       0.05" _n
+file write myfile "global geno2       0.02" _n
+file write myfile "global kin_d       0.3540" _n
+file write myfile "global kin_f       0.1770" _n
+file write myfile "global kin_s       0.0884" _n
+file write myfile "global kin_t       0.0442" _n
+file write myfile "global data_folder	example\data" _n
+file write myfile "global data_input	example" _n
+file close myfile
+
+genotypeqc, param(test.parameters)
+```
+
+**installation**
+
+```
+net install genotypeqc,         from(https://raw.github.com/ricanney/stata/master/code/g/) replace
+```
+
+the data bundle for running genotypeqc is  
+```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
+
+
 ## get_stat_bundle
 ## graphgene
 ## graphmanhattan
@@ -79,6 +147,9 @@ gwas_short author-year                       /// set a short-name for gwas input
 gwas_prePRS author-year-prePRS.tsv           /// set location/filename for prePRS.tsv file (note *.tsv often archived as *.tsv.gz - gz not needed)
 global tabbed                                /// perl + the location of the perl script tabbed.pl (e.g. perl D:/perl/code/tabbed.pl)
 global plink                                 /// the location of the plink1.9.exe (e.g. D:/plink/bin/plink.exe)
+
+* plink and tabbed whould be set up via the profile.do along with loadunixreplicas (includes many other standard dependencies)
+
 */
 file open myfile using test.parameters, write replace
 file write myfile "global project_folder  `c(pwd)'"                              _n 
@@ -102,8 +173,6 @@ net install profilescore,         from(https://raw.github.com/ricanney/stata/mas
 ```
 
 ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bim```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.bed```, ```kg_ref eur_1000g_phase3_chrall_impute_macgt5.fam``` are available in the archive ```kg_ref.tar.gz``` for download via dropbox at https://www.dropbox.com/s/xk6mk0v1bn777g7/kg_ref.tar.gz?dl=0
-
-
 
 ## recodegenotype
 ## recodestrand
