@@ -4,14 +4,22 @@
 
 ## bim2build
 
-**description** a command to examine the genome build of a plink \*.bim file. 
+**description** - a command to examine the genome build of a plink \*.bim file. the command utilises the programs ```checkfile```, ```bim2dta``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
 
-**remarks**
-**options**
+**remarks** - to date this only examines hg17 +0/1- hg19 +0/1
+
 **examples**
-```
 
+```
 bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
+
+. bim2build, bim(temp) build_ref(rsid-hapmap-genome-location.dta)
+# > checkfile ................................... located temp.bim
+# > checkfile ................................... located rsid-hapmap-genome-location.dta
+# > bim2dta ............................................. atemp.bim
+# > checkfile ................................... located temp.bim
+# > bim2build  .......... build identified as hg18 +0 for temp.bim
+
 ```
 **installation**
 
@@ -19,9 +27,7 @@ bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
 net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
-this command requires a reference of snps with location on various builds. this has been created and is available for download via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
-
-
+```rsid-hapmap-genome-location.dta``` has been created and is available for download via dropbox at https://www.dropbox.com/s/zb7ehghhir2fjn3/rsid-hapmap-genome-location.dta?dl=0
 
 ## bim2count
 ## bim2dta    
