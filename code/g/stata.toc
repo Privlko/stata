@@ -1,6 +1,7 @@
 d Richard Anney, Cardiff University
 t genotypeqc       command to run a full genotype-array-quality-control
-t genotypeqc_parameter       command to run a full genotype-array-quality-control
+t genotypeqc_parameter     command to run a full genotype-array-quality-control
+t genotypeqc_setarray      command to gnerate / define input array
 t get_stata_bundle command to get stata packages from https://github.com/ricanney/stata
 t graphmanhattan   command to draw a simple manhattan plot to tmpManhattan.gph
 t graphmiami       command to draw a miami plot at a region for 2 gwas datasets to tmpMiami.gph
