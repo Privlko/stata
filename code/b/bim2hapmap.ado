@@ -82,8 +82,8 @@ qui {
 	qui di as text"# >> flip/ merge datasets"
 	qui {	
 		!$plink --bfile _test --flip _test.flip --make-founders --extract overlap.extract --make-bed --out  _test_flip_intersect
-		!$plink --bfile _hapmap                   --make-founders --extract overlap.extract --make-bed --out  _hapmap_intersect
-		!$plink --bfile _test_flip_intersect --bmerge _hapmap_intersect.bed _hapmap_intersect.bim _hapmap_intersect.fam  --make-bed --out _combined
+		!$plink --bfile _hapmap                 --make-founders --extract overlap.extract --make-bed --out  _hapmap_intersect
+		!$plink --bfile _test_flip_intersect --bmerge _hapmap_intersect.bed _hapmap_intersect.bim _hapmap_intersect.fam  --allow-no-sex --make-bed --out _combined
 		}
 	qui di as text"# >> calculate eigenvec/ eigenval"
 	qui { 
