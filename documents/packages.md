@@ -1,10 +1,10 @@
 ![back to opening page](https://github.com/ricanney/stata)
 ## information on packages
-[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2count```](#bim2eigenvec) [```bim2eigenvec```](#bim2count) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
+[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2eigenvec```](#bim2eigenvec) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
 
 ## bim2build
 
-**description** - a command to examine the genome build of a plink \*.bim file. the command utilises the programs ```checkfile```, ```bim2dta``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
+**description** - a command to examine the genome build of a plink \*.bim file. the command utilises the programs [```checkfile```](#checkfile), [```bim2dta```](#bim2dta) and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
 
 **remarks** - to date this only examines hg17 +0/1- hg19 +0/1
 
@@ -26,7 +26,7 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 
 ## bim2count
 
-**description** - a command to count observation in plink \*.bim and \*.fam files. the command utilises the programs ```checkfile```.
+**description** - a command to count observation in plink \*.bim and \*.fam files. the command utilises the programs [```checkfile```](#checkfile).
 
 **remarks** 
 
@@ -45,7 +45,7 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 **additional files**
 
 ## bim2dta   
-**description** - a command to import the plink \*.bim files. the command utilises the programs ```checkfile```. in addition, the command uses the ```recodegenotype``` program to create the single letter IUPAC genotype code (see below) from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
+**description** - a command to import the plink \*.bim files. the command utilises the programs [```checkfile```](#checkfile). in addition, the command uses the [```recodegenotype```](#recodegenotype) program to create the single letter IUPAC genotype code (see below) from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
 
 | IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
 | :-- | -- | :-- | --|
@@ -60,7 +60,7 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 | X	| reverse complement of a**N**y base | . | gap |
 | - | gap ||
 
-**remarks** - ```bim2dta``` works with biallelic markers and includes indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. 
+**remarks** - [```bim2dta```](#bim2dta) works with biallelic markers and includes indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. 
 
 **examples**
 
@@ -79,24 +79,23 @@ net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/c
 
 ## bim2eigenvec
 
-**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for ```plink``` and ```plink2``` - both programs should be accessable by the ${plink} and ${plink2} commands (see ![getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md). utilises the programs ```checkfile```, ```bim2ldexclude``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
+**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
 
-**remarks** - to date this only examines hg17 +0/1- hg19 +0/1
+**remarks** - note [```bim2ldexclude```](#bim2ldexclude) is based on build hg19 co-ordinates. exclusion co-ordinates will need updating for other builds. a more verbose script is [```bim2hapmap```](#bim2hapmap) this uses the [```bim2eigenvec```](#bim2eigenvec) program but also plots against hapmap refernece genotypes and creates a "similarity" file that identifies samples that show similar ancestries to the definabe hapmap3 populations 
 
 **examples**
 
 ```
-bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
+bim2eigenvec , bim(temp) 
 
 ```
 **installation**
 
 ```
-net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2eigenvec,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
 **additional files**
-
 
 ## bim2frq
 ## bim2hapmap
