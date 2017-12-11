@@ -2,6 +2,8 @@
 	syntax
 	cd ${data_folder}	
 	file open myfile using ${data_input}.parameters, write replace
+	file write myfile "global data_folder	${data_folder}" _n
+	file write myfile "global data_input	${data_input}" _n
 	file write myfile "global array_ref		E:\data\methods\genotype-array\data" _n
 	file write myfile "global build_ref		E:\data\methods\genome-build\data\rsid-hapmap-genome-location.dta" _n
 	file write myfile "global kg_ref_frq	E:\data\genotypes\ref\1000-genomes\phase1\data\hg19\eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta" _n
