@@ -24,9 +24,60 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 
 [```rsid-hapmap-genome-location.dta```](<add-link>)
 
-
 ## bim2count
-## bim2dta    
+
+**description** - a command to count observation in plink \*.bim and \*.fam files. the command utilises the programs ```checkfile```.
+
+**remarks** 
+
+**examples**
+
+```
+bim2count , bim(temp) 
+
+```
+**installation**
+
+```
+net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
+## bim2dta   
+**description** - a command to import the plink \*.bim files. the command utilises the programs ```checkfile```. in addition, the command creates the single letter genotype code from the observed alleles and stores as the variable ```gt```.
+
+| IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
+| :-- | -- | :-- | --|
+| A	| **A**denine | C	| **C**ytosine |
+| G	| **G**uanine | T | **T**hymine |
+| U | **U**racil  | R	| pu**R**ine (A or G) |
+| Y	| pyr**Y**midine (C or T) | S	| **S**trong (G or C) |
+| W	| **W**eak (A or T) | K	| **K**etone (G or T) |
+| M	| a**M**ine (A or C) | B	| not **A** (C or G or T) |
+| D	| not **C** A or G or T | H | not **G** (A or C or T) |
+| V	| not **T** (A or C or G) | N	| a**N**y |
+| X	| rverse complement of a**N**y base | . | gap |
+| - | gap ||
+
+
+**remarks** 
+
+**examples**
+
+```
+bim2count , bim(temp) 
+
+```
+**installation**
+
+```
+net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
+
 ## bim2eigenvec
 ## bim2frq
 ## bim2hapmap
