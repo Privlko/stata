@@ -104,16 +104,186 @@ net install bim2frq,         from(https://raw.github.com/ricanney/stata/master/c
 
 **additional files**
 
-
 ## bim2hapmap
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## bim2ldexclude
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## bim2ld_subset
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## checkfile
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## checktabbed
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## create_temp_dir
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## datestamp
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## ensembl2symbol
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## fam2dta
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## genotypeqc
 
 **description** - this program performs genotype quality control on plink binaries; the program acts as a wrapper for plink to run through a pipeline of checks and balances, along with a applying a range of quality controls. the program creates a bundle of qc'd plink binaries along with a summary \*.meta-log and a quality control report in \*docx format containing numerous quality metrics. as part of the pipeline the program identified the genome-build of the array as well as most likely source of array. markers are renamd to rsid and procerssed according to excessive cryptic relatedness, missingess, heterozygosity, relatedess(duplicates, second and third degree relatives are removed), minor allele frequency and hardy weinberg equilibrium. ancestry are inferred and plotted against references and files generated to allow individuals to be removed in downstream applications.   
@@ -189,19 +359,285 @@ net install genotypeqc,         from(https://raw.github.com/ricanney/stata/maste
 [```rsid-hapmap-genome-location.dta```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>) | [```eur-1000g-phase1integrated-v3-chrall-impute-macgt5-frq.dta```](<add-link>) | [```hapmap3-all-hg19-1.bim```](<add-link>) | [```hapmap3-all-hg19-1.bed```](<add-link>) | [```hapmap3-all-hg19-1.fam```](<add-link>) | [```hapmap3-all-hg19-1.population```](<add-link>) | [```hapmap3-all-hg19-1-aims.snp-list```](<add-link>) | [```genotype-array.tar.gz```](<add-link>)
 
 ## get_stata_bundle
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphgene
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphmanhattan
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphmiami
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinkfrq
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinkhet
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinkhwe
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinkimiss
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinkkin0
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphplinklmiss
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## graphqq
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## gwas2prs
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## kin0filter
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## loadunixreplicas
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## profilescore
 
 **description** - this program performs polygenic risk score calculation at multiple thresholds for multiple genotype files against a single GWAS input. the GWAS input file need to be preprocessed to prePRS format (see [```gwas2psr```](#gwas2prs). using input prePRS and quality controlled genotypes (via [```genotypeqc```](#genotypeqc); the program acts as a wrapper for plink to run through a pipeline of checks and balances, merges and clumping routines to generate \*.profile scores at a range of P-value thresholds from 1 to 1e-8. these profile scores are merged into a single analysis \*.dta for each genotype and a summary \*.meta-log describing key metrics from the process.
@@ -286,7 +722,43 @@ net install recodegenotype,         from(https://raw.github.com/ricanney/stata/m
 
 **additional files**
 
-
 ## recodestrand
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## symbol2ensembl
+
+**description** 
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
 
