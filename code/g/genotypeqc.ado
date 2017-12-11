@@ -66,10 +66,10 @@ qui { // Module #0 - preamble
 	noi	di as text"# > run parameters file ................................. "as result"`param'"
 	qui {
 		noi checkfile, file(`param')
-		foreach macro in data_folder data_input array_ref build_ref  kg_ref_frq hapmap_data	aims rounds hwep hetsd maf mind geno1 geno2 kin_d kin_f kin_s kin_t{
+		foreach macro in data_folder data_input array_ref build_ref  kg_ref_frq hapmap_data	aims rounds hwep hetsd maf mind geno1 geno2 kin_d kin_f kin_s kin_t {
 			macro drop `macro'
 			}
-		do ${tmp_param}
+		do `param'
 		}
 	qui di as text"# > create temp directory"
 	qui {
