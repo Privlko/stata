@@ -66,6 +66,7 @@ qui { // Module #0 - preamble
 	noi	di as text"# > run parameters file ................................. "as result"`param'"
 	qui {
 		noi checkfile, file(`param')
+		macro drop _all
 		do `param'
 		}
 	qui di as text"# > create temp directory"
