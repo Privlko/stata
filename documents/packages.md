@@ -9,17 +9,13 @@
 **remarks** - to date this only examines hg17 +0/1- hg19 +0/1
 
 **examples**
-
 ```
 bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
-
 ```
 **installation**
-
 ```
 net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-
 **additional files**
 
 [```rsid-hapmap-genome-location.dta```](<add-link>)
@@ -31,17 +27,13 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 **remarks** 
 
 **examples**
-
 ```
 bim2count , bim(temp) 
-
 ```
 **installation**
-
 ```
 net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-
 **additional files**
 
 ## bim2dta   
@@ -50,38 +42,29 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 **remarks** 
 
 **examples**
-
 ```
 bim2dta , bim(temp) 
-
 ```
-
 **installation**
-
 ```
 net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-
 **additional files**
 
 ## bim2eigenvec
 
 **description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
 
-**remarks** - note [```bim2ldexclude```](#bim2ldexclude) is based on build hg19 co-ordinates. exclusion co-ordinates will need updating for other builds. a more verbose script is [```bim2hapmap```](#bim2hapmap) this uses the [```bim2eigenvec```](#bim2eigenvec) program but also plots against hapmap refernece genotypes and creates a "similarity" file that identifies samples that show similar ancestries to the definabe hapmap3 populations 
+**remarks** - note [```bim2ldexclude```](#bim2ldexclude) is based on build hg19 co-ordinates. exclusion co-ordinates will need updating for other builds. a more verbose script is [```bim2hapmap```](#bim2hapmap) this uses the [```bim2eigenvec```](#bim2eigenvec) program but also plots against hapmap reference genotypes and creates a "similarity" file that identifies samples that show similar ancestries to the definable hapmap3 populations 
 
 **examples**
-
 ```
 bim2eigenvec , bim(temp) 
-
 ```
 **installation**
-
 ```
 net install bim2eigenvec,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-
 **additional files**
 
 ## bim2frq
@@ -90,28 +73,27 @@ net install bim2eigenvec,         from(https://raw.github.com/ricanney/stata/mas
 **remarks** 
 
 **examples**
-
 ```
 bim2frq , bim(temp) 
-
 ```
-
 **installation**
-
 ```
 net install bim2frq,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-
 **additional files**
 
 ## bim2hapmap
 
-**description** 
+**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. this program also utilises reference genotypes from the hapmap3 collection to plot and creates a "similarity" file that identifies samples that show similar ancestries to the definable hapmap3 populations. 
+
+the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). 
+
+
+this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
 
 **remarks** 
 
 **examples**
-
 ```
 syntax
 
