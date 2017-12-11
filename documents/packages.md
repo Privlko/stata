@@ -57,7 +57,7 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 | M	| a**M**ine (A or C) | B	| not **A** (C or G or T) |
 | D	| not **C** A or G or T | H | not **G** (A or C or T) |
 | V	| not **T** (A or C or G) | N	| a**N**y |
-| X	| rverse complement of a**N**y base | . | gap |
+| X	| reverse complement of a**N**y base | . | gap |
 | - | gap ||
 
 **remarks** - ```bim2dta``` works with biallelic markers and includes indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. 
@@ -79,7 +79,7 @@ net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/c
 
 ## bim2eigenvec
 
-**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command utilises the programs ```checkfile```, ```bim2eigenvec``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
+**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for ```plink``` and ```plink2``` - both programs should be accessable by the ${plink} and ${plink2} commands (see ![getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md). utilises the programs ```checkfile```, ```bim2ldexclude``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
 
 **remarks** - to date this only examines hg17 +0/1- hg19 +0/1
 
