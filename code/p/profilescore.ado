@@ -60,7 +60,8 @@ qui { // Module #0 - preamble
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #0 - preamble"
-  noi	di as text"# > run parameters file ................................. "as result"`param'"
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
+	noi	di as text"# > run parameters file ................................. "as result"`param'"
 	qui {
 		noi checkfile, file(`param')
 		do `param'
@@ -93,7 +94,8 @@ qui { // Module #1 - processing GWAS summary data
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #1 - processing GWAS summary data"
-  noi	di as text"# > unzipping / importing / zipping ..................... "as result"${gwas_prePRS}.gz"
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
+	noi	di as text"# > unzipping / importing / zipping ..................... "as result"${gwas_prePRS}.gz"
 	qui {
 		noi checkfile, file(${gwas_prePRS}.gz)
 		!$gunzip ${gwas_prePRS}.gz
@@ -141,6 +143,7 @@ qui { // Module #2 - processing genotype data
 	noi di as text"#########################################################################"
 	noi di as text"# Module #2 - processing genotype data"
 	noi	di as text"# > number of genotype datasets to process .............. "as result"$Ndata"
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	foreach data of num 1 / $Ndata {
 		noi di as text"# > processing .......................................... "as result"${data`data'}"as text"  (`data' of ${Ndata})"
 		qui {
@@ -186,6 +189,7 @@ qui { // Module #3 - merging GWAS and genotype data to define intersect
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #3 - merging GWAS and genotype data to define intersect"
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	noi	di as text"# > opening  ............................................ "as result"tempfile-gwas.dta"
 	qui {
 		use tempfile-gwas.dta, clear
@@ -203,6 +207,7 @@ qui { // Module #4 - mapping to the same strand
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #4 - map alleles to the same strand"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	noi di as text"# > map all snps to a common strand [risk - alt] based on gwas data"
 	foreach data of num 1 / $Ndata {
 		noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"data`data'"
@@ -246,7 +251,8 @@ qui { // Module #4 - mapping to the same strand
 qui { // Module #5 - processing genotype data
 	noi di as text" "
 	noi di as text"#########################################################################"
-	noi di as text"# Module #5 - processing genotype data"			
+	noi di as text"# Module #5 - processing genotype data"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	noi di as text"# > extract intersect and flip alleles using plink"
 	qui {
 		foreach data of num 1 / $Ndata {
@@ -263,6 +269,7 @@ qui { // Module #6 - create profile scores
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #6 - create profile scores"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	noi di as text"# > create profile score based on ....................... " as result "${gwas_short}"
 	qui { 
 		use tempfile-combined-flipped.dta, replace
@@ -337,6 +344,7 @@ qui { // Module #7 - combine profile scores into single file
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #7 - combine profile scores into single file"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	foreach data of num 1 / $Ndata {
 		noi di as text"# > join profile files into single file ................. " as result"data`data'-final-profiles.dta"
 		noi fam2dta, fam(data`data'-intersect-flipped)
@@ -372,6 +380,7 @@ qui { // Module #8 - make meta-log
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #8 - make meta-log"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	qui { 
 		log using tempfile.log, replace
 		noi di as text"#########################################################################"
@@ -474,6 +483,7 @@ qui { // Module #9 - plot manhattan of intersect
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #9 - make meta-log"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	noi di as text"# > plot manhattan of intersect"
 	qui {
 		use tempfile-combined.dta, clear
@@ -487,6 +497,7 @@ qui { // Module #10 - rename and clean
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #10 - move and clean"	
+	noi di as text"# Started: $S_DATE $S_TIME                                               "
 	qui {
 		foreach data of num 1 / $Ndata {	
 			!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
