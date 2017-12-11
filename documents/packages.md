@@ -45,7 +45,7 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 **additional files**
 
 ## bim2dta   
-**description** - a command to import the plink \*.bim files. the command utilises the programs ```checkfile```. in addition, the command creates the single letter genotype code from the observed alleles and stores as the variable ```gt```.
+**description** - a command to import the plink \*.bim files. the command utilises the programs ```checkfile```. in addition, the command uses the ```recodegenotype``` program to create the single letter IUPAC genotype code (see below) from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
 
 | IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
 | :-- | -- | :-- | --|
@@ -60,25 +60,44 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 | X	| rverse complement of a**N**y base | . | gap |
 | - | gap ||
 
-
-**remarks** 
+**remarks** - ```bim2dta``` works with biallelic markers and includes indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. 
 
 **examples**
 
 ```
-bim2count , bim(temp) 
+bim2dta , bim(temp) 
+
+```
+
+**installation**
+
+```
+net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
+## bim2eigenvec
+
+**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command utilises the programs ```checkfile```, ```bim2eigenvec``` and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
+
+**remarks** - to date this only examines hg17 +0/1- hg19 +0/1
+
+**examples**
+
+```
+bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
 
 ```
 **installation**
 
 ```
-net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
 **additional files**
 
 
-## bim2eigenvec
 ## bim2frq
 ## bim2hapmap
 ## bim2ldexclude
