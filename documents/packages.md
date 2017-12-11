@@ -45,22 +45,9 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 **additional files**
 
 ## bim2dta   
-**description** - a command to import the plink \*.bim files. the command utilises the programs [```checkfile```](#checkfile). in addition, the command uses the [```recodegenotype```](#recodegenotype) program to create the single letter IUPAC genotype code (see below) from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
+**description** - a command to import the plink \*.bim files. the command utilises the programs [```checkfile```](#checkfile). in addition, the command uses the [```recodegenotype```](#recodegenotype) program to create the single letter IUPAC genotype code from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
 
-| IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
-| :-- | -- | :-- | --|
-| A	| **A**denine | C	| **C**ytosine |
-| G	| **G**uanine | T | **T**hymine |
-| U | **U**racil  | R	| pu**R**ine (A or G) |
-| Y	| pyr**Y**midine (C or T) | S	| **S**trong (G or C) |
-| W	| **W**eak (A or T) | K	| **K**etone (G or T) |
-| M	| a**M**ine (A or C) | B	| not **A** (C or G or T) |
-| D	| not **C** A or G or T | H | not **G** (A or C or T) |
-| V	| not **T** (A or C or G) | N	| a**N**y |
-| X	| reverse complement of a**N**y base | . | gap |
-| - | gap ||
-
-**remarks** - [```bim2dta```](#bim2dta) works with biallelic markers and includes indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. 
+**remarks** 
 
 **examples**
 
@@ -79,7 +66,7 @@ net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/c
 
 ## bim2eigenvec
 
-**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
+**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
 
 **remarks** - note [```bim2ldexclude```](#bim2ldexclude) is based on build hg19 co-ordinates. exclusion co-ordinates will need updating for other builds. a more verbose script is [```bim2hapmap```](#bim2hapmap) this uses the [```bim2eigenvec```](#bim2eigenvec) program but also plots against hapmap refernece genotypes and creates a "similarity" file that identifies samples that show similar ancestries to the definabe hapmap3 populations 
 
@@ -98,6 +85,26 @@ net install bim2eigenvec,         from(https://raw.github.com/ricanney/stata/mas
 **additional files**
 
 ## bim2frq
+**description** - a command to import the plink \*.bim files and calculate the allele frequencies of each marker. the command utilises the programs [```checkfile```](#checkfile), [```checktabbed```](#checktabbed) and [```recodegenotype```](#recodegenotype). the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) - this program should be accessable by the ${plink} command (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). the program creates the variable ```gt``` and ```maf``` which are preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_frq.dta```. 
+
+**remarks** 
+
+**examples**
+
+```
+bim2frq , bim(temp) 
+
+```
+
+**installation**
+
+```
+net install bim2frq,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
+
 ## bim2hapmap
 ## bim2ldexclude
 ## bim2ld_subset
@@ -246,6 +253,40 @@ net install profilescore,         from(https://raw.github.com/ricanney/stata/mas
 [```eur_1000g_phase3_chrall_impute_macgt5.bim```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.bed```](<add-link>) | [```eur_1000g_phase3_chrall_impute_macgt5.fam```](<add-link>)
 
 ## recodegenotype
+
+**description** - this program creates the single letter IUPAC genotype code (see below) from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
+
+| IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
+| :-- | -- | :-- | --|
+| A	| **A**denine | C	| **C**ytosine |
+| G	| **G**uanine | T | **T**hymine |
+| U | **U**racil  | R	| pu**R**ine (A or G) |
+| Y	| pyr**Y**midine (C or T) | S	| **S**trong (G or C) |
+| W	| **W**eak (A or T) | K	| **K**etone (G or T) |
+| M	| a**M**ine (A or C) | B	| not **A** (C or G or T) |
+| D	| not **C** A or G or T | H | not **G** (A or C or T) |
+| V	| not **T** (A or C or G) | N	| a**N**y |
+| X	| reverse complement of a**N**y base | . | gap |
+| - | gap ||
+
+**remarks** - [```recodegenotype```](#recodegenotype) works with biallelic markers and indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. the program requires allele1 and allele2 to be varnames to be defined. 
+
+**examples**
+
+```
+recodegenotype, a1(a1) a2(a2) 
+
+```
+
+**installation**
+
+```
+net install recodegenotype,         from(https://raw.github.com/ricanney/stata/master/code/r/) replace
+```
+
+**additional files**
+
+
 ## recodestrand
 ## symbol2ensembl
 
