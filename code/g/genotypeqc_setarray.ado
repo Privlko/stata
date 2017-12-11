@@ -2,6 +2,7 @@
 	syntax, name(string asis)
 	!rmdir `array_ref'\\`name' /S /Q
 	!mkdir `array_ref'\\`name'
+	noi checkfile, file(`bim'.bim)
 	import delim using `bim'.bim, clear
 	keep v1 v2 v4
 	for var v1 - v4 : tostring X, replace
