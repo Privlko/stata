@@ -276,6 +276,7 @@ net install -name-,         from(https://raw.github.com/ricanney/stata/master/co
   - v4 - included a minor allele frequency threshold default = 0.01
   - v5 - alter maf to mac5 to retain additional "rarer" variation
   - v6 - convert script to include stand-alone subroutines; bug-fix: duplicate routine now retain one of the duplicated observations
+  - xx - add known_array function - this skips array check for known arrays (e.g. post imputation) - assumes hg19+1 co-ordinates
 
 **examples**
 
@@ -328,6 +329,7 @@ file write myfile "global data_input	example" _n
 file close myfile
 
 genotypeqc, param(test.parameters)
+genotypeqc, param(test.parameters) known_array(michigan-imputation-server-v1.0.3-hrc-r1.1-2016)
 ```
 
 **installation**
