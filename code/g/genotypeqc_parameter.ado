@@ -21,4 +21,6 @@
 	file write myfile "global kin_s       0.0884" _n
 	file write myfile "global kin_t       0.0442" _n
 	file close myfile
+	noi di as text"# > "as input"genotypeqc_parameter"as text" ........ parameter file created "as result"${data_input}.parameters"
+
 	end;	
