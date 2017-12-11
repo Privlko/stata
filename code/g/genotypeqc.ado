@@ -44,7 +44,7 @@
 */
 
 program genotypeqc
-syntax , param(string asis) 
+syntax , param(string asis) [known_array(string asis)]
 
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc                                                             "
@@ -89,9 +89,9 @@ qui { // Module #0 - preamble
 		noi checkfile, file(${hapmap_data}.bed)
 		noi checkfile, file(${hapmap_data}.bim)
 		noi checkfile, file(${hapmap_data}.fam)
-		noi checkfile, file(${input}.bed)
-		noi checkfile, file(${input}.bim)
-		noi checkfile, file(${input}.fam)
+		noi checkfile, file(${data_folder}\\${data_input}.bed)
+		noi checkfile, file(${data_folder}\\${data_input}.bim)
+		noi checkfile, file(${data_folder}\\${data_input}.fam)
 		}
 	qui di as text"# > create new globals"
 	qui { 
@@ -118,91 +118,107 @@ qui { // Module #0 - preamble
 qui { // Module #1 - determining the original genotyping array 
 	noi di as text" "
 	noi di as text"#########################################################################"
-	noi	di as text"# Module #1 - determing most likely genotyping array from "as result"${input}.bim"
-	qui di as text"# > importing ........................................... "as result"${input}.bim"
-	qui {
-		global sub_mod_output tempfile-module1-01
-		noi bim2dta,bim(${input})
-		rename snp rsid
-		keep rsid
-		sort rsid
-		save ${sub_mod_output}.dta, replace
-		}
-	qui di as text"# > calculate overlap with references and reporting to .. "as result"${output}.arraymatch"
-	qui {
-		global sub_mod_input  tempfile-module1-01
-		global sub_mod_output tempfile-module1-02
-		file open myfile using "${output}.arraymatch", write replace
-		file write myfile "Array:Overlap:SNPsinModel:Jaccard Index" _n
-		file close myfile
-		clear
-		set obs 1								
-		gen folder = ""							
-		save ${sub_mod_output}.dta,replace
-		local myfiles: dir "${array_ref}" dirs "*" 	, respectcase				
-		foreach folder of local myfiles {
-			clear								
-			set obs 1							
-			gen folder = "`folder'" 					
-			append using ${sub_mod_output}.dta						
-			save ${sub_mod_output}.dta,replace						
+	clear
+	set obs 1
+	gen known_array == "`known_array'"
+	if  known_array == "" {
+		noi	di as text"# Module #1 - determing most likely genotyping array from "as result"${input}.bim"
+		qui di as text"# > importing ........................................... "as result"${input}.bim"
+		qui {
+			global sub_mod_output tempfile-module1-01
+			noi bim2dta,bim(${input})
+			rename snp rsid
+			keep rsid
+			sort rsid
+			save ${sub_mod_output}.dta, replace
 			}
-		drop if folder == ""
-		foreach i of num 1/20 {
-			append using ${sub_mod_output}.dta
+		qui di as text"# > calculate overlap with references and reporting to .. "as result"${output}.arraymatch"
+		qui {
+			global sub_mod_input  tempfile-module1-01
+			global sub_mod_output tempfile-module1-02
+			file open myfile using "${output}.arraymatch", write replace
+			file write myfile "Array:Overlap:SNPsinModel:Jaccard Index" _n
+			file close myfile
+			clear
+			set obs 1								
+			gen folder = ""							
+			save ${sub_mod_output}.dta,replace
+			local myfiles: dir "${array_ref}" dirs "*" 	, respectcase				
+			foreach folder of local myfiles {
+				clear								
+				set obs 1							
+				gen folder = "`folder'" 					
+				append using ${sub_mod_output}.dta						
+				save ${sub_mod_output}.dta,replace						
+				}
+			drop if folder == ""
+			foreach i of num 1/20 {
+				append using ${sub_mod_output}.dta
+				}
+			erase ${sub_mod_output}.dta
+			sort folder
+			drop if folder == ""
+			egen obs = seq(),by(folder)
+			gen a = ""
+			replace a = `"use ${sub_mod_input}.dta, clear"'     if obs == 1 
+			replace a = `"merge m:m rsid using ${array_ref}\"' + folder + "\" + folder + ".dta"  if obs == 2 
+			replace a = `"count if _merge == 3"' if obs == 3
+			replace a = `"global ab \`r(N)'"' if obs == 4
+			replace a = `"gen ab = \${ab}"' if obs == 5
+			replace a = `"count "' if obs == 6
+			replace a = `"global all \`r(N)'"' if obs == 7
+			replace a = `"gen all = \${all}"' if obs == 8
+			replace a = `"gen JaccardIndex = ab/all"' if obs == 9 
+			replace a = `"sum JaccardIndex"' if obs == 10
+			replace a = `"global ji \`r(min)'"' if obs == 11 
+			replace a = `"di"... "' + folder + `" overlap = \${ab} of \${all}""' if obs == 12 
+			replace a = `"filei + ""' + folder + `":\${ab}:\${all}:\${ji}" \${output}.arraymatch"' if obs == 13 
+			outsheet a using ${sub_mod_input}.do, non noq replace
+			do ${sub_mod_input}.do
+			erase ${sub_mod_input}.dta
+			import delim using "${output}.arraymatch", clear delim(":") varnames(1) case(preserve)
+			gsort -J
+			gen MostLikely = "+++" in 1
+			replace MostLikely = "++" if J > 0.9 & MostLikely == ""
+			replace MostLikely = "+" if J > 0.8 & MostLikely == ""
+			outsheet using ${input}.arraymatch, replace noq
+			qui di as text"# > determining most likely array"
+			keep in 1
+			gen a = ""
+			replace a = "global arrayType "
+			outsheet a Array using ${sub_mod_input}.do, non noq replace
+			do ${sub_mod_input}.do
+			erase ${sub_mod_input}.do 
+			replace a = "global Jaccard "
+			outsheet a J using ${sub_mod_input}.do, non noq replace
+			do ${sub_mod_input}.do
+			erase ${sub_mod_input}.do
 			}
-		erase ${sub_mod_output}.dta
-		sort folder
-		drop if folder == ""
-		egen obs = seq(),by(folder)
-		gen a = ""
-		replace a = `"use ${sub_mod_input}.dta, clear"'     if obs == 1 
-		replace a = `"merge m:m rsid using ${array_ref}\"' + folder + "\" + folder + ".dta"  if obs == 2 
-		replace a = `"count if _merge == 3"' if obs == 3
-		replace a = `"global ab \`r(N)'"' if obs == 4
-		replace a = `"gen ab = \${ab}"' if obs == 5
-		replace a = `"count "' if obs == 6
-		replace a = `"global all \`r(N)'"' if obs == 7
-		replace a = `"gen all = \${all}"' if obs == 8
-		replace a = `"gen JaccardIndex = ab/all"' if obs == 9 
-		replace a = `"sum JaccardIndex"' if obs == 10
-		replace a = `"global ji \`r(min)'"' if obs == 11 
-		replace a = `"di"... "' + folder + `" overlap = \${ab} of \${all}""' if obs == 12 
-		replace a = `"filei + ""' + folder + `":\${ab}:\${all}:\${ji}" \${output}.arraymatch"' if obs == 13 
-		outsheet a using ${sub_mod_input}.do, non noq replace
-		do ${sub_mod_input}.do
-		erase ${sub_mod_input}.dta
-		import delim using "${output}.arraymatch", clear delim(":") varnames(1) case(preserve)
-		gsort -J
-		gen MostLikely = "+++" in 1
-		replace MostLikely = "++" if J > 0.9 & MostLikely == ""
-		replace MostLikely = "+" if J > 0.8 & MostLikely == ""
-		outsheet using ${input}.arraymatch, replace noq
-		qui di as text"# > determining most likely array"
-		keep in 1
-		gen a = ""
-		replace a = "global arrayType "
-		outsheet a Array using ${sub_mod_input}.do, non noq replace
-		do ${sub_mod_input}.do
-		erase ${sub_mod_input}.do 
-		replace a = "global Jaccard "
-		outsheet a J using ${sub_mod_input}.do, non noq replace
-		do ${sub_mod_input}.do
-		erase ${sub_mod_input}.do
+		qui di as text"# > plotting most likely arrays to ...................... "as result"${output}.arraymatch.png"
+		qui {
+			import delim using ${output}.arraymatch, clear delim(":") case(preserve)
+			keep if _n <10
+			graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) fxsize(200) fysize(100) ///
+			caption("Based on overlap with our reference data (derived from http://www.well.ox.ac.uk/~wrayner/strand/) the best matched ARRAY is ${arrayType}" ///
+							"Jaccard Index of  ${arrayType} = ${Jaccard}")
+			graph export ${output}.arraymatch.png, height(1000) width(4000) as(png) replace 
+			graph export  ${input}.arraymatch.png, height(1000) width(4000) as(png) replace 
+			window manage close graph
+			}
+		noi di as text"# > most likely array (best match) is ................... "as result"${arrayType}" as text " (based on jaccard index = "as result"${Jaccard}"as text")"
+		noi di as text"#########################################################################"
 		}
-	qui di as text"# > plotting most likely arrays to ...................... "as result"${output}.arraymatch.png"
-	qui {
-		import delim using ${output}.arraymatch, clear delim(":") case(preserve)
-		keep if _n <10
-		graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) fxsize(200) fysize(100) ///
-		caption("Based on overlap with our reference data (derived from http://www.well.ox.ac.uk/~wrayner/strand/) the best matched ARRAY is ${arrayType}" ///
-						"Jaccard Index of  ${arrayType} = ${Jaccard}")
+	else {
+		noi	di as text"# Module #1 - determing most likely genotyping array from "as result"set by user"
+		noi di as text"# > array defined by user as  ........................... "as result"`known_array'"
+		global arrayType "`known_array'"
+		qui di as text"# > plotting blank graphs to ............................ "as result"${output}.arraymatch.png"
+
+		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))     
 		graph export ${output}.arraymatch.png, height(1000) width(4000) as(png) replace 
 		graph export  ${input}.arraymatch.png, height(1000) width(4000) as(png) replace 
 		window manage close graph
 		}
-	noi di as text"# > most likely array (best match) is ................... "as result"${arrayType}" as text " (based on jaccard index = "as result"${Jaccard}"as text")"
-	noi di as text"#########################################################################"
 	}
 qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 	noi di as text" "
@@ -237,43 +253,57 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		noi bim2count, bim(${sub_mod_output})
 		}	
 	qui di as text"#########################################################################"
-	noi di as text"# > update build to ..................................... "as result"hg19+1"
-	qui {
+	clear
+	set obs 1
+	gen known_array == "`known_array'"
+	if  known_array == "" {
+		noi di as text"# > update build to ..................................... "as result"hg19+1"
+		qui {
+			global sub_mod_input  tempfile-module2-01
+			global sub_mod_output tempfile-module2-02
+			qui di as text"# >> based on markernames - this array is most likely " as result"${arrayType}"
+			qui di as text"# >> using " as result"${arrayType}" as text " as reference"
+			use ${array_ref}\\${arrayType}\\${arrayType}.dta, clear
+			replace chr = "23" if chr == "X"
+			replace chr = "24" if chr == "Y"
+			replace chr = "26" if chr == "MT"
+			keep rsid chr bp
+			save ${sub_mod_output}_array.dta, replace
+			import delim using ${sub_mod_input}.bim, clear
+			gen obs = _n
+			rename v2 rsid
+			merge 1:1 rsid using ${sub_mod_output}_array.dta
+			erase ${sub_mod_output}_array.dta
+			sort obs
+			drop if _m == 2
+			for var v1 v4: tostring X, replace
+			gen _v1 = chr
+			replace _v1 = v1 if _v1 == ""	
+			gen _v4 = bp
+			replace _v4 = v4 if _v4 == ""
+			outsheet _v1 rsid v3 _v4 v5 v6 using ${sub_mod_input}_update.bim, non noq replace
+			keep if _m == 3
+			qui di as text"# >> limit to overlap via --extract "as result"${sub_mod_output}.extract"
+			qui { 
+				outsheet rsid   using ${sub_mod_output}.extract, non noq replace
+				!$plink --bim ${sub_mod_input}_update.bim --bed ${sub_mod_input}.bed --fam ${sub_mod_input}.fam  --extract ${sub_mod_output}.extract --make-bed --out ${sub_mod_output} 
+				foreach file in bim bed fam  {
+					erase "${sub_mod_input}.`file'"
+					}
+				erase ${sub_mod_input}_update.bim
+				erase ${sub_mod_output}.extract
+				}
+			}	
+		}
+	else {
+		noi di as text"# > known array assumed to be ........................... "as result"hg19+1"
 		global sub_mod_input  tempfile-module2-01
 		global sub_mod_output tempfile-module2-02
-		qui di as text"# >> based on markernames - this array is most likely " as result"${arrayType}"
-		qui di as text"# >> using " as result"${arrayType}" as text " as reference"
-		use ${array_ref}\\${arrayType}\\${arrayType}.dta, clear
-		replace chr = "23" if chr == "X"
-		replace chr = "24" if chr == "Y"
-		replace chr = "26" if chr == "MT"
-		keep rsid chr bp
-		save ${sub_mod_output}_array.dta, replace
-		import delim using ${sub_mod_input}.bim, clear
-		gen obs = _n
-		rename v2 rsid
-		merge 1:1 rsid using ${sub_mod_output}_array.dta
-		erase ${sub_mod_output}_array.dta
-		sort obs
-		drop if _m == 2
-		for var v1 v4: tostring X, replace
-		gen _v1 = chr
-		replace _v1 = v1 if _v1 == ""	
-		gen _v4 = bp
-		replace _v4 = v4 if _v4 == ""
-		outsheet _v1 rsid v3 _v4 v5 v6 using ${sub_mod_input}_update.bim, non noq replace
-		keep if _m == 3
-		qui di as text"# >> limit to overlap via --extract "as result"${sub_mod_output}.extract"
-		qui { 
-			outsheet rsid   using ${sub_mod_output}.extract, non noq replace
-			!$plink --bim ${sub_mod_input}_update.bim --bed ${sub_mod_input}.bed --fam ${sub_mod_input}.fam  --extract ${sub_mod_output}.extract --make-bed --out ${sub_mod_output} 
-			foreach file in bim bed fam  {
-				erase "${sub_mod_input}.`file'"
-				}
-			erase ${sub_mod_input}_update.bim
-			erase ${sub_mod_output}.extract
-			}
-		}	
+		foreach file in bim bed fam {
+			!del "${sub_mod_output}.`file'"
+			!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
+			}			
+		}
 	qui di as text"#########################################################################"
 	noi di as text"# > process varnames"
 	qui {
@@ -422,7 +452,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 		qui {
 			global sub_mod_input  tempfile-module2-05
 			global sub_mod_output tempfile-module2-06
-		  noi bim2dta, bim(${sub_mod_input}_update)
+			noi bim2dta, bim(${sub_mod_input}_update)
 			gen rs = substr(snp`i',1,2)	
 			drop if rs == "rs"
 			count
