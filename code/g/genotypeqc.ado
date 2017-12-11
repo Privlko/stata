@@ -120,7 +120,7 @@ qui { // Module #1 - determining the original genotyping array
 	noi di as text"#########################################################################"
 	clear
 	set obs 1
-	gen known_array == "`known_array'"
+	gen known_array = "`known_array'"
 	if  known_array == "" {
 		noi	di as text"# Module #1 - determing most likely genotyping array from "as result"${input}.bim"
 		qui di as text"# > importing ........................................... "as result"${input}.bim"
@@ -255,7 +255,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 	qui di as text"#########################################################################"
 	clear
 	set obs 1
-	gen known_array == "`known_array'"
+	gen known_array = "`known_array'"
 	if  known_array == "" {
 		noi di as text"# > update build to ..................................... "as result"hg19+1"
 		qui {
