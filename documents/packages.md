@@ -44,6 +44,11 @@ net install bim2build,         from(https://raw.github.com/ricanney/stata/master
 
 **remarks** - to run ```genotypeqc``` you will first need to set a number of global parameters. these parameters need to be saved into a flat text file e.g. test.parameters
 
+**version history**
+  - v4 - included a minor allele frequency threshold default = 0.01
+  - v5 - alter maf to mac5 to retain additional "rarer" variation
+  - v6 - convert script to include stand-alone subroutines; bug-fix: duplicate routine now retain one of the duplicated observations
+
 **examples**
 
 ```
