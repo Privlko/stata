@@ -1,6 +1,6 @@
 	program genotypeqc_setarray
 	
-	syntax, name(string asis) array_ref(string asis), bim(string asis)
+	syntax, name(string asis) array_ref(string asis) bim(string asis)
 	
 	!rmdir `array_ref'\\`name' /S /Q
 	!mkdir `array_ref'\\`name'
