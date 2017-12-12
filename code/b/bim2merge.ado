@@ -93,7 +93,7 @@ qui {
 	}
 noi di as text"# > "as input"bim2merge "as text" map snps to common strand "
 qui{
-		foreach data of num 2 / $bim2merge_dataN {
+	foreach data of num 2 / $bim2merge_dataN {
 		noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"data`data'"
 		noi ta gt_data1 gt_data`data',m
 		gen flip`data' = .
@@ -104,20 +104,20 @@ qui{
 		replace flip`data' = 2 if (gt_data1 == "M" & gt_data`data' == "K")
 		drop if flip`data' == .
 		}
-		outsheet snp using intersect.extract, non noq replace
-		noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data1}"
-		noi di as text"# >> create ............................................. "as result"${bim2merge_newname1}"
-		!$plink --bfile ${bim2merge_data1} --extract intersect.extract --make-bed --out ${bim2merge_newname1}
-		foreach data of num 2 / $bim2merge_dataN {
-			noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data`data'}"
-			!$plink --bfile ${bim2merge_data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
-			outsheet snp if flip`data' == 2 using tempfile-data`data'.flip, non noq replace
-			noi di as text"# >> flip strands on .................................... "as result"${data`data'}"
-			noi di as text"# >> create ............................................. "as result"${bim2merge_newname`data'}"
-			!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out ${bim2merge_newname`data'}
-			!del data`data'-intersect.* tempfile-data`data'.flip
-			}
+	outsheet snp using intersect.extract, non noq replace
+	noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data1}"
+	noi di as text"# >> create ............................................. "as result"${bim2merge_newname1}"
+	!$plink --bfile ${bim2merge_data1} --extract intersect.extract --make-bed --out ${bim2merge_newname1}
+	foreach data of num 2 / $bim2merge_dataN {
+		noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data`data'}"
+		!$plink --bfile ${bim2merge_data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
+		outsheet snp if flip`data' == 2 using tempfile-data`data'.flip, non noq replace
+		noi di as text"# >> flip strands on .................................... "as result"${data`data'}"
+		noi di as text"# >> create ............................................. "as result"${bim2merge_newname`data'}"
+		!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out ${bim2merge_newname`data'}
+		!del data`data'-intersect.* tempfile-data`data'.flip
 		}
+	}
 qui di as text"# > plot allele-frequencies between datasets"
 qui {
 	global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
@@ -173,11 +173,10 @@ qui {
 			noi di as text"# " as result "data`data' " as text "build is ........................................ "as result"${data`data'_build}"
 			}
 		else {
-		}
+			}
 		}
 	noi di as text"#########################################################################"	
 	log close
-	}
 	}
 noi di as text"# > move and clean"	
 qui {
