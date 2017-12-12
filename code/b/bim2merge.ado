@@ -54,7 +54,7 @@ qui {
 qui di as text"# > create frequency files"
 qui {
 	foreach num of num 1 / $bim2merge_dataN {
-		noi di as text"# > "as input"bim2merge "as text" - create frequency files ................. " as result "${bim2merge_data`num'}_frq.dta"
+		noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
 		noi bim2frq, bim(${bim2merge_data`num'})
 		}
 	}
