@@ -51,7 +51,7 @@ qui di as text"# > create temp directory"
 qui {
 	noi create_temp_dir
 	}
-qui di as text"# > create frequency files"
+noi di as text"# > "as input"bim2merge "as text" create frq files "
 qui {
 	foreach num of num 1 / $bim2merge_dataN {
 		capture confirm file ${bim2merge_data`num'}_frq.dta 
@@ -91,7 +91,7 @@ qui {
 		for var gt a1 maf: rename X X_data`num'
 		}
 	}
-noi di as text"# > map all snps to a common strand based on data1"
+noi di as text"# > "as input"bim2merge "as text" map snps to common strand "
 qui{
 		foreach data of num 2 / $bim2merge_dataN {
 		noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"data`data'"
@@ -145,7 +145,7 @@ qui {
 		noi bim2count, bim(${bim2merge_data`data'})
 		noi di as text"# data`data'  ......................................... output "as result"${bim2merge_newname`data'}"
 		noi bim2count, bim(${bim2merge_newname`data'})
-		capture confirm file  ${data`data'}.meta-log {
+		capture confirm file  ${data`data'}.meta-log 
 		if !_rc {
 			import delim using  ${data`data'}.meta-log, clear delim("#")
 			keep v2
@@ -172,6 +172,8 @@ qui {
 			noi di as text"# " as result "data`data' " as text "array is ........................................ "as result"${data`data'_array}"
 			noi di as text"# " as result "data`data' " as text "build is ........................................ "as result"${data`data'_build}"
 			}
+		else {
+		}
 		}
 	noi di as text"#########################################################################"	
 	log close
@@ -196,7 +198,7 @@ qui {
 	qui di as text"# > removing temporary folder"
 	qui {
 		cd ..
-		!rmdir ${temp_dir} /s /q 
+		!rmdir ${temp_dir} /S /Q 
 		}
 	}
 noi di as text"#########################################################################"
