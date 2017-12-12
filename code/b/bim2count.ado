@@ -29,17 +29,17 @@ noi checkfile, file(`bim'.bim)
 
 qui di as text"# > importing *.bim file"
 qui { 
-	!$wc -l ${sub_mod_output}.bim  > ${sub_mod_output}.count
-	import delim using ${sub_mod_output}.count, clear varnames(nonames)
-	erase ${sub_mod_output}.count
+	!$wc -l `bim'.bim  > `bim'.count
+	import delim using `bim'.count, clear varnames(nonames)
+	erase `bim'.count
 	split v1,p(" ")
 	destring v11, replace
 	sum v11
 	global bim2count_snp `r(max)'
 	noi di as text"# >> number of SNPs in file ............................. "as result `r(max)'
-	!$wc -l ${sub_mod_output}.fam  > ${sub_mod_output}.count
-	import delim using ${sub_mod_output}.count, clear varnames(nonames)
-	erase ${sub_mod_output}.count
+	!$wc -l `bim'.fam  > `bim'.count
+	import delim using `bim'.count, clear varnames(nonames)
+	erase `bim'.count
 	split v1,p(" ")
 	destring v11, replace
 	sum v11
