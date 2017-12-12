@@ -69,9 +69,11 @@ qui di as text"# > limit to autosome"
 qui {
 	capture confirm file ${bim2merge_data1}_bim.dta 
 	if !_rc {
+		noi di as text"# > "as input"bim2merge "as text"................ marker files already exist " as result "${bim2merge_data1}_bim.dta"
 		use ${bim2merge_data1}_bim.dta ,clear
 		}
 	else {
+		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${bim2merge_data1}_bim.dta"
 		noi bim2dta, bim(${bim2merge_data1})
 		}
 	for var chr bp: tostring X,replace
