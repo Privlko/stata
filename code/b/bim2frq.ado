@@ -54,6 +54,7 @@ qui {
 qui di as text"# > saving file as `bim'_frq.dta"
 qui {
 	save `bim'_frq.dta, replace
+	!del tmp-bim2frq.fr*
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"

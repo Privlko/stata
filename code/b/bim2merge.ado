@@ -28,7 +28,7 @@ qui {
 	split a,p("\")
 	gen a_final = ""
 	for var a1-a_final: replace a_final = X if X!="" 	
-	gen d = "global bim2merge_newname" + b + " " + a_final + "=intersect"
+	gen d = "global bim2merge_newname" + b + " " + a_final + "-intersect"
 	outsheet d using _tmp.do, non noq replace
 	do _tmp.do
 	erase _tmp.do
@@ -117,9 +117,10 @@ qui {
 		}
 	}
 noi di as text"# > "as input"bim2merge "as text" create log to ............................ " as result "`project'.log"
+x
 qui { 
 	*log using `project'.log, replace
-	log using project.log, replace
+	*log using project.log, replace
 	noi di as text"#########################################################################"
 	noi di as text"# Polygenic Risk Score Processing Report - from GWAS + GENOTYPE > PROFILE"                                                                
 	noi di as text"#########################################################################"
@@ -128,12 +129,12 @@ qui {
 	noi di as text"#########################################################################"			
 	noi di as text"# merge details for `project' "
 	noi di as text"#########################################################################"
-	foreach num of num 1 / $bim2merge_dataN {
-		noi di as text"# data`num'  .......................................... input "as result"${bim2merge_data`num'}"
-		noi bim2count, bim(${bim2merge_data`num'})
-		noi di as text"# data`num'  ........................................... output "as result"${bim2merge_newname`num'}"
-		noi bim2count, bim(${bim2merge_newname`num'})
-		import delim using  ${data`num'}.meta-log, clear delim("#")
+	foreach data of num 1 / $bim2merge_dataN {
+		noi di as text"# data`data'  .......................................... input "as result"${bim2merge_data`data'}"
+		noi bim2count, bim(${bim2merge_data`data'})
+		noi di as text"# data`data'  .......................................... output "as result"${bim2merge_newname`data'}"
+		noi bim2count, bim(${bim2merge_newname`data'})
+		import delim using  ${data`data'}.meta-log, clear delim("#")
 		keep v2
 		foreach num of num 1/50 {
 			replace  v2 = subinstr(v2, "..", "$",.)
@@ -147,16 +148,16 @@ qui {
 		replace  v2 = subinstr(v2, "  ", " ",.)
 		split v2,p(" $ ")
 		gen a = ""
-		replace a = "global data`num'_file "  + `"""' + v22 + `"""' if v21 == "Input File" 
-		replace a = "global data`num'_array " + `"""' + v22 + `"""' if v21 == "Input Array (Approximated)" 
-		replace a = "global data`num'_build " + `"""' + v22 + `"""' if v21 == "Output Genome Build"  
+		replace a = "global data`data'_file "  + `"""' + v22 + `"""' if v21 == "Input File" 
+		replace a = "global data`data'_array " + `"""' + v22 + `"""' if v21 == "Input Array (Approximated)" 
+		replace a = "global data`data'_build " + `"""' + v22 + `"""' if v21 == "Output Genome Build"  
 		drop if a == ""
 		outsheet a using tempfile.do, non noq replace
 		do tempfile.do
 		erase tempfile.do
-		noi di as text"# " as result "data`num' " as text ".................................................. "as result"${data`num'_file}"
-		noi di as text"# " as result "data`num' " as text "array is ......................................... "as result"${data`num'_array}"
-		noi di as text"# " as result "data`num' " as text "build is ......................................... "as result"${data`num'_build}"
+		noi di as text"# " as result "data`data' " as text ".................................................. "as result"${data`data'_file}"
+		noi di as text"# " as result "data`data' " as text "array is ......................................... "as result"${data`data'_array}"
+		noi di as text"# " as result "data`data' " as text "build is ......................................... "as result"${data`data'_build}"
 		}
 	noi di as text"#########################################################################"	
 	log close
