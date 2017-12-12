@@ -1,6 +1,6 @@
 d get_stata_bundle - command to get stata packages from https://github.com/ricanney/stata
 d Richard Anney  Cardiff University
-d Distribution-Date: 07dec2017
+d Distribution-Date: 12dec2017
 
 f get_stata_bundle.ado
 f ../_/_sub_genotypeqc_meta.ado     
@@ -13,6 +13,7 @@ f ../b/bim2frq.ado
 f ../b/bim2hapmap.ado     
 f ../b/bim2ld_subset.ado     
 f ../b/bim2ldexclude.ado     
+f ../b/bim2merge.ado     
 f ../c/checkfile.ado     
 f ../c/checktabbed.ado     
 f ../c/create_temp_dir.ado     

@@ -8,3 +8,4 @@ p bim2frq  a command to create _frq.dta (plink-format marker files) from plink b
 p bim2hapmap command to use plink-format genotype files to plot againsts hapmap ancestries and define ancestral similarities to a defined hapmap set
 p bim2ld_subset a command to use *.bim files (plink-format marker files) to generate a subset of ld independent snps (_subset#.extract)
 p bim2ldexclude command to generate ld-exclude regions for plink
+p bim2merge command to merge bim files

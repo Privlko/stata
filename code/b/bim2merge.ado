@@ -11,8 +11,7 @@ qui di as text"# > define files to merge"
 qui {
 	clear
 	set obs 1
-	*gen a = "`bim',`ref_bim'"
-	gen a = "${data1},${data2},${data3},${kg_ref}"
+	gen a = "`ref_bim',`bim'"
 	split a,p(",")
 	drop a
 	gen x = 1
@@ -98,11 +97,12 @@ qui{
 		!$plink --bfile ${bim2merge_data1} --extract intersect.extract --make-bed --out ${bim2merge_newname1}
 		foreach data of num 2 / $bim2merge_dataN {
 			noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data`data'}"
-			!$plink --bfile ${bim2merge_data`data'} --extract intersect.extract --make-bed --out data`data'-intersect_part1
+			!$plink --bfile ${bim2merge_data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
 			outsheet snp if flip`data' == 2 using tempfile-data`data'.flip, non noq replace
 			noi di as text"# >> flip strands on .................................... "as result"${data`data'}"
 			noi di as text"# >> create ............................................. "as result"${bim2merge_newname`data'}"
 			!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out ${bim2merge_newname`data'}
+			!del data`data'-intersect.* tempfile-data`data'.flip
 			}
 		}
 qui di as text"# > plot allele-frequencies between datasets"
@@ -112,15 +112,13 @@ qui {
 		replace maf_data`data' = 1- maf_data`data' if flip`data' == 2
 		replace maf_data`data' = 1- maf_data`data' if a1_data1 != a1_data`data'
 		noi di as text"# >> plot two-way scatter of allele frq betweeen data1 and "as result"data`data'"as text" to "as result"tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph"
-		tw scatter maf_data1 maf_data`data', ${format} caption("data1 = ${bim2merge_data1}""data`data' = ${bim2merge_data`num'}") saving(tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
+		tw scatter maf_data1 maf_data`data', ${format} caption("data1 = ${bim2merge_data1}""data`data' = ${bim2merge_data`data'}") saving(tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
 		window manage close graph
 		}
 	}
 noi di as text"# > "as input"bim2merge "as text" create log to ............................ " as result "`project'.log"
-x
 qui { 
-	*log using `project'.log, replace
-	*log using project.log, replace
+	log using `project'.log, replace
 	noi di as text"#########################################################################"
 	noi di as text"# Polygenic Risk Score Processing Report - from GWAS + GENOTYPE > PROFILE"                                                                
 	noi di as text"#########################################################################"
@@ -132,71 +130,56 @@ qui {
 	foreach data of num 1 / $bim2merge_dataN {
 		noi di as text"# data`data'  .......................................... input "as result"${bim2merge_data`data'}"
 		noi bim2count, bim(${bim2merge_data`data'})
-		noi di as text"# data`data'  .......................................... output "as result"${bim2merge_newname`data'}"
+		noi di as text"# data`data'  ......................................... output "as result"${bim2merge_newname`data'}"
 		noi bim2count, bim(${bim2merge_newname`data'})
-		import delim using  ${data`data'}.meta-log, clear delim("#")
-		keep v2
-		foreach num of num 1/50 {
-			replace  v2 = subinstr(v2, "..", "$",.)
+		capture confirm file  ${data`data'}.meta-log {
+		if !_rc {
+			import delim using  ${data`data'}.meta-log, clear delim("#")
+			keep v2
+			foreach num of num 1/50 {
+				replace  v2 = subinstr(v2, "..", "$",.)
+				}
+			replace  v2 = subinstr(v2, "$.", "$",.)
+			foreach num of num 1/50 {
+				replace  v2 = subinstr(v2, "$$", "$",.)
+				}
+			replace  v2 = subinstr(v2, "  ", " ",.)
+			replace  v2 = subinstr(v2, "  ", " ",.)
+			replace  v2 = subinstr(v2, "  ", " ",.)
+			split v2,p(" $ ")
+			gen a = ""
+			replace a = "global data`data'_file "  + `"""' + v22 + `"""' if v21 == "Input File" 
+			replace a = "global data`data'_array " + `"""' + v22 + `"""' if v21 == "Input Array (Approximated)" 
+			replace a = "global data`data'_build " + `"""' + v22 + `"""' if v21 == "Output Genome Build"  
+			drop if a == ""
+			outsheet a using tempfile.do, non noq replace
+			do tempfile.do
+			erase tempfile.do
+			noi di as text"# " as result "data`data' " as text "................................................. "as result"${data`data'_file}"
+			noi di as text"# " as result "data`data' " as text "array is ........................................ "as result"${data`data'_array}"
+			noi di as text"# " as result "data`data' " as text "build is ........................................ "as result"${data`data'_build}"
 			}
-		replace  v2 = subinstr(v2, "$.", "$",.)
-		foreach num of num 1/50 {
-			replace  v2 = subinstr(v2, "$$", "$",.)
-			}
-		replace  v2 = subinstr(v2, "  ", " ",.)
-		replace  v2 = subinstr(v2, "  ", " ",.)
-		replace  v2 = subinstr(v2, "  ", " ",.)
-		split v2,p(" $ ")
-		gen a = ""
-		replace a = "global data`data'_file "  + `"""' + v22 + `"""' if v21 == "Input File" 
-		replace a = "global data`data'_array " + `"""' + v22 + `"""' if v21 == "Input Array (Approximated)" 
-		replace a = "global data`data'_build " + `"""' + v22 + `"""' if v21 == "Output Genome Build"  
-		drop if a == ""
-		outsheet a using tempfile.do, non noq replace
-		do tempfile.do
-		erase tempfile.do
-		noi di as text"# " as result "data`data' " as text ".................................................. "as result"${data`data'_file}"
-		noi di as text"# " as result "data`data' " as text "array is ......................................... "as result"${data`data'_array}"
-		noi di as text"# " as result "data`data' " as text "build is ......................................... "as result"${data`data'_build}"
 		}
 	noi di as text"#########################################################################"	
 	log close
 	}
 	}
-qui { // Module #9 - plot manhattan of intersect
-	noi di as text" "
-	noi di as text"#########################################################################"
-	noi di as text"# Module #9 - make meta-log"	
-	noi di as text"# Started: $S_DATE $S_TIME                                               "
-	noi di as text"# > plot manhattan of intersect"
-	qui {
-		use tempfile-combined.dta, clear
-		graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
-		graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
-		graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
-		window manage close graph
-		}	
-	}
-qui { // Module #10 - rename and clean
-	noi di as text" "
-	noi di as text"#########################################################################"
-	noi di as text"# Module #10 - move and clean"	
-	noi di as text"# Started: $S_DATE $S_TIME                                               "
-	qui {
-		foreach data of num 1 / $Ndata {	
-			!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
-			!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
+noi di as text"# > move and clean"	
+qui {
+	foreach data of num 1 / $bim2merge_dataN {
+		foreach file in bed bim fam {
+			!copy "${bim2merge_newname`data'}.`file'"   "..\\${bim2merge_newname`data'}.`file'"
+			}
+		capture confirm file "tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph" 
+		if !_rc {
 			graph use "tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph" 
-			graph export "..\\${gwas_short}-by-${project_name}_sanity-check-gwas-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
+			graph export "..\\`project'_sanity-check-data1-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
 			window manage close graph
 			}
-		foreach threshold in $thresholds {
-			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
-			!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
+		else {
 			}
-		!copy "tempfile.log"               "..\\${gwas_short}-by-${project_name}.meta-log"
-		!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-by-${project_name}_intersect_manhattan.png"
-		}
+		!copy "`project'.log"               "..\\`project'.log.meta-log"
+		}	
 	qui di as text"# > removing temporary folder"
 	qui {
 		cd ..
