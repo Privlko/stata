@@ -54,13 +54,26 @@ qui {
 qui di as text"# > create frequency files"
 qui {
 	foreach num of num 1 / $bim2merge_dataN {
-		noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
-		noi bim2frq, bim(${bim2merge_data`num'})
+		capture confirm file ${bim2merge_data`num'}_frq.dta 
+		if !_rc {
+			noi di as text"# > "as input"bim2merge "as text"............. frequency files already exist " as result "${bim2merge_data`num'}_frq.dta"
+			}
+		else {
+			noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
+			noi bim2frq, bim(${bim2merge_data`num'})
+			}
+
 		}
 	}
 qui di as text"# > limit to autosome"
 qui {
-	noi bim2dta, bim(${bim2merge_data1})
+	capture confirm file ${bim2merge_data1}_bim.dta 
+	if !_rc {
+		use ${bim2merge_data1}_bim.dta ,clear
+		}
+	else {
+		noi bim2dta, bim(${bim2merge_data1})
+		}
 	for var chr bp: tostring X,replace
 	drop if chr == "23" | chr == "24" | chr == "25"
 	}
