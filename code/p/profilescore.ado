@@ -426,9 +426,17 @@ qui { // Module #6 - plot manhattan of intersect
 	noi di as text"# Module #6 - make meta-log"	
 	noi di as text"# > plot manhattan of intersect"
 	qui {
-		noi bim2dta, bim(kg_ref)
+	capture confirm file ${kg_ref}_bim.dta
+	if !_rc {
+		noi di as text"# > "as input"bim2merge "as text"................ marker files already exist " as result "${kg_ref}_bim.dta"
+
+		}
+	else {
+		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${kg_ref}_bim.dta"
+		noi bim2dta, bim(${kg_ref}_bim.dta)
+		}
 		use tempfile-gwas.dta, clear
-		merge 1:1 snp using kg_ref_bim.dta
+		merge 1:1 snp using ${kg_ref}_bim.dta
 		graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
 		graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
 		graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace

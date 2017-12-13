@@ -62,7 +62,6 @@ qui {
 			noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
 			noi bim2frq, bim(${bim2merge_data`num'})
 			}
-
 		}
 	}
 qui di as text"# > limit to autosome"
