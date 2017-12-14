@@ -296,7 +296,7 @@ qui { // Module #3 - create profile scores
 									--score         tempfile-P`threshold'.score  ///
 									--q-score-file  tempfile-P`threshold'.q-score-file ///
 									--q-score-range tempfile-P`threshold'.q-score-range ///
-									--out           ${profilescore_data`data'}
+									--out           data`data'
 					}
 				}
 			}
@@ -310,7 +310,7 @@ qui { // Module #4 - combine profile scores into single file
 		noi di as text"# > join profile files into single file ................. " as result"${profilescore_data`data'}-final-profiles.dta"
 		noi fam2dta, fam(${profilescore_data`data'})
 		keep fid iid sex
-		save ${profilescore_data`data'}-final-profiles.dta, replace
+		save data`data'-final-profiles.dta, replace
 		qui di as text"# >> converting thresholds to varnames"
 		foreach threshold in $thresholds {
 			clear
@@ -322,18 +322,18 @@ qui { // Module #4 - combine profile scores into single file
 			do tempfile.do
 			erase tempfile.do
 			noi di as text"# >> import data for ${profilescore_data`data'}.P`threshold'.profile"
-			!$tabbed           ${profilescore_data`data'}.P`threshold'.profile
-			import delim using ${profilescore_data`data'}.P`threshold'.profile.tabbed, case(lower) clear
-			erase ${profilescore_data`data'}.P`threshold'.profile
-			erase ${profilescore_data`data'}.P`threshold'.profile.tabbed
+			!$tabbed           data`data'.P`threshold'.profile
+			import delim using data`data'.P`threshold'.profile.tabbed, case(lower) clear
+			erase data`data'.P`threshold'.profile
+			erase data`data'.P`threshold'.profile.tabbed
 			keep fid - score
 			for var fid iid: tostring X, replace
 			for var cnt cnt2 score: rename X ${tag}_X
-			merge 1:1 fid iid using ${profilescore_data`data'}-final-profiles.dta
+			merge 1:1 fid iid using data`data'-final-profiles.dta
 			drop _m
 			order fid iid sex 
-			save ${profilescore_data`data'}-final-profiles.dta, replace
-			outsheet using ${profilescore_data`data'}-final-profiles.csv, comma noq replace
+			save           data`data'-final-profiles.dta, replace
+			outsheet using data`data'-final-profiles.csv, comma noq replace
 			}
 		}
 	}
@@ -436,14 +436,26 @@ qui { // Module #6 - plot manhattan of intersect
 		}
 	else {
 	}
+	}
 qui { // Module #7 - rename and clean
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #7 - move and clean"	
 	qui {
-		foreach data of num 1 / $Ndata {	
-			!copy "${profilescore_data`data'}-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
-			!copy "${profilescore_data`data'}-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
+		foreach data of num 1 / $Ndata {
+			clear
+			set obs 1
+			gen a = "${data`data'}"
+			split a, p("\")
+			gen a999 = ""
+			for var a1-a999: replace a999 = X 
+			replace a999 = "global profilescore_data`data'_short " + a999
+			replace a999 = subinstr(a999, "-intersect", "",.)
+			outsheet a999 using tmp.do, non noq replace
+			do tmp.do
+			erase tmp.do
+			!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${profilescore_data`data'_short}_profiles.dta"
+			!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${profilescore_data`data'_short}_profiles.csv"
 			}
 		foreach threshold in $thresholds {
 			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
