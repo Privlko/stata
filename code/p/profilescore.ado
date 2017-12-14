@@ -350,7 +350,7 @@ qui { // Module #5 - make meta-log
 	noi di as text"#########################################################################"
 	noi di as text"# Module #5 - make meta-log"	
 	qui { 
-		log using tempfile.log, replace
+		log using "..\\${gwas_short}-profilescore.meta-log", replace
 		noi di as text"#########################################################################"
 		noi di as text"# Polygenic Risk Score Processing Report - from GWAS + GENOTYPE > PROFILE"                                                                
 		noi di as text"#########################################################################"
@@ -409,7 +409,7 @@ qui { // Module #5 - make meta-log
 			foreach data of num 1 / $Ndata {
 				noi di as text"# data`data' ................................................. "as result"${${profilescore_data`data'}}"
 				noi bim2count, bim(${profilescore_data`data'})
-				noi di as text"# >> data`data' profiles stored in ........................... "as result"${gwas_short}-by-${project_name}_data`data'_profiles.dta"
+				noi di as text"# >> data`data' profiles stored in ........................... "as result"${gwas_short}-by-${profilescore_data`data'_short}_profiles.dta"
 				}
 			}
 		noi di as text"#########################################################################"	
@@ -438,12 +438,12 @@ qui { // Module #6 - plot manhattan of intersect
 			merge 1:1 snp using ${profilescore_kg_ref}_bim.dta
 			graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
 			graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
-			graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
+			graph export "..\\${gwas_short}-profilescore-manhattan.png", as(png) height(2000) width(4000) replace
 			window manage close graph
 			}	
 		}
 	else {
-	}
+		}
 	}
 qui { // Module #7 - rename and clean
 	noi di as text" "
@@ -468,11 +468,9 @@ qui { // Module #7 - rename and clean
 		foreach threshold in $thresholds {
 			!mkdir ..\score
 			!mkdir ..\q-score-file
-			!copy "tempfile-P`threshold'.score"          ".\score\\${gwas_short}_P`threshold'.score"
+			!copy "tempfile-P`threshold'.score"          "..\score\\${gwas_short}_P`threshold'.score"
 			!copy "tempfile-P`threshold'.q-score-file"   "..\q-score-file\\${gwas_short}_P`threshold'.q-score-file"
 			}
-		!copy "tempfile.log"                 "..\\${gwas_short}-profilescore.meta-log"
-		!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-profilescore-manhattan.png"
 		}
 	qui di as text"# > removing temporary folder"
 	qui {
