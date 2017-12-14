@@ -33,19 +33,21 @@ qui {
 	erase _tmp.do
 	}
 noi di as text"# > check path of input files is true"
+noi di as text"# "
 qui{
 	count
 	global bim2merge_dataN `r(N)'
 	foreach num of num 1 / $bim2merge_dataN {
-		noi checkfile, file(${bim2merge_data`num'}.bim)
-		noi checkfile, file(${bim2merge_data`num'}.bed)
-		noi checkfile, file(${bim2merge_data`num'}.fam)
+		checkfile, file(${bim2merge_data`num'}.bim)
+		checkfile, file(${bim2merge_data`num'}.bed)
+		checkfile, file(${bim2merge_data`num'}.fam)
 		}
 	}	
 noi di as text"# > check path of dependent software is true"
+noi di as text"# "
 qui { 
-	noi checkfile, file(${plink})
-	noi checktabbed
+	checkfile, file(${plink})
+	checktabbed
 	}
 qui di as text"# > create temp directory"
 qui {
@@ -60,7 +62,8 @@ qui {
 			}
 		else {
 			noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
-			noi bim2frq, bim(${bim2merge_data`num'})
+			noi di as text"# "
+			bim2frq, bim(${bim2merge_data`num'})
 			}
 		}
 	}
@@ -73,7 +76,8 @@ qui {
 		}
 	else {
 		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${bim2merge_data1}_bim.dta"
-		noi bim2dta, bim(${bim2merge_data1})
+		noi di as text"# "
+		bim2dta, bim(${bim2merge_data1})
 		}
 	for var chr bp: tostring X,replace
 	drop if chr == "23" | chr == "24" | chr == "25"
@@ -141,14 +145,15 @@ qui {
 	noi di as text"#########################################################################"			
 	noi di as text"# merge details for `project' "
 	noi di as text"#########################################################################"
-	foreach data of num 1 / $bim2merge_dataN {
-		noi di as text"# data`data'  .......................................... input "as result"${bim2merge_data`data'}"
-		noi bim2count, bim(${bim2merge_data`data'})
-		noi di as text"# data`data'  ......................................... output "as result"${bim2merge_newname`data'}"
-		noi bim2count, bim(${bim2merge_newname`data'})
+	noi di as text"# reference genotypes ........................................ "as result"`ref_bim'"
+	noi di as text"# .................................. overlapping data in model "as result"${bim2merge_newname1}"
+	noi bim2count, bim(${`ref_bim'})
+	noi bim2count, bim(${bim2merge_newname1})
+	foreach data of num 2 / $bim2merge_dataN {
 		capture confirm file  ${data`data'}.meta-log 
+		qui { 
 		if !_rc {
-			import delim using  ${data`data'}.meta-log, clear delim("#")
+			import delim using  ${data`data'}-genotypeqc.meta-log, clear delim("#")
 			keep v2
 			foreach num of num 1/50 {
 				replace  v2 = subinstr(v2, "..", "$",.)
@@ -169,12 +174,23 @@ qui {
 			outsheet a using tempfile.do, non noq replace
 			do tempfile.do
 			erase tempfile.do
-			noi di as text"# " as result "data`data' " as text "................................................. "as result"${data`data'_file}"
-			noi di as text"# " as result "data`data' " as text "array is ........................................ "as result"${data`data'_array}"
-			noi di as text"# " as result "data`data' " as text "build is ........................................ "as result"${data`data'_build}"
 			}
 		else {
+			global data`data'_file 		"-"
+			global data`data'_array		"-"	
+			global data`data'_build		"-"	
 			}
+		}
+		noi di as text"#########################################################################"
+		noi di as text"# data`data' ................................................. "as result"${data`data'_file}"
+		noi di as text"# ....................................................array is "as result"${data`data'_array}"
+		noi di as text"# ...................................................... input "as result"${bim2merge_data`data'}"
+		noi di as text"# .................................. overlapping data in model "as result"${bim2merge_newname`data'}"
+		noi bim2count, bim(${bim2merge_data`data'})
+		noi bim2count, bim(${bim2merge_newname`data'})
+		}
+	else {
+		}
 		}
 	noi di as text"#########################################################################"	
 	log close
@@ -214,7 +230,7 @@ qui {
 			}
 		else {
 			}
-		!copy "`project'.log"               "..\\`project'.log.meta-log"
+		!copy "`project'.log"               "..\\`project'-bim2merge.meta-log"
 		}	
 	qui di as text"# > removing temporary folder"
 	qui {

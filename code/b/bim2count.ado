@@ -25,10 +25,9 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
 noi di as text"# > "as input"bim2count "as text"........................................... "as result"`bim'"
-noi checkfile, file(`bim'.bim)
-
-qui di as text"# > importing *.bim file"
 qui { 
+	noi checkfile, file(`bim'.bim)
+	qui di as text"# > importing *.bim file"
 	!$wc -l `bim'.bim  > bim.count
 	import delim using bim.count, clear varnames(nonames)
 	erase bim.count
@@ -37,6 +36,10 @@ qui {
 	sum v11
 	global bim2count_snp `r(max)'
 	noi di as text"# >> number of SNPs in file ............................. "as result `r(max)'
+	}
+qui {
+	noi checkfile, file(`bim'.fam)
+	qui di as text"# > importing *.fam file"
 	!$wc -l `bim'.fam  > fam.count
 	import delim using fam.count, clear varnames(nonames)
 	erase fam.count

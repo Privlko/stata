@@ -1283,7 +1283,7 @@ qui { // Module #9 - rename and clean
 	qui di as text"# > move files to data directory"
 	qui {
 		!copy "${sub_mod_output}-quality-control-report.docx"   "${output}.quality-control-report.docx"
-		!copy "${sub_mod_output}.meta-log"                      "${output}.meta-log"
+		!copy "${sub_mod_output}.meta-log"                      "${output}-genotypeqc.meta-log"
 		!copy "${sub_mod_output}.bed"                           "${output}.bed"
 		!copy "${sub_mod_output}.bim"                           "${output}.bim"
 		!copy "${sub_mod_output}.fam"                           "${output}.fam"
@@ -1303,7 +1303,7 @@ qui { // Module #9 - rename and clean
 		!copy "${output}.bim"                           "${output_2}.bim"
 		!copy "${output}.fam"                           "${output_2}.fam"
 		!copy "${output}_CEU_TSI-like.keep"             "${output_2}_CEU_TSI-like.keep  "
-		!copy "${output}.meta-log"                      "${output_2}.meta-log"
+		!copy "${output}.meta-log"                      "${output_2}-genotypeqc.meta-log"
 		!copy "${output}.quality-control-report.docx"   "${output_2}.quality-control-report.docx"
 		!del  ${output}*
 		}

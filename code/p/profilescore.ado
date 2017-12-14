@@ -458,11 +458,13 @@ qui { // Module #7 - rename and clean
 			!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${profilescore_data`data'_short}_profiles.csv"
 			}
 		foreach threshold in $thresholds {
-			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
-			!copy "tempfile-P`threshold'.q-score-file"   "..\\${gwas_short}-by-${project_name}_P`threshold'.q-score-file"
+			!mkdir ..\score
+			!mkdir ..\q-score-file
+			!copy "tempfile-P`threshold'.score"          ".\score\${gwas_short}_P`threshold'.score"
+			!copy "tempfile-P`threshold'.q-score-file"   "..\q-score-file\${gwas_short}_P`threshold'.q-score-file"
 			}
-		!copy "tempfile.log"                 "..\\${gwas_short}-by-${project_name}-profilescore.meta-log"
-		!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-by-${project_name}-profilescore-manhattan.png"
+		!copy "tempfile.log"                 "..\\${gwas_short}-profilescore.meta-log"
+		!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-profilescore-manhattan.png"
 		}
 	qui di as text"# > removing temporary folder"
 	qui {
