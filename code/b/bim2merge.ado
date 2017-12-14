@@ -147,7 +147,7 @@ qui {
 	noi di as text"#########################################################################"
 	noi di as text"# reference genotypes ........................................ "as result"`ref_bim'"
 	noi di as text"# .................................. overlapping data in model "as result"${bim2merge_newname1}"
-	noi bim2count, bim(${`ref_bim'})
+	noi bim2count, bim(`ref_bim')
 	noi bim2count, bim(${bim2merge_newname1})
 	foreach data of num 2 / $bim2merge_dataN {
 		capture confirm file  ${data`data'}.meta-log 
