@@ -108,7 +108,7 @@ qui { // Module #1 - processing genotype data
 		replace a = subinstr(a, ",$$", `"""',.)
 		outsheet a using tmp.do, non noq replace
 		do tmp.do
-		noi bim2merge , bim(${data_list}) ref_bim(${kg_ref}) project(${gwas_short}-by-${project_name})
+		noi bim2merge , bim(${data_list}) ref_bim(${kg_ref}) project(${project_name})
 		qui di as text"# > define new globals for downstream processing - also save redundent copy"
 		qui { // kg_ref
 			global profilescore_kg_ref ${bim2merge_newname1}
@@ -350,7 +350,7 @@ qui { // Module #5 - make meta-log
 	noi di as text"#########################################################################"
 	noi di as text"# Module #5 - make meta-log"	
 	qui { 
-		log using "..\\${gwas_short}-profilescore.meta-log", replace
+		log using tempfile.log, replace
 		noi di as text"#########################################################################"
 		noi di as text"# Polygenic Risk Score Processing Report - from GWAS + GENOTYPE > PROFILE"                                                                
 		noi di as text"#########################################################################"
@@ -449,6 +449,8 @@ qui { // Module #7 - rename and clean
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# Module #7 - move and clean"	
+			!copy "tempfile.log" "..\\${gwas_short}-${project_name}-profilescore.meta-log"
+
 	qui {
 		foreach data of num 1 / $Ndata {
 			clear
