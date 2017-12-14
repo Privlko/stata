@@ -194,7 +194,7 @@ qui {
 				}
 			drop if b == ""
 			outsheet b using tmp.merge-list, non noq replace
-			!$plink --bfile ${bim2merge_newname2} --merge-list tmp.merge-list --make-bed --out `project'
+			!$plink --bfile ${bim2merge_newname2} --merge-list tmp.merge-list --make-bed --out ..\\`project'
 			erase tmp.merge-list
 			}
 		else {
