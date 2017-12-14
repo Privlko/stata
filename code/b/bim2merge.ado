@@ -42,13 +42,13 @@ qui{
 		checkfile, file(${bim2merge_data`num'}.fam)
 		}
 	}	
-noi di as text"# "
+noi di as text" "
 noi di as text"# > check path of dependent software is true"
 qui { 
 	checkfile, file(${plink})
 	checktabbed
 	}
-noi di as text"# "
+noi di as text" "
 qui di as text"# > create temp directory"
 qui {
 	noi create_temp_dir
@@ -99,7 +99,9 @@ qui {
 noi di as text"# > "as input"bim2merge "as text" map snps to common strand "
 qui{
 	foreach data of num 2 / $bim2merge_dataN {
-		noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"data`data'"
+		noi di as text"# >> cross-tabulate "
+		noi di as text"# ................................................. data1 "as result"${bim2merge_data1}"
+		noi di as text"# ..................................................data`data' "as result"${bim2merge_data`data'}"
 		noi ta gt_data1 gt_data`data',m
 		gen flip`data' = .
 		replace flip`data' = 1 if (gt_data1 == gt_data`data') 
@@ -110,17 +112,16 @@ qui{
 		drop if flip`data' == .
 		}
 	outsheet snp using intersect.extract, non noq replace
-	noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data1}"
-	noi di as text"# >> create ............................................. "as result"${bim2merge_newname1}"
+	noi di as text"# >> processing ........................................ "as result"${bim2merge_data1}"
 	!$plink --bfile ${bim2merge_data1} --extract intersect.extract --make-bed --out ${bim2merge_newname1}
+	noi di as text"# >>> created .......................................... "as result"${bim2merge_newname1}"
 	foreach data of num 2 / $bim2merge_dataN {
-		noi di as text"# >> extract intersect on ............................... "as result"${bim2merge_data`data'}"
+	noi di as text"# >> processing ........................................ "as result"${bim2merge_data`data'}"
 		!$plink --bfile ${bim2merge_data`data'} --extract intersect.extract --make-bed --out data`data'-intersect
 		outsheet snp if flip`data' == 2 using tempfile-data`data'.flip, non noq replace
-		noi di as text"# >> flip strands on .................................... "as result"${data`data'}"
-		noi di as text"# >> create ............................................. "as result"${bim2merge_newname`data'}"
 		!$plink --bfile data`data'-intersect --flip tempfile-data`data'.flip --make-bed --out ${bim2merge_newname`data'}
 		!del data`data'-intersect.* tempfile-data`data'.flip
+		noi di as text"# >>> created .......................................... "as result"${bim2merge_newname`data'}"
 		}
 	}
 qui di as text"# > plot allele-frequencies between datasets"
@@ -129,8 +130,9 @@ qui {
 	foreach data of num 2 / $bim2merge_dataN {
 		replace maf_data`data' = 1- maf_data`data' if flip`data' == 2
 		replace maf_data`data' = 1- maf_data`data' if a1_data1 != a1_data`data'
-		noi di as text"# >> plot two-way scatter of allele frq betweeen data1 and "as result"data`data'"as text" to "as result"tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph"
-		tw scatter maf_data1 maf_data`data', ${format} caption("data1 = ${bim2merge_data1}""data`data' = ${bim2merge_data`data'}") saving(tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph, replace)
+		noi di as text"# >> plot two-way scatter of allele frq betweeen reference and "as result"${bim2merge_newname`data'}"as text" to "as result"bim2merge_newname`data'-sanity-check-allele-frequencies-vs-ref.png"
+		tw scatter maf_data1 maf_data`data', ${format} caption("data1 = ${bim2merge_newname1}""data`data' = ${bim2merge_newname`data'}") 
+		graph export "..\\bim2merge_newname`data'-sanity-check-allele-frequencies-vs-ref.png", as(png) height(500) width(1000) replace
 		window manage close graph
 		}
 	}
@@ -145,8 +147,8 @@ qui {
 	noi di as text"#########################################################################"			
 	noi di as text"# merge details for `project' "
 	noi di as text"#########################################################################"
-	noi di as text"# reference genotypes ........................................ "as result"`ref_bim'"
-	noi di as text"# .................................. overlapping data in model "as result"${bim2merge_newname1}"
+	noi di as text"# reference genotypes .................................. "as result"`ref_bim'"
+	noi di as text"# ............................ overlapping data in model "as result"${bim2merge_newname1}"
 	noi bim2count, bim(`ref_bim')
 	noi bim2count, bim(${bim2merge_newname1})
 	foreach data of num 2 / $bim2merge_dataN {
@@ -183,14 +185,13 @@ qui {
 		}
 		noi di as text"#########################################################################"
 		noi di as text"# data`data' ................................................. "as result"${data`data'_file}"
-		noi di as text"# ....................................................array is "as result"${data`data'_array}"
-		noi di as text"# ...................................................... input "as result"${bim2merge_data`data'}"
-		noi di as text"# .................................. overlapping data in model "as result"${bim2merge_newname`data'}"
+		noi di as text"# .............................................. array is "as result"${data`data'_array}"
+		noi di as text"# ................................................. input "as result"${bim2merge_data`data'}"
+		noi di as text"# ............................. overlapping data in model "as result"${bim2merge_newname`data'}"
 		noi bim2count, bim(${bim2merge_data`data'})
 		noi bim2count, bim(${bim2merge_newname`data'})
 		}
 	else {
-		}
 		}
 	noi di as text"#########################################################################"	
 	log close
@@ -202,7 +203,6 @@ qui {
 		gen a = "`join'"
 		if a == "yes" {
 		noi di as text"# > "as input"bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
-
 			set obs ${bim2merge_dataN}
 			gen b = ""
 			foreach data of num 3 / $bim2merge_dataN {
@@ -222,21 +222,13 @@ qui {
 		foreach file in bed bim fam {
 			!copy "${bim2merge_newname`data'}.`file'"   "..\\${bim2merge_newname`data'}.`file'"
 			}
-		capture confirm file "tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph" 
-		if !_rc {
-			graph use "tempfile-gwas_risk_frq_x_data`data'_risk_frq.gph" 
-			graph export "..\\`project'_sanity-check-data1-vs-data`data'-allele-frequencies.png", as(png) height(500) width(1000) replace
-			window manage close graph
-			}
-		else {
-			}
-		!copy "`project'.log"               "..\\`project'-bim2merge.meta-log"
-		}	
-	qui di as text"# > removing temporary folder"
-	qui {
-		cd ..
-		!rmdir ${temp_dir} /S /Q 
 		}
+	!copy "`project'.log"               "..\\`project'-bim2merge.meta-log"
+	}	
+qui di as text"# > removing temporary folder"
+qui {
+	cd ..
+	!rmdir ${temp_dir} /S /Q 
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
