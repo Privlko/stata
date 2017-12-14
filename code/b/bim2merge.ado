@@ -1,5 +1,5 @@
 program bim2merge
-syntax , bim(string asis) ref_bim(string asis) project(string asis)
+syntax , bim(string asis) ref_bim(string asis) project(string asis) [join(string asis)]
 
 qui di as text"#########################################################################"
 qui di as text"# profilescore_merge_gt - a routine to merge genotype datasets "
@@ -178,6 +178,27 @@ qui {
 		}
 	noi di as text"#########################################################################"	
 	log close
+	}
+qui di as text"# > "as input"bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
+qui { 
+		clear 
+		set obs 1
+		gen a = "`join'"
+		if a == "yes" {
+		noi di as text"# > "as input"bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
+
+			set obs ${bim2merge_dataN}
+			gen b = ""
+			foreach data of num 3 / $bim2merge_dataN {
+				replace b = "${bim2merge_newname`data'}.bed ${bim2merge_newname`data'}.bim ${bim2merge_newname`data'}.fam" in `data'
+				}
+			drop if b == ""
+			outsheet b using tmp.merge-list, non noq replace
+			!$plink --bfile ${bim2merge_newname2} --merge-list tmp.merge-list --make-bed --out `project'
+			erase tmp.merge-list
+			}
+		else {
+		}
 	}
 noi di as text"# > move and clean"	
 qui {
