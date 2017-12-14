@@ -29,6 +29,14 @@ noi di as text"# > "as input"create_temp_dir "as text"................... curren
 qui {
 	clear
 	set obs 52
+	qui { // random seed from - https://www.stata.com/statalist/archive/2008-10/msg00032.html
+		tokenize "`c(current_date)'" ,parse(" ")
+		local seed_1 "`1'"
+		tokenize "`c(current_time)'" ,parse(":")
+		local seed_2 "`1'`3'`5'"
+		local seed_final "`seed_1'`seed_2'"
+		set seed `seed_final'
+		}
 	gen folderRandom = ""
 	foreach num of num 1/10 {
 		gen a = uniform()
