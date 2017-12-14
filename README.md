@@ -4,7 +4,7 @@ They were written to work on a windows 10 machine and STATA 13.1 MP. I am relati
 
 The following pages will hopefully be useful in helping you utilise theseprograms / code-snippets.
 
-* ![1-getting started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)
-* ![2-documentation on packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
-* ![3-performing genotype array quality control](https://github.com/ricanney/stata/blob/master/documents/genotype_array_quality_control.md)
-* ![4-performing polygenic risk scoring](https://github.com/ricanney/stata/blob/master/documents/polygenic_risk_scoring.md)
+* [1-getting started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)
+* [2-documentation on packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+* [3-performing genotype array quality control](https://github.com/ricanney/stata/blob/master/documents/genotype_array_quality_control.md)
+* [4-performing polygenic risk scoring](https://github.com/ricanney/stata/blob/master/documents/polygenic_risk_scoring.md)
