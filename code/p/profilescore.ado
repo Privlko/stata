@@ -192,39 +192,47 @@ qui { // Module #2 - processing GWAS summary data
 		save tempfile-gwas.dta,replace	
 	  noi	di as text"# > merging with ${profilescore_kg_ref}"
 		qui {
-			noi bim2frq, bim(${profilescore_kg_ref})
-			merge 1:1 snp using tempfile-gwas.dta
-			keep if _m == 3
-			noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"${profilescore_kg_ref}"
-			noi ta gt gwas_gt,m
-			gen flip = .
-			replace flip = 1 if (gwas_gt == gt) 
-			replace flip = 2 if (gwas_gt == "R" & gt == "Y")
-			replace flip = 2 if (gwas_gt == "Y" & gt == "R")
-			replace flip = 2 if (gwas_gt == "K" & gt == "M")
-			replace flip = 2 if (gwas_gt == "M" & gt == "K")
-			drop if flip == .
-			noi di as text"# >> map allele code to same strand as .................. "as result"${profilescore_kg_ref}"
-			foreach i in risk alt {
-				gen `i' = gwas_`i'
-				replace `i' = "A" if gwas_`i' == "T" & flip == 2
-				replace `i' = "C" if gwas_`i' == "C" & flip == 2
-				replace `i' = "G" if gwas_`i' == "G" & flip == 2
-				replace `i' = "T" if gwas_`i' == "A" & flip == 2
+			capture confirm file  ${profilescore_kg_ref}_frq.dta 
+			if !_rc {
+				noi di as text"# > "as input"profilescore "as text".......... frequency files already exist "as result"${profilescore_kg_ref}_frq.dta"
+				use ${profilescore_kg_ref}_frq.dta, clear
 				}
-			noi di as text"# >> map frequency of risk to same as a1 in ............. "as result"${profilescore_kg_ref}"
+			else {
+				noi di as text"# > "as input"profilescore "as text"................ create frequency files "as result"${profilescore_kg_ref}_frq.dta"
+				noi bim2frq, bim(${profilescore_kg_ref})
+				}
+			}
+		merge 1:1 snp using tempfile-gwas.dta
+		keep if _m == 3
+		noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"${profilescore_kg_ref}"
+		noi ta gt gwas_gt,m
+		gen flip = .
+		replace flip = 1 if (gwas_gt == gt) 
+		replace flip = 2 if (gwas_gt == "R" & gt == "Y")
+		replace flip = 2 if (gwas_gt == "Y" & gt == "R")
+		replace flip = 2 if (gwas_gt == "K" & gt == "M")
+		replace flip = 2 if (gwas_gt == "M" & gt == "K")
+		drop if flip == .
+		noi di as text"# >> map allele code to same strand as .................. "as result"${profilescore_kg_ref}"
+		foreach i in risk alt {
+			gen `i' = gwas_`i'
+			replace `i' = "A" if gwas_`i' == "T" & flip == 2
+			replace `i' = "C" if gwas_`i' == "C" & flip == 2
+			replace `i' = "G" if gwas_`i' == "G" & flip == 2
+			replace `i' = "T" if gwas_`i' == "A" & flip == 2
+			}
+		noi di as text"# >> map frequency of risk to same as a1 in ............. "as result"${profilescore_kg_ref}"
+		qui {
+			replace maf = 1-maf if flip == 2
+			replace maf = 1-maf if risk != a1
+			global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
+			noi di as text"# >> plot two-way scatter of allele frq betweeen gwas and "as result"${profilescore_kg_ref}"as text" to "as result"tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph"
+			tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${profilescore_kg_ref}") saving(tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph, replace)
+			window manage close graph
+			keep snp risk alt gwas_weight gwas_risk gwas_p
+			qui di as text"# >> saving as ........................................ "as result"tempfile-gwas.dta"
 			qui {
-				replace maf = 1-maf if flip == 2
-				replace maf = 1-maf if risk != a1
-				global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
-				noi di as text"# >> plot two-way scatter of allele frq betweeen gwas and "as result"${profilescore_kg_ref}"as text" to "as result"tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph"
-				tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${profilescore_kg_ref}") saving(tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph, replace)
-				window manage close graph
-				keep snp risk alt gwas_weight gwas_risk gwas_p
-				qui di as text"# >> saving as ........................................ "as result"tempfile-gwas.dta"
-				qui {
-					save tempfile-gwas.dta,replace	
-					}
+				save tempfile-gwas.dta,replace	
 				}
 			}
 		}
@@ -460,8 +468,8 @@ qui { // Module #7 - rename and clean
 		foreach threshold in $thresholds {
 			!mkdir ..\score
 			!mkdir ..\q-score-file
-			!copy "tempfile-P`threshold'.score"          ".\score\${gwas_short}_P`threshold'.score"
-			!copy "tempfile-P`threshold'.q-score-file"   "..\q-score-file\${gwas_short}_P`threshold'.q-score-file"
+			!copy "tempfile-P`threshold'.score"          ".\score\\${gwas_short}_P`threshold'.score"
+			!copy "tempfile-P`threshold'.q-score-file"   "..\q-score-file\\${gwas_short}_P`threshold'.q-score-file"
 			}
 		!copy "tempfile.log"                 "..\\${gwas_short}-profilescore.meta-log"
 		!copy "gwas-processed-mahhattan.png" "..\\${gwas_short}-profilescore-manhattan.png"

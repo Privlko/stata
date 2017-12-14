@@ -62,8 +62,7 @@ qui {
 			}
 		else {
 			noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
-			noi di as text"# "
-			bim2frq, bim(${bim2merge_data`num'})
+			noi bim2frq, bim(${bim2merge_data`num'})
 			}
 		}
 	}
