@@ -35,7 +35,7 @@
 */
 
 program profilescore
-syntax , param(string asis) [premerge(string asis)]
+syntax , param(string asis) [premerge(string asis) draw_manhattan(string asis)]
 
 noi di as text"#########################################################################"
 noi di as text"# profilescore                                                           "
@@ -411,25 +411,30 @@ qui { // Module #5 - make meta-log
 qui { // Module #6 - plot manhattan of intersect
 	noi di as text" "
 	noi di as text"#########################################################################"
-	noi di as text"# Module #6 - make meta-log"	
+	noi di as text"# Module #6 - plot manhattan"	
 	noi di as text"# > plot manhattan of intersect"
-	qui {
-	capture confirm file ${profilescore_kg_ref}_bim.dta
-	if !_rc {
-		noi di as text"# > "as input"bim2dta "as text".................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
-
+	clear
+	set obs 1
+	gen a = "`draw_manhattan'"
+	if a == "yes" {
+		qui {
+		capture confirm file ${profilescore_kg_ref}_bim.dta
+		if !_rc {
+			noi di as text"# > "as input"bim2dta "as text".................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
+			}
+		else {
+			noi di as text"# > "as input"bim2dta "as text".............................. create marker  " as result "${profilescore_kg_ref}_bim.dta"
+			noi bim2dta, bim(${profilescore_kg_ref})
+			}
+			use tempfile-gwas.dta, clear
+			merge 1:1 snp using ${profilescore_kg_ref}_bim.dta
+			graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
+			graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
+			graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
+			window manage close graph
+			}	
 		}
 	else {
-		noi di as text"# > "as input"bim2dta "as text".............................. create marker  " as result "${profilescore_kg_ref}_bim.dta"
-		noi bim2dta, bim(${profilescore_kg_ref})
-		}
-		use tempfile-gwas.dta, clear
-		merge 1:1 snp using ${profilescore_kg_ref}_bim.dta
-		graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
-		graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
-		graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
-		window manage close graph
-		}	
 	}
 qui { // Module #7 - rename and clean
 	noi di as text" "
