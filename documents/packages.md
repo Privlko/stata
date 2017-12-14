@@ -1,4 +1,5 @@
-![back to opening page](https://github.com/ricanney/stata)
+[back to opening page](https://github.com/ricanney/stata)
+
 ## information on packages
 [```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2eigenvec```](#bim2eigenvec) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
 
