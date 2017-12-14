@@ -33,7 +33,6 @@ qui {
 	erase _tmp.do
 	}
 noi di as text"# > check path of input files is true"
-noi di as text"# "
 qui{
 	count
 	global bim2merge_dataN `r(N)'
@@ -43,12 +42,13 @@ qui{
 		checkfile, file(${bim2merge_data`num'}.fam)
 		}
 	}	
-noi di as text"# > check path of dependent software is true"
 noi di as text"# "
+noi di as text"# > check path of dependent software is true"
 qui { 
 	checkfile, file(${plink})
 	checktabbed
 	}
+noi di as text"# "
 qui di as text"# > create temp directory"
 qui {
 	noi create_temp_dir
@@ -150,7 +150,7 @@ qui {
 	noi bim2count, bim(`ref_bim')
 	noi bim2count, bim(${bim2merge_newname1})
 	foreach data of num 2 / $bim2merge_dataN {
-		capture confirm file  ${data`data'}.meta-log 
+		capture confirm file  ${data`data'}-genotypeqc.meta-log 
 		qui { 
 		if !_rc {
 			import delim using  ${data`data'}-genotypeqc.meta-log, clear delim("#")
