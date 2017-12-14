@@ -27,9 +27,7 @@ qui di as text"#################################################################
 noi di as text"# > "as input"bim2count "as text"........................................... "as result"`bim'"
 checkfile, file(`bim'.bim)
 checkfile, file(`bim'.fam)
-noi di as text" "
-
-	qui { 
+qui { 
 	qui di as text"# > importing *.bim file"
 	!$wc -l `bim'.bim  > bim.count
 	import delim using bim.count, clear varnames(nonames)

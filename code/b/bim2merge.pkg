@@ -5,6 +5,7 @@ f bim2merge.ado
 f ../c/checkfile.ado
 f ../c/checktabbed.ado
 f ../c/create_temp_dir.ado
+f ../b/bim2count.ado
 f ../b/bim2dta.ado
 f ../b/bim2frq.ado
 

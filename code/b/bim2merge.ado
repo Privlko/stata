@@ -32,7 +32,7 @@ qui {
 	do _tmp.do
 	erase _tmp.do
 	}
-noi di as text"# > check path of input files is true"
+noi di as text"# > quietly check if input filepath is true"
 qui{
 	count
 	global bim2merge_dataN `r(N)'
@@ -43,7 +43,7 @@ qui{
 		}
 	}	
 noi di as text" "
-noi di as text"# > check path of dependent software is true"
+noi di as text"# > quietly check if dependent software filepath is true"
 qui { 
 	checkfile, file(${plink})
 	checktabbed
@@ -132,7 +132,7 @@ qui {
 		replace maf_data`data' = 1- maf_data`data' if a1_data1 != a1_data`data'
 		noi di as text"# >> plot two-way scatter of allele frq betweeen reference and "as result"${bim2merge_newname`data'}"as text" to "as result"bim2merge_newname`data'-sanity-check-allele-frequencies-vs-ref.png"
 		tw scatter maf_data1 maf_data`data', ${format} caption("data1 = ${bim2merge_newname1}""data`data' = ${bim2merge_newname`data'}") 
-		graph export "..\\bim2merge_newname`data'-sanity-check-allele-frequencies-vs-ref.png", as(png) height(500) width(1000) replace
+		graph export "..\\${bim2merge_newname`data'}-sanity-check-allele-frequencies-vs-${bim2merge_newname1}.png", as(png) height(500) width(1000) replace
 		window manage close graph
 		}
 	}
@@ -147,8 +147,8 @@ qui {
 	noi di as text"#########################################################################"			
 	noi di as text"# merge details for `project' "
 	noi di as text"#########################################################################"
-	noi di as text"# reference genotypes .................................. "as result"`ref_bim'"
-	noi di as text"# ............................ overlapping data in model "as result"${bim2merge_newname1}"
+	noi di as text"# reference genotypes ................................... "as result"`ref_bim'"
+	noi di as text"# ............................. overlapping data in model "as result"${bim2merge_newname1}"
 	noi bim2count, bim(`ref_bim')
 	noi bim2count, bim(${bim2merge_newname1})
 	foreach data of num 2 / $bim2merge_dataN {
@@ -184,9 +184,8 @@ qui {
 			}
 		}
 		noi di as text"#########################################################################"
-		noi di as text"# data`data' ................................................. "as result"${data`data'_file}"
-		noi di as text"# .............................................. array is "as result"${data`data'_array}"
 		noi di as text"# ................................................. input "as result"${bim2merge_data`data'}"
+		noi di as text"# .............................................. array is "as result"${data`data'_array}"
 		noi di as text"# ............................. overlapping data in model "as result"${bim2merge_newname`data'}"
 		noi bim2count, bim(${bim2merge_data`data'})
 		noi bim2count, bim(${bim2merge_newname`data'})
