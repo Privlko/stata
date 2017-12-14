@@ -109,61 +109,49 @@ qui { // Module #1 - processing genotype data
 		outsheet a using tmp.do, non noq replace
 		do tmp.do
 		noi bim2merge , bim(${data_list}) ref_bim(${kg_ref}) project(${gwas_short}-by-${project_name})
-		foreach file in bim bed fam {
-			noi checkfile, file(${bim2merge_newname1}.`file')
-			!del "kg_ref.`file'"
-			!copy "${bim2merge_newname1}.`file'" "kg_ref.`file'"
+		qui di as text"# > define new globals for downstream processing - also save redundent copy"
+		qui { // kg_ref
+			global profilescore_kg_ref ${bim2merge_newname1}
+			noi checkfile, file(${profilescore_kg_ref}.bim)
+			noi checkfile, file(${profilescore_kg_ref}.bed)
+			noi checkfile, file(${profilescore_kg_ref}.fam)
 			}
-		foreach data of num 2 / $bim2merge_dataN {
-			foreach file in bim bed fam {
-				noi checkfile, file(${bim2merge_newname`data'}.`file')
-				!del "data`data'.`file'"
-				!copy "${bim2merge_newname`data'}.`file'" "data`data'.`file'"
+		qui { // data2 - dataN
+			foreach data of num 1 / $Ndata {
+				clear
+				set obs 1
+				gen a = "${data`data'}"
+				split a, p("\")
+				gen a999 = ""
+				for var a1-a999: replace a999 = X 
+				replace a999 = "global profilescore_data`data' " + a999 + "-intersect"
+				outsheet a999 using tmp.do, non noq replace
+				do tmp.do
+				erase tmp.do
+				noi checkfile, file(${profilescore_data`data'}.bim)
+				noi checkfile, file(${profilescore_data`data'}.bed)
+				noi checkfile, file(${profilescore_data`data'}.fam)
 				}
 			}
-		clear
-		set obs 1
-		gen filename = ""
-		save tempfile.dta,replace
-		local myfiles: dir "`c(pwd)'" files "data*" 
-		foreach file of local myfiles { 
-			clear
-			set obs 1
-			gen filename = "`file'" 
-			append using tempfile.dta
-			save tempfile.dta,replace
-			}
-		split filename, p(".")
-		gen keep = .
-		replace keep = 1 if inlist(filename2,"bim","bed","fam")
-		keep if keep == 1
-		keep filename
-		split filename, p("data"".")
-		destring filename2, replace
-		replace filename2 = filename2 - 1
-		tostring filename2, replace
-		sort filename2
-		gen a = `"!rename ""' + filename + `"" "data"' + filename2 + "." + filename3 + `"""'
-		outsheet a using tmp.do, non noq replace
-		do tmp.do
-		erase tmp.do
 		}
 	else {
 		noi	di as text"# > premerge was performed .............................. "as result"skip bim2merge"
-		foreach file in bim bed fam {
-			noi checkfile, file(${kg_ref}.`file')
-			!del "kg_ref.`file'"
-			!copy "${kg_ref}.`file'" "kg_ref.`file'"
+		qui { // kg_ref
+			global profilescore_kg_ref ${kg_ref}
+			noi checkfile, file(${profilescore_kg_ref}.bim)
+			noi checkfile, file(${profilescore_kg_ref}.bed)
+			noi checkfile, file(${profilescore_kg_ref}.fam)
 			}
-		foreach data of num 1 / $Ndata {
-			foreach file in bim bed fam {
-				noi checkfile, file(${data`data'}.`file')
-				!del "data`data'.`file'"
-				!copy "${data`data'}.`file'" "data`data'.`file'"
+		qui { // data2 - dataN
+			foreach data of num 1 / $Ndata {
+				global profilescore_data`data' ${data`data'}
+				noi checkfile, file(${profilescore_data`data'}.bim)
+				noi checkfile, file(${profilescore_data`data'}.bed)
+				noi checkfile, file(${profilescore_data`data'}.fam)
 				}
 			}
 		}
-	}
+	}		
 qui { // Module #2 - processing GWAS summary data
 	noi di as text" "
 	noi di as text"#########################################################################"
@@ -202,12 +190,12 @@ qui { // Module #2 - processing GWAS summary data
 			drop dups
 			}
 		save tempfile-gwas.dta,replace	
-	  noi	di as text"# > merging with kg_ref"
+	  noi	di as text"# > merging with ${profilescore_kg_ref}"
 		qui {
-			noi bim2frq, bim(kg_ref)
+			noi bim2frq, bim(${profilescore_kg_ref})
 			merge 1:1 snp using tempfile-gwas.dta
 			keep if _m == 3
-			noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"kg_ref"
+			noi di as text"# >> cross-tabulate gwas genotype coding with ........... "as result"${profilescore_kg_ref}"
 			noi ta gt gwas_gt,m
 			gen flip = .
 			replace flip = 1 if (gwas_gt == gt) 
@@ -216,7 +204,7 @@ qui { // Module #2 - processing GWAS summary data
 			replace flip = 2 if (gwas_gt == "K" & gt == "M")
 			replace flip = 2 if (gwas_gt == "M" & gt == "K")
 			drop if flip == .
-			noi di as text"# >> map allele code to same strand as .................. "as result"kg_ref"
+			noi di as text"# >> map allele code to same strand as .................. "as result"${profilescore_kg_ref}"
 			foreach i in risk alt {
 				gen `i' = gwas_`i'
 				replace `i' = "A" if gwas_`i' == "T" & flip == 2
@@ -224,13 +212,13 @@ qui { // Module #2 - processing GWAS summary data
 				replace `i' = "G" if gwas_`i' == "G" & flip == 2
 				replace `i' = "T" if gwas_`i' == "A" & flip == 2
 				}
-			noi di as text"# >> map frequency of risk to same as a1 in ............. "as result"kg_ref"
+			noi di as text"# >> map frequency of risk to same as a1 in ............. "as result"${profilescore_kg_ref}"
 			qui {
 				replace maf = 1-maf if flip == 2
 				replace maf = 1-maf if risk != a1
 				global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
-				noi di as text"# >> plot two-way scatter of allele frq betweeen gwas and "as result"kg_ref"as text" to "as result"tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph"
-				tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${kg_ref}") saving(tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph, replace)
+				noi di as text"# >> plot two-way scatter of allele frq betweeen gwas and "as result"${profilescore_kg_ref}"as text" to "as result"tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph"
+				tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${profilescore_kg_ref}") saving(tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph, replace)
 				window manage close graph
 				keep snp risk alt gwas_weight gwas_risk gwas_p
 				qui di as text"# >> saving as ........................................ "as result"tempfile-gwas.dta"
@@ -280,7 +268,7 @@ qui { // Module #3 - create profile scores
 				qui di as text"# >>> define SNPs at P < "as result"``threshold' "as text "for clumping"
 				outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
 				qui di as text"# >>>  clump SNPs at P < "as result"`threshold' "as text "to identify ld-independent set for scoring"
-				!${plink} --bfile kg_ref --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
+				!${plink} --bfile ${profilescore_kg_ref} --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
 				!${tabbed} tempfile-P`threshold'.clumped
 				import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
 				keep snp
@@ -303,12 +291,12 @@ qui { // Module #3 - create profile scores
 					}
 				qui di as text"# > create *.profile file for each threshold for each dataset "
 				foreach data of num 1 / $Ndata {
-				qui di as text">> create data`data'-intersect-flipped.P`threshold'.profile"
-				!${plink} --bfile         data`data' ///
+				qui di as text">> create data`data'.P`threshold'.profile"
+				!${plink} --bfile         ${profilescore_data`data'} ///
 									--score         tempfile-P`threshold'.score  ///
 									--q-score-file  tempfile-P`threshold'.q-score-file ///
 									--q-score-range tempfile-P`threshold'.q-score-range ///
-									--out           data`data'
+									--out           ${profilescore_data`data'}
 					}
 				}
 			}
@@ -319,10 +307,10 @@ qui { // Module #4 - combine profile scores into single file
 	noi di as text"#########################################################################"
 	noi di as text"# Module #4 - combine profile scores into single file"	
 	foreach data of num 1 / $Ndata {
-		noi di as text"# > join profile files into single file ................. " as result"data`data'-final-profiles.dta"
-		noi fam2dta, fam(data`data')
+		noi di as text"# > join profile files into single file ................. " as result"${profilescore_data`data'}-final-profiles.dta"
+		noi fam2dta, fam(${profilescore_data`data'})
 		keep fid iid sex
-		save data`data'-final-profiles.dta, replace
+		save ${profilescore_data`data'}-final-profiles.dta, replace
 		qui di as text"# >> converting thresholds to varnames"
 		foreach threshold in $thresholds {
 			clear
@@ -333,19 +321,19 @@ qui { // Module #4 - combine profile scores into single file
 			outsheet a using tempfile.do, non noq replace
 			do tempfile.do
 			erase tempfile.do
-			noi di as text"# >> import data for data`data'-intersect-flipped.P`threshold'.profile"
-			!$tabbed           data`data'.P`threshold'.profile
-			import delim using data`data'.P`threshold'.profile.tabbed, case(lower) clear
-			erase data`data'.P`threshold'.profile
-			erase data`data'.P`threshold'.profile.tabbed
+			noi di as text"# >> import data for ${profilescore_data`data'}.P`threshold'.profile"
+			!$tabbed           ${profilescore_data`data'}.P`threshold'.profile
+			import delim using ${profilescore_data`data'}.P`threshold'.profile.tabbed, case(lower) clear
+			erase ${profilescore_data`data'}.P`threshold'.profile
+			erase ${profilescore_data`data'}.P`threshold'.profile.tabbed
 			keep fid - score
 			for var fid iid: tostring X, replace
 			for var cnt cnt2 score: rename X ${tag}_X
-			merge 1:1 fid iid using data`data'-final-profiles.dta
+			merge 1:1 fid iid using ${profilescore_data`data'}-final-profiles.dta
 			drop _m
 			order fid iid sex 
-			save data`data'-final-profiles.dta, replace
-			outsheet using data`data'-final-profiles.csv, comma noq replace
+			save ${profilescore_data`data'}-final-profiles.dta, replace
+			outsheet using ${profilescore_data`data'}-final-profiles.csv, comma noq replace
 			}
 		}
 	}
@@ -411,8 +399,8 @@ qui { // Module #5 - make meta-log
 		noi di as text"# > report of genotype files"
 		qui {
 			foreach data of num 1 / $Ndata {
-				noi di as text"# data`data' ................................................. "as result"${data`data'}"
-				noi bim2count, bim(data`data')
+				noi di as text"# data`data' ................................................. "as result"${${profilescore_data`data'}}"
+				noi bim2count, bim(${profilescore_data`data'})
 				noi di as text"# >> data`data' profiles stored in ........................... "as result"${gwas_short}-by-${project_name}_data`data'_profiles.dta"
 				}
 			}
@@ -426,17 +414,17 @@ qui { // Module #6 - plot manhattan of intersect
 	noi di as text"# Module #6 - make meta-log"	
 	noi di as text"# > plot manhattan of intersect"
 	qui {
-	capture confirm file ${kg_ref}_bim.dta
+	capture confirm file ${profilescore_kg_ref}_bim.dta
 	if !_rc {
-		noi di as text"# > "as input"bim2merge "as text"................ marker files already exist " as result "${kg_ref}_bim.dta"
+		noi di as text"# > "as input"bim2dta "as text".................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
 
 		}
 	else {
-		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${kg_ref}_bim.dta"
-		noi bim2dta, bim(${kg_ref}_bim.dta)
+		noi di as text"# > "as input"bim2dta "as text".............................. create marker  " as result "${profilescore_kg_ref}_bim.dta"
+		noi bim2dta, bim(${profilescore_kg_ref})
 		}
 		use tempfile-gwas.dta, clear
-		merge 1:1 snp using ${kg_ref}_bim.dta
+		merge 1:1 snp using ${profilescore_kg_ref}_bim.dta
 		graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
 		graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
 		graph export gwas-processed-mahhattan.png, as(png) height(2000) width(4000) replace
@@ -449,8 +437,8 @@ qui { // Module #7 - rename and clean
 	noi di as text"# Module #7 - move and clean"	
 	qui {
 		foreach data of num 1 / $Ndata {	
-			!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
-			!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
+			!copy "${profilescore_data`data'}-final-profiles.dta"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.dta"
+			!copy "${profilescore_data`data'}-final-profiles.csv"   "..\\${gwas_short}-by-${project_name}_data`data'_profiles.csv"
 			}
 		foreach threshold in $thresholds {
 			!copy "tempfile-P`threshold'.score"          "..\\${gwas_short}-by-${project_name}_P`threshold'.score"
