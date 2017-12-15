@@ -885,7 +885,7 @@ qui { // Module #5 - apply quality control to genotypes
 				else {
 					foreach file in bim bed fam {
 						!del "${sub_mod_output}.`file'"
-						!rename "${sub_mod_input}.`file'" "${sub_mod_mid}.`file'"
+						!rename "${sub_mod_input}.`file'" "${sub_mod_output}.`file'"
 						}
 					}
 				}
