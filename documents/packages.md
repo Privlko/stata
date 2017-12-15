@@ -1,7 +1,7 @@
 [back to opening page](https://github.com/ricanney/stata)
 
 ## information on packages
-[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2eigenvec```](#bim2eigenvec) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
+[```bim2build```](#bim2build) [```bim2count```](#bim2count) [```bim2dta```](#bim2dta) [```bim2eigenvec```](#bim2eigenvec) [```bim2frq```](#bim2frq) [```bim2hapmap```](#bim2hapmap) [```bim2ld_subset```](#bim2ld_subset) [```bim2ldexclude```](#bim2ldexclude) [```bim2merge```](#bim2merge) [```bim2unrelated```](#bim2unrelated) [```checkfile```](#checkfile) [```checktabbed```](#checktabbed) [```create_temp_dir```](#create_temp_dir) [```datestamp```](#datestamp) [```ensembl2symbol```](#ensembl2symbol) [```fam2dta```](#fam2dta) [```genotypeqc```](#genotypeqc) [```get_stata_bundle```](#get_stata_bundle) [```graphmanhattan```](#graphmanhattan) [```graphmiami```](#graphmiami) [```graphqq```](#graphqq) [```graphplinkfrq```](#graphplinkfrq) [```graphplinkhet```](#graphplinkhet) [```graphplinkhwe```](#graphplinkhwe) [```graphplinkimiss```](#graphplinkimiss) [```graphplinkkin0```](#graphplinkkin0) [```graphplinklmiss```](#graphplinklmiss) [```graphgene```](#graphgene) [```gwas2prs```](#gwas2prs) [```kin0filter```](#kin0filter) [```loadunixreplicas```](#loadunixreplicas) [```profilescore```](#profilescore) [```recodegenotype```](#recodegenotype) [```recodestrand```](#recodestrand) [```symbol2ensembl```](#symbol2ensembl) 
 
 ## bim2build
 
@@ -146,6 +146,48 @@ net install -name-,         from(https://raw.github.com/ricanney/stata/master/co
 ```
 
 **additional files**
+
+## bim2merge 
+
+**description** - a command to create mergable plink binaries. the process includes; limit to autosome; remove ambiguous markers (W/S); remove incompatible markers; strand flip and limit to intercept over all markers and reference. the resultant binaries are created and named with the tag ```-intercept```.
+
+**remarks** 
+
+**examples** - list comma-seperate binaries in bim(). add the reference binary to ref_bim() - this binary will be used to define strand. add a project-name in project() - the log file will be named using this name. if the join(yes) flag is included - the files in the bim() command will be merged into a the project.bim 'bed .fam
+
+```
+bim2merge , bim(file1,file2,file3) ref_bim(file4) project(project_name) [join(yes)]
+
+```
+**installation**
+
+```
+net install bim2merge ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
+## bim2unrelated 
+
+**description** - a command to create a subset froma genotype dataset on "unrelated" individuals. the program is a wrapper for plink2 - where it extracts a subset of 50000 ld-independent markers and applies the --king-cutoff. the program creates the unrelated dataset and uses [```graphplinkkin0```](#graphplinkkin0) to plot the kinship from the ```--make-king-table```.
+
+**remarks** - you can define a threshold for "relatedness", this number is based on the KING algorithm; where 0.354 = duplicates; 0.1770 = first degree relationships; 0.0884 = second degree relationships; 0.0442 = third degree relatinships etc) The default for this program is .0221
+ 
+**examples** 
+
+```
+bim2unrelated , bim(file1) threshold(0.0442)
+bim2unrelated , bim(file1) 
+
+```
+**installation**
+
+```
+net install bim2unrelated ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
+**additional files**
+
 
 ## checkfile
 
