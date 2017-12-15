@@ -74,6 +74,7 @@ qui { // Module #0 - preamble
 	qui di as text"# > create temp directory"
 	qui {
 		noi create_temp_dir
+		global genotypeqc_temp_dir ${temp_dir}
 		}		
 	noi di as text"# > check path of dependent software is true"
 	qui { 
@@ -1199,6 +1200,7 @@ qui { // Module #9 - rename and clean
 	noi di as text"# > create destination folder ........................... "as result "${output_2}"
 	qui di as text"# > move files to data directory"
 	qui {
+		
 		!copy "${sub_mod_output}-quality-control-report.docx"   "${output}.quality-control-report.docx"
 		!copy "${sub_mod_output}.meta-log"                      "${output}-genotypeqc.meta-log"
 		!copy "${sub_mod_output}.bed"                           "${output}.bed"
@@ -1212,10 +1214,12 @@ qui { // Module #9 - rename and clean
 		!del *_bim.dta
 		!del ${output}.hg-buildmatc* ${output}.arraymatc*
 		noi di as text"# > remove temporary directory"
-		!rmdir  $wd /S /Q
+		!rmdir  $genotypeqc_temp_dir /S /Q
 		cd ..
+		!rmdir "${output_2}"  /S /Q
 		!mkdir "${output_2}"
 		cd "${output_2}"
+		
 		!copy "${output}.bed"                           "${output_2}.bed"
 		!copy "${output}.bim"                           "${output_2}.bim"
 		!copy "${output}.fam"                           "${output_2}.fam"
