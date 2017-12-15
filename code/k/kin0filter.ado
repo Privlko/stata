@@ -44,6 +44,7 @@ qui {
 	}
 qui di as text"# > count observations > threshold"
 qui {
+	drop if fid1 == fid2
 	count  
 	noi di as text"# > "as input"kin0filter"as text" pairs with kinship > threshold ........... "as result `r(N)'
 	if `r(N)' > 0 {
@@ -72,7 +73,7 @@ qui {
 			}
 		}
 	else {
-		noi di as text"# no pairs observed"
+		noi di as text"# no (unrelated) pairs observed"
 		noi di as text"# > "as input"kin0filter"as text" individuals saved ........................ "as result `r(N)'
 		}
 	}
