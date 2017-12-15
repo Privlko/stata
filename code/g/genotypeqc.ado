@@ -844,7 +844,7 @@ qui { // Module #5 - apply quality control to genotypes
 			qui { 
 				import delim using ${sub_mod_input}.king.id, clear case(lower)
 				rename (v1 v2) (fid iid)
-				for var fid iid: tostring fid iid, replace
+				for var fid iid: tostring X, replace
 				gen obs = _n
 				aorder
 				merge 1:1 obs using ${sub_mod_input}.dta, update
@@ -894,11 +894,11 @@ qui { // Module #5 - apply quality control to genotypes
 				foreach file in bim bed fam { 
 					!del ${sub_mod_input}.`file'
 					}	
-				erase excessiveCryptic.remove
 				erase ${sub_mod_input}_fam.dta
 				erase ${sub_mod_input}.dta
 				erase ${sub_mod_input}.king
 				erase ${sub_mod_input}.king.id
+				!del xs_crypic.remove
 				}
 			}
 		}
@@ -1052,7 +1052,7 @@ qui { // Module #5 - apply quality control to genotypes
 		qui	di as text"# >> calculating kinship / relatedness"
 		qui {
 			noi bim2ld_subset, bim(${sub_mod_input})
-			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_input}
+			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0224 --out ${sub_mod_input}
 			}
 		}
 	qui di as text"#########################################################################"
@@ -1111,40 +1111,6 @@ qui { // Module #5 - apply quality control to genotypes
 		}
 	noi di as text"#########################################################################"
 	}
-qui { // Module #6 - plot relatedness 
-	noi di as text" "
-	noi di as text"#########################################################################"
-	noi di as text"# Module #6 - plot relatedness"
-	qui {
-		global sub_mod_input  tempfile-module5-${round2}
-		global sub_mod_output tempfile-module6-final
-		qui di as text"# >> create _subset50000.extract"
-		qui { 
-			noi bim2ld_subset, bim(${sub_mod_input})
-			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-bed --out ${sub_mod_input}_subset50000
-			}
-		qui di as text"# >> create kinship matrix"
-		qui {
-			!$plink2 --bfile ${sub_mod_input}_subset50000 --make-king-table --king-table-filter 0.0224 --out ${sub_mod_input}
-			}
-		qui di as text"# >> plot"
-		qui {
-			noi graphplinkkin0, kin0(${sub_mod_input})	
-			graph combine tmpKIN0_1.gph, title("Between Family Relationships") 
-			graph export ${sub_mod_output}-ibs-by-kin.png, as(png) replace width(4000) height(2000)
-			window manage close graph
-			graph combine tmpKIN0_2.gph, title("Relatedness in sample") 
-			graph export ${sub_mod_output}-kinship-hist.png, as(png) replace width(4000) height(2000)
-			window manage close graph		
-			}
-		qui di as text"# > clean up"
-		qui { 
-			!del ${sub_mod_output}.kin0 *.remove *.exclude tmpK* *.kin0 *.extract
-			!del ${sub_mod_input}_subset*
-			}
-		noi di as text"#########################################################################"
-		}
-	}
 qui { // Module #7 - define european (ceu-tsi-like) subset 
 	noi di as text" "
 	noi di as text"#########################################################################"
@@ -1182,7 +1148,7 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 		qui { 
 			global sub_mod_pre  tempfile-module5-round0
 			global sub_mod_post tempfile-module5-round4
-			foreach i in FRQ HET HWE IMISS LMISS {
+			foreach i in FRQ HET HWE IMISS LMISS KIN0_1 KIN0_2{
 				noi checkfile, file(${sub_mod_pre}_`i'.gph)
 				noi checkfile, file(${sub_mod_post}_`i'.gph)
 				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 

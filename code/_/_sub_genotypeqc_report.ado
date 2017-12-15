@@ -251,9 +251,9 @@ end
 	_docx_paragraph_add_text(dh, "# relatives) are given by horizontal red lines.                                     #")
 	_docx_paragraph_add_linebreak(dh)	
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"${sub_mod_output}-ibs-by-kin.png")
+	_docx_image_add(dh,"${sub_mod_output}-KIN0_1.png")
 	_docx_paragraph_add_text(dh, "# ================================================================================= #")
-	_docx_image_add(dh,"${sub_mod_output}-kinship-hist.png")
+	_docx_image_add(dh,"${sub_mod_output}-KIN0_2.png")
 
 	// REPORTING HETEROZYGOSITY
 	_docx_paragraph_new(dh, "")
