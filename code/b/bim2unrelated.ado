@@ -77,6 +77,9 @@ qui {
 		}
 	!del tmpKIN0.relPairs `bim'.kin0 `bim'-unrelated.kin0 _subset50000.extract
 	}
+noi bim2count, bim(`bim')
+noi bim2count, bim(`bim'-unrelated)
+
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"

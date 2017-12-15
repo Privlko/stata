@@ -5,6 +5,7 @@ d Distribution-Date: 15dec2017
    
 f bim2unrelated.ado       
 f bim2ld_subset.ado       
+f bim2count.ado       
 f ../c/checkfile.ado      
 f ../g/graphplinkkin0.ado     
         
