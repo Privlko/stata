@@ -14,8 +14,9 @@ program _sub_genotypeqc_report
 syntax  
 end
 
-	noi di in green"...creating quality-control-report.docx"
+	noi di as text"...creating quality-control-report.docx"
 	global toc    "$S_DATE $S_TIME"
+	!del ${sub_mod_output}-quality-control-report.docx
 	//open document" 
 	mata:
 	dh = _docx_new()
@@ -93,7 +94,6 @@ end
 	_docx_image_add(dh,"${input}.hg-buildmatch.png")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Genome build of the output binaries : ${data_input}-qc-v6")
-	_docx_paragraph_add_text(dh, "# GENOME BUILD OF ${data_input}-qc-v6")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_image_add(dh,"tempfile-module2-processed.hg-buildmatch.png")
 
@@ -105,10 +105,9 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# =================================================================================")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# This subset was created using the program -bim2array- (under development).")  
-	_docx_paragraph_add_text(dh, "# This program assesses the genotype-array against a panel of known arrays. Most of the data used to cross reference comes from the data reported here (http://www.well.ox.ac.uk/~wrayner/strand/). Importantly, these are only the best estimates based on overlap coefficients. Below is a plot the jaccard index for the top ten matched arrays.")
+	_docx_paragraph_add_text(dh, "This subset was created using the program -bim2array- (under development). This program assesses the genotype-array against a panel of known arrays. Most of the data used to cross reference comes from the data reported here (http://www.well.ox.ac.uk/~wrayner/strand/). Importantly, these are only the best estimates based on overlap coefficients. Below is a plot the jaccard index for the top ten matched arrays.")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Array match for input binaries is  ${arrayType} ")
+	_docx_paragraph_add_text(dh, "# > Array match for input binaries is  ${arrayType}")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# > match metrics (Jaccard Index) .... ${Jaccard}")
 	_docx_paragraph_add_linebreak(dh) 
@@ -122,9 +121,8 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# =================================================================================")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# As part of the quality-control protocol, the imported variant names are sometimes converted to rsid. This is achieved by mapping to a 1000-genomes dataset as a reference. The mapping is based on chromosome location and genotype (based on compatible UIPAC genotype codes, for example R genotypes are compatible with R or Y). The program runs a sanity-check for the merge using allele-frequencies. After matching to strand/ allele we can plot frequencies to identify discrepancies between the allele frequencies reported in the test and reference dataset. As a precaution markers with > 10% allele-frequency differences are dropped. Below is a plot the pre and post qc allele frequency scatter plots.")
+	_docx_paragraph_add_text(dh, "As part of the quality-control protocol, the imported variant names are sometimes converted to rsid. This is achieved by mapping to a 1000-genomes dataset as a reference. The mapping is based on chromosome location and genotype (based on compatible UIPAC genotype codes, for example R genotypes are compatible with R or Y). The program runs a sanity-check for the merge using allele-frequencies. After matching to strand/ allele we can plot frequencies to identify discrepancies between the allele frequencies reported in the test and reference dataset. As a precaution markers with > 10% allele-frequency differences are dropped. Below is a plot the pre and post qc allele frequency scatter plots.")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# ================================================================================= #")	
 	_docx_image_add(dh,"tempfile-module2-allele-frequency-check.png")
 
 	// DISPLAYING ANCESTRY DISTRIBUTIONS   
@@ -133,9 +131,9 @@ end
 	_docx_paragraph_set_textsize(dh, 20)
 	_docx_paragraph_add_text(dh, "# Plotting ancestry PCA with hapmap reference")
 	_docx_paragraph_add_linebreak(dh) 
-	_docx_paragraph_add_text(dh, "# This subset was created using the program -bim2hapmap-.")
+	_docx_paragraph_add_text(dh, "This subset was created using the program -bim2hapmap-.")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# These plots are created from the *.eigenval files created using the --pca flag in plink. As part of the program we also define a subset of individuals who are defined as ${like}-like. This is based on similarity of the genotypes to hapmap reference genotypes. In this instance we flag individuals who for the top-3 PCs are no more than 2.5 standard deviations from that reported by the ${like} hapmap3 populations. Individuals are not removed, but flagged in the  *_${like}-like.keep file. This can be used directly in plink using the --keep flag. Below we plot two panels of PCA plots (PC Scree-Plot; PC1 v PC2; PC1 v PC3; PC2 v PC3). The top panel includes all individuals, whereas the bottom panel focuses on the regions around the ${like} populations. ")
+	_docx_paragraph_add_text(dh, "These plots are created from the *.eigenval files created using the --pca flag in plink. As part of the program we also define a subset of individuals who are defined as ${like}-like. This is based on similarity of the genotypes to hapmap reference genotypes. In this instance we flag individuals who for the top-3 PCs are no more than 2.5 standard deviations from that reported by the ${like} hapmap3 populations. Individuals are not removed, but flagged in the  *_${like}-like.keep file. This can be used directly in plink using the --keep flag. Below we plot two panels of PCA plots (PC Scree-Plot; PC1 v PC2; PC1 v PC3; PC2 v PC3). The top panel includes all individuals, whereas the bottom panel focuses on the regions around the ${like} populations. ")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_image_add(dh,"bim2hapmap_pca.png")
 	_docx_paragraph_add_linebreak(dh)
@@ -147,7 +145,7 @@ end
 	_docx_paragraph_set_textsize(dh, 20)
 	_docx_paragraph_add_text(dh, "# Plotting chromosome distributions")
 	_docx_paragraph_add_linebreak(dh) 
-	_docx_paragraph_add_text(dh, "# The following plots show the distribution of markers by chromosome. This is a useful sanity-check on your data to make sure all chromosomes were included in the final report.")	
+	_docx_paragraph_add_text(dh, "The following plots show the distribution of markers by chromosome. This is a useful sanity-check on your data to make sure all chromosomes were included in the final report.")	
 	_docx_paragraph_add_linebreak(dh)
 	_docx_image_add(dh,"${sub_mod_output}-chromosomes.png")
 
@@ -157,7 +155,7 @@ end
 	_docx_paragraph_set_textsize(dh, 20)
 	_docx_paragraph_add_text(dh, "# Plotting kinship distributions")
 	_docx_paragraph_add_linebreak(dh) 
-	_docx_paragraph_add_text(dh, "# These plots are created from the *.kin0 files created using the --make-king-table flag in plink2. The following plots show relatedness as defined by this kinship matrix. Approximation of kinship thresholds (duplicates, 2nd and 3rd degree  relatives) are given by horizontal red lines. As part of the quality control pipeline I have decided to remove -related- individuals at this stage. Individuals with excessive relatedness (indicative of genotyping error) are removed. use the -bim2unrelated- (underdevelopment) to identify an unrelated subset for downstream analysis.")
+	_docx_paragraph_add_text(dh, "These plots are created from the *.kin0 files created using the --make-king-table flag in plink2. The following plots show relatedness as defined by this kinship matrix. Approximation of kinship thresholds (duplicates, 2nd and 3rd degree  relatives) are given by horizontal red lines. As part of the quality control pipeline I have decided to remove -related- individuals at this stage. Individuals with excessive relatedness (indicative of genotyping error) are removed. use the -bim2unrelated- (underdevelopment) to identify an unrelated subset for downstream analysis.")
 	_docx_paragraph_add_linebreak(dh)	
 	_docx_image_add(dh,"${sub_mod_output}-KIN0_1.png")
 	_docx_paragraph_add_linebreak(dh)
