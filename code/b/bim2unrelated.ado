@@ -64,8 +64,10 @@ qui {
 		}
 	graph combine preKIN0_1.gph postKIN0_1.gph, col(1) ycommon
 	graph export `bim'-unrelated-ibs-by-kin.png, as(png) height(2000) width(4000) replace
+	window manage close graph
 	graph combine preKIN0_2.gph postKIN0_2.gph, col(1) ycommon
 	graph export `bim'-unrelated-kinship-histogram.png, as(png) height(2000) width(4000) replace
+	window manage close graph
 	}
 qui di as text"# > clean up files"
 qui { 
