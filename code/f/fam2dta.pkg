@@ -1,5 +1,5 @@
 d fam2dta command to convert *.fam plink marker file to *.dta 
 d Richard Anney, Cardiff University
-d Distribution-Date: 29nov2017
+d Distribution-Date: 15dec2017
 f ../c/checkfile.ado
 f fam2dta.ado
