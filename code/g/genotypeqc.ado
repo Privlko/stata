@@ -689,7 +689,7 @@ qui { // Module #5 - apply quality control to genotypes
 			qui	di as text"# >>> calculating kinship / relatedness"
 			qui {
 				noi bim2ld_subset, bim(${sub_mod_input})
-				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_input}
+				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0224 --out ${sub_mod_input}
 				}
 			}
 		qui di as text"#########################################################################"
@@ -819,81 +819,93 @@ qui { // Module #5 - apply quality control to genotypes
 			}
 		noi di as text"# >> remove individuals with excess cryptic relatedness"
 		qui {
-			qui di as text"# >>>> identify individuals with excess cryptic relatedness"
-			qui {	
-				global sub_mod_input  ${sub_mod_output}-05
-				global sub_mod_output tempfile-module5-round1
-				noi fam2dta, fam(${sub_mod_input})
-				count
-				global sampleSize `r(N)'
-				noi di as text"# >> number of individuals in file ...................... "as result `r(N)'	
-				noi di as text"# >> creating a kinship matrix .......................... "as result "`r(N)'" as text" x "as result "`r(N)'"
-				noi bim2ld_subset, bim(${sub_mod_input})
-				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king square --out ${sub_mod_input}			
+			global sub_mod_input  ${sub_mod_output}-05
+			global sub_mod_output tempfile-module5-round1
+			noi fam2dta, fam(${sub_mod_input})
+			count
+			global sampleSize `r(N)'
+			noi di as text"# >> number of individuals in file ...................... "as result `r(N)'	
+			noi di as text"# >> creating a kinship matrix .......................... "as result "`r(N)'" as text" x "as result "`r(N)'"
+			noi bim2ld_subset, bim(${sub_mod_input})
+			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king square --out ${sub_mod_input}	
+			qui di as text"# >>> import kinship matrix"
+			qui { 
 				import delim using ${sub_mod_input}.king, clear case(lower)
 				count
-				global countX `r(N)'
-				keep v1-v$countX
-				forvalues i=1/ $countX {
-							replace v`i' = . in `i'
-							}
+				forvalues i=1/ `r(N)' {
+					replace v`i' = . in `i'
+					replace v`i' = 0 if v`i' < 0
+					}
 				gen obs = _n
 				aorder
 				save ${sub_mod_input}.dta,replace
-				qui di as text"# >>> merge kinship table to identifiers"
+				}
+			qui di as text"# >>> merge kinship table to identifiers"
+			qui { 
 				import delim using ${sub_mod_input}.king.id, clear case(lower)
 				rename (v1 v2) (fid iid)
+				for var fid iid: tostring fid iid, replace
 				gen obs = _n
 				aorder
 				merge 1:1 obs using ${sub_mod_input}.dta, update
-				drop obs _m
-				qui di as text"# >>> calculate by-individual metrics"
-				for var v1-v$countX: replace X = 0 if X < 0
-				egen rm = rowmean(v1-v$countX)
-				egen rx =  rowmax(v1-v$countX)
-				keep fid iid rm rx
-				qui di as text"# >>> identify individuals with excessive kinship coefficients"
-				gen excessCryptic = ""
-				sum rm
-				gen lb = `r(mean)' - 2.5 *`r(sd)'
-				gen ub = `r(mean)' + 2.5 *`r(sd)'
-				replace excessCryptic = "1" if rm < (lb)
-				replace excessCryptic = "1" if rm > (ub)
-				count if ex == "1"
-				global excessC `r(N)'
-				noi di as text"# >> individuals showing excessive kinship .............. "as result `r(N)'
-				outsheet fid iid if excessC == "1" using excessiveCryptic.remove, replace non noq
+				drop _m
 				}
-			qui di as text"# >>>> remove individuals with excess cryptic relatedness"
+			qui di as text"# >>> blank out known family identifiers"
 			qui {
-					!$plink --bfile ${sub_mod_input} --remove excessiveCryptic.remove   --make-bed --out ${sub_mod_output}
-					foreach file in bim bed fam { 
-							!del ${sub_mod_input}.`file'
-							}	
-					erase excessiveCryptic.remove
-					erase ${sub_mod_input}_fam.dta
-					erase ${sub_mod_input}.dta
-					erase ${sub_mod_input}.king
-					erase ${sub_mod_input}.king.id
+				gen a = ""
+				tostring obs, replace
+				replace a = "replace v" + obs + `" = . if fid ==""' + fid + `"""'
+				outsheet a using tmp.do, non noq replace
+				do tmp.do
+				erase tmp.do
+				drop a obs
+				}
+			qui di as text"# >>> calculate by-individual metrics"
+			qui { 
+				count
+				egen rm = rowmean(v1-v`r(N)')
+				count
+				egen rx = rowmax(v1-v`r(N)')	
+				keep fid iid rm
+				gen xs_relate = .
+				sum rm
+				foreach i of num 1/5 {
+					sum rm
+					replace xs_relate = `i' if rm > `r(mean)' + (`i' * `r(sd)')
 					}
-			qui di as text"# >>>> plot individuals with excess cryptic relatedness"
+				}
+			qui di as text"# >> identify individuals with excessive kinship coefficients"
 			qui {
-						global format "mlc(black) mlw(vvthin) m(O)"
-						tw scatter rx rm if excessCryptic != "1", $format mfc(blue)   ///
-						|| scatter rx rm if excessCryptic == "1", $format mfc(red)    ///
-							 legend(off) ytitle("maximum kinship") xtitle("average kinship") ///
-							 caption("kinship is the estimated kinship coefficient from the SNP data. All kinship < 0 are reported as 0. " ///
-											 "If an individual has excessive kinship it may indicate poor genotyping." ///
-											 "In this sample of N = $sampleSize, N = $excessC are +/- 2.5 sd from the kinship mean")
-							graph export ${sub_mod_output}-relate.png, as(png) height(1000) width(2000) replace
-							window manage close graph
-							}
+				count if xs > 3 & xs != .
+				noi di as text"# >> individuals showing excessive kinship .............. "as result `r(N)'
+				if `r(N)' != 0 {
+					outsheet fid iid if xs > 3 & xs != . using xs_crytptic.remove, replace non noq
+					!$plink --bfile ${sub_mod_input} --remove xs_crytptic.remove   --make-bed --out ${sub_mod_output}
+					}
+				else {
+					foreach file in bim bed fam {
+						!del "${sub_mod_output}.`file'"
+						!rename "${sub_mod_input}.`file'" "${sub_mod_mid}.`file'"
+						}
+					}
+				}
+			qui di as text"# > clean up"
+			qui {
+				foreach file in bim bed fam { 
+					!del ${sub_mod_input}.`file'
+					}	
+				erase excessiveCryptic.remove
+				erase ${sub_mod_input}_fam.dta
+				erase ${sub_mod_input}.dta
+				erase ${sub_mod_input}.king
+				erase ${sub_mod_input}.king.id
+				}
 			}
-		qui di as text"#########################################################################"
-		qui di as text"# >> clean up temporary files"
-		qui {
-			!del *.exclude *.remove *.relPairs *.snplist *.indlist
-			}
+		}
+	qui di as text"#########################################################################"
+	qui di as text"# >> clean up temporary files"
+	qui {
+		!del *.exclude *.remove *.relPairs *.snplist *.indlist
 		}
 	qui di as text"#########################################################################"
 	qui di as text"# > round #N of quality control pipeline"
@@ -1099,91 +1111,39 @@ qui { // Module #5 - apply quality control to genotypes
 		}
 	noi di as text"#########################################################################"
 	}
-qui { // Module #6 - remove duplicates; 2nd and 3rd degree relatives 
+qui { // Module #6 - plot relatedness 
 	noi di as text" "
 	noi di as text"#########################################################################"
-	noi di as text"# Module #6 - remove duplicates; 2nd and 3rd degree relatives"
-	qui	di as text"# > identify duplicates; 2nd and 3rd degree relatives "
+	noi di as text"# Module #6 - plot relatedness"
 	qui {
 		global sub_mod_input  tempfile-module5-${round2}
 		global sub_mod_output tempfile-module6-final
-		qui di as text"# >> create "as result "${sub_mod_input}_kinship.remove"
-		qui {
-				!type > ${sub_mod_input}_kinship.remove
-				}	
 		qui di as text"# >> create _subset50000.extract"
 		qui { 
 			noi bim2ld_subset, bim(${sub_mod_input})
 			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-bed --out ${sub_mod_input}_subset50000
 			}
-		qui di as text"# >> create kinship matrix and remove most related individual whilst looping through thresholds"
-		noi di as text"# > ignoring first degree relatives "
-		noi di as text"# >> pairs ignored where ...................... kinship > "as result"${kin_f}"
-		noi di as text"# >> pairs ignored where .................... & kinship < "as result"${kin_d}"
+		qui di as text"# >> create kinship matrix"
 		qui {
-			foreach kin_threshold in $kin_d $kin_s $kin_t {
-				qui di as text"#########################################################################"
-				!del _x_.stop
-				foreach num of num 1/ 999 {
-					capture confirm file _x_.stop
-					if _rc==0 {
-						continue
-						}
-					else {
-						noi di as text"# > identify pairs with kinship thresholds ............ > "as result "`kin_threshold'"
-						!$plink2 --bfile ${sub_mod_input}_subset50000 --remove ${sub_mod_input}_kinship.remove --make-king-table --king-table-filter `kin_threshold' --out ${sub_mod_input}
-						qui di as text"# >> removing first degree relatives from dataset"
-						qui {
-							import delim using ${sub_mod_input}.kin0, clear
-							gen keep = 1
-							replace keep = 0 if kinship > ${kin_f} & kinship < ${kin_d}
-							keep if keep == 1
-							drop keep
-							outsheet using ${sub_mod_input}_no1dr.kin0, noq replace
-							}
-						count
-						if `r(N)' != 0 {
-							noi di as text"# > iteration ........................................... "as result"`num'"
-							noi kin0filter, kin0(${sub_mod_input}_no1dr) filter(`kin_threshold')
-							!type ${sub_mod_input}_no1dr_filter_`kin_threshold'.remove >> ${sub_mod_input}_kinship.remove
-							erase ${sub_mod_input}_no1dr_filter_`kin_threshold'.remove 
-							erase ${sub_mod_input}_no1dr.kin0 
-							erase ${sub_mod_input}.kin0 
-							}
-						else {
-							noi di as text"# >> all pairs with kinship > threshold added to ........ "as result"${sub_mod_input}_kinship.remove"
-							!type > _x_.stop
-							}
-						}
-					}
-				!del _x_.stop ${sub_mod_input}.kin0 ${sub_mod_input}_no1dr.kin0 
-				}
-			}	
-		}
-	qui di as text"#########################################################################"
-	noi	di as text"# > remove duplicates; 2nd and 3rd degree relatives "
-	qui {
-		!$plink --bfile ${sub_mod_input} --remove ${sub_mod_input}_kinship.remove --make-bed --out ${sub_mod_output} 
-		erase ${sub_mod_input}_kinship.remove
-		foreach file in bim bed fam {
-			!del "${sub_mod_input}.`file'"
+			!$plink2 --bfile ${sub_mod_input}_subset50000 --make-king-table --king-table-filter 0.0224 --out ${sub_mod_input}
 			}
+		qui di as text"# >> plot"
+		qui {
+			noi graphplinkkin0, kin0(${sub_mod_input})	
+			graph combine tmpKIN0_1.gph, title("Between Family Relationships") 
+			graph export ${sub_mod_output}-ibs-by-kin.png, as(png) replace width(4000) height(2000)
+			window manage close graph
+			graph combine tmpKIN0_2.gph, title("Relatedness in sample") 
+			graph export ${sub_mod_output}-kinship-hist.png, as(png) replace width(4000) height(2000)
+			window manage close graph		
+			}
+		qui di as text"# > clean up"
+		qui { 
+			!del ${sub_mod_output}.kin0 *.remove *.exclude tmpK* *.kin0 *.extract
+			!del ${sub_mod_input}_subset*
+			}
+		noi di as text"#########################################################################"
 		}
-	noi di as text"#########################################################################"
-	noi	di as text"# > plot post-removal relatedness "
-	qui { 
-		noi bim2ld_subset, bim(${sub_mod_output})
-		!$plink2 --bfile ${sub_mod_output} --extract _subset50000.extract --make-king-table --king-table-filter ${kin_t} --out ${sub_mod_output}
-		noi graphplinkkin0, kin0(${sub_mod_output})	
-		!del "${sub_mod_output}_KIN0_2_noRel.gph"
-		!rename "tmpKIN0_2.gph" "${sub_mod_output}_KIN0_2_noRel.gph"
-		}
-	qui { 
-		!del ${sub_mod_output}.kin0 *.remove *.exclude tmpK* *.kin0 *.extract
-		!del ${sub_mod_input}_subset*
-		}
-	noi di as text"#########################################################################"
-
 	}
 qui { // Module #7 - define european (ceu-tsi-like) subset 
 	noi di as text" "
@@ -1222,7 +1182,7 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 		qui { 
 			global sub_mod_pre  tempfile-module5-round0
 			global sub_mod_post tempfile-module5-round4
-			foreach i in FRQ HET HWE IMISS LMISS KIN0_1 {
+			foreach i in FRQ HET HWE IMISS LMISS {
 				noi checkfile, file(${sub_mod_pre}_`i'.gph)
 				noi checkfile, file(${sub_mod_post}_`i'.gph)
 				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 
@@ -1231,18 +1191,6 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 				graph export ${sub_mod_output}-`i'.png, as(png) replace width(4000) height(2000)
 				window manage close graph
 				!del x_`i'* y_`i'*
-				}
-			foreach i in  KIN0_2 {
-				noi checkfile, file(${sub_mod_pre}_`i'.gph)
-				noi checkfile, file(${sub_mod_post}_`i'.gph)
-				noi checkfile, file(${sub_mod_output}_`i'_noRel.gph)
-				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 
-				graph combine ${sub_mod_post}_`i'.gph, title("post-quality-control") nodraw saving(y_`i'.gph, replace) 
-				graph combine ${sub_mod_output}_`i'_noRel.gph,    title("post-quality-control (no-relatives)") nodraw saving(z_`i'.gph, replace) 
-				graph combine x_`i'.gph y_`i'.gph z_`i'.gph, col(3) caption("CREATED: $S_DATE $S_TIME" "INPUT: ${input}" "OUTPUT: ${output}", size(tiny))
-				graph export ${sub_mod_output}-`i'.png, as(png) replace width(4000) height(2000)
-				!del x_`i'* y_`i'* z_`i'*
-				window manage close graph
 				}
 			}	
 		}

@@ -53,9 +53,7 @@ noi checktabbed
 
 qui di as text"# > processing `kin0'.kin0"
 qui { 
-	!$tabbed `kin0'.kin0
-	import delim using `kin0'.kin0.tabbed, clear case(lower)
-	erase `kin0'.kin0.tabbed
+	import delim using `kin0'.kin0, clear case(lower)
 	count
 	if `r(N)' > 0 {
 		qui di as text"# > non-zero individuals with kinship co-efficients imported - plotting ibs0 by kinship to tmpKIN0_1.gph"
@@ -63,17 +61,17 @@ qui {
 		for var hethet-kinship: destring X, replace force
 		replace kin = 0 if kin <0
 		global format "msiz(medlarge) msymbol(O) mfc(red) mlc(black) mlabsize(small) mlw(vvthin)"
-		global xlabel "0(0.2).4"
+		global xlabel "0(0.1).5"
 		qui { 
-			tw scatter kin ibs, $format       ///
+			tw scatter ibs kin, $format       ///
 				 title("Between-Family Relationships") ///
-				 xtitle("Proportion of Zero IBS") ///
-				 ylabel($xlabel)          ///
-				 ytitle("Estimated Kinship Coefficient") ///
-				 yline(0.354, lpattern(dash) lwidth(vthin) lcolor(red))  ///
-				 yline(0.177, lpattern(dash) lwidth(vthin) lcolor(red))  ///
-				 yline(0.0884, lpattern(dash) lwidth(vthin) lcolor(red)) ///
-				 yline(0.0442, lpattern(dash) lwidth(vthin) lcolor(red)) ///
+				 ytitle("Proportion of Zero IBS") ///
+				 xlabel($xlabel)          ///
+				 xtitle("Estimated Kinship Coefficient") ///
+				 xline(0.354, lpattern(dash) lwidth(vthin) lcolor(red))  ///
+				 xline(0.177, lpattern(dash) lwidth(vthin) lcolor(red))  ///
+				 xline(0.0884, lpattern(dash) lwidth(vthin) lcolor(red)) ///
+				 xline(0.0442, lpattern(dash) lwidth(vthin) lcolor(red)) ///
 				 nodraw saving(tmpKIN0_1.gph, replace)
 			 }
 		gen rel = ""
@@ -88,7 +86,7 @@ qui {
 			}
 		qui di as text"# > non-zero individuals with kinship co-efficients imported - plotting kinship histogram to tmpKIN0_2.gph"
 		qui { 
-			tw hist kinship , width(0.005) percent                          ///
+			tw hist kinship , width(0.005) freq                          ///
 				 xline(0.3540, lpattern(dash) lwidth(vthin) lcolor(red)) ///
 				 xline(0.1707, lpattern(dash) lwidth(vthin) lcolor(red)) ///
 				 xline(0.0884, lpattern(dash) lwidth(vthin) lcolor(red)) ///
