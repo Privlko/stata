@@ -31,6 +31,7 @@ qui di as text"# > check path of plink *.fam file is true"
 noi checkfile, file(`fam'.fam)
 qui {
 	import delim  using `fam'.fam, clear delim(" ")
+	
 	}
 qui di as text"# > naming variables"
 qui { 
@@ -41,7 +42,6 @@ qui di as text"# > cleaning file"
 qui { 
 	order fid iid fatid motid sex pheno
 	keep  fid iid fatid motid sex pheno
-	sort fid iid
 	compress
 	}
 qui di as text"# > saving file as `fam'_fam.dta"

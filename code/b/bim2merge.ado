@@ -2,7 +2,7 @@ program bim2merge
 syntax , bim(string asis) ref_bim(string asis) project(string asis) [join(string asis)]
 
 qui di as text"#########################################################################"
-qui di as text"# profilescore_merge_gt - a routine to merge genotype datasets "
+qui di as text"# bim2merge - a routine to merge genotype datasets "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME                                               "
 qui di as text"#########################################################################"
