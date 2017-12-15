@@ -169,16 +169,14 @@ net install bim2merge ,         from(https://raw.github.com/ricanney/stata/maste
 
 ## bim2unrelated 
 
-**description** - a command to create a subset froma genotype dataset on "unrelated" individuals. the program is a wrapper for plink2 - where it extracts a subset of 50000 ld-independent markers and applies the --king-cutoff. the program creates the unrelated dataset and uses [```graphplinkkin0```](#graphplinkkin0) to plot the kinship from the ```--make-king-table```.
+**description** - a command to create a subset froma genotype dataset on "unrelated" individuals. the program is a wrapper for plink2 - where it extracts a subset of 50000 ld-independent markers via [```bim2ld_subset```](#bim2ld_subset) and applies the ```--king-cutoff``` command. the program creates the unrelated dataset and uses [```graphplinkkin0```](#graphplinkkin0) to plot the kinship from the ```--make-king-table```.
 
 **remarks** - you can define a threshold for "relatedness", this number is based on the KING algorithm; where 0.354 = duplicates; 0.1770 = first degree relationships; 0.0884 = second degree relationships; 0.0442 = third degree relatinships etc) The default for this program is .0221
  
 **examples** 
-
 ```
 bim2unrelated , bim(file1) threshold(0.0442)
 bim2unrelated , bim(file1) 
-
 ```
 **installation**
 
