@@ -21,6 +21,7 @@ net install bim2hapmap,             from(https://raw.github.com/ricanney/stata/m
 net install bim2ld_subset,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2ldexclude,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2merge,              from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2unrelated,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install checkfile,              from(https://raw.github.com/ricanney/stata/master/code/c/) replace
 net install checktabbed,            from(https://raw.github.com/ricanney/stata/master/code/c/) replace
 net install create_temp_dir,        from(https://raw.github.com/ricanney/stata/master/code/c/) replace

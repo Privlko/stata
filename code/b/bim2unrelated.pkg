@@ -1,0 +1,10 @@
+d get_stata_bundle - a command to use plink-format genotype files and to select a subset of unrelated individuals
+d Richard Anney  Cardiff University
+d Distribution-Date: 15dec2017
+
+   
+f bim2unrelated.ado       
+f bim2ld_subset.ado       
+f ../c/checkfile.ado      
+f ../g/graphplinkkin0.ado     
+        

@@ -9,3 +9,4 @@ p bim2hapmap command to use plink-format genotype files to plot againsts hapmap 
 p bim2ld_subset a command to use *.bim files (plink-format marker files) to generate a subset of ld independent snps (_subset#.extract)
 p bim2ldexclude command to generate ld-exclude regions for plink
 p bim2merge command to merge bim files
+p bim2unrelated command to use plink-format genotype files and to select a subset of unrelated individuals

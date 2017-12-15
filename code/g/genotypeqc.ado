@@ -689,7 +689,7 @@ qui { // Module #5 - apply quality control to genotypes
 			qui	di as text"# >>> calculating kinship / relatedness"
 			qui {
 				noi bim2ld_subset, bim(${sub_mod_input})
-				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0224 --out ${sub_mod_input}
+				!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 				}
 			}
 		qui di as text"#########################################################################"
@@ -1052,7 +1052,7 @@ qui { // Module #5 - apply quality control to genotypes
 		qui	di as text"# >> calculating kinship / relatedness"
 		qui {
 			noi bim2ld_subset, bim(${sub_mod_input})
-			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0224 --out ${sub_mod_input}
+			!$plink2 --bfile ${sub_mod_input} --extract _subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 			}
 		}
 	qui di as text"#########################################################################"
