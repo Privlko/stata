@@ -29,7 +29,7 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
 noi di as text"# > "as input"bim2unrelated "as text"....................................... "as result"`bim'.bim"
-noi checkfile, file(${plink})
+noi checkfile, file(${plink2})
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(`bim'.bed)
 noi checkfile, file(`bim'.fam)
@@ -65,7 +65,7 @@ qui {
 	graph combine preKIN0_1.gph postKIN0_1.gph, col(1) ycommon
 	graph export `bim'-unrelated-ibs-by-kin.png, as(png) height(2000) width(4000) replace
 	graph combine preKIN0_2.gph postKIN0_2.gph, col(1) ycommon
-	graph export `bim'-unrelated-kinship histogram.png, as(png) height(2000) width(4000) replace
+	graph export `bim'-unrelated-kinship-histogram.png, as(png) height(2000) width(4000) replace
 	}
 qui di as text"# > clean up files"
 qui { 
