@@ -196,14 +196,14 @@ qui { // Module #1 - determining the original genotyping array
 			}
 		qui di as text"# > plotting most likely arrays to ...................... "as result"${output}.arraymatch.png"
 		qui {
-			import delim using ${output}.arraymatch, clear delim(":") case(preserve)
+			import delim using ${input}.arraymatch, clear case(preserve)
 			keep if _n <10
-			graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) fxsize(200) fysize(100) ///
+			graph hbar Jaccard , over(Array,sort(Jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) ylabel(0(.1)1) fxsize(200) fysize(100) ///
 			caption("Based on overlap with our reference data (derived from http://www.well.ox.ac.uk/~wrayner/strand/) the best matched ARRAY is ${arrayType}" ///
 							"Jaccard Index of  ${arrayType} = ${Jaccard}")
-			graph export ${output}.arraymatch.png, height(1000) width(4000) as(png) replace 
 			graph export  ${input}.arraymatch.png, height(1000) width(4000) as(png) replace 
 			window manage close graph
+
 			}
 		noi di as text"# > most likely array (best match) is ................... "as result"${arrayType}" as text " (based on jaccard index = "as result"${Jaccard}"as text")"
 		noi di as text"#########################################################################"
@@ -1132,11 +1132,15 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 		qui di as text"# >> plotting markers by chromosome by input / output"
 		qui { 
 			noi bim2dta,bim(${input})
-			hist chr,  xlabel(1(1)25) xtitle("Chromosome") discrete freq ylabel(#4,format(%9.0g))
+			count
+			hist chr,  xlabel(1(1)25) xtitle("Chromosome") caption("count based on `r(N)' SNPs") discrete freq ylabel(#4,format(%9.0g))
 			graph save _1.gph, replace
-			noi bim2dta,bim(${sub_mod_input})
-			hist chr,  xlabel(1(1)25) xtitle("Chromosome") discrete freq ylabel(#4,format(%9.0g))
+			window manage close graph
+			noi bim2dta,bim(${sub_mod_output})
+			count
+			hist chr,  xlabel(1(1)25) xtitle("Chromosome") caption("count based on `r(N)' SNPs") discrete freq ylabel(#4,format(%9.0g))
 			graph save _2.gph, replace
+			window manage close graph
 			graph combine _1.gph  _2.gph, caption("CREATED: $S_DATE $S_TIME" "INPUT: ${input}" "OUTPUT: ${output}",	size(tiny)) col(1) ycommon
 			graph export  ${sub_mod_input}-chromosomes.png, as(png) replace width(4000) height(2000)
 			window manage close graph
