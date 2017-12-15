@@ -74,7 +74,6 @@ qui { // Module #0 - preamble
 	qui di as text"# > create temp directory"
 	qui {
 		noi create_temp_dir
-		global genotypeqc_temp_dir ${temp_dir}
 		}		
 	noi di as text"# > check path of dependent software is true"
 	qui { 
@@ -1214,19 +1213,18 @@ qui { // Module #9 - rename and clean
 		!del *_bim.dta
 		!del ${output}.hg-buildmatc* ${output}.arraymatc*
 		noi di as text"# > remove temporary directory"
-		!rmdir  $genotypeqc_temp_dir /S /Q
+		!rmdir  "$temp_dir" /S /Q
 		cd ..
 		!rmdir "${output_2}"  /S /Q
 		!mkdir "${output_2}"
-		cd "${output_2}"
-		
-		!copy "${output}.bed"                           "${output_2}.bed"
-		!copy "${output}.bim"                           "${output_2}.bim"
-		!copy "${output}.fam"                           "${output_2}.fam"
-		!copy "${output}_CEU_TSI-like.keep"             "${output_2}_CEU_TSI-like.keep  "
-		!copy "${output}.meta-log"                      "${output_2}-genotypeqc.meta-log"
-		!copy "${output}.quality-control-report.docx"   "${output_2}.quality-control-report.docx"
-		!del  ${output}*
+		!copy "${output}.bed"                           "${output_2}\\${output_2}.bed"
+		!copy "${output}.bim"                           "${output_2}\\${output_2}.bim"
+		!copy "${output}.fam"                           "${output_2}\\${output_2}.fam"
+		!copy "${output}_CEU_TSI-like.keep"             "${output_2}\\${output_2}_CEU_TSI-like.keep  "
+		!copy "${output}-genotypeqc.meta-log"           "${output_2}\\${output_2}-genotypeqc.meta-log"
+		!copy "${output}.quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
+		cd ${data_folder}
+		!del  ${output}* *.arraymatc* *hg-build* *.parameters	
 		}
 	noi di as text"#########################################################################"
 	noi di as text" "
