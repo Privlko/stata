@@ -1116,7 +1116,7 @@ qui { // Module #7 - define european (ceu-tsi-like) subset
 	noi di as text"#########################################################################"
 	noi di as text"# Module #7 - define / plot ancestry"
 	qui { 
-		global sub_mod_input  tempfile-module6-final
+		global sub_mod_input  tempfile-module5-round4
 		global sub_mod_hapmp  ${hapmap_data} 
 		noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${sub_mod_hapmp}) aims(${aims})
 		!rename "bim2hapmap_CEU_TSI-like.keep" "${sub_mod_output}_CEU_TSI-like.keep"
@@ -1131,7 +1131,6 @@ qui { // Module #8 - create quality-control mini-log and docx-report
 	qui { 
 		qui di as text"# >> plotting markers by chromosome by input / output"
 		qui { 
-			global sub_mod_input  tempfile-module6-final
 			noi bim2dta,bim(${input})
 			hist chr,  xlabel(1(1)25) xtitle("Chromosome") discrete freq ylabel(#4,format(%9.0g))
 			graph save _1.gph, replace
