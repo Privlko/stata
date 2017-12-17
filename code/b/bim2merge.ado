@@ -37,16 +37,16 @@ qui{
 	count
 	global bim2merge_dataN `r(N)'
 	foreach num of num 1 / $bim2merge_dataN {
-		checkfile, file(${bim2merge_data`num'}.bim)
-		checkfile, file(${bim2merge_data`num'}.bed)
-		checkfile, file(${bim2merge_data`num'}.fam)
+		noi checkfile, file(${bim2merge_data`num'}.bim)
+		noi checkfile, file(${bim2merge_data`num'}.bed)
+		noi checkfile, file(${bim2merge_data`num'}.fam)
 		}
 	}	
 noi di as text" "
 noi di as text"# > quietly check if dependent software filepath is true"
 qui { 
-	checkfile, file(${plink})
-	checktabbed
+	noi checkfile, file(${plink})
+	noi checktabbed
 	}
 noi di as text" "
 qui di as text"# > create temp directory"
@@ -76,7 +76,7 @@ qui {
 	else {
 		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${bim2merge_data1}_bim.dta"
 		noi di as text"# "
-		bim2dta, bim(${bim2merge_data1})
+		noi bim2dta, bim(${bim2merge_data1})
 		}
 	for var chr bp: tostring X,replace
 	drop if chr == "23" | chr == "24" | chr == "25"
