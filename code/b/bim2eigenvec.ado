@@ -69,6 +69,7 @@ qui {
 	!$tabbed _00000003.eigenvec
 	import delim using _00000003.eigenvec.tabbed, clear
 	keep fid iid pc1 - pc`pc'
+	for var fid iid: tostring X,replace
 	save `bim'_eigenvec.dta,replace
 	}
 qui di as text"# > processing eigenval file to `bim'_eigenval.dta"
