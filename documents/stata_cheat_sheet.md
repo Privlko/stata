@@ -1,8 +1,11 @@
-[```packages```](#packages)
-[```routines```](#routines)
+* [packages](#packages)
+* [routines](#routines)
 
 # packages
-[```colorbrewer```](#colorbrewer) [```discard```](#discard) [```encode```](#encode) [```inlist```](#inlist) 
+* [```colorbrewer```](#colorbrewer)
+* [```discard```](#discard)
+* [```encode```](#encode)
+* [```inlist```](#inlist) 
 
 # colorbrewer
 how to install colorbrewer
@@ -46,10 +49,20 @@ The difference between using numeric and string values is in the number of allow
 ```
 
 # routines
-[create-newvar-odds_ratio-based-on-oldvar-or-l95-u95](#create-newvar-odds_ratio-based-on-oldvar-or-l95-u95)
-[create-newvar-foreach-observations-in-oldvar](create-newvar-foreach-observations-in-oldvar)
-[create-newvar-based-on-line-number](create-newvar-based-on-line-number)
-[create-newvar-listing-nth-observations-in-oldvar](create-newvar-listing-nth-observations-in-oldvar)
+* [add-a-leading-zero-to-number](#add-a-leading-zero-to-number)
+* [create-a-blank-graph](#create-a-blank-graph)
+* [create-newvar-based-on-line-number](#create-newvar-based-on-line-number)
+* [create-newvar-foreach-observations-in-oldvar](#create-newvar-foreach-observations-in-oldvar)
+* [create-newvar-listing-nth-observations-in-oldvar](#create-newvar-listing-nth-observations-in-oldvar)
+* [create-newvar-odds_ratio-based-on-oldvar-or-l95-u95](#create-newvar-odds_ratio-based-on-oldvar-or-l95-u95)
+* [fill-missing-if-previous-observation-is-present](#fill-missing-if-previous-observation-is-present)
+
+
+# create-newvar-based-on-line-number
+```
+gen  newvar = _n 							
+```
+
 # create-newvar-odds_ratio-based-on-oldvar-or-l95-u95
 ```
 keep or l95 u95
@@ -65,16 +78,13 @@ creates a new variable 0/1 for each observation
 sysuse auto, clear
 tab oldvar, gen(newvar)
 ```
-# create-newvar-based-on-line-number
-```
-gen  newvar = _n 							
-```
+
 # create-newvar-listing-nth-observations-in-oldvar
 ```
 egen newvar = seq(), by(oldvar)	
 ```
 
-#  create a blank graph
+#  create-a-blank-graph
 ```
 twoway scatteri 1 1,            ///
 msymbol(i)                      ///
@@ -85,16 +95,16 @@ plotregion(lpattern(blank))     ///
 name(blank, replace)
 ```
 
-# adding-leading-zeros 
+# add-a-leading-zero-to-number
 ```
 gen str4 stringvar =    string(numvar, "%04.0f")
 gen      stringvar = strofreal(numvar, "%04.0f")
 ```
 
-# replace-missing-with-previous-non-missing-observation
+# fill-missing-if-previous-observation-is-present
 ```
 replace var = var[_n-1] if var == ""
-```	
+```
 
 # rename files and folders
 ```
