@@ -46,35 +46,32 @@ The difference between using numeric and string values is in the number of allow
 ```
 
 # routines
-[creating string odds-ratio for tables](#creating_string_odds-ratio_for_tables)
-
-
-
-# creating string odds-ratio for tables
+[create-newvar-odds_ratio-based-on-oldvar-or-l95-u95](#create-newvar-odds_ratio-based-on-oldvar-or-l95-u95)
+[create-newvar-foreach-observations-in-oldvar](create-newvar-foreach-observations-in-oldvar)
+[create-newvar-based-on-line-number](create-newvar-based-on-line-number)
+[create-newvar-listing-nth-observations-in-oldvar](create-newvar-listing-nth-observations-in-oldvar)
+# create-newvar-odds_ratio-based-on-oldvar-or-l95-u95
 ```
+keep or l95 u95
 gen str4 x= string(or,"%03.2f")						
 gen str4 y= string(l95,"%03.2f")					
-gen str4 z= string(u95,"%03.2f")					
-drop or l95 u95								
-gen a=" ("								
-gen b=")"								
-gen c="-"								
-egen or=concat(x a y c z b)						
-ta or									
-drop x y z a b c
+gen str4 z= string(u95,"%03.2f")			
+gen odds_ratio = x + " (" + y + "-" + z + ")"
 ```
 
-# create a set of newvars based on observations in a single variable
+# create-newvar-foreach-observations-in-oldvar
+creates a new variable 0/1 for each observation 
 ```
-tab SYMBOL, gen(newvar)
+sysuse auto, clear
+tab oldvar, gen(newvar)
 ```
-# create newvar based on observation (line) in database
+# create-newvar-based-on-line-number
 ```
 gen  newvar = _n 							
 ```
-# create newvar based on observation in database (by the observations in the variable)
+# create-newvar-listing-nth-observations-in-oldvar
 ```
-egen newvar = seq(), by(obsvar)	
+egen newvar = seq(), by(oldvar)	
 ```
 
 #  create a blank graph
