@@ -1,4 +1,19 @@
-(discard)[#discard](discard) [#discard]
+[```packages```](#packages)
+[```routines```](#routines)
+
+# packages
+[```colorbrewer```](#colorbrewer) [```discard```](#discard) [```encode```](#encode) [```inlist```](#inlist) 
+
+# colorbrewer
+how to install colorbrewer
+from https://github.com/matthieugomez/stata-colorscheme
+1. download archive from github 
+2. unpack archive
+3. then run the following commands;
+```
+cap ado uninstall colorscheme                         
+net install colorscheme, from("folder\stata-colorscheme-master")         
+```
 
 # discard
 command to discard all ado files from memory
@@ -30,16 +45,10 @@ gen asean4 = 1 if inlist(countrycode, 360, 458, 608, 764)''
 The difference between using numeric and string values is in the number of allowable elements in the list. For numeric values, 254 elements are allowed and for string values, only 9. 
 ```
 
-color-brewer
-how to install colorbrewer
-from https://github.com/matthieugomez/stata-colorscheme
-1. download archive from github 
-2. unpack archive
-3. then run the following commands;
-```
-cap ado uninstall colorscheme                         
-net install colorscheme, from("folder\stata-colorscheme-master")         
-```
+# routines
+[creating string odds-ratio for tables](#creating_string_odds-ratio_for_tables)
+
+
 
 # creating string odds-ratio for tables
 ```
