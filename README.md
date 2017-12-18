@@ -8,3 +8,4 @@ The following pages will hopefully be useful in helping you utilise theseprogram
 * [2-documentation on packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 * [3-performing genotype array quality control](https://github.com/ricanney/stata/blob/master/documents/genotype_array_quality_control.md)
 * [4-performing polygenic risk scoring](https://github.com/ricanney/stata/blob/master/documents/polygenic_risk_scoring.md)
+* [5-stata cheat sheet](https://github.com/ricanney/stata/blob/master/documents/stata_cheat_sheet.md)
