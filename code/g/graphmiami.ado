@@ -119,8 +119,7 @@ qui di as text"# > cleaning"
 qui {
 	erase temp-graphgene.gph
 	erase temp-graphgene-data.dta
-	erase tmp.do
-	erase tmp1.dta
+
 	}
 clear 
 qui di as text"#########################################################################"

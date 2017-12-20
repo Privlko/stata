@@ -23,6 +23,7 @@ f ../f/fam2dta.ado
 f ../g/genotypeqc.ado     
 f ../g/graphgene.ado     
 f ../g/graphmanhattan.ado     
+f ../g/graphmiami.ado     
 f ../g/graphplinkfrq.ado     
 f ../g/graphplinkhet.ado     
 f ../g/graphplinkhwe.ado     
