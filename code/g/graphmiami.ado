@@ -74,20 +74,21 @@ qui {
 	drop if bp > ${stop}
 	rename snp rsid
 	keep rsid chr bp
+	rename (chr bp) (chr_ bp_)
 	}
 qui di as text"# > merge rsid and p from `gwas1'"
 qui { 
 	merge 1:1 rsid using `gwas1'
 	keep if _m == 3
 	gen gwas1_log10p = -log10(p)
-	keep rsid chr bp gwas1_log10p
+	keep rsid chr_ bp_ gwas1_log10p
 	}
 qui di as text"# > merge rsid and p from `gwas2'"
 qui {
 	merge 1:1 rsid using `gwas2'
 	keep if _m == 3
 	gen gwas2_log10p = -log10(p)
-	keep rsid chr bp gwas1_log10p gwas2_log10p
+	keep rsid chr_ bp_ gwas1_log10p gwas2_log10p
 	}
 qui di as text"# > plot regions to tmpMiami.gph"
 qui { 
