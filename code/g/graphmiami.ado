@@ -87,7 +87,7 @@ qui di as text"# > merge rsid and p from `gwas2'"
 qui {
 	merge 1:1 rsid using `gwas2'
 	keep if _m == 3
-	gen gwas2_log10p = -log10(p)
+	gen gwas2_log10p = log10(p)
 	keep rsid chr_ bp_ gwas1_log10p gwas2_log10p
 	}
 qui di as text"# > plot regions to tmpMiami.gph"
