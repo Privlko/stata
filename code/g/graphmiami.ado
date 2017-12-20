@@ -77,14 +77,14 @@ qui {
 	}
 qui di as text"# > merge rsid and p from `gwas1'"
 qui { 
-	merge rsid using `gwas1', clear
+	merge rsid using `gwas1'
 	keep if _m == 3
 	gen gwas1_log10p = -log10(p)
 	keep rsid chr bp gwas1_log10p
 	}
 qui di as text"# > merge rsid and p from `gwas2'"
 qui {
-	merge rsid using `gwas2', clear
+	merge rsid using `gwas2'
 	keep if _m == 3
 	gen gwas2_log10p = -log10(p)
 	keep rsid chr bp gwas1_log10p gwas2_log10p
@@ -119,7 +119,6 @@ qui di as text"# > cleaning"
 qui {
 	erase temp-graphgene.gph
 	erase temp-graphgene-data.dta
-
 	}
 clear 
 qui di as text"#########################################################################"
