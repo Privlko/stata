@@ -60,7 +60,7 @@ qui {
 	global start `r(max)'
 	sum a4
 	global stop `r(max)'
-	noi di as text"# > plot region is set as as result"as result"${chr}:${start}-${stop}"
+	noi di as text"# > "as input"graphmiami"as text" ........................... plot region to "as result"chr${chr}:${start}-${stop}"
 	}
 qui di as text"# > plot genes in region"
 qui { 

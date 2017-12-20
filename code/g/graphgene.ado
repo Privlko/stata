@@ -42,10 +42,9 @@ qui { // display region to plot
 	qui di as text "# This script will plot genes on chromosome `chr': from `start' to `end'"
 	}
 qui { // create DUMMY gene data (for gene deserts)
-	qui di as text"...create DUMMY gene data (for gene deserts)"
+	qui di as text"# > create DUMMY gene data (for gene deserts)"
 	clear
 	set obs 1
-	noi di"...create dummy file for gene deserts"
 	gen symbol  = "DUMMY"
 	gen chr     = `chr'
 	gen txstart = `start' +1000
