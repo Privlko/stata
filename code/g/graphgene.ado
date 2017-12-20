@@ -24,87 +24,80 @@ program graphgene
 syntax  ,  chr(string asis) start(string asis) end(string asis) gene_file(string asis) 
 
 qui { // introduce program
-	di in white"#########################################################################"
-	di in white"# graphgene                                                              "
-	di in white"# version:       1.0                                                     "
-	di in white"# Creation Date: 7th September 2017                                      "
-	di in white"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-	di in white"#########################################################################"
-	di in white"# Note:       The genome build is based on the ensembl gene-location file"
-	di in white"#########################################################################"
-	di in white""
+	qui di as text"#########################################################################"
+	qui di as text"# graphgene                                                              "
+	qui di as text"# version:       1.0                                                     "
+	qui di as text"# Creation Date: 7th September 2017                                      "
+	qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
+	qui di as text"#########################################################################"
+	qui di as text"# Note:       The genome build is based on the ensembl gene-location file"
+	qui di as text"#########################################################################"
+	qui di as text""
 	}
 qui { // check file dependencies
-	di in white"# checking ensembl gene-location file;"
-	capture confirm file "`gene_file'"
-	if _rc==0 {
-		di in white"# ...................................... `gene_file' found"
-		}
-	else {
-		di in red"# ...................................... `gene_file' does not exist"
-		exit
-		}
+	qui di as text"# checking ensembl gene-location file;"
+	noi checkfile, file(`gene_file')
 	}
 qui { // display region to plot
-	di in white "# This script will plot genes on chromosome `chr': from `start' to `end'"
+	qui di as text "# This script will plot genes on chromosome `chr': from `start' to `end'"
 	}
 qui { // create DUMMY gene data (for gene deserts)
-			noi di"...create DUMMY gene data (for gene deserts)"
-			clear
-			set obs 1
-			noi di"...create dummy file for gene deserts"
-			gen symbol  = "DUMMY"
-			gen chr     = `chr'
-			gen txstart = `start' +1000
-			gen txend   = `end'	 -1000
-			gen start   = `start' +1
-			gen end     = `end'   -1
-			save tmpDUMMY.dta, replace
-			}
+	qui di as text"...create DUMMY gene data (for gene deserts)"
+	clear
+	set obs 1
+	noi di"...create dummy file for gene deserts"
+	gen symbol  = "DUMMY"
+	gen chr     = `chr'
+	gen txstart = `start' +1000
+	gen txend   = `end'	 -1000
+	gen start   = `start' +1
+	gen end     = `end'   -1
+	save tmpDUMMY.dta, replace
+	}
 qui { // identify genes in region
-			use `gene_file', clear
-			qui { // limit transcripts
-				drop if biotype == "3prime_overlapping_ncrna" 
-				drop if biotype == "IG_C_gene"
-				drop if biotype == "IG_C_pseudogene"
-				drop if biotype == "IG_D_gene"
-				drop if biotype == "IG_J_gene"
-				drop if biotype == "IG_J_pseudogene"
-				drop if biotype == "IG_V_gene"
-				drop if biotype == "IG_V_pseudogene"
-				drop if biotype == "Mt_rRNA"
-				drop if biotype == "Mt_tRNA"
-				drop if biotype == "TR_C_gene"
-				drop if biotype == "TR_D_gene"
-				drop if biotype == "TR_J_gene"
-				drop if biotype == "TR_J_pseudogene"
-				drop if biotype == "TR_V_gene"
-				drop if biotype == "TR_V_pseudogene"
-				drop if biotype == "antisense"
-				drop if biotype == "lincRNA"
-				drop if biotype == "miRNA"
-				drop if biotype == "misc_RNA"
-				drop if biotype == "polymorphic_pseudogene"
-				drop if biotype == "processed_transcript"
-			*	drop if biotype == "protein_coding"
-				drop if biotype == "pseudogene"
-				drop if biotype == "rRNA"
-				drop if biotype == "sense_intronic"
-				drop if biotype == "sense_overlapping"
-				drop if biotype == "snRNA"
-				drop if biotype == "snoRNA"
-				}
-			keep if chr    ==  `chr'
-			drop if start   > `end'
-			drop if end     < `start'
-			drop if txstart > `end'
-			drop if txend   < `start'
-			replace start   = `start' if start   < `start'
-			replace end     = `end'   if end     > `end'
-			replace txstart = `start' if txstart < `start'
-			replace txend   = `end'   if txend   > `end'
-			append using tmpDummy.dta
-			}
+	use `gene_file', clear
+	qui { // limit transcripts
+		drop if biotype == "3prime_overlapping_ncrna" 
+		drop if biotype == "IG_C_gene"
+		drop if biotype == "IG_C_pseudogene"
+		drop if biotype == "IG_D_gene"
+		drop if biotype == "IG_J_gene"
+		drop if biotype == "IG_J_pseudogene"
+		drop if biotype == "IG_V_gene"
+		drop if biotype == "IG_V_pseudogene"
+		drop if biotype == "Mt_rRNA"
+		drop if biotype == "Mt_tRNA"
+		drop if biotype == "TR_C_gene"
+		drop if biotype == "TR_D_gene"
+		drop if biotype == "TR_J_gene"
+		drop if biotype == "TR_J_pseudogene"
+		drop if biotype == "TR_V_gene"
+		drop if biotype == "TR_V_pseudogene"
+		drop if biotype == "antisense"
+		drop if biotype == "lincRNA"
+		drop if biotype == "miRNA"
+		drop if biotype == "misc_RNA"
+		drop if biotype == "polymorphic_pseudogene"
+		drop if biotype == "processed_transcript"
+		*	drop if biotype == "protein_coding"
+		drop if biotype == "pseudogene"
+		drop if biotype == "rRNA"
+		drop if biotype == "sense_intronic"
+		drop if biotype == "sense_overlapping"
+		drop if biotype == "snRNA"
+		drop if biotype == "snoRNA"
+		}
+	keep if chr    ==  `chr'
+	drop if start   > `end'
+	drop if end     < `start'
+	drop if txstart > `end'
+	drop if txend   < `start'
+	replace start   = `start' if start   < `start'
+	replace end     = `end'   if end     > `end'
+	replace txstart = `start' if txstart < `start'
+	replace txend   = `end'   if txend   > `end'
+	append using tmpDummy.dta
+	}
 qui { // remove duplicates # this plot will focus on gene units not alternative transcripts
 	keep chr start end txs txe symbol biotype
 	duplicates drop
@@ -113,7 +106,7 @@ qui { // how many genes are in the region
 	encode symbol, gen(region_n)
 	sum region_n
 	global region_n `r(max)'
-	noi di in yellow "# there are $region_n unique elements in the region"
+	noi di as text"# > "as input"graphgene"as text" ........................ elements in region "as result"$region_n"
 	}	
 qui { // save co-ordinates file
 	keep symbol	chr st en txs txe
@@ -186,9 +179,9 @@ qui { // plot region
 		;
 		#delim cr
 		}
+	noi di as text"# > "as input"graphgene"as text" .............................. plot gene to "as result"temp-graphgene.gph"
 	}
 qui { //clean up tmp files"
 	!del tmpGENEcoords.dta tmpDUMMY.dta
 	}
-noi di "done!"
 end;
