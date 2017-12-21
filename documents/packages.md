@@ -445,14 +445,14 @@ net install -name-,         from(https://raw.github.com/ricanney/stata/master/co
 
 ## graphmiami
 
-**description** 
+**description** - this script plots a simple miami plot for two gwas datasets for a defined region. the plot also includes a geneplot. both input gwas require the variable rsid/p; co-ordinates are taken from a reference binary. the geneplot requires gene/exon boundaries derived using the ```get-ensembl-gtf.do``` script.
 
 **remarks** 
 
 **examples**
 
 ```
-syntax
+graphmiami , gwas1(file1) gwas2(fil2) title1(disease1) title2(disease1) region(chr7:100000000-120000000) exons(E:\data\other\ftp-ensembl\data\Homo_sapiens.GRCh37.87.gtf_exon.dta) ref(E:\data\genotypes\ref\1000-genomes\phase3\data\hg19\eur_1000g_phase3_chrall_impute_macgt5)
 
 ```
 **installation**
