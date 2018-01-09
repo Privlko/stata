@@ -1,0 +1,5 @@
+d _gwas2sumstat subcommand: convert summary file to *.sumstats.gz
+d Richard Anney, Cardiff University
+d Distribution-Date: 9Jan2018
+f _gwas2sumstat.ado
+

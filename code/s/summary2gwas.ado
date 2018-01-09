@@ -1,5 +1,5 @@
 program summary2gwas
-syntax ,  reference(string asis) out(string asis)
+syntax ,  reference(string asis) out(string asis) 
 qui di as text"#########################################################################"
 qui di as text"# summary2gwas               "
 qui di as text"# Creation Date: 9Jan2018            "

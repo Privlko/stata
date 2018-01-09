@@ -1,0 +1,4 @@
+d _gwas2prePRS subcommand: convert summary file to *.prePRS.tsv.gz
+d Richard Anney, Cardiff University
+d Distribution-Date: 9Jan2018
+f _gwas2prePRS.ado
