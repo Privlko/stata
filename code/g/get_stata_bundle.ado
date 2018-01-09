@@ -44,6 +44,7 @@ net install loadUnixReplicas,       from(https://raw.github.com/ricanney/stata/m
 net install profilescore,           from(https://raw.github.com/ricanney/stata/master/code/p/) replace
 net install recodegenotype,         from(https://raw.github.com/ricanney/stata/master/code/r/) replace
 net install recodestrand,           from(https://raw.github.com/ricanney/stata/master/code/r/) replace
+net install summary2gwas,           from(https://raw.github.com/ricanney/stata/master/code/s/) replace
 net install symbol2ensembl,         from(https://raw.github.com/ricanney/stata/master/code/s/) replace
 
 noi di as text"# > install external dependencies"

@@ -1,6 +1,6 @@
 d get_stata_bundle - command to get stata packages from https://github.com/ricanney/stata
 d Richard Anney  Cardiff University
-d Distribution-Date: 12dec2017
+d Distribution-Date: 9jan2018
 
 f get_stata_bundle.ado
 f ../_/_sub_genotypeqc_meta.ado     
@@ -37,4 +37,5 @@ f ../l/loadUnixReplicas.ado
 f ../p/profilescore.ado     
 f ../r/recodegenotype.ado     
 f ../r/recodestrand.ado     
-f ../s/symbol2ensembl           
+f ../s/summary2gwas.ado    
+f ../s/symbol2ensembl.ado       

@@ -1,3 +1,5 @@
 v 1
 d Richard Anney, Cardiff University
 p symbol2ensembl command to conver gene-symbols to enseml identifiers
+p summary2gwas command to process summary gwas data prior to conversion to other formats (e.g. magma/ profilescore/ sumstats)
+

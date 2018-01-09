@@ -108,7 +108,7 @@ qui {
 	}
 qui di as text"# > tabulating genotypes (clean #3)"
 qui {
-	noi ta temp_ref_gt _gt
+	ta temp_ref_gt _gt
 	drop _gt temp_ref_gt temp_alt_gt
 	}
 qui di as text"#########################################################################"
