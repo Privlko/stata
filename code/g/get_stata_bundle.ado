@@ -12,7 +12,7 @@ noi di as text" "
 noi di as text"# > install packages from https://github.com/ricanney/stata"
 net install _gwas2magma,            from(https://raw.github.com/ricanney/stata/master/code/_/) replace
 net install _gwas2prePRS,           from(https://raw.github.com/ricanney/stata/master/code/_/) replace
-net install _gwas2sumstats,         from(https://raw.github.com/ricanney/stata/master/code/_/) replace
+net install _gwas2sumstat,          from(https://raw.github.com/ricanney/stata/master/code/_/) replace
 net install _sub_genotypeqc_report, from(https://raw.github.com/ricanney/stata/master/code/_/) replace
 net install bim2build,              from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2count,              from(https://raw.github.com/ricanney/stata/master/code/b/) replace

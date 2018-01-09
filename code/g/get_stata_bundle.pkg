@@ -5,7 +5,7 @@ d Distribution-Date: 9jan2018
 f get_stata_bundle.ado
 f ../_/_gwas2magma.ado     
 f ../_/_gwas2prePRS.ado     
-f ../_/_gwas2sumstats.ado     
+f ../_/_gwas2sumstat.ado     
 f ../_/_sub_genotypeqc_meta.ado     
 f ../_/_sub_genotypeqc_report.ado     
 f ../b/bim2build.ado     
