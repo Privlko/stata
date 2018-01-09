@@ -1,6 +1,7 @@
 [back to opening page](https://github.com/ricanney/stata)
 
 ## information on packages
+### b
 [```bim2build```](#bim2build)
 [```bim2count```](#bim2count)
 [```bim2dta```](#bim2dta)
@@ -11,12 +12,17 @@
 [```bim2ldexclude```](#bim2ldexclude)
 [```bim2merge```](#bim2merge)
 [```bim2unrelated```](#bim2unrelated)
+### c
 [```checkfile```](#checkfile)
 [```checktabbed```](#checktabbed)
 [```create_temp_dir```](#create_temp_dir)
+### d
 [```datestamp```](#datestamp)
+### e
 [```ensembl2symbol```](#ensembl2symbol) 
+### f
 [```fam2dta```](#fam2dta) 
+### g
 [```genotypeqc```](#genotypeqc)
 [```get_stata_bundle```](#get_stata_bundle) 
 [```graphmanhattan```](#graphmanhattan)
@@ -30,11 +36,16 @@
 [```graphplinklmiss```](#graphplinklmiss)
 [```graphgene```](#graphgene)
 [```gwas2prs```](#gwas2prs) 
+### k
 [```kin0filter```](#kin0filter) 
+### l
 [```loadunixreplicas```](#loadunixreplicas) 
+### p
 [```profilescore```](#profilescore) 
+### r
 [```recodegenotype```](#recodegenotype)
 [```recodestrand```](#recodestrand) 
+### s
 [```summary2gwas```](#summary2gwas) 
 [```symbol2ensembl```](#symbol2ensembl) 
 
