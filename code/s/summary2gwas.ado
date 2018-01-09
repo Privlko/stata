@@ -13,9 +13,8 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 qui { // Module 0 - check reference data exists
-	*noi checkfile, file(`reference')
-	noi checkfile, file(${ref}_bim.dta)
-	noi checkfile, file(${ref}_frq.dta)
+	noi checkfile, file(`reference'_bim.dta)
+	noi checkfile, file(`reference'_frq.dta)
 	}
 qui { // Module 1 - report to screen
 	noi di as text"# > "as input"summary2gwas "as text" .................... processing data to " as result`"`out'"'
@@ -32,7 +31,7 @@ qui { // Module 2 - duplicates drop
 	}
 qui { // Module 3 - convert to hg19 via reference
 	rename (a1 a2) (_a1 _a2)
-	merge 1:1 snp using ${ref}_bim.dta
+	merge 1:1 snp using `reference'_bim.dta
 	keep if _m == 3
 	count
 	global mergeSNP `r(N)'
@@ -95,7 +94,7 @@ qui { // Module 6 - add a1_frq if absent
 			}
 		else {
 			rename (a1 a2) (_a1 _a2)
-			merge 1:1 snp using ${ref}_frq.dta
+			merge 1:1 snp using `reference'_frq.dta
 			keep if _m == 3
 			drop _m
 			gen a1_frq = .
@@ -110,28 +109,28 @@ qui { // Module 6 - add a1_frq if absent
 qui { // Module 7 - export data
 	order chr bp snp a1 a2 a1_frq p
 	sort chr bp
-	save ${out}.dta, replace
+	save `out'.dta, replace
 	count
 	global outputSNP `r(N)'
 	noi di as text"# > markers in the dataset after screening .............. "as result"${outputSNP}" 
 	}
 qui { // Module 8 - write a log file
-	!echo #########################################################################  >  ${out}.log
-	!echo # summary2gwas                                                             >> ${out}.log
-	!echo # available from https://github.com/ricanney                               >> ${out}.log
-	!echo # =======================================================================  >> ${out}.log
-	!echo # Author:     Richard Anney                                                >> ${out}.log
-	!echo # Institute:  Cardiff University                                           >> ${out}.log
-	!echo # E-mail:     AnneyR@cardiff.ac.uk                                         >> ${out}.log
-	!echo # Date:       9th January 2018                                             >> ${out}.log
-	!echo #########################################################################  >> ${out}.log
-	!echo # Output.................................................. ${out).dta      >> ${out}.log
-	!echo # Date / Time of run ..................................... $S_DATE $S_TIME >> ${out}.log
-	!echo # Number of snps imported ................................ ${inputSNP}     >> ${out}.log
-	!echo # Number of snps in output................................ ${outputSNP}    >> ${out}.log
-	!echo # Origin of a1_frq ....................................... ${a1_frq}       >> ${out}.log 
-	!echo # Chromosome / Location from  ............................ ${ref}          >> ${out}.log 
-	!echo #########################################################################  >> ${out}.log
+	!echo #########################################################################  >  `out'.log
+	!echo # summary2gwas                                                             >> `out'.log
+	!echo # available from https://github.com/ricanney                               >> `out'.log
+	!echo # =======================================================================  >> `out'.log
+	!echo # Author:     Richard Anney                                                >> `out'.log
+	!echo # Institute:  Cardiff University                                           >> `out'.log
+	!echo # E-mail:     AnneyR@cardiff.ac.uk                                         >> `out'.log
+	!echo # Date:       9th January 2018                                             >> `out'.log
+	!echo #########################################################################  >> `out'.log
+	!echo # Output.................................................. ${out).dta      >> `out'.log
+	!echo # Date / Time of run ..................................... $S_DATE $S_TIME >> `out'.log
+	!echo # Number of snps imported ................................ ${inputSNP}     >> `out'.log
+	!echo # Number of snps in output................................ ${outputSNP}    >> `out'.log
+	!echo # Origin of a1_frq ....................................... ${a1_frq}       >> `out'.log 
+	!echo # Chromosome / Location from  ............................ ${ref}          >> `out'.log 
+	!echo #########################################################################  >> `out'.log
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
