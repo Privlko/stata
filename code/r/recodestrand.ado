@@ -51,12 +51,21 @@ qui {
 	qui di as text"# >> tabulating genotypes"
 	ta temp_ref_gt temp_alt_gt
 	qui di as text"# >> dropping non- R Y M K genotypes"
-	foreach xx in A C G T ID DI W S {
+	foreach xx in A C G T W S {
 		gen drop = .
 		replace drop = 1 if temp_ref_gt == "`xx'"
 		replace drop = 1 if temp_alt_gt == "`xx'"
 		count if drop == 1
-		noi di as text"# > markers with non-informative genotypes (`xx') ....... "as result `r(N)' 
+		noi di as text"# > markers with non-informative genotypes (`xx') .......... "as result `r(N)' 
+		drop if drop == 1
+		drop drop
+		}
+	foreach xx in ID DI {
+		gen drop = .
+		replace drop = 1 if temp_ref_gt == "`xx'"
+		replace drop = 1 if temp_alt_gt == "`xx'"
+		count if drop == 1
+		noi di as text"# > markers with non-informative genotypes (`xx') ......... "as result `r(N)' 
 		drop if drop == 1
 		drop drop
 		}
@@ -68,7 +77,7 @@ qui {
 	replace drop = 1 if temp_ref_gt == "M" & ( temp_alt_gt == "R" |  temp_alt_gt == "Y")
 	replace drop = 1 if temp_ref_gt == "R" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
 	replace drop = 1 if temp_ref_gt == "Y" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
-	count if drop = 1
+	count if drop == 1
 	noi di as text"# > markers with incompatible genotypes (K!=M and R!=Y) . "as result `r(N)' 
 	drop if drop == 1
 	drop drop
