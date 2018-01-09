@@ -813,6 +813,26 @@ net install -name-,         from(https://raw.github.com/ricanney/stata/master/co
 
 **additional files**
 
+## summary2gwas 
+
+**description**  - post-gwas analysis of gwas summary files requires a variety of formats, but often the same quality controls need to be applied, common builds need to be mapped and ambiguous or non-strand compatible genotypes need to be removed. this program performs standard quality control on pre-processed gwas summary files and saves as \*.dta format. these files can then be used to create input files for [```profilescore```](#profilescore), magma and ldscore regression as \*.prePRS.tsv.gz, \*.pval.gz and \*.sumstats files respectively. additional sub-routine files  [```_gwas2magma```](#_gwas2magma), [```_gwas2prePRS```](#_gwas2prePRS), and [```_gwas2sumstat```](#_gwas2sumstat) are required to convert to other formats.
+
+**remarks** 
+
+**examples**
+
+```
+syntax
+
+```
+**installation**
+
+```
+net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
+```
+
+**additional files**
+
 ## symbol2ensembl
 
 **description** 
