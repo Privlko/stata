@@ -34,6 +34,8 @@ qui di as text"# - this script creates flip code for all markers that were flipp
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
+
+noi di as text"# > "as input"recodestrand "as text"........................................ checking strand compatibility"
 qui di as text"# > generating genotype variable for reference alleles"
 qui {
 	qui recodegenotype, a1(`ref_a1') a2(`ref_a2')
@@ -46,22 +48,32 @@ qui {
 	}
 qui di as text"# > checking for incompatible genotypes"
 qui {
-	noi qui di as text"# >> tabulating genotypes"
-	noi ta temp_ref_gt temp_alt_gt
-	noi qui di as text"# >> dropping non- R Y M K genotypes"
+	qui di as text"# >> tabulating genotypes"
+	ta temp_ref_gt temp_alt_gt
+	qui di as text"# >> dropping non- R Y M K genotypes"
 	foreach xx in A C G T ID DI W S {
-		drop if temp_ref_gt == "`xx'"
-		drop if temp_alt_gt == "`xx'"
+		gen drop = .
+		replace drop = 1 if temp_ref_gt == "`xx'"
+		replace drop = 1 if temp_alt_gt == "`xx'"
+		count if drop == 1
+		noi di as text"# > markers with non-informative genotypes (`xx') ....... "as result `r(N)' 
+		drop if drop == 1
+		drop drop
 		}
-	noi qui di as text"# >> tabulating R Y M K genotypes (clean #1)"
-	noi ta temp_ref_gt temp_alt_gt
-	noi qui di as text"# >> dropping non-compatible genotypes (K!=M and R!=Y)"
-	drop if temp_ref_gt == "K" & ( temp_alt_gt == "R" |  temp_alt_gt == "Y")
-	drop if temp_ref_gt == "M" & ( temp_alt_gt == "R" |  temp_alt_gt == "Y")
-	drop if temp_ref_gt == "R" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
-	drop if temp_ref_gt == "Y" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
-	noi qui di as text"# >> tabulating genotypes (clean #2)"
-	noi ta temp_ref_gt temp_alt_gt
+	qui di as text"# >> tabulating R Y M K genotypes (clean #1)"
+	ta temp_ref_gt temp_alt_gt
+	qui di as text"# >> dropping non-compatible genotypes (K!=M and R!=Y)"
+	gen drop = .
+	replace drop = 1 if temp_ref_gt == "K" & ( temp_alt_gt == "R" |  temp_alt_gt == "Y")
+	replace drop = 1 if temp_ref_gt == "M" & ( temp_alt_gt == "R" |  temp_alt_gt == "Y")
+	replace drop = 1 if temp_ref_gt == "R" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
+	replace drop = 1 if temp_ref_gt == "Y" & ( temp_alt_gt == "M" |  temp_alt_gt == "K")
+	count if drop = 1
+	noi di as text"# > markers with incompatible genotypes (K!=M and R!=Y) . "as result `r(N)' 
+	drop if drop == 1
+	drop drop
+	qui di as text"# >> tabulating genotypes (clean #2)"
+	ta temp_ref_gt temp_alt_gt
 	}
 qui di as text"# > checking for strand flips"
 qui {
