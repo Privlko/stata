@@ -130,7 +130,7 @@ qui { // Module 8 - write a log file
 	!echo # Number of snps imported ................................ ${inputSNP}     >> "`out'.log"
 	!echo # Number of snps exported ................................ ${outputSNP}    >> "`out'.log"
 	!echo # Origin of a1_frq ....................................... ${a1_frq}       >> "`out'.log" 
-	!echo # Chromosome / Location from .............................. ${ref}         >> "`out'.log" 
+	!echo # Chromosome / Location from ............................. ${ref}          >> "`out'.log" 
 	!echo #########################################################################  >> "`out'.log"
 	}
 qui di as text"#########################################################################"
