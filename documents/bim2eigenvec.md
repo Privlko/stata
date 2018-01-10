@@ -1,18 +1,30 @@
-# Title
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh.
-# Installation
-```net install xxxxx,                from(https://raw.github.com/ricanney/stata/master/code/x/) replace```
-# Syntax
-```xxxxxx, xxxxx(filename)```
-# Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh. Donec gravida quam est, at aliquam ex facilisis vel. Etiam quis ex sapien. Nulla sapien sem, auctor et neque egestas, scelerisque aliquet nunc. Vivamus venenatis massa velit, suscipit scelerisque nisi dapibus eget. Morbi commodo elementum ante, vel condimentum purus consectetur vel. Pellentesque efficitur risus in mauris elementum pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet sem urna, sit amet varius leo tristique eu. Ut ultricies bibendum mi, vel convallis nulla egestas at. Integer fermentum nibh eget purus ornare pulvinar. Suspendisse a felis ac elit molestie consequat. Donec ac dui nunc. Vestibulum dapibus lorem non ante sagittis fringilla.
+[back to opening page](https://github.com/ricanney/stata)
 
-# Examples
+[back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+
+## bim2eigenvec  
+**description** - create eigenvector and eigenvalues from plink binaries. the command is essentially a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in [getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). the program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
+
+**remarks** - [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md) is based on build hg19 co-ordinates. exclusion co-ordinates will need updating for other builds. 
+
+**remarks** - also consider [```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md) to generate plots related to the hapmap3 reference panel genotypes. [```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md) also uses the [```bim2eigenvec```](#bim2eigenvec) program and creates a "similarity" file that identifies samples that show similar ancestries to the definable hapmap3 populations 
+
+**examples**
 ```
-example
+bim2eigenvec , bim(temp) 
+```
+**installation**
+```
+net install bim2eigenvec,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
-# Dependencies
-| Program | Installation Command
-| :----- | :------
-|```program``` | ```ssc install program```
+**auxiliary files**
+
+**dependencies**
+
+[```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)
+
+[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
+
+
+
