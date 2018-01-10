@@ -1,60 +1,45 @@
 [back to opening page](https://github.com/ricanney/stata)
 
 # information on packages
+# information on packages
 |package | description|
 | ------: | :------- |
-|   [```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)    | checks the genome build from a plink \*.bim file
-|   [```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md)    | counts the number of markers and individuals plink \*.bim and \*.fam file
-|     [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)      | imports plink \*.bim files into stata 
-|[```bim2eigenvec```](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md) | create eigenvector and eigenvalues from plink binaries.
-|[```bim2frq```](https://github.com/ricanney/stata/blob/master/documents/bim2frq.md) | xxxxx
-|[```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md) | xxxxx
-|[```bim2ld_subset```](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md) | xxxxx
-|[```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md) | xxxxx
-|[```bim2merge```](https://github.com/ricanney/stata/blob/master/documents/bim2merge.md) | xxxxx
-|[```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md) | xxxxx
-|[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) | xxxxx
-|[```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md) | xxxxx
-|[```create_temp_dir```](https://github.com/ricanney/stata/blob/master/documents/create_temp_dir.md) | xxxxx
-|[```datestamp```](https://github.com/ricanney/stata/blob/master/documents/datestamp.md) | xxxxx
-|[```ensembl2symbol```](https://github.com/ricanney/stata/blob/master/documents/ensembl2symbol.md) | xxxxx
-|[```fam2dta```](https://github.com/ricanney/stata/blob/master/documents/fam2dta.md) | xxxxx
-|[```genotypeqc```](https://github.com/ricanney/stata/blob/master/documents/genotypeqc.md) | xxxxx
-|[```get_stata_bundle```](https://github.com/ricanney/stata/blob/master/documents/get_stata_bundle.md) | xxxxx
-|[```graphgene```](https://github.com/ricanney/stata/blob/master/documents/graphgene.md) | xxxxx
-|[```graphmanhattan```](https://github.com/ricanney/stata/blob/master/documents/graphmanhattan.md) | xxxxx
-|[```graphmiami```](https://github.com/ricanney/stata/blob/master/documents/graphmiami.md) | xxxxx
-|[```graphplinkfrq```](https://github.com/ricanney/stata/blob/master/documents/graphplinkfrq.md) | xxxxx
-|[```graphplinkhet```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhet.md) | xxxxx
-|[```graphplinkhwe```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhwe.md) | xxxxx
-|[```graphplinkimiss```](https://github.com/ricanney/stata/blob/master/documents/graphplinkimiss.md) | xxxxx
-|[```graphplinkkin0```](https://github.com/ricanney/stata/blob/master/documents/graphplinkkin0.md) | xxxxx
-|[```graphplinklmiss```](https://github.com/ricanney/stata/blob/master/documents/graphplinklmiss.md) | xxxxx
-|[```graphqq```](https://github.com/ricanney/stata/blob/master/documents/graphqq.md) | xxxxx
-|[```gwas2prs```](https://github.com/ricanney/stata/blob/master/documents/gwas2prs.md) | xxxxx
-|[```kin0filter```](https://github.com/ricanney/stata/blob/master/documents/kin0filter.md) | xxxxx
-|[```loadunixreplicas```](https://github.com/ricanney/stata/blob/master/documents/loadunixreplicas.md) | xxxxx
-|[```profilescore```](https://github.com/ricanney/stata/blob/master/documents/profilescore.md) | xxxxx
-|[```recodegenotype```](https://github.com/ricanney/stata/blob/master/documents/recodegenotype.md) | xxxxx
-|[```recodestrand```](https://github.com/ricanney/stata/blob/master/documents/recodestrand.md) | xxxxx
-|[```summary2gwas```](https://github.com/ricanney/stata/blob/master/documents/summary2gwas.md) | xxxxx
-|[```symbol2ensembl```](https://github.com/ricanney/stata/blob/master/documents/symbol2ensembl.md) | xxxxx
-
-
-## bim2frq
-**description** - a command to import the plink \*.bim files and calculate the allele frequencies of each marker. the command utilises the programs [```checkfile```](#checkfile), [```checktabbed```](#checktabbed) and [```recodegenotype```](#recodegenotype). the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) - this program should be accessable by the ${plink} command (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). the program creates the variable ```gt``` and ```maf``` which are preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_frq.dta```. 
-
-**remarks** 
-
-**examples**
-```
-bim2frq , bim(temp) 
-```
-**installation**
-```
-net install bim2frq,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-**additional files**
+|        [```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)        | checks the genome build from a plink \*.bim file
+|        [```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md)        | counts the number of markers and individuals plink \*.bim and \*.fam file
+|          [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)          | imports plink \*.bim files into stata 
+|     [```bim2eigenvec```](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md)     | create eigenvector and eigenvalues from plink binaries
+|          [```bim2frq```](https://github.com/ricanney/stata/blob/master/documents/bim2frq.md)          | create allele frequency file from plink binaries
+|       [```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md)       | create ancestry plots and similarity to hapmap3 classifiers from plink binaries
+|    [```bim2ld_subset```](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md)    | xxxxx
+|    [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)    | xxxxx
+|        [```bim2merge```](https://github.com/ricanney/stata/blob/master/documents/bim2merge.md)        | merge multiple plink binary files (with quality control and limit to overlap)
+|    [```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md)    | xxxxx
+|        [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)        | xxxxx
+|      [```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md)      | xxxxx
+|  [```create_temp_dir```](https://github.com/ricanney/stata/blob/master/documents/create_temp_dir.md)  | xxxxx
+|        [```datestamp```](https://github.com/ricanney/stata/blob/master/documents/datestamp.md)        | xxxxx
+|   [```ensembl2symbol```](https://github.com/ricanney/stata/blob/master/documents/ensembl2symbol.md)   | xxxxx
+|          [```fam2dta```](https://github.com/ricanney/stata/blob/master/documents/fam2dta.md)          | xxxxx
+|       [```genotypeqc```](https://github.com/ricanney/stata/blob/master/documents/genotypeqc.md)       | xxxxx
+| [```get_stata_bundle```](https://github.com/ricanney/stata/blob/master/documents/get_stata_bundle.md) | xxxxx
+|        [```graphgene```](https://github.com/ricanney/stata/blob/master/documents/graphgene.md)        | xxxxx
+|   [```graphmanhattan```](https://github.com/ricanney/stata/blob/master/documents/graphmanhattan.md)   | xxxxx
+|       [```graphmiami```](https://github.com/ricanney/stata/blob/master/documents/graphmiami.md)       | xxxxx
+|    [```graphplinkfrq```](https://github.com/ricanney/stata/blob/master/documents/graphplinkfrq.md)    | xxxxx
+|    [```graphplinkhet```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhet.md)    | xxxxx
+|    [```graphplinkhwe```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhwe.md)    | xxxxx
+|  [```graphplinkimiss```](https://github.com/ricanney/stata/blob/master/documents/graphplinkimiss.md)  | xxxxx
+|   [```graphplinkkin0```](https://github.com/ricanney/stata/blob/master/documents/graphplinkkin0.md)   | xxxxx
+|  [```graphplinklmiss```](https://github.com/ricanney/stata/blob/master/documents/graphplinklmiss.md)  | xxxxx
+|          [```graphqq```](https://github.com/ricanney/stata/blob/master/documents/graphqq.md)          | xxxxx
+|         [```gwas2prs```](https://github.com/ricanney/stata/blob/master/documents/gwas2prs.md)         | xxxxx
+|       [```kin0filter```](https://github.com/ricanney/stata/blob/master/documents/kin0filter.md)       | xxxxx
+| [```loadunixreplicas```](https://github.com/ricanney/stata/blob/master/documents/loadunixreplicas.md) | xxxxx
+|     [```profilescore```](https://github.com/ricanney/stata/blob/master/documents/profilescore.md)     | xxxxx
+|   [```recodegenotype```](https://github.com/ricanney/stata/blob/master/documents/recodegenotype.md)   | xxxxx
+|     [```recodestrand```](https://github.com/ricanney/stata/blob/master/documents/recodestrand.md)     | xxxxx
+|     [```summary2gwas```](https://github.com/ricanney/stata/blob/master/documents/summary2gwas.md)     | xxxxx
+|   [```symbol2ensembl```](https://github.com/ricanney/stata/blob/master/documents/symbol2ensembl.md)   | xxxxx
 
 ## bim2hapmap
 
