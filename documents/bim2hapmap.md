@@ -10,7 +10,7 @@ the program creates three files;
  - ```bim2hapmap_<ancestry>-like.png```  - ancestry-selected scatter plots
  - ```bim2hapmap_<ancestry>-like.keep``` - list of ```fid iid``` of individuals who are similar to the defined ancestry
 
-![](https://github.com/ricanney/stata/blob/master/images/bim2hapmap_pca-CEU_TSI.png)
+![](https://github.com/ricanney/stata/blob/master/images/bim2hapmap_pca.png)
 ![](https://github.com/ricanney/stata/blob/master/images/bim2hapmap_pca-CEU_TSI-like.png)
 
 

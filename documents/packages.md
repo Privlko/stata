@@ -1,7 +1,6 @@
 [back to opening page](https://github.com/ricanney/stata)
 
 # information on packages
-# information on packages
 |package | description|
 | ------: | :------- |
 |        [```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)        | checks the genome build from a plink \*.bim file
