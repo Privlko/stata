@@ -4,7 +4,7 @@
 ### b
 [```bim2build```](#bim2build)
 [```bim2count```](#bim2count)
-[```bim2dta```](#bim2dta)
+[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) - imports plink \*.bim files into stata 
 [```bim2eigenvec```](#bim2eigenvec)
 [```bim2frq```](#bim2frq)
 [```bim2hapmap```](#bim2hapmap)
@@ -83,20 +83,7 @@ net install bim2count,         from(https://raw.github.com/ricanney/stata/master
 ```
 **additional files**
 
-## bim2dta   
-**description** - a command to import the plink \*.bim files. the command utilises the programs [```checkfile```](#checkfile). in addition, the command uses the [```recodegenotype```](#recodegenotype) program to create the single letter IUPAC genotype code from the observed alleles and stores as the variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
 
-**remarks** 
-
-**examples**
-```
-bim2dta , bim(temp) 
-```
-**installation**
-```
-net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-**additional files**
 
 ## bim2eigenvec
 
