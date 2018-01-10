@@ -1,21 +1,29 @@
 [back to opening page](https://github.com/ricanney/stata)
 
+
+
 ## information on packages
 ### b
-[```bim2build```](#bim2build)
-[```bim2count```](#bim2count)
-[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) - imports plink \*.bim files into stata 
-[```bim2eigenvec```](#bim2eigenvec)
-[```bim2frq```](#bim2frq)
-[```bim2hapmap```](#bim2hapmap)
-[```bim2ld_subset```](#bim2ld_subset)
-[```bim2ldexclude```](#bim2ldexclude)
-[```bim2merge```](#bim2merge)
-[```bim2unrelated```](#bim2unrelated)
+
+|package | description|
+| ------ | ------- |
+|[```bim2build```](#bim2build)| x
+|[```bim2count```](#bim2count)| x
+|[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) | imports plink \*.bim files into stata 
+|[```bim2eigenvec```](#bim2eigenvec)| x
+|[```bim2frq```](#bim2frq)| x
+|[```bim2hapmap```](#bim2hapmap)| x
+|[```bim2ld_subset```](#bim2ld_subset)| x
+|[```bim2ldexclude```](#bim2ldexclude)| x
+|[```bim2merge```](#bim2merge)| x
+|[```bim2unrelated```](#bim2unrelated)| x
+
 ### c
-[```checkfile```](#checkfile)
-[```checktabbed```](#checktabbed)
-[```create_temp_dir```](#create_temp_dir)
+|package | description|
+| ------ | ------- |
+|[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) | checks the presence of a file 
+|[```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md) | checks that the tabbed.pl file is present and working 
+|[```create_temp_dir```](#create_temp_dir)
 ### d
 [```datestamp```](#datestamp)
 ### e

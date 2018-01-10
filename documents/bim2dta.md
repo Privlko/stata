@@ -1,4 +1,5 @@
 [back to opening page](https://github.com/ricanney/stata)
+
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 
@@ -16,5 +17,8 @@ bim2dta , bim(temp)
 net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 **additional files**
-[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)[```recodegenotype```](https://github.com/ricanney/stata/blob/master/documents/recodegenotype.md)
+
+[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
+
+[```recodegenotype```](https://github.com/ricanney/stata/blob/master/documents/recodegenotype.md)
 
