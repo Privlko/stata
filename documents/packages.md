@@ -3,12 +3,10 @@
 
 
 ## information on packages
-### b
-
 |package | description|
 | ------ | ------- |
-|[```bim2build```](#bim2build)| x
-|[```bim2count```](#bim2count)| x
+|[```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)| checks the genome build from a plink \*.bim file
+|[```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md)| counts the number of markers and individuals plink \*.bim and \*.fam file
 |[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) | imports plink \*.bim files into stata 
 |[```bim2eigenvec```](#bim2eigenvec)| x
 |[```bim2frq```](#bim2frq)| x
@@ -17,10 +15,6 @@
 |[```bim2ldexclude```](#bim2ldexclude)| x
 |[```bim2merge```](#bim2merge)| x
 |[```bim2unrelated```](#bim2unrelated)| x
-
-### c
-|package | description|
-| ------ | ------- |
 |[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) | checks the presence of a file 
 |[```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md) | checks that the tabbed.pl file is present and working 
 |[```create_temp_dir```](#create_temp_dir)

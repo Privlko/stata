@@ -16,7 +16,7 @@ bim2dta , bim(temp)
 ```
 net install bim2dta,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
-**additional files**
+**dependencies**
 
 [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
 
