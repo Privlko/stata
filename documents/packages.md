@@ -8,7 +8,7 @@
 |[```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)| checks the genome build from a plink \*.bim file
 |[```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md)| counts the number of markers and individuals plink \*.bim and \*.fam file
 |[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) | imports plink \*.bim files into stata 
-|[```bim2eigenvec```](#bim2eigenvec)| x
+|[```bim2eigenvec```](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md)| create eigenvector and eigenvalues from plink binaries.
 |[```bim2frq```](#bim2frq)| x
 |[```bim2hapmap```](#bim2hapmap)| x
 |[```bim2ld_subset```](#bim2ld_subset)| x
@@ -50,41 +50,6 @@
 ### s
 [```summary2gwas```](#summary2gwas) 
 [```symbol2ensembl```](#symbol2ensembl) 
-
-## bim2build
-
-**description** - a command to examine the genome build of a plink \*.bim file. the command utilises the programs [```checkfile```](#checkfile), [```bim2dta```](#bim2dta) and requires a reference of snps with location on various builds ```rsid-hapmap-genome-location.dta```
-
-**remarks** - to date this only examines hg17 +0/1- hg19 +0/1
-
-**examples**
-```
-bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
-```
-**installation**
-```
-net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-**additional files**
-
-[```rsid-hapmap-genome-location.dta```](<add-link>)
-
-## bim2count
-
-**description** - a command to count observation in plink \*.bim and \*.fam files. the command utilises the programs [```checkfile```](#checkfile).
-
-**remarks** 
-
-**examples**
-```
-bim2count , bim(temp) 
-```
-**installation**
-```
-net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-**additional files**
-
 
 
 ## bim2eigenvec
