@@ -1,18 +1,36 @@
-# Title
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh.
-# Installation
-```net install xxxxx,                from(https://raw.github.com/ricanney/stata/master/code/x/) replace```
-# Syntax
-```xxxxxx, xxxxx(filename)```
-# Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh. Donec gravida quam est, at aliquam ex facilisis vel. Etiam quis ex sapien. Nulla sapien sem, auctor et neque egestas, scelerisque aliquet nunc. Vivamus venenatis massa velit, suscipit scelerisque nisi dapibus eget. Morbi commodo elementum ante, vel condimentum purus consectetur vel. Pellentesque efficitur risus in mauris elementum pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet sem urna, sit amet varius leo tristique eu. Ut ultricies bibendum mi, vel convallis nulla egestas at. Integer fermentum nibh eget purus ornare pulvinar. Suspendisse a felis ac elit molestie consequat. Donec ac dui nunc. Vestibulum dapibus lorem non ante sagittis fringilla.
+[back to opening page](https://github.com/ricanney/stata)
 
-# Examples
+[back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+
+## datestamp
+**description** - create a non space seperated date macro ${DATE} that can be used to tag files
+
+**remarks** 
+
+**examples**
 ```
-example
+datestamp
+
+>#########################################################################
+># datestamp                                                              
+># version:       1                                                       
+># Creation Date: 10Sep2015                                               
+># Author:        Richard Anney (anneyr@cardiff.ac.uk)                    
+>#########################################################################
+># Started: 10 Jan 2018 17:00:29
+>#########################################################################
+># > creating $DATE
+># > the global $DATE will report 10Jan2018
+>#########################################################################
+># Completed: 10 Jan 2018 17:00:29
+>#########################################################################
+
+```
+**installation**
+```
+net install datestamp,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace
 ```
 
-# Dependencies
-| Program | Installation Command
-| :----- | :------
-|```program``` | ```ssc install program```
+**auxiliary files**
+
+**dependencies**

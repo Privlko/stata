@@ -20,20 +20,3 @@ net install checkfile,         from(https://raw.github.com/ricanney/stata/master
 
 **dependencies**
 
-## checktabbed
-**description** - check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
-
-**remarks** 
-
-**examples**
-```
-checktabbed
-```
-**installation**
-```
-net install checktabbed,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace
-```
-
-**auxiliary files**
-
-**dependencies**
