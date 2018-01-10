@@ -9,12 +9,12 @@
 |     [```bim2eigenvec```](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md)     | create eigenvector and eigenvalues from plink binaries
 |          [```bim2frq```](https://github.com/ricanney/stata/blob/master/documents/bim2frq.md)          | create allele frequency file from plink binaries
 |       [```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md)       | create ancestry plots and similarity to hapmap3 classifiers from plink binaries
-|    [```bim2ld_subset```](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md)    | xxxxx
-|    [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)    | xxxxx
+|    [```bim2ld_subset```](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md)    | create a list of N snps that are ld independent from from plink binaries
+|    [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)    | create a list of snps that do include those within regions of known extended ld
 |        [```bim2merge```](https://github.com/ricanney/stata/blob/master/documents/bim2merge.md)        | merge multiple plink binary files (with quality control and limit to overlap)
-|    [```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md)    | xxxxx
-|        [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)        | xxxxx
-|      [```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md)      | xxxxx
+|    [```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md)    | create a subset of unrelated individuals from plink binaries using the --king-cutoff flag in ``` plink2```
+|        [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)        | check the presence/absence of a file 
+|      [```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md#checktabbed)      | check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
 |  [```create_temp_dir```](https://github.com/ricanney/stata/blob/master/documents/create_temp_dir.md)  | xxxxx
 |        [```datestamp```](https://github.com/ricanney/stata/blob/master/documents/datestamp.md)        | xxxxx
 |   [```ensembl2symbol```](https://github.com/ricanney/stata/blob/master/documents/ensembl2symbol.md)   | xxxxx
@@ -39,110 +39,6 @@
 |     [```recodestrand```](https://github.com/ricanney/stata/blob/master/documents/recodestrand.md)     | xxxxx
 |     [```summary2gwas```](https://github.com/ricanney/stata/blob/master/documents/summary2gwas.md)     | xxxxx
 |   [```symbol2ensembl```](https://github.com/ricanney/stata/blob/master/documents/symbol2ensembl.md)   | xxxxx
-
-## bim2hapmap
-
-**description** - a command to generate eigenvector and eigenvalues from plink binaries  \*.bim \*.bed and \*.fam file. this program also utilises reference genotypes from the hapmap3 collection to plot and creates a "similarity" file that identifies samples that show similar ancestries to the definable hapmap3 populations. 
-
-the command is primarily a wrapper for [```plink```](https://www.cog-genomics.org/plink/1.9/) and [```plink2```](https://www.cog-genomics.org/plink/2.0/) - both programs should be accessable by the ${plink} and ${plink2} commands (see setting up ```profile.do``` in ![1-getting_started](https://github.com/ricanney/stata/blob/master/documents/getting_started.md)). 
-
-
-this program also utilises the programs [```checkfile```](#checkfile), [```bim2ldexclude```](#bim2ldexclude). The program creates two files ```<bimname>_eigenvec.dta``` and ```<bimname>_eigenval.dta```. these are stata versions of the plink2 --pca output file \*. eigenvec and \*.eigenval (see https://www.cog-genomics.org/plink/2.0/formats#eigenvec). 
-
-**remarks** 
-
-**examples**
-```
-syntax
-
-```
-**installation**
-
-```
-net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
-```
-
-**additional files**
-
-## bim2ldexclude
-
-**description** 
-
-**remarks** 
-
-**examples**
-
-```
-syntax
-
-```
-**installation**
-
-```
-net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
-```
-
-**additional files**
-
-## bim2ld_subset
-
-**description** 
-
-**remarks** 
-
-**examples**
-
-```
-syntax
-
-```
-**installation**
-
-```
-net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
-```
-
-**additional files**
-
-## bim2merge 
-
-**description** - a command to create mergable plink binaries. the process includes; limit to autosome; remove ambiguous markers (W/S); remove incompatible markers; strand flip and limit to intercept over all markers and reference. the resultant binaries are created and named with the tag ```-intercept```.
-
-**remarks** 
-
-**examples** - list comma-seperate binaries in bim(). add the reference binary to ref_bim() - this binary will be used to define strand. add a project-name in project() - the log file will be named using this name. if the join(yes) flag is included - the files in the bim() command will be merged into a the project.bim 'bed .fam
-
-```
-bim2merge , bim(file1,file2,file3) ref_bim(file4) project(project_name) [join(yes)]
-
-```
-**installation**
-
-```
-net install bim2merge ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-
-**additional files**
-
-## bim2unrelated 
-
-**description** - a command to create a subset froma genotype dataset on "unrelated" individuals. the program is a wrapper for plink2 - where it extracts a subset of 50000 ld-independent markers via [```bim2ld_subset```](#bim2ld_subset) and applies the ```--king-cutoff``` command. the program creates the unrelated dataset and uses [```graphplinkkin0```](#graphplinkkin0) to plot the kinship from the ```--make-king-table```.
-
-**remarks** - you can define a threshold for "relatedness", this number is based on the KING algorithm; where 0.354 = duplicates; 0.1770 = first degree relationships; 0.0884 = second degree relationships; 0.0442 = third degree relatinships etc) The default for this program is .0221
- 
-**examples** 
-```
-bim2unrelated , bim(file1) threshold(0.0442)
-bim2unrelated , bim(file1) 
-```
-**installation**
-
-```
-net install bim2unrelated ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-
-**additional files**
-
 
 ## checkfile
 
