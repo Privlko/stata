@@ -19,6 +19,7 @@ net install bim2count,              from(https://raw.github.com/ricanney/stata/m
 net install bim2dta,                from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2eigenvec,           from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2frq,                from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2qcfrq,              from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2hapmap,             from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2ld_subset,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 net install bim2ldexclude,          from(https://raw.github.com/ricanney/stata/master/code/b/) replace
