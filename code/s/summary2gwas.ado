@@ -159,7 +159,7 @@ qui { // Module 8 - write a log file
 	}
 qui { // Module 9 - convert to formats
 	use "`out'.dta", clear
-	_gwas2sumstat , out(`out') munge(`munge'}) 
+	_gwas2sumstat , out(`out') munge(`munge') 
 	use "`out'.dta", clear
 	_gwas2prePRS , out(`out')
 	use "`out'.dta", clear

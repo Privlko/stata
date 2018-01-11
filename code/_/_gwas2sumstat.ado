@@ -1,5 +1,5 @@
 program _gwas2sumstat
-syntax , munge(string asis) merge(string asis) out(string asis)
+syntax , munge(string asis) out(string asis) [merge(string asis)]
 keep snp a1 a2 z p n a1_frq
 rename a1_frq maf
 renvars, upper
