@@ -4,3 +4,6 @@ d Distribution-Date: 11jan2018
 f summary2gwas.ado
 f ../c/checkfile.ado
 f ../r/recodestrand.ado
+f ../_/_gwas2magma.ado
+f ../_/_gwas2prePRS.ado
+f ../_/_gwas2sumstat.ado
