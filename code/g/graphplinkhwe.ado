@@ -71,6 +71,7 @@ qui{
 	drop if log10p < ${hwelimit}
 	qui di as text"# >>> applying ceiling to data for p < 1E-20"
 	replace log10p = 20 if log10p >= 20
+	sum p
 	if `r(min)' != `r(max)' {
 		tw hist log10p , width(1) start(${hwelimit}) percent ///
 		   xlabel(0(5)20) ///
