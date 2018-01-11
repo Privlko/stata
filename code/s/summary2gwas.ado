@@ -158,11 +158,11 @@ qui { // Module 8 - write a log file
 
 	}
 qui { // Module 9 - convert to formats
-	use "`out'.dta", clear
+	use "`out'-summary.dta", clear
 	_gwas2sumstat , out(`out') munge(`munge') 
-	use "`out'.dta", clear
+	use "`out'-summary.dta", clear
 	_gwas2prePRS , out(`out')
-	use "`out'.dta", clear
+	use "`out'-summary.dta", clear
 	_gwas2magma , out(`out')
 	}
 qui di as text"#########################################################################"
