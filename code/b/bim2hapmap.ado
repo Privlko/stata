@@ -169,7 +169,7 @@ qui {
 	qui di as text"# >> define individuals as -like- "
 	qui { 
 		count if pop == "TEST"
-	    noi di as text"# >> number of test individuals included in analysis .... "as result `r(N)'		
+	  noi di as text"# >> number of test individuals included in analysis .... "as result `r(N)'		
 		gen like = .
 		foreach i in `like'  {
 			replace like = 1 if pop =="`i'"
