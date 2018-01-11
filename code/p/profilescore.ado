@@ -177,7 +177,7 @@ qui { // Module #2 - processing GWAS summary data
 		replace risk       = a2     if flip == 1
 		replace alt        = a1     if flip == 1
 		replace risk_frq = 1-a1_frq if flip == 1
-		gen weight = log(risk_or)
+		gen weight = ln(risk_or)
 		recodegenotype, a1(risk) a2(alt)
 		rename (rsid _gt) (snp gt)
 		keep snp risk alt gt weight p risk_frq
