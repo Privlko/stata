@@ -1,5 +1,5 @@
 program summary2gwas
-syntax ,  reference(string asis) out(string asis) 
+syntax ,  reference(string asis) out(string asis) munge(string asis) 
 qui di as text"#########################################################################"
 qui di as text"# summary2gwas               "
 qui di as text"# Creation Date: 9Jan2018            "
@@ -110,7 +110,7 @@ qui { // Module 6 - add a1_frq if absent
 qui { // Module 7 - export data
 	order chr bp snp a1 a2 a1_frq p
 	sort chr bp
-	save "`out'.dta", replace
+	save "`out'-summary.dta", replace
 	count
 	global outputSNP `r(N)'
 	noi di as text"# > markers in the dataset after screening .............. "as result"${outputSNP}" 
@@ -156,6 +156,14 @@ qui { // Module 8 - write a log file
 	!echo #    absent - we use the 1000-genomes reference for this.                  >> "`out'.log"
 	!echo #########################################################################  >> "`out'.log"
 
+	}
+qui { // Module 9 - convert to formats
+	use "`out'.dta", clear
+	_gwas2sumstat , out(`out'-summary) munge(`munge'}) 
+	use "`out'.dta", clear
+	_gwas2prePRS , out(`out'-summary)
+	use "`out'.dta", clear
+	_gwas2magma , out(`out'-summary)
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
