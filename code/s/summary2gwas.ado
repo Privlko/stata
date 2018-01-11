@@ -161,15 +161,12 @@ qui { // Module 9 - convert to formats
 	use "`out'-summary.dta", clear
 	_gwas2sumstat , out(`out') munge(`munge') 
 	noi di as text"# > "as input"summary2gwas "as text" ................... create sumstat file " as result"`out'.sumstats.gz"
-	noi checkfile, file("`out'.sumstats.gz")
 	use "`out'-summary.dta", clear
 	_gwas2prePRS , out(`out')
 	noi di as text"# > "as input"summary2gwas "as text" .................... create prePRS file " as result"`out'.prePRS.tsv.gz"
-	noi checkfile, file("`out'.sumstats.gz")
 	use "`out'-summary.dta", clear
 	_gwas2magma , out(`out')
 	noi di as text"# > "as input"summary2gwas "as text" ..................... create magma file " as result"`out'.pval.gz"
-	noi checkfile, file("`out'.sumstats.gz")
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
