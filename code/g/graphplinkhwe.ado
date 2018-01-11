@@ -62,11 +62,17 @@ qui{
 	gen log10p = -log10(p)
 	qui di as text"# >> pruning dataset for plotting"
 	qui di as text"# >>> pruning if p > 1E-4"
-	drop if log10p < 4
+	sum log10p
+	gen x = round(`r(max)',1)
+	replace x = x -1
+	replace x = 4 if x > 4
+	sum x
+	global hwelimit `r(max)'
+	drop if log10p < ${hwelimit}
 	qui di as text"# >>> applying ceiling to data for p < 1E-20"
 	replace log10p = 20 if log10p >= 20
 	if `r(min)' != `r(max)' {
-		tw hist log10p , width(1) start(4) percent ///
+		tw hist log10p , width(1) start(${hwelimit}) percent ///
 		   xlabel(0(5)20) ///
 		   xline(`threshold'  , lpattern(dash) lwidth(vthin) lcolor(red)) ///
 		   legend(off) ///
