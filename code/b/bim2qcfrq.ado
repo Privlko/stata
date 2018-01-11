@@ -66,6 +66,8 @@ qui di as text"# > saving file as `bim'_frq.dta"
 qui {
 	save `bim'_qcfrq.dta, replace
 	!del tmp-bim2qcfrq.fr*
+	erase tmp-bim2qcfrq.log
+	erase tmp_loc.dta
 	}
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
