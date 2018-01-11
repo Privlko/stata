@@ -30,6 +30,7 @@ noi di as text"# > "as input"bim2qcfrq "as text"................................
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(${plink})
 noi checktabbed
+
 qui di as text"# > running plink --freq"
 qui { 
 	!${plink} --bfile `bim' --freq --out tmp-bim2qcfrq
@@ -40,7 +41,14 @@ qui {
 	}
 qui di as text"# > importing file"
 qui { 
+	import delim using `bim'.bim, clear
+	keep v1 v2 v4
+	rename (v1 v2 v4) (chr snp bp)
+	save tmp_loc.dta, replace
 	import delim using tmp-bim2qcfrq.frq.tabbed, clear
+	merge 1:1 snp using tmp_loc.dta
+	keep if _m == 3
+	keep chr bp snp maf a1 a2
 	}
 qui di as text"# > create genotype variable"
 qui { 
@@ -49,6 +57,8 @@ qui {
 qui di as text"# > naming variables"
 qui { 
 	rename (snp a1 maf _gt) (rsid kg_a1 kg_maf kg_gt)
+	sort chr bp
+	for var chr bp : tostring X, replace
 	keep chr bp rsid kg_a1 kg_maf kg_gt
 	order chr bp rsid kg_a1 kg_maf kg_gt
 	}
