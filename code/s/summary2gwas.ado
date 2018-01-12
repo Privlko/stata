@@ -138,7 +138,7 @@ qui { // Module 8 - write a log file
 	!echo # Date:       9th January 2018                                             >> "`out'-summary.log"
 	!echo #########################################################################  >> "`out'-summary.log"
 	!echo # Input .................................................. `in'            >> "`out'-summary.log"
-	!echo # Output.................................................. `out'.dta       >> "`out'-summary.log"
+	!echo # Output.................................................. `out'-summary.dta       >> "`out'-summary.log"
 	!echo # Date / Time of run ..................................... $S_DATE $S_TIME >> "`out'-summary.log"
 	!echo # Number of snps imported ................................ ${inputSNP}     >> "`out'-summary.log"
 	!echo # Number of snps exported ................................ ${outputSNP}    >> "`out'-summary.log"
