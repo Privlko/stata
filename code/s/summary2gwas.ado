@@ -23,6 +23,13 @@ qui { // Module 1 - report to screen
 	global inputSNP `r(N)'
 	noi di as text"# > markers in the dataset .............................. "as result"${inputSNP}" 
 	}
+qui { // Module 1a -  drop if p out-of-bounds
+	drop if p > 1
+	drop if p < 0
+	count
+	global oobSNP `r(N)'
+	noi di as text"# > markers in the dataset after removing out of bounds . "as result"${oobSNP}" 
+	}
 qui { // Module 2 - duplicates drop
 	duplicates drop 
 	duplicates drop snp, force
@@ -54,9 +61,12 @@ qui { // Module 5 - perform other quality control
 		capture confirm numeric var info
 		if !_rc {
 			noi di as text"# > info is present and numeric ......................... apply qc"
+			drop if info > 2 & info ! = .
+			drop if info < 0
 			count if info < .8
 			global infoSNP `r(N)'
 			drop if info < .8
+			drop if info > 2
 			drop info
 			count
 			global infoSNP `r(N)'
@@ -92,6 +102,8 @@ qui { // Module 6 - add a1_frq if absent
 		if !_rc {
 			noi di as text"# > a1_frq present"
 			global a1_frq "a1_frq present in input and used in output"
+			drop if a1_frq > 1
+			drop if a1_frq < 0
 			}
 		else {
 			rename (a1 a2) (_a1 _a2)

@@ -1,18 +1,36 @@
-# Title
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh.
-# Installation
-```net install xxxxx,                from(https://raw.github.com/ricanney/stata/master/code/x/) replace```
-# Syntax
-```xxxxxx, xxxxx(filename)```
-# Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh. Donec gravida quam est, at aliquam ex facilisis vel. Etiam quis ex sapien. Nulla sapien sem, auctor et neque egestas, scelerisque aliquet nunc. Vivamus venenatis massa velit, suscipit scelerisque nisi dapibus eget. Morbi commodo elementum ante, vel condimentum purus consectetur vel. Pellentesque efficitur risus in mauris elementum pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet sem urna, sit amet varius leo tristique eu. Ut ultricies bibendum mi, vel convallis nulla egestas at. Integer fermentum nibh eget purus ornare pulvinar. Suspendisse a felis ac elit molestie consequat. Donec ac dui nunc. Vestibulum dapibus lorem non ante sagittis fringilla.
+[back to opening page](https://github.com/ricanney/stata)
 
-# Examples
+[back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+## recodegenotype
+
+**description** - creates single letter IUPAC genotype code from the observed alleles. the program storesthe variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
+
+| IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
+| -: | :-- | --: | :--
+| A	| **A**denine | C	| **C**ytosine |
+| G	| **G**uanine | T | **T**hymine |
+| U | **U**racil  | R	| pu**R**ine (A or G) |
+| Y	| pyr**Y**midine (C or T) | S	| **S**trong (G or C) |
+| W	| **W**eak (A or T) | K	| **K**etone (G or T) |
+| M	| a**M**ine (A or C) | B	| not **A** (C or G or T) |
+| D	| not **C** A or G or T | H | not **G** (A or C or T) |
+| V	| not **T** (A or C or G) | N	| a**N**y |
+| X	| reverse complement of a**N**y base | . | gap |
+| - | gap ||
+
+**remarks** - [```recodegenotype```](#recodegenotype) works with biallelic markers and indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. the program requires allele1 and allele2 to be varnames to be defined. 
+
+**examples**
+
 ```
-example
+recodegenotype, a1(a1) a2(a2) 
+
 ```
 
-# Dependencies
-| Program | Installation Command
-| :----- | :------
-|```program``` | ```ssc install program```
+**installation**
+
+```
+net install recodegenotype,         from(https://raw.github.com/ricanney/stata/master/code/r/) replace
+```
+
+**additional files**
