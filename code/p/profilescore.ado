@@ -95,7 +95,6 @@ qui { // Module #1 - processing genotype data
 			noi checkfile, file(${data`data'}.bed)
 			noi checkfile, file(${data`data'}.bim)
 			noi checkfile, file(${data`data'}.fam)
-			noi checkfile, file(${data`data'}.meta-log)
 			}
 		noi checkfile, file(${kg_ref}.bed)
 		noi checkfile, file(${kg_ref}.bim)
@@ -162,8 +161,8 @@ qui { // Module #2 - processing GWAS summary data
 		!$gunzip ${gwas_prePRS}.gz
 		noi checkfile, file(${gwas_prePRS})
 		import delim using ${gwas_prePRS}, clear
-		*!$gzip ${gwas_prePRS}
-		*noi checkfile, file(${gwas_prePRS}.gz)
+		!$gzip ${gwas_prePRS}
+		noi checkfile, file(${gwas_prePRS}.gz)
 		}
   noi	di as text"# > processing gwas summary data ........................ "as result"${gwas_prePRS}"
 	qui {

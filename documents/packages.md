@@ -23,7 +23,7 @@
 | [```get_stata_bundle```](https://github.com/ricanney/stata/blob/master/documents/get_stata_bundle.md) | ![](../images/under-construction.png)
 |        [```graphgene```](https://github.com/ricanney/stata/blob/master/documents/graphgene.md)        | ![](../images/under-construction.png)
 |   [```graphmanhattan```](https://github.com/ricanney/stata/blob/master/documents/graphmanhattan.md)   | ![](../images/under-construction.png)
-|       [```graphmiami```](https://github.com/ricanney/stata/blob/master/documents/graphmiami.md)       | ![](../images/under-construction.png)
+|       [```graphmiami```](https://github.com/ricanney/stata/blob/master/documents/graphmiami.md)       | plot a miami plot for two gwas datasets for a defined region
 |    [```graphplinkfrq```](https://github.com/ricanney/stata/blob/master/documents/graphplinkfrq.md)    | ![](../images/under-construction.png)
 |    [```graphplinkhet```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhet.md)    | ![](../images/under-construction.png)
 |    [```graphplinkhwe```](https://github.com/ricanney/stata/blob/master/documents/graphplinkhwe.md)    | ![](../images/under-construction.png)
@@ -39,27 +39,6 @@
 |     [```recodestrand```](https://github.com/ricanney/stata/blob/master/documents/recodestrand.md)     | ![](../images/under-construction.png)
 |     [```summary2gwas```](https://github.com/ricanney/stata/blob/master/documents/summary2gwas.md)     | ![](../images/under-construction.png)
 |   [```symbol2ensembl```](https://github.com/ricanney/stata/blob/master/documents/symbol2ensembl.md)   | ![](../images/under-construction.png)
-
-## graphmiami
-
-**description** - this script plots a simple miami plot for two gwas datasets for a defined region. the plot also includes a geneplot. both input gwas require the variable rsid/p; co-ordinates are taken from a reference binary. the geneplot requires gene/exon boundaries derived using the ```get-ensembl-gtf.do``` script.
-
-**remarks** 
-
-**examples**
-
-```
-graphmiami , gwas1(file1) gwas2(fil2) title1(disease1) title2(disease1) region(chr7:100000000-120000000) exons(E:\data\other\ftp-ensembl\data\Homo_sapiens.GRCh37.87.gtf_exon.dta) ref(E:\data\genotypes\ref\1000-genomes\phase3\data\hg19\eur_1000g_phase3_chrall_impute_macgt5)
-
-```
-**installation**
-
-```
-net install -name-,         from(https://raw.github.com/ricanney/stata/master/code/-folder-/) replace
-```
-
-**additional files**
-
 
 
 ## profilescore
