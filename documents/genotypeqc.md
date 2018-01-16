@@ -89,5 +89,7 @@ net install genotypeqc, from(https://raw.github.com/ricanney/stata/master/code/g
 [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
 [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)
 
+**know bugs**
+the rename rsid module has some issues with complex non-rsid markers names (e.g. CLOZUK). the workaround is to rename prior to inclusion - however, the code needs to be updated to cope with these problems. - ```Richard Anney - 16Jan2018```
 
 
