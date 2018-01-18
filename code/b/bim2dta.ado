@@ -50,10 +50,7 @@ qui {
 	compress
 	}
 qui { 
-	noi bim2count, file(`bim')
 	noi di as text"# > "as input"bim2dta "as text".............................. saving file as "as result"`bim'_bim.dta"
-	}
-qui {
 	save `bim'_bim.dta, replace
 	}
 qui di as text"#########################################################################"
