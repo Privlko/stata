@@ -49,7 +49,10 @@ qui {
 	keep  chr snp bp a1 a2 gt
 	compress
 	}
-qui di as text"# > saving file as `bim'_bim.dta"
+qui { 
+	noi bim2count, file(`bim')
+	noi di as text"# > "as input"bim2dta "as text".............................. saving file as "as result"`bim'_bim.dta"
+	}
 qui {
 	save `bim'_bim.dta, replace
 	}

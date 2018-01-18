@@ -1,2 +1,3 @@
 d datestamp create a non-space datestamp in global that can be accessed via $DATA 
+d dir2dta   save folders from dit to _dir2dta.dta
 d Richard Anney, Cardiff University
