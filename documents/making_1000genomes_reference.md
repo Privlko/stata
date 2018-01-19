@@ -3,7 +3,7 @@
 
 ## making the 1000 genomes reference datasets
 
-**background** - many of the genomics based applications / packages require a genome reference dataset. for example, to compare allele frequencies in arrays.  you can either download a copy from the url below -```link not active```, access one from the cardiff rocks databank ```local users only```- or build your own. below is a tutorial as to how to build your own plink-ready 1000 genome reference .
+**background** - many of the genomics based applications / packages require a genome reference dataset. for example, to compare allele frequencies in arrays.  you can either download a copy from the url below -```link not active```, access one from the cardiff rocks databank ```local users only```- or build your own. below is a tutorial as to how to build your own plink-ready 1000 genome reference. one of the key components of a *reference* is the ability to map, this requires unambiguous genotypes - importantly, this script **ommits ambiguous genotyes i.e. ID A C G T W and S**.
 
 **1 - download the 1000 genome genotypes (*.vcf format) from ebi.**
 
@@ -49,7 +49,15 @@ do _tmp.do
  
  **_subprocess-1.do**
 ```
-	for var v1 v2 v4: tostring X, replace
+	qui { // create loc_name
+		for var v1 v2 v4: tostring X, replace
+		gen a1 = v5 
+		gen a2 = v6
+		recodegenotype, a1(a1) a2(a2)
+		replace _gt = "R"  if _gt == "Y"
+		replace _gt = "M"  if _gt == "K" 
+		gen loc_name = "chr" + v1 + ":" + v4 + "-" + _gt 
+		}
 	qui { // replace v2 = single rs#
 		split v2,p(";")
 		replace v2 = ""
@@ -83,13 +91,38 @@ do _tmp.do
 				}
 			}
 		}
-	qui { // replace v2 = dummy if v2 == ""
-		gen a1 = v5 
-		gen a2 = v6
-		recodegenotype, a1(a1) a2(a2)
-		gen v7 = "chr" + v1 + ":" + v4 + "-" + _gt 
-		replace v2 = v7 if v2 == ""
+	qui { // replace v2 = loc_name if v2 == ""
+			replace v2 = loc_name if v2 == ""
 		}
+	qui { // identify snps to drop
+		gen drop = .
+		qui { // tag duplicates to drop
+			egen dup = seq(), by(loc_name)
+			replace dup = dup - 1
+			tostring dup, replace 
+			replace dup = "_dup" + dup
+			replace dup = ""     if dup == "_dup0"
+			replace v2 = v2 + dup
+			replace drop = 1 if dup != ""
+			}
+		qui { // drop ambiguous markers
+			foreach gt in A C G T W S ID {
+				replace drop = 1 if _gt == "`gt'"
+				}
+			}
+		qui { // drop snps with known duplicate locations
+			foreach snp in rs111307503 rs111577982 rs5988705 rs113189289 rs75766429 rs56110824 rs111664647 rs11952502 rs12334732 rs113937023 rs79245793 rs112702727 rs76545203 rs75240632 rs113853039 {
+				replace drop = 1  if v2 =="`snp'"
+				}
+			}
+		}
+	qui { // export processed files
+		outsheet v1 v2 v3 v4 v5 v6 using  tmp.mac5_update.bim, non noq replace
+		outsheet v2 if drop == 1   using  tmp.mac5_update.exclude, non noq replace
+		}
+	
+	
+
 	
 	
 
