@@ -226,20 +226,7 @@ qui { // Module #2 - update marker identifiers to 1000-genomes compatible rsid
 	noi di as text"# Module #2 - update marker identifiers to 1000-genomes compatible rsid"
 	noi di as text"# > count observations in ............................... "as result"${input}"
 	qui { 
-		!$wc -l ${input}.bim  > ${input}.count
-		import delim using ${input}.count, clear varnames(nonames)
-		erase ${input}.count
-		split v1,p(" ")
-		destring v11, replace
-		sum v11
-		noi di as text"# >> number of SNPs in file ............................. "as result `r(max)'		
-		!$wc -l ${input}.fam  > ${input}.count
-		import delim using ${input}.count, clear varnames(nonames)
-		erase ${input}.count
-		split v1,p(" ")
-		destring v11, replace
-		sum v11
-		noi di as text"# >> number of individuals in file ...................... "as result `r(max)'		
+		bim2count, bim(${input})
 		}
 	qui di as text"#########################################################################"
 	noi di as text"# > pre-process plink files (mac 5 / geno 0.99 / mind 0.99)"

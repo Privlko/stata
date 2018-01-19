@@ -1,6 +1,6 @@
 /*
 #########################################################################
-# bim2rsid
+# snp2rsid
 # =======================================================================
 # Author:     Richard Anney
 # Institute:  Cardiff University
@@ -9,15 +9,14 @@
 # #########################################################################
 */
 
-program bim2rsid
-syntax , bim(string asis) ref(string asis)
+program snp2rsid
+syntax , snp(`snp') a1(`a1') a2(`a2') ref(string asis)
 
 qui di as text"#########################################################################"
-qui di as text"# bim2rsid - version 0.1a 16jan2018 richard anney "
+qui di as text"# snp2rsid - version 0.1a 16jan2018 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
-noi checkfile, file(`bim'.bim)
 noi checkfile, file(`ref')
 qui {
 	noi bim2dta, bim(`bim')
