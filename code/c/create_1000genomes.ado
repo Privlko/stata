@@ -88,8 +88,8 @@ qui { // update marker name to single rs# / esv# / ss# or dummy - remove duplica
 				replace  v2 = v2 + dup
 				replace drop = 1 if dup != ""
 				}
-		qui { // drop ambiguous markers
-			foreach gt in  W S ID {
+		qui { // drop monomorphic markers
+			foreach gt in  A C G T {
 				replace drop = 1 if _gt == "`gt'"
 				}
 			}
