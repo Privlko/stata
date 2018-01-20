@@ -89,7 +89,7 @@ qui { // update marker name to single rs# / esv# / ss# or dummy - remove duplica
 				replace drop = 1 if dup != ""
 				}
 		qui { // drop ambiguous markers
-			foreach gt in  W S ID {
+			foreach gt in A C G T W S ID {
 				replace drop = 1 if _gt == "`gt'"
 				}
 			}
@@ -123,7 +123,7 @@ qui { // merge binaries
 	gen b = "tmp-chr" + a + "-processed.bed tmp-chr" + a + "-processed.bim tmp-chr" + a + "-processed.fam"
 	drop in 1
 	outsheet b using all.merge-list, non noq replace
-	!$plink --bfile tmp-chr1-processed --merge-list all.merge-list --make-bed --out all-1000g-phase3-chrall-mac5
+	!$plink --bfile tmp-chr1-processed --merge-list all.merge-list --make-bed --out all-1000g-phase3-chrall-RYMKonly-mac5
 	} 
 qui { // split by super-populations
 	import delim using integrated_call_samples_v3.20130502.ALL.panel, clear varnames(1)
@@ -135,13 +135,13 @@ qui { // split by super-populations
 	foreach population in afr amr eas eur sas {
 		use all-1000g-populations.dta, clear
 		outsheet fid iid if sup == "`population'" using `population'.keep, non noq replace
-		!$plink --bfile all-1000g-phase3-chrall-mac5 --keep `population'.keep --mac 5 --make-bed --out `population'-1000g-phase3-chrall-mac5
-		bim2count, bim(`population'-1000g-phase3-chrall-mac5)
+		!$plink --bfile all-1000g-phase3-chrall-RYMKonly-mac5 --keep `population'.keep --mac 5 --make-bed --out `population'-1000g-phase3-chrall-RYMKonly-mac5
+		bim2count, bim(`population'-1000g-phase3-chrall-RYMKonly-mac5)
 		}
 	}
 qui { // create reference datasets (european)
-	noi bim2frq, bim(eur-1000g-phase3-chrall-mac5)
-	noi bim2dta, bim(eur-1000g-phase3-chrall-mac5)
+	noi bim2frq, bim(eur-1000g-phase3-chrall-RYMKonly-mac5)
+	noi bim2dta, bim(eur-1000g-phase3-chrall-RYMKonly-mac5)
 	}
 qui { // clean-up
 	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22  {

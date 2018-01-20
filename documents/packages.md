@@ -15,6 +15,7 @@
 |    [```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md)    | create a subset of unrelated individuals from plink binaries using the --king-cutoff flag in ``` plink2```
 |        [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)        | check the presence/absence of a file 
 |      [```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md)      | check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
+|  [```create_1000genomes```](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)  | create the ```eur-1000g-phase3-chrall-RYMKonly-mac5``` plink binaries and reference datasets.
 |  [```create_temp_dir```](https://github.com/ricanney/stata/blob/master/documents/create_temp_dir.md)  | create a temporary directory using the date/time as a random seed generator
 |        [```datestamp```](https://github.com/ricanney/stata/blob/master/documents/datestamp.md)        | create a non space seperated date macro ${DATE} that can be used to tag files
 |   [```ensembl2symbol```](https://github.com/ricanney/stata/blob/master/documents/ensembl2symbol.md)   | ![](../images/under-construction.png)
