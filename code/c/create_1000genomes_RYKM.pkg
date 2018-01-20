@@ -1,0 +1,4 @@
+d create_1000genomes_RYKM -  command to create plink binaries <ancestry>-1000g-phase3-chrall-RYMKonly-mac5
+d Richard Anney, Cardiff University
+d Distribution-Date: 20jan2018
+f create_1000genomes_RYKM.ado
