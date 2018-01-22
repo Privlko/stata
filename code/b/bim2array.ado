@@ -49,7 +49,7 @@ qui { // check against arrays
 		di "${bim2array`num'}"
 		use _bim2array.dta, replace 
 		duplicates drop
-		merge 1:1 snp using ${bim2array`num'}.dta
+		merge 1:1 snp using `dir'\${bim2array`num'}.dta
 		gen array = "${bim2array`num'}"
 		sum _m 
 		gen all = `r(N)'
