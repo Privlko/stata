@@ -83,6 +83,11 @@ net install genotypeqc, from(https://raw.github.com/ricanney/stata/master/code/g
 - [```hapmap3-all-hg19-1.population```](<add-link>) 
 - [```hapmap3-all-hg19-1-aims.snp-list```](<add-link>) 
 - [```genotype-array.tar.gz```](<add-link>)
+- ```eur-1000g-phase3-chrall-mac5.bim``` - see [create_1000genomes](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)
+- ```eur-1000g-phase3-chrall-mac5.bed``` - see [create_1000genomes](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)
+- ```eur-1000g-phase3-chrall-mac5.fam``` - see [create_1000genomes](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)
+- ```eur-1000g-phase3-chrall-mac5_bim.dta``` - see [create_1000genomes](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)
+- ```eur-1000g-phase3-chrall-mac5_qcfrq.dta``` - see [create_1000genomes](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md)
 
 
 **dependencies**
