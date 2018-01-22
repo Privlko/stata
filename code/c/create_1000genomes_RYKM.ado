@@ -18,7 +18,6 @@ qui { // checkfile
 	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22  {
 		noi checkfile, file(ALL.chr`chromosome'.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz)
 		}
-	noi checkfile, file(ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf.gz)
 	noi checkfile, file(ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz)
 	noi checkfile, file(integrated_call_samples_v3.20130502.ALL.panel)
 	}
@@ -26,11 +25,10 @@ qui { // convert vcf to plink (mac5)
 	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 {
 		!$plink --vcf ALL.chr`chromosome'.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz --mac 5 --make-bed --out tmp-chr`chromosome'
 		}
-	!$plink --vcf ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf.gz                   --mac 5 --make-bed --out tmp-chrMT
 	!$plink --vcf ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz --mac 5 --make-bed --out tmp-chrX
 	}
 qui { // update marker name to single rs# / esv# / ss# or dummy - remove duplicates
-	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X MT {
+	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X  {
 		import delim using tmp-chr`chromosome'.bim, clear varnames(nonames)
 		qui { // create loc_name
 			for var v1 v2 v4: tostring X, replace
@@ -119,7 +117,6 @@ qui { // merge binaries
 	gen a = _n
 	tostring a, replace
 	replace a = "X"  if a == "23"
-	replace a = "MT" if a == "24"
 	gen b = "tmp-chr" + a + "-processed.bed tmp-chr" + a + "-processed.bim tmp-chr" + a + "-processed.fam"
 	drop in 1
 	outsheet b using all.merge-list, non noq replace
@@ -147,10 +144,9 @@ qui { // clean-up
 	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22  {
 		erase ALL.chr`chromosome'.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
 		}
-	erase ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf.gz
 	erase ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
 	erase integrated_call_samples_v3.20130502.ALL.panel
-	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X MT {
+	foreach chromosome in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X {
 		!del tmp-chr`chromosome'*	
 		}
 	!del all.merge* *.exclude *.nosex *.keep 
