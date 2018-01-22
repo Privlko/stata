@@ -19,7 +19,7 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 noi checkfile, file(`bim'.bim)
 qui { // create list of snps
-	bim2count, bim(`bim')
+	noi bim2count, bim(`bim')
 	import delim using `bim'.bim, clear
 	keep v2
 	tostring v2, replace
@@ -49,7 +49,7 @@ qui { // check against arrays
 		di "${bim2array`num'}"
 		use _bim2array.dta, replace 
 		duplicates drop
-		merge 1:1 snp using `dir'\${bim2array`num'}.dta
+		merge 1:1 snp using `dir'\\${bim2array`num'}.dta
 		gen array = "${bim2array`num'}"
 		sum _m 
 		gen all = `r(N)'
