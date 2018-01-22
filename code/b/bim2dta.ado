@@ -49,8 +49,11 @@ qui {
 	keep  chr snp bp a1 a2 gt
 	compress
 	for var chr bp: tostring X, replace force
-	gen loc_name = "chr" + chr + ":" + bp + "-" + gt
-
+	gen _gt = gt
+	replace _gt = "R" if gt == "Y"
+	replace _gt = "M" if gt == "K"
+	gen loc_name = "chr" + chr + ":" + bp + "-" + _gt
+	drop _gt
 	}
 qui { 
 	noi di as text"# > "as input"bim2dta "as text".............................. saving file as "as result"`bim'_bim.dta"
