@@ -1,0 +1,7 @@
+d bim2ldexclude - to generate the (hg19) ld-exclude regions for downstream plink applications
+d Richard Anney, Cardiff University
+d Distribution-Date: 29nov2017
+f bim2ldexclude.ado
+f ../c/checkfile.ado
+f ../c/checktabbed.ado
+

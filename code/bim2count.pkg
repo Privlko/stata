@@ -1,0 +1,5 @@
+d bim2count - a command to count observations in a plink dataset
+d Richard Anney, Cardiff University
+d Distribution-Date: 14dec2017
+f bim2count.ado
+f ../c/checkfile.ado
