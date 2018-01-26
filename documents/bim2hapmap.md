@@ -13,7 +13,6 @@ the program creates three files;
 ![](../images/bim2hapmap_pca.png)
 ![](../images/bim2hapmap_pca-CEU_TSI-like.png)
 
-
 **remarks** 
 
 **examples**
