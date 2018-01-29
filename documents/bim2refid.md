@@ -8,13 +8,23 @@
 **remarks** - to create ```eur-1000g-phase3-chrall-mac5_bim.dta``` see [```create_1000genomes```](https://github.com/ricanney/stata/blob/master/documents/create_1000genomes.md) and apply the routine [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
 
 **syntax**
-```bim2refid , bim(string asis) ref(string asis)```
+```
+bim2refid , bim(string asis) ref(string asis)
+```
+
 **example**
-```bim2refid, bim(bipolar-disorder-wtccc1) ref(eur-1000g-phase3-chrall-mac5_bim.dta)```
+```
+bim2refid, bim(bipolar-disorder-wtccc1) ref(eur-1000g-phase3-chrall-mac5_bim.dta)
+```
+
 **installation**
-```net install bim2refid , from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
+```
+net install bim2refid , from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+```
+
 **auxiliary files**
 ```eur-1000g-phase3-chrall-mac5_bim.dta``` or any hg19 genotype reference containing the variables ```snp``` and ```loc_name```
+
 **dependencies**
 [```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md) [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md) [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
 
