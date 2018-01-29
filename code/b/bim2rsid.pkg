@@ -1,5 +1,0 @@
-d bim2rsid - covert non-rsid named markers to rs#.
-d Richard Anney, Cardiff University
-d Distribution-Date: 16jan2018
-f bim2rsid.ado
-f ../c/checkfile.ado
