@@ -2,26 +2,22 @@
 
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
-## bim2build   
-**description** - checks the genome build from a plink \*.bim file. the command requires the marker identifiers to be rs# and uses a merge routine against a reference file of snps with location on various builds
+## bim2build
+**description** - checks the genome build from a plink \*.bim file. 
 
 **remarks** - to date this only examines hg17 +0/1- hg19 +0/1
 
 **examples**
 ```
-bim2build , bim(temp) build_ref(rsid-hapmap-genome-location.dta)
+bim2build , bim(temp) ref(bim2build.dta)
 ```
 **installation**
 ```
-net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
+net install bim2build, from(https://raw.github.com/ricanney/stata/master/code/b/) replace
 ```
 
 **auxiliary files**
-
-[```rsid-hapmap-genome-location.dta```](https://www.dropbox.com/s/uji8b7pe39pq7yp/rsid-hapmap-genome-location.dta)
+[```bim2build.dta```](link)
 
 **dependencies**
-
-[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
-
-[```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
+[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
