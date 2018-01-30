@@ -17,9 +17,11 @@ qui di as text"# bim2array - version 0.1a 16jan2018 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
-noi checkfile, file(`bim'.bim)
+
+qui {
+	noi checkfile, file(`bim'.bim)
+	}
 qui { // create list of snps
-	noi bim2count, bim(`bim')
 	import delim using `bim'.bim, clear
 	keep v2
 	tostring v2, replace
@@ -31,7 +33,7 @@ qui { // check against arrays
 	set obs 1
 	gen a = "array jaccard-index"
 	outsheet a using bim2array.out, non noq replace
-	noi files2dta, dir(`dir')
+	files2dta, dir(`dir')
 	erase _files2dta.dta
 	drop if file == "_files2dta.dta"
 	drop if file == "_bim2array.dta"
