@@ -14,7 +14,7 @@
 # Author: Richard Anney
 # Institute: Cardiff University
 # E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015
+# Date: 10th September 2015 
 #########################################################################
 */
 program graphplinkfrq
