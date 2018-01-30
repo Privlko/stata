@@ -37,10 +37,11 @@ qui di as text"# Syntax : graphplinkhet, het(filename) [sd(real 4)]            "
 qui di as text"# for filename, .het is not needed                                     "
 qui di as text"#########################################################################"
 
-noi di as text"# > graphplinkhet ....................................... "as result"`het'.het"
-noi checkfile, file(`het'.het)
-noi checktabbed
-
+qui {
+	noi di as text"# > graphplinkhet ....................................... "as result"`het'.het"
+	noi checkfile, file(`het'.het)
+	checktabbed
+	}
 qui di as text"# > processing `het'.het"
 qui { 
 	!$tabbed `het'.het
@@ -50,7 +51,7 @@ qui {
 	for var ohom   : destring X, replace force
 	for var ohom   : lab var X "Homozygosity (observed)"
 	sum ohom
-	qui di as text"# >> calculateing standard deviation of ohom"
+	qui di as text"# >> calculating standard deviation of ohom"
 	gen sd   = `r(sd)'
 	gen _ohom = ohom - `r(mean)'
 	gen threshold = 0
@@ -70,17 +71,18 @@ qui {
 		}	
 	count
 	global nIND `r(N)'
-	noi di as text"# >> number of individuals in file ...................... "as result `r(N)'		
+	noi di as text"# > graphplinkhet ......... number of individuals in file "as result `r(N)'
 	count if threshold == 1
 	global nINDlow `r(N)'
 	global sd_tmp `sd'
-	noi di as text"# >> heterozygosity threshold +/- standard deviations ... "as result"`sd'x"
-	noi di as text"# >> number of individuals with het > threshold ......... "as result"${nINDlow}"
+	noi di as text"# > graphplinkhet ....... heterozygosity threshold +/- sd "as result "`sd'x"
+	noi di as text"# > graphplinkhet ...... individuals with het > threshold "as result "${nINDlow}"
 	}
 qui di as text"# > plotting heterozygosity to tmpHET.gph"
 qui{
 	sum ohom
 	if `r(min)' != `r(max)' {
+		noi di as text"# > graphplinkhet ...................... plotting data to "as result "tmpHET.gph"
 		tw hist _ohom,  ///
 		   xtitle("Adjuster Homozygosity") ///
 		   xlabel(${ux} 0 ${lx}) ///
@@ -91,8 +93,13 @@ qui{
 		           "Individuals with Homozygosity < `sd' * Std. Dev. from Mean ; N = ${nINDlow}") ///
 		   nodraw saving(tmpHET.gph, replace)
 		}
+	else {
+		noi di as text"# > graphplinkhet ........ nothing to plot (create blank) "as result "tmpHET.gph"
+		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
+		graph save `i', replace
+		}
 	}
-qui di as text"# > exporting individual ids where heterozygosity outside the ${sd_tmp}x threshold to tmpHET.indlist"
+	noi di as text"# > graphplinkhet .............. exporting identifiers to "as result "tmpHET.indlist"
 qui {
 	outsheet fid iid if threshold == 1 using tempHET.indlist, non noq replace
 	}
