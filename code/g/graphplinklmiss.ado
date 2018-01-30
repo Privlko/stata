@@ -36,7 +36,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"graphplinklmiss "as text"..................................... "as result"`lmiss'.lmiss"
+noi di as text"# > graphplinklmiss ..................................... "as result"`lmiss'.lmiss"
 noi checkfile, file(`lmiss'.lmiss)
 noi checktabbed
 

@@ -2,7 +2,7 @@ program get_stata_bundle
 syntax
 
 noi di as text"#########################################################################"
-noi di as text"# > command to get stata packages from "as input"https://github.com/ricanney/stata"
+noi di as text"# > command to get stata packages from https://github.com/ricanney/stata"
 noi di as text"# > on first download this program runs an automatically install of the stata"
 noi di as text"# > program bundle"
 noi di as text"# > this can be reinstalled by running the command get_stata_bundle"

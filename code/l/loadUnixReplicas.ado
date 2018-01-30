@@ -44,7 +44,7 @@ qui {
 	rename un a
 	reshape wide a , i(x) j(y)
 	egen a = concat(a1 - a8), p(" ")
-	noi di as text"# > "as input"loadUnixReplicas "as text"............................. loaded " as result a[1]
+	noi di as text"# > loadUnixReplicas ............................. loaded " as result a[1]
 	count
 	global num `r(N)'
 	foreach num of num 2 / $num {

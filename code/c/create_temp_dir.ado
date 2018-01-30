@@ -25,7 +25,7 @@ qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)            
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME                                               "
 qui di as text"#########################################################################"
-noi di as text"# > "as input"create_temp_dir "as text"................... current directory " as result"`c(pwd)'"
+noi di as text"# > create_temp_dir ................... current directory " as result"`c(pwd)'"
 qui {
 	clear
 	set obs 52
@@ -108,8 +108,8 @@ qui {
 	!mkdir ${temp_dir}
 	cd ${temp_dir}
 	}
-noi di as text"# > "as input"create_temp_dir "as text"....................... new directory " as result"`c(pwd)'"
-noi di as text"# > "as input"create_temp_dir "as text"...... new directory global stored as " as result"\${temp_dir}"
+noi di as text"# > create_temp_dir ....................... new directory " as result"`c(pwd)'"
+noi di as text"# > create_temp_dir ...... new directory global stored as " as result"\${temp_dir}"
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"

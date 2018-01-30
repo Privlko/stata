@@ -17,7 +17,7 @@ qui {
 	gen x = 1
 	reshape long a, i(x) j(obs)
 	count
-	noi di as text"# > "as input"bim2merge "as text" - number of bim files to merge ........... " as result `r(N)'
+	noi di as text"# > bim2merge "as text" - number of bim files to merge ........... " as result `r(N)'
 	gen b = _n
 	tostring b, replace
 	gen c = "global bim2merge_data" + b + " " + a
@@ -53,15 +53,15 @@ qui di as text"# > create temp directory"
 qui {
 	noi create_temp_dir
 	}
-noi di as text"# > "as input"bim2merge "as text" create frq files "
+noi di as text"# > bim2merge "as text" create frq files "
 qui {
 	foreach num of num 1 / $bim2merge_dataN {
 		capture confirm file ${bim2merge_data`num'}_frq.dta 
 		if !_rc {
-			noi di as text"# > "as input"bim2merge "as text"............. frequency files already exist " as result "${bim2merge_data`num'}_frq.dta"
+			noi di as text"# > bim2merge ............. frequency files already exist " as result "${bim2merge_data`num'}_frq.dta"
 			}
 		else {
-			noi di as text"# > "as input"bim2merge "as text".................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
+			noi di as text"# > bim2merge .................... create frequency files " as result "${bim2merge_data`num'}_frq.dta"
 			noi bim2frq, bim(${bim2merge_data`num'})
 			}
 		}
@@ -70,11 +70,11 @@ qui di as text"# > limit to autosome"
 qui {
 	capture confirm file ${bim2merge_data1}_bim.dta 
 	if !_rc {
-		noi di as text"# > "as input"bim2merge "as text"................ marker files already exist " as result "${bim2merge_data1}_bim.dta"
+		noi di as text"# > bim2merge ................ marker files already exist " as result "${bim2merge_data1}_bim.dta"
 		use ${bim2merge_data1}_bim.dta ,clear
 		}
 	else {
-		noi di as text"# > "as input"bim2merge "as text"............................ create marker  " as result "${bim2merge_data1}_bim.dta"
+		noi di as text"# > bim2merge ............................ create marker  " as result "${bim2merge_data1}_bim.dta"
 		noi di as text"# "
 		noi bim2dta, bim(${bim2merge_data1})
 		}
@@ -95,7 +95,7 @@ qui {
 		for var gt a1 maf: rename X X_data`num'
 		}
 	}
-noi di as text"# > "as input"bim2merge "as text" map snps to common strand "
+noi di as text"# > bim2merge "as text" map snps to common strand "
 qui{
 	foreach data of num 2 / $bim2merge_dataN {
 		noi di as text"# >> cross-tabulate "
@@ -135,7 +135,7 @@ qui {
 		window manage close graph
 		}
 	}
-noi di as text"# > "as input"bim2merge "as text" create log to ............................ " as result "`project'.log"
+noi di as text"# > bim2merge "as text" create log to ............................ " as result "`project'.log"
 qui { 
 	log using `project'.log, replace
 	noi di as text"#########################################################################"
@@ -194,13 +194,13 @@ qui {
 	noi di as text"#########################################################################"	
 	log close
 	}
-qui di as text"# > "as input"bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
+qui di as text"# > bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
 qui { 
 		clear 
 		set obs 1
 		gen a = "`join'"
 		if a == "yes" {
-		noi di as text"# > "as input"bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
+		noi di as text"# > bim2merge "as text" merging to ............................... " as result "`project'.bim/bed/fam"
 			set obs ${bim2merge_dataN}
 			gen b = ""
 			foreach data of num 3 / $bim2merge_dataN {

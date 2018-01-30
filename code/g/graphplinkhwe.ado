@@ -35,7 +35,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"graphplinkhwe "as text"....................................... "as result"`hwe'.hwe"
+noi di as text"# > graphplinkhwe ....................................... "as result"`hwe'.hwe"
 noi checkfile, file(`hwe'.hwe)
 
 qui di as text"# > processing `hwe'.hwe"

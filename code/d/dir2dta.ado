@@ -17,8 +17,8 @@ qui di as text"#################################################################
 
 program dir2dta
 syntax , dir(string asis) 
-noi di as text"# > "as input"dir2dta "as text" ................. saving folders from " as result "`dir'"
-noi di as text"# > "as input"dir2dta "as text" .................................. to " as result "_dir2dta.dta"
+noi di as text"# > dir2dta "as text" ................. saving folders from " as result "`dir'"
+noi di as text"# > dir2dta "as text" .................................. to " as result "_dir2dta.dta"
 qui {
 	clear
 	set obs 1								

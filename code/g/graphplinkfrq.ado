@@ -36,7 +36,7 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 qui di as text"# > check path of plink *.frq.counts file is true"
 
-noi di as text"# > "as input"graphplinkfrq "as text"....................................... "as result"`frq'.frq.counts"
+noi di as text"# > graphplinkfrq ....................................... "as result"`frq'.frq.counts"
 noi checkfile, file(`frq'.frq.counts)
 noi checktabbed
 

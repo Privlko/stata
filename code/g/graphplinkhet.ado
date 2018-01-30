@@ -37,7 +37,7 @@ qui di as text"# Syntax : graphplinkhet, het(filename) [sd(real 4)]            "
 qui di as text"# for filename, .het is not needed                                     "
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"graphplinkhet "as text"....................................... "as result"`het'.het"
+noi di as text"# > graphplinkhet ....................................... "as result"`het'.het"
 noi checkfile, file(`het'.het)
 noi checktabbed
 

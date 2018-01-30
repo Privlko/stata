@@ -35,7 +35,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"recodestrand "as text"........................................ checking strand compatibility"
+noi di as text"# > recodestrand ........................................ checking strand compatibility"
 qui di as text"# > generating genotype variable for reference alleles"
 qui {
 	qui recodegenotype, a1(`ref_a1') a2(`ref_a2')

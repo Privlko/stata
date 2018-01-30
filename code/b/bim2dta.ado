@@ -27,7 +27,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"bim2dta "as text"............................................. "as result"`bim'.bim"
+noi di as text"# > bim2dta ............................................. "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 
 qui di as text"# > importing *.bim file"
@@ -56,7 +56,7 @@ qui {
 	drop _gt
 	}
 qui { 
-	noi di as text"# > "as input"bim2dta "as text".............................. saving file as "as result"`bim'_bim.dta"
+	noi di as text"# > bim2dta .............................. saving file as "as result"`bim'_bim.dta"
 	save `bim'_bim.dta, replace
 	}
 qui di as text"#########################################################################"

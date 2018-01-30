@@ -28,7 +28,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"bim2unrelated "as text"....................................... "as result"`bim'.bim"
+noi di as text"# > bim2unrelated ....................................... "as result"`bim'.bim"
 noi checkfile, file(${plink2})
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(`bim'.bed)

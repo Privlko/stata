@@ -105,7 +105,7 @@ qui { // how many genes are in the region
 	encode symbol, gen(region_n)
 	sum region_n
 	global region_n `r(max)'
-	noi di as text"# > "as input"graphgene"as text" ........................ elements in region "as result"$region_n"
+	noi di as text"# > graphgene"as text" ........................ elements in region "as result"$region_n"
 	}	
 qui { // save co-ordinates file
 	keep symbol	chr st en txs txe
@@ -178,7 +178,7 @@ qui { // plot region
 		;
 		#delim cr
 		}
-	noi di as text"# > "as input"graphgene"as text" .............................. plot gene to "as result"temp-graphgene.gph"
+	noi di as text"# > graphgene"as text" .............................. plot gene to "as result"temp-graphgene.gph"
 	}
 qui { //clean up tmp files"
 	!del tmpGENEcoords.dta tmpDUMMY.dta

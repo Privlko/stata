@@ -24,7 +24,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"bim2count "as text"........................................... "as result"`bim'"
+noi di as text"# > bim2count ........................................... "as result"`bim'"
 checkfile, file(`bim'.bim)
 checkfile, file(`bim'.fam)
 qui { 

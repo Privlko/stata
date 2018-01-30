@@ -32,7 +32,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"bim2ldexclude "as text"....................................... "as result"`bim'.bim"
+noi di as text"# > bim2ldexclude ....................................... "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 qui di as text"# > importing *.bim file"
 qui { 

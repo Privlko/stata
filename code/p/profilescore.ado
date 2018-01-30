@@ -193,11 +193,11 @@ qui { // Module #2 - processing GWAS summary data
 		qui {
 			capture confirm file  ${profilescore_kg_ref}_frq.dta 
 			if !_rc {
-				noi di as text"# > "as input"profilescore "as text".......... frequency files already exist "as result"${profilescore_kg_ref}_frq.dta"
+				noi di as text"# > profilescore .......... frequency files already exist "as result"${profilescore_kg_ref}_frq.dta"
 				use ${profilescore_kg_ref}_frq.dta, clear
 				}
 			else {
-				noi di as text"# > "as input"profilescore "as text"................ create frequency files "as result"${profilescore_kg_ref}_frq.dta"
+				noi di as text"# > profilescore ................ create frequency files "as result"${profilescore_kg_ref}_frq.dta"
 				noi bim2frq, bim(${profilescore_kg_ref})
 				}
 			}
@@ -427,10 +427,10 @@ qui { // Module #6 - plot manhattan of intersect
 		qui {
 		capture confirm file ${profilescore_kg_ref}_bim.dta
 		if !_rc {
-			noi di as text"# > "as input"bim2dta "as text".................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
+			noi di as text"# > bim2dta .................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
 			}
 		else {
-			noi di as text"# > "as input"bim2dta "as text".............................. create marker  " as result "${profilescore_kg_ref}_bim.dta"
+			noi di as text"# > bim2dta .............................. create marker  " as result "${profilescore_kg_ref}_bim.dta"
 			noi bim2dta, bim(${profilescore_kg_ref})
 			}
 			use tempfile-gwas.dta, clear

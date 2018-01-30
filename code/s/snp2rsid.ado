@@ -55,15 +55,15 @@ qui {
 			replace class = 3 if (chr > 0 & chr < 27 & bp > 0 & gt !="") & class == 0
 			}
 		count
-		noi di as text"# > "as input"bim2rsid "as text" ....... markers loaded from bim file " as result `r(N)'
+		noi di as text"# > bim2rsid "as text" ....... markers loaded from bim file " as result `r(N)'
 		count if class == 0
-		noi di as text"# > "as input"bim2rsid "as text" .... unable to map to rsid (class 0) " as result `r(N)'
+		noi di as text"# > bim2rsid "as text" .... unable to map to rsid (class 0) " as result `r(N)'
 		count if class == 1
-		noi di as text"# > "as input"bim2rsid "as text" .... already names as rsid (class 1) " as result `r(N)'
+		noi di as text"# > bim2rsid "as text" .... already names as rsid (class 1) " as result `r(N)'
 		count if class == 2
-		noi di as text"# > "as input"bim2rsid "as text" .... rsid embedded in name (class 2) " as result `r(N)'
+		noi di as text"# > bim2rsid "as text" .... rsid embedded in name (class 2) " as result `r(N)'
 		count if class == 3
-		noi di as text"# > "as input"bim2rsid "as text" ........ map via reference (class 3) " as result `r(N)'
+		noi di as text"# > bim2rsid "as text" ........ map via reference (class 3) " as result `r(N)'
 		}		
 	qui { // process classes seperately
 		qui { // process class 0
@@ -115,7 +115,7 @@ qui {
 			rename (original rsid) (snp rename)
 			keep snp rename 
 			count 
-			noi di as text"# > "as input"bim2rsid "as text" ..... mapped via reference (class 3) " as result `r(N)'
+			noi di as text"# > bim2rsid "as text" ..... mapped via reference (class 3) " as result `r(N)'
 			save  _bim2rsid-class3.dta, replace		
 			}
 		}

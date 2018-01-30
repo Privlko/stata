@@ -40,7 +40,7 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"bim2eigenvec "as text"........................................ "as result"`bim'.bim"
+noi di as text"# > bim2eigenvec ........................................ "as result"`bim'.bim"
 noi checkfile, file(`bim'.bim)
 noi checkfile, file(`bim'.bed)
 noi checkfile, file(`bim'.fam)

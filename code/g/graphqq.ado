@@ -28,10 +28,10 @@
 	qui { // check variables
 		capture confirm numeric var `p' 
 		if _rc==0 {
-			noi di as text"# > "as input"graphqq"as text" ............. the p-value variable is numeric "as result "continue"
+			noi di as text"# > graphqq"as text" ............. the p-value variable is numeric "as result "continue"
 			}
 		else {
-			noi di as text"# > "as input"graphqq"as text" ......... the p-value variable is not numeric "as error "exit"
+			noi di as text"# > graphqq"as text" ......... the p-value variable is not numeric "as error "exit"
 			exit
 			}
 		}
@@ -79,9 +79,9 @@
 		drop if `p' == .
 		count
 		global rN `r(N)'
-		noi di as text"# > "as input"graphqq"as text" ............................ plot qq data for "as result "`r(N)'" as text " non missing data points"
+		noi di as text"# > graphqq"as text" ............................ plot qq data for "as result "`r(N)'" as text " non missing data points"
 		sum `p'
-		noi di as text"# > "as input"graphqq"as text" ................... min observed p in dataset "as result "`r(min)'"
+		noi di as text"# > graphqq"as text" ................... min observed p in dataset "as result "`r(min)'"
 		sort `p'
 		gen n = _n
 		gen  expected    = -log10(_n/${rN})			
@@ -121,7 +121,7 @@
 		sort expected
 		}
 	qui { // plotting to tmpQQ.gph"
-		noi di as text"# > "as input"graphqq"as text" ............................... plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpQQ.gph"
+		noi di as text"# > graphqq"as text" ............................... plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpQQ.gph"
 		global gws red 
 		global str midgreen
 		colorscheme 8, palette(Reds)

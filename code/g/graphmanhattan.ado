@@ -29,30 +29,30 @@ qui { // checking variable in correct format
 	qui { // chr
 		capture confirm numeric var `chr' 
 		if _rc==0 {
-			noi di as text"# > "as input"graphmanhattan"as text" ... the chromosome variable is numeric "as result "continue"
+			noi di as text"# > graphmanhattan"as text" ... the chromosome variable is numeric "as result "continue"
 			}
 		else {
-			noi di as text"# > "as input"graphmanhattan"as text" the chromosome variable is not numeric "as error "exit"
+			noi di as text"# > graphmanhattan"as text" the chromosome variable is not numeric "as error "exit"
 			exit
 			}
 		}
 	qui { // p
 		capture confirm numeric var `p' 
 		if _rc==0 {
-			noi di as text"# > "as input"graphmanhattan"as text" ...... the p-value variable is numeric "as result "continue"
+			noi di as text"# > graphmanhattan"as text" ...... the p-value variable is numeric "as result "continue"
 				}
 		else {
-			noi di as text"# > "as input"graphmanhattan"as text" .... the p-value variable is not numeric "as error "exit"
+			noi di as text"# > graphmanhattan"as text" .... the p-value variable is not numeric "as error "exit"
 			exit
 			}
 		}
 	qui { // bp
 		capture confirm numeric var `bp' 
 		if _rc==0 {
-			noi di as text"# > "as input"graphmanhattan"as text" ..... the location variable is numeric "as result "continue"
+			noi di as text"# > graphmanhattan"as text" ..... the location variable is numeric "as result "continue"
 			}
 		else {
-			noi di as text"# > "as input"graphmanhattan"as text" . the location variable is not numeric "as error "exit"
+			noi di as text"# > graphmanhattan"as text" . the location variable is not numeric "as error "exit"
 			exit
 			}
 		}
@@ -62,9 +62,9 @@ qui { // processing variables
 	gen observed = -log10(`p')
 	count
 	global rN `r(N)'	
-	noi di as text"# > "as input"graphmanhattan"as text" .............. plot manhattan data for "as result "`r(N)'" as text " non missing data points"
+	noi di as text"# > graphmanhattan"as text" .............. plot manhattan data for "as result "`r(N)'" as text " non missing data points"
 	sum `p'
-	noi di as text"# > "as input"graphmanhattan"as text" ............ min observed p in dataset "as result "`r(min)'"
+	noi di as text"# > graphmanhattan"as text" ............ min observed p in dataset "as result "`r(min)'"
 	drop if `chr' > 23		   // drop chromosomes > X (X- XY and other)
 	duplicates drop			 	   // drop any duplicate observations
 	drop if observed < `min' // apply floor
@@ -85,7 +85,7 @@ qui { // preparing bp for plotting
 		}
 	}
 qui { // plotting to tmpManhattan.gph
-	noi di as text"# > "as input"graphmanhattan"as text" ........................ plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpManhattan.gph"
+	noi di as text"# > graphmanhattan"as text" ........................ plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpManhattan.gph"
 
 	colorscheme 8, palette(Blues)
 	global color3	"mlc("`r(color7)'") mfc("`r(color7)'")"

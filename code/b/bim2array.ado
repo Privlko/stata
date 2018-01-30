@@ -58,7 +58,7 @@ qui { // check against arrays
 		gen jaccard = ab/(all)
 		keep array jaccard
 		sum jaccard
-		noi di as text"# > "as input"bim2array "as text" calculating ........ jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array : " as result "${bim2array`num'}" 
+		di as text"# > bim2array .................... jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array " as result "${bim2array`num'}" 
 		filei + "${bim2array`num'} `r(min)'" bim2array.out
 		}
 	erase _bim2array.dta
@@ -78,8 +78,8 @@ qui { // define most likely and jaccard globals
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
 	erase _tmp.do
-	noi di as text"# > "as input"bim2array "as text" .................. most likely array " as result "${bim2array}" 
-	noi di as text"# > "as input"bim2array "as text" ...................... jaccard index " as result $Jaccard  
+	noi di as text"# > bim2array ......................... most likely array "as result "${bim2array}" 
+	noi di as text"# > bim2array ........................ with jaccard index "as result "${Jaccard}" 
 	}
 qui { // plot most likely 
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)

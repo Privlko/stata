@@ -28,8 +28,8 @@ qui di as text"#################################################################
 qui di as text"# kin_started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > "as input"kin0filter"as text"........................................... "as result"`kin0'.kin0"
-noi di as text"# > "as input"kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
+noi di as text"# > kin0filter........................................... "as result"`kin0'.kin0"
+noi di as text"# > kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
 noi checkfile, file(`kin0'.kin0)
 
 qui di as text"# > process/import "as result "`kin0'.kin0"
@@ -46,7 +46,7 @@ qui di as text"# > count observations > threshold"
 qui {
 	drop if fid1 == fid2
 	count  
-	noi di as text"# > "as input"kin0filter"as text" pairs with kinship > threshold ........... "as result `r(N)'
+	noi di as text"# > kin0filter"as text" pairs with kinship > threshold ........... "as result `r(N)'
 	if `r(N)' > 0 {
 		keep fid1 id1 fid2 id2
 		gen pair = _n
@@ -59,22 +59,22 @@ qui {
 		if `r(max)' == 1 {
 			noi di as text"# >> all individuals in pairs are observed only once"
 			count
-			noi di as text"# > "as input"kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
-			noi di as text"# > "as input"kin0filter"as text" individuals saved ........................ "as result `r(N)'
+			noi di as text"# > kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
+			noi di as text"# > kin0filter"as text" individuals saved ........................ "as result `r(N)'
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		else {
 			keep in 1
 			noi di as text"# some individuals are in more than 1 pair"
 			count
-			noi di as text"# > "as input"kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
-			noi di as text"# > "as input"kin0filter"as text" individuals saved ........................ "as result `r(N)'
+			noi di as text"# > kin0filter"as text" saving individuals to exclude to ......... "as result"`kin0'_filter_`filter'.remove"
+			noi di as text"# > kin0filter"as text" individuals saved ........................ "as result `r(N)'
 			outsheet fid id using `kin0'_filter_`filter'.remove, non noq replace
 			}
 		}
 	else {
 		noi di as text"# no (unrelated) pairs observed"
-		noi di as text"# > "as input"kin0filter"as text" individuals saved ........................ "as result `r(N)'
+		noi di as text"# > kin0filter"as text" individuals saved ........................ "as result `r(N)'
 		}
 	}
 qui di as text"#########################################################################"
