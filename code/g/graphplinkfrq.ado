@@ -36,10 +36,11 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 qui di as text"# > check path of plink *.frq.counts file is true"
 
-noi di as text"# > graphplinkfrq ............................. importing "as result"`frq'.frq.counts"
-noi checkfile, file(`frq'.frq.counts)
+qui { 
+	noi di as text"# > graphplinkfrq ............................. importing "as result"`frq'.frq.counts"
+	noi checkfile, file(`frq'.frq.counts)
     checktabbed
-
+	}
 qui di as text"# > processing *.frq.counts"
 qui {
 	!$tabbed `frq'.frq.counts
