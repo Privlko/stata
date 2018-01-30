@@ -18,8 +18,8 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 qui { // module 1 - check input files
-	noi di as text"# > bim2refid ............... checking plink is mapped as "as result"${plink}"
-	noi checkfile, file(${plink})
+	di as text"# > bim2refid ............... checking plink is mapped as "as result"${plink}"
+	checkfile, file(${plink})
 	noi di as text"# > bim2refid ......... updating bim snpid to refid (bim) "as result"`bim'.bim"
 	noi checkfile, file(`bim'.bim)
 	noi di as text"# > bim2refid ......... updating bim snpid to refid (ref) "as result"`ref'"
@@ -30,7 +30,7 @@ qui { // module 2 - rename according to refid
 		noi di as text"# > bim2refid ................... pre-process metrics for "as result"`bim'.bim"
 		noi bim2count, bim(`bim')
 		noi di as text"# > bim2refid .................................... import "as result"`bim'.bim"
-		noi bim2dta, bim(`bim')
+		bim2dta, bim(`bim')
 		erase `bim'_bim.dta
 		keep loc_name snp
 		rename snp oldname

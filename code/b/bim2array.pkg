@@ -1,7 +1,6 @@
-d bim2array -  a command to check array from plink binaries
+d bim2array a command to check array from plink binaries
 d Richard Anney, Cardiff University
 d Distribution-Date: 29jan2018
 f bim2array.ado
-f ../b/bim2count.ado
 f ../c/checkfile.ado
 f ../f/files2dta.ado

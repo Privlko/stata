@@ -29,7 +29,7 @@ qui { // module 1 - check input files
 qui { // module 2 - measure overlap
 	qui { // import bim file
 		noi di as text"# > bim2build .................................... import "as result"`bim'.bim"
-		noi bim2dta, bim(`bim')
+		bim2dta, bim(`bim')
 		erase `bim'_bim.dta
 		keep snp chr bp
 		}
