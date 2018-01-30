@@ -24,9 +24,11 @@ qui di as text"#################################################################
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 
-noi di as text"# > bim2count ........................................... "as result"`bim'"
-checkfile, file(`bim'.bim)
-checkfile, file(`bim'.fam)
+qui {
+	noi di as text"# > bim2count ........................................... "as result"`bim'"
+	checkfile, file(`bim'.bim)
+	checkfile, file(`bim'.fam)
+	}
 qui { 
 	qui di as text"# > importing *.bim file"
 	!$wc -l `bim'.bim  > bim.count
@@ -36,7 +38,7 @@ qui {
 	destring v11, replace
 	sum v11
 	global bim2count_snp `r(max)'
-	noi di as text"# >> number of SNPs in file ............................. "as result `r(max)'
+	noi di as text"# > number of SNPs in file .............................. "as result `r(max)'
 	}
 qui {
 	qui di as text"# > importing *.fam file"
@@ -47,7 +49,7 @@ qui {
 	destring v11, replace
 	sum v11
 	global bim2count_ind `r(max)'
-	noi di as text"# >> number of individuals in file ...................... "as result `r(max)'		
+	noi di as text"# > number of individuals in file ....................... "as result `r(max)'		
 	}	
 qui di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"

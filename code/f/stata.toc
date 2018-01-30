@@ -1,3 +1,4 @@
 v 1
 d Richard Anney, Cardiff University
 p fam2dta command to convert *.fam plink marker file to *.dta 
+p files2dta command to convert files in directory to dta
