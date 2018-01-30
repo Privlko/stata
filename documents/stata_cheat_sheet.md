@@ -57,6 +57,10 @@ The difference between using numeric and string values is in the number of allow
 * [create-newvar-odds_ratio-based-on-oldvar-or-l95-u95](#create-newvar-odds_ratio-based-on-oldvar-or-l95-u95)
 * [fill-missing-if-previous-observation-is-present](#fill-missing-if-previous-observation-is-present)
 
+# display macro with formatting
+```
+noi di as text"# > "as input"bim2array "as text" calculating ........ jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array : " as result "${bim2array`num'}"
+```
 
 # create-newvar-based-on-line-number
 ```

@@ -58,7 +58,7 @@ qui { // check against arrays
 		gen jaccard = ab/(all)
 		keep array jaccard
 		sum jaccard
-		noi di as text"# > "as input"bim2array "as text" calculating ........ jaccard index = " as result `r(min)' as text " for array : " as result "${bim2array`num'}" 
+		noi di as text"# > "as input"bim2array "as text" calculating ........ jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array : " as result "${bim2array`num'}" 
 		filei + "${bim2array`num'} `r(min)'" bim2array.out
 		}
 	erase _bim2array.dta
@@ -67,9 +67,9 @@ qui { // define most likely and jaccard globals
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
 	duplicates drop
 	gsort -j
-	gen a1 = "global arrayType " + array in 1
-	tostring jaccard, replace force
-	gen a2 = "global Jaccard " + jacc in 1 
+	gen a1 = "global bim2array " + array in 1
+	gen str6 jaccard2 = string(jaccard, "%5.4f") 
+	gen a2 = "global Jaccard " + jaccard2 in 1 
 	keep a1 a2
 	gen n = 1
 	keep in 1
@@ -78,8 +78,8 @@ qui { // define most likely and jaccard globals
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
 	erase _tmp.do
-	noi di as text"# > "as input"bim2array "as text" ................. most likely array " as result "${arrayType}" 
-	noi di as text"# > "as input"bim2array "as text" ..................... jaccard index " as result $Jaccard  
+	noi di as text"# > "as input"bim2array "as text" .................. most likely array " as result "${bim2array}" 
+	noi di as text"# > "as input"bim2array "as text" ...................... jaccard index " as result $Jaccard  
 	}
 qui { // plot most likely 
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
@@ -88,8 +88,8 @@ qui { // plot most likely
 	gsort -j
 	keep if _n <10
 	graph hbar jaccard , over(array,sort(jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) ylabel(0(.1)1) fxsize(200) fysize(100) ///
-			caption("Based on overlap with our reference data the best matched ARRAY is ${arrayType}" ///
-							"Jaccard Index of  ${arrayType} = ${Jaccard}")
+			caption("Based on overlap with our reference data the best matched ARRAY is ${bim2array}" ///
+							"Jaccard Index of  ${bim2array} = ${Jaccard}")
 	graph export  `bim'.arraymatch.png, height(1000) width(4000) as(png) replace 
 	window manage close graph
 	}
