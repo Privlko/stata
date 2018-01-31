@@ -98,7 +98,7 @@ qui { // 4 - define ancestries
 	erase _temp_.do
 	noi di as text"# > bim2hapmap ................................. saved to "as result"bim2hapmap_${like}-like.keep"
 	outsheet fid iid if pop == "nr" using bim2hapmap_${like}-like.keep, non noq replace
-	save bim2hapmap_population.dta, clear
+	save bim2hapmap_population.dta, replace
 	}
 qui { // 5 - plot graphs
 	qui { // scree
