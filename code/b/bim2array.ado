@@ -1,41 +1,45 @@
 /*
-#########################################################################
-# bim2array
-# =======================================================================
-# Author:     Richard Anney
-# Institute:  Cardiff University
-# E-mail:     AnneyR@cardiff.ac.uk
-# Date:       16jan2018
-# #########################################################################
+*program*
+ bim2array
+
+*description* 
+ a command to check array from plink binaries
+
+*syntax*
+ bim2array, bim(-filename-) dir(-folder-)
+ 
+ -filename- does not require the .bim filetype to be included - this is assumed
+ -folder- this refers to a folder containing the reference arrays - download bim2array.gz from github.com/ricanney
 */
 
 program bim2array
 syntax , bim(string asis) dir(string asis)
-
-noi di as text""
+noi di as text" "
 noi di as text"#########################################################################"
-qui di as text"# bim2array "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-noi checkfile, file(`bim'.bim)
-qui { // create list of snps
-	noi bim2count, bim(`bim')
+noi di as text"# bim2array"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > bim2array ................... checking array of (bim) "as result"`bim'.bim"
+	noi checkfile, file(`bim'.bim)
+	}
+qui { // 2 - import snps from bim file
 	import delim using `bim'.bim, clear
 	keep v2
 	tostring v2, replace
 	rename v2 snp
-	save _bim2array.dta, replace
+	save bim2array.dta, replace
 	}
-qui { // check against arrays
+qui { // 3 - define reference panel
 	clear
 	set obs 1
 	gen a = "array jaccard-index"
 	outsheet a using bim2array.out, non noq replace
-	noi files2dta, dir(`dir')
+	files2dta, dir(`dir')
 	erase _files2dta.dta
 	drop if file == "_files2dta.dta"
-	drop if file == "_bim2array.dta"
+	drop if file == "bim2array.dta"
 	split file, p(".dt")
 	keep if file2 == "a"
 	keep file1
@@ -64,7 +68,7 @@ qui { // check against arrays
 		}
 	erase _bim2array.dta
 	}
-qui { // define most likely and jaccard globals
+qui { // 4 - define most likely and jaccard globals
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
 	duplicates drop
 	gsort -j
@@ -82,7 +86,7 @@ qui { // define most likely and jaccard globals
 	noi di as text"# > bim2array .................. most likely array "as result "${bim2array}" 
 	noi di as text"# > bim2array ................. with jaccard index "as result "${Jaccard}" 
 	}
-qui { // plot most likely 
+qui { // 5 - plot most likely 
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
 	erase bim2array.out
 	duplicates drop
@@ -91,11 +95,12 @@ qui { // plot most likely
 	graph hbar jaccard , over(array,sort(jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) ylabel(0(.1)1) fxsize(200) fysize(100) ///
 			caption("Based on overlap with our reference data the best matched ARRAY is ${bim2array}" ///
 							"Jaccard Index of  ${bim2array} = ${Jaccard}")
+	noi di as text"# > bim2array .................. build overlap plotted to " as result"`bim'.arraymatch.png"
 	graph export  `bim'.arraymatch.png, height(1000) width(4000) as(png) replace 
 	window manage close graph
 	}
 noi di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;	
 
