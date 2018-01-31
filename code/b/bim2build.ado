@@ -15,7 +15,8 @@
 
 program bim2build
 syntax , bim(string asis) ref(string asis)
-qui di as text"#########################################################################"
+noi di as text""
+noi di as text"#########################################################################"
 qui di as text"# bim2build - version 0.1b 29jan2018 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
@@ -89,7 +90,7 @@ qui { // module 2 - measure overlap
 		erase _tmp.do
 		}
 	}
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 end;	

@@ -12,16 +12,15 @@
 program bim2array
 syntax , bim(string asis) dir(string asis)
 
-qui di as text"#########################################################################"
-qui di as text"# bim2array - version 0.1a 16jan2018 richard anney "
+noi di as text""
+noi di as text"#########################################################################"
+qui di as text"# bim2array "
 qui di as text"#########################################################################"
 qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
-
-qui {
-	noi checkfile, file(`bim'.bim)
-	}
+noi checkfile, file(`bim'.bim)
 qui { // create list of snps
+	noi bim2count, bim(`bim')
 	import delim using `bim'.bim, clear
 	keep v2
 	tostring v2, replace
@@ -33,7 +32,7 @@ qui { // check against arrays
 	set obs 1
 	gen a = "array jaccard-index"
 	outsheet a using bim2array.out, non noq replace
-	files2dta, dir(`dir')
+	noi files2dta, dir(`dir')
 	erase _files2dta.dta
 	drop if file == "_files2dta.dta"
 	drop if file == "_bim2array.dta"
@@ -80,8 +79,8 @@ qui { // define most likely and jaccard globals
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
 	erase _tmp.do
-	noi di as text"# > bim2array ......................... most likely array "as result "${bim2array}" 
-	noi di as text"# > bim2array ........................ with jaccard index "as result "${Jaccard}" 
+	noi di as text"# > bim2array .................. most likely array "as result "${bim2array}" 
+	noi di as text"# > bim2array ................. with jaccard index "as result "${Jaccard}" 
 	}
 qui { // plot most likely 
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
@@ -95,7 +94,7 @@ qui { // plot most likely
 	graph export  `bim'.arraymatch.png, height(1000) width(4000) as(png) replace 
 	window manage close graph
 	}
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 end;	

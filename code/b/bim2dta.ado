@@ -18,7 +18,8 @@
 program bim2dta
 syntax , bim(string asis)
 
-qui di as text"#########################################################################"
+noi di as text""
+noi di as text"#########################################################################"
 qui di as text"# bim2dta - version 0.1a 10sept2015 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# A command to convert *.bim files (plink-format marker files) to *.dta  "
@@ -59,7 +60,7 @@ qui {
 	noi di as text"# > bim2dta .............................. saving file as "as result"`bim'_bim.dta"
 	save `bim'_bim.dta, replace
 	}
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 end;	

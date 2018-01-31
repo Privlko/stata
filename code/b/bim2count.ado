@@ -15,8 +15,8 @@
 
 program bim2count
 syntax , bim(string asis)
-
-qui di as text"#########################################################################"
+noi di as text""
+noi di as text"#########################################################################"
 qui di as text"# bim2count - version 0.1a 06dec2017 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# a command to count observations in a plink dataset  "
@@ -51,7 +51,7 @@ qui {
 	global bim2count_ind `r(max)'
 	noi di as text"# > number of individuals in file ....................... "as result `r(max)'		
 	}	
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
 qui di as text"# Completed: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 end;	
