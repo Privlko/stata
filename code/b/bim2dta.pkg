@@ -2,6 +2,5 @@ d bim2dta -  convert *.bim plink marker file to *.dta (converts indel codes and 
 d Richard Anney, Cardiff University
 d Distribution-Date: 18jan2018
 f bim2dta.ado
-f ../b/bim2count.ado
 f ../c/checkfile.ado
 f ../r/recodegenotype.ado
