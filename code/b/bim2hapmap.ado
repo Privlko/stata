@@ -96,7 +96,7 @@ qui { // 4 - define ancestries
 	outsheet a in 1 using _temp_.do, non noq replace
 	do _temp_.do
 	erase _temp_.do
-	noi di as text"# > bim2hapmap ................................. saved to "as result"bim2hapmap_${like}-like.keep"
+	noi di as text"# > bim2hapmap ................................. saved to "as result"`bim'_${like}-like.keep"
 	outsheet fid iid if pop == "nr" using bim2hapmap_${like}-like.keep, non noq replace
 	save bim2hapmap_population.dta, replace
 	}
@@ -186,7 +186,7 @@ qui { // 5 - plot graphs
 				xline(${pc`i'min}, lw(.1) lc(black) lp(solid)) nodraw
 				}
 			}
-		graph combine bim2hapmap_combined_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
+		graph combine bim2hapmap_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
 		noi di as text"# > bim2hapmap .......... graph (all ancestries) saved to "as result"bim2hapmap_pca.png"
 		graph export  bim2hapmap_pca.png, height(2500) width(8000) replace
 		window manage close graph
@@ -219,7 +219,7 @@ qui { // 5 - plot graphs
 				xline(${pc`i'min}, lsty(refline) lw(.1) lc(black) lp(solid)) nodraw
 				}
 			}
-		graph combine bim2hapmap_combined_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
+		graph combine bim2hapmap_eigenval-scree  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
 		noi di as text"# > bim2hapmap ..... graph (selected ancestries) saved to "as result"bim2hapmap_pca-${like}-like.png"
 		graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
 		window manage close graph
