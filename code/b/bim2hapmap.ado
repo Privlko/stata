@@ -122,7 +122,7 @@ qui { // 4 - plot graphs
   merge 1:1 fid iid using bim2hapmap_combined_eigenvec.dta
   replace pop = "TEST" if pop == ""
   count if pop == "TEST"
-  noi di as text"# > bim2hapmap ............. test individuals in analysis "as result`r(N)'  
+  noi di as text"# > bim2hapmap ............. test individuals in analysis "as result"`r(N)'"  
   gen like = .
   foreach i in `like'  {
    replace like = 1 if pop =="`i'"
