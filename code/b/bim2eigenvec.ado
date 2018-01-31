@@ -35,7 +35,7 @@ qui { // 1 - introduction
 	}
 qui { // 2 - process input binaries
 	bim2ldexclude, bim(`bim') 
-	!$plink --bfile `bim' --exclude long-range-ld.exclude --indep-pairwise 1000 5 0.2  --out bim2eigenvec
+	!$plink --bfile `bim' --exclude bim2ldexclude.exclude --indep-pairwise 1000 5 0.2  --out bim2eigenvec
 	!$plink --bfile `bim' --extract bim2eigenvec.prune.in --make-bed                    --out bim2eigenvec
 	}
 qui { // 3 - defining principle component using ${plink2}
@@ -58,7 +58,7 @@ qui { // 5 - processing eigenval file to `bim'_eigenval.dta
 	save `bim'_eigenval.dta,replace
 	}
 qui { // 6 - cleaning temp files
-	!del bim2eigenvec.* long-range-ld.exclude
+	!del bim2eigenvec.* bim2ldexclude.exclude
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
