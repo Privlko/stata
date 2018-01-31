@@ -1,33 +1,32 @@
 /*
-#########################################################################
-# bim2build
-# a command to create check genome build from plink binaries
-#
-# command: bim2build, bim(<FILENAME>) build_ref(<FILENAME>)
-# notes: the filename does not require the .bim to be added
-# =======================================================================
-# Author:     Richard Anney
-# Institute:  Cardiff University
-# E-mail:     AnneyR@cardiff.ac.uk
-# Date:       29jan2018
-# #########################################################################
+*program*
+ bim2build
+
+*description* 
+ a command to check genome build from plink binaries
+
+*syntax*
+ bim2build, bim(-filename-) ref(-reference-)
+ 
+ -filename- does not require the .bim filetype to be included - this is assumed
+ -reference- download bim2build.dta from github.com/ricanney
 */
 
 program bim2build
 syntax , bim(string asis) ref(string asis)
-noi di as text""
+noi di as text" "
 noi di as text"#########################################################################"
-qui di as text"# bim2build - version 0.1b 29jan2018 richard anney "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-qui { // module 1 - check input files
+noi di as text"# bim2count"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
 	noi di as text"# > bim2build ................... checking build of (bim) "as result"`bim'.bim"
 	noi checkfile, file(`bim'.bim)
 	noi di as text"# > bim2build .............. checking build against (ref) "as result"`ref'"
 	noi checkfile, file(`ref')
 	}
-qui { // module 2 - measure overlap
+qui { // 2 - measure overlap
 	qui { // import bim file
 		noi di as text"# > bim2build .................................... import "as result"`bim'.bim"
 		bim2dta, bim(`bim')
@@ -47,8 +46,7 @@ qui { // module 2 - measure overlap
 			gen hg`i'_1 = .
 			replace hg`i'_0 = 1 if bp == hg`i'_chromStart 
 			replace hg`i'_1 = 1 if bp == hg`i'_chromEnd 
-			}
-		
+			}		
 		count
 		gen all = `r(N)'
 		foreach i in 17 18 19 { 
@@ -91,6 +89,6 @@ qui { // module 2 - measure overlap
 		}
 	}
 noi di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;	
