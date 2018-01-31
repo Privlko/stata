@@ -52,7 +52,7 @@ qui { // 3 - define reference panel
 	count
 	foreach num of num 1 / `r(N)' { 
 		di "${bim2array`num'}"
-		use _bim2array.dta, replace 
+		use bim2array.dta, replace 
 		duplicates drop
 		merge 1:1 snp using `dir'\\${bim2array`num'}.dta
 		gen array = "${bim2array`num'}"
@@ -66,7 +66,7 @@ qui { // 3 - define reference panel
 		di as text"# > bim2array .................... jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array " as result "${bim2array`num'}" 
 		filei + "${bim2array`num'} `r(min)'" bim2array.out
 		}
-	erase _bim2array.dta
+	erase bim2array.dta
 	}
 qui { // 4 - define most likely and jaccard globals
 	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
