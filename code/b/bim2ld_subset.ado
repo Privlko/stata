@@ -29,7 +29,7 @@ qui { // 1 - introduction
 	}
 qui { // 2 - define subset	
 	bim2ldexclude, bim(`bim')
-	!$plink  --bfile `bim' --maf 0.05 --exclude long-range-ld.exclude --make-bed --out bim2ld_subset
+	!$plink  --bfile `bim' --maf 0.05 --exclude bim2ldexclude.exclude --make-bed --out bim2ld_subset
 	!$plink  --bfile bim2ld_subset --indep-pairwise 1000 5 0.2 --out bim2ld_subset
 	import delim using bim2ld_subset.prune.in, clear
 	gen x = uniform()
@@ -42,7 +42,7 @@ qui { // 2 - define subset
 	}
 qui di as text"# > clean"
 qui {
-	!del bim2ld_subset.* long-range-ld.exclude
+	!del bim2ld_subset.* bim2ldexclude
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
