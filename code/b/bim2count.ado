@@ -22,7 +22,7 @@ noi di as text"#################################################################
 qui { // 1 - introduction
 	noi di as text"# > bim2count ................. counting observations for "as result"`bim'"
 	noi checkfile, file(`bim'.bim)
-	noicheckfile, file(`bim'.fam)
+	noi checkfile, file(`bim'.fam)
 	}
 qui { // 2 - counting bim observations
 	!$wc -l `bim'.bim  > bim.count
