@@ -29,8 +29,8 @@ qui { // 1 - introduction
 	noi checkfile, file(`bim'.bim)
 	noi checkfile, file(`bim'.bed)
 	noi checkfile, file(`bim'.fam)
-	checkfile, file(${plink})
-	checkfile, file(${plink2})
+	noi checkfile, file(${plink})
+	noi checkfile, file(${plink2})
 	checktabbed
 	}
 qui { // 2 - process input binaries
