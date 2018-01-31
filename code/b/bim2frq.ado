@@ -41,6 +41,7 @@ qui { // 3 - process frequency file
 	noi di as text"# > bim2frq .............................. saving file as "as result"`bim'_frq.dta"
 	save `bim'_frq.dta, replace
 	!del bim2frq.fr*
+	!del bim2frq.log
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

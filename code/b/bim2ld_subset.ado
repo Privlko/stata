@@ -42,7 +42,7 @@ qui { // 2 - define subset
 	}
 qui di as text"# > clean"
 qui {
-	!del bim2ld_subset.* bim2ldexclude
+	!del bim2ld_subset.* bim2ldexclude.exclude
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
