@@ -1,82 +1,68 @@
 /*
-#########################################################################
-# bim2hapmap
-# a command to use plink-format genotype files to plot againsts hapmap 
-# ancestries and define ancestral similarities to a defined hapmap set
-#
-# populations to compare against include;
-# ASW LWK MKK YRI CEU TSI MEX GIH CHB CHD JPT
-#
-# command: bim2hapmap, bim(<FILENAME>) hapmap(hapmap genotypes) aims(ancestry informative markers file) like(ancestry list)
-# =======================================================================
-# Author:     Richard Anney
-# Institute:  Cardiff University
-# E-mail:     AnneyR@cardiff.ac.uk
-# Date:       10th September 2015
-# #########################################################################
+*program*
+ bim2hapmap
+
+*description* 
+ command that uses plink-format genotype files to plot against hapmap 
+ ancestries. the script also defines individuals with ancestral 
+ similarities to a defined hapmap set
+
+*syntax*
+bim2hapmap,  bim(-filename-) hapmap(string asis) aims(string asis) like(string asis)
+ 
+ -filename- does not require the .bim filetype to be included - this is assumed
+ -aims-     download bim2hapmap.aims from github.com/ricanney
+ -hapmap-   download hapmap3-all-hg19+1.bed; hapmap3-all-hg19+1.bim; hapmap3-all-hg19+1.fam; hapmap3-all-hg19+1.population from github.com/ricanney
+ -like-     this refers to population codes (ASW LWK MKK YRI CEU TSI MEX GIH CHB CHD JPT); more than one code can be specified (space seperated)
 */
 
 program bim2hapmap
 syntax , bim(string asis) like(string asis) hapmap(string asis) aims(string asis)
-
-qui di as text"#########################################################################"
-qui di as text"# bim2hapmap - version 0.1a 05dec2017 richard anney "
-qui di as text"#########################################################################"
-qui di as text"# a command to use plink-format genotype files to plot againsts hapmap"
-qui di as text"# ancestries and define ancestral similarities to a defined hapmap set"
-qui di as text"#"
-qui di as text"# populations to compare against include;"
-qui di as text"# ASW LWK MKK YRI CEU TSI MEX GIH CHB CHD JPT"
-qui di as text"#"
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-
-noi di as text"# > bim2hapmap .......................................... "as result"`bim'.bim"
-noi checkfile, file(${plink})
-noi checkfile, file(`bim'.bim)
-noi checkfile, file(`bim'.bed)
-noi checkfile, file(`bim'.fam)
-noi checkfile, file(`hapmap'.bim)
-noi checkfile, file(`hapmap'.bed)
-noi checkfile, file(`hapmap'.fam)
-noi checkfile, file(`hapmap'.population)
-noi checkfile, file(`aims')
-
-qui di as text"# > limit genotype files to allele informative markers"
-qui { 
-	!$plink --bfile `bim'    --extract `aims' --make-founders --make-bed --out _test
-	!$plink --bfile `hapmap' --extract `aims' --make-founders --make-bed --out _hapmap
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# bim2hapmap"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > bim2hapmap ........ defining ancestries vs hapmap for "as result"`bim'"
+	noi checkfile, file(`bim'.bim)
+	noi checkfile, file(`bim'.bed)
+	noi checkfile, file(`bim'.fam)
+	noi checkfile, file(`hapmap'.bim)
+	noi checkfile, file(`hapmap'.bed)
+	noi checkfile, file(`hapmap'.fam)
+	noi checkfile, file(`hapmap'.population)
+	noi checkfile, file(`aims')
+	noi checkfile, file(${plink})
 	}
-qui di as text"# > align _test_ to _hapmap_strand"
-qui { 
-	qui di as text"# >> merge bim files"
-	qui {
-		noi bim2dta, bim(_test)
-		keep snp a1 a2 gt
-		rename (a1 a2 gt) (_test_a1 _test_a2 _test_gt)
-		save _test_bim.dta,replace
-		noi bim2dta, bim(_hapmap)
-		keep snp a1 a2 gt
-		rename (a1 a2 gt) (_hapmap_a1 _hapmap_a2 _hapmap_gt)
-		merge 1:1 snp using _test_bim.dta
-		keep if _m == 3
-		keep snp _test_a1 _test_a2 _test_gt _hapmap_a1 _hapmap_a2 _hapmap_gt
+qui { // 2 - limit genotypes to aims and merge
+	!$plink --bfile `bim'    --extract `aims' --make-founders --make-bed --out bim2hapmap_test
+	!$plink --bfile `hapmap' --extract `aims' --make-founders --make-bed --out bim2hapmap_hapmap
+	bim2dta, bim(bim2hapmap_test)
+	keep snp a1 a2 gt
+	rename (a1 a2 gt) (_test_a1 _test_a2 _test_gt)
+	save bim2hapmap_test_bim.dta,replace
+	bim2dta, bim(bim2hapmap_hapmap)
+	keep snp a1 a2 gt
+	rename (a1 a2 gt) (_hapmap_a1 _hapmap_a2 _hapmap_gt)
+	merge 1:1 snp using bim2hapmap_test_bim.dta
+	keep if _m == 3
+	keep snp _test_a1 _test_a2 _test_gt _hapmap_a1 _hapmap_a2 _hapmap_gt
+	
+	xlab
+	foreach gt in S W ID A B C D DI {
+		for var _hapmap_gt _test_gt: drop if X == "`gt'"
 		}
-	qui di as text"# >> drop incompatible genotypes"
-	qui {
-		foreach gt in S W ID A B C D DI {
-			for var _hapmap_gt _test_gt: drop if X == "`gt'"
-			}
-		drop if _hapmap_gt == "K" & _test_gt =="R"
-		drop if _hapmap_gt == "K" & _test_gt =="Y"
-		drop if _hapmap_gt == "M" & _test_gt =="R"
-		drop if _hapmap_gt == "M" & _test_gt =="Y"
-		drop if _hapmap_gt == "R" & _test_gt =="K"
-		drop if _hapmap_gt == "R" & _test_gt =="M"
-		drop if _hapmap_gt == "Y" & _test_gt =="K"
-		drop if _hapmap_gt == "Y" & _test_gt =="M"	
-		outsheet snp                           using overlap.extract, non noq replace
+	drop if _hapmap_gt == "K" & _test_gt =="R"
+	drop if _hapmap_gt == "K" & _test_gt =="Y"
+	drop if _hapmap_gt == "M" & _test_gt =="R"
+	drop if _hapmap_gt == "M" & _test_gt =="Y"
+	drop if _hapmap_gt == "R" & _test_gt =="K"
+	drop if _hapmap_gt == "R" & _test_gt =="M"
+	drop if _hapmap_gt == "Y" & _test_gt =="K"
+	drop if _hapmap_gt == "Y" & _test_gt =="M"	
+	outsheet snp                           using overlap.extract, non noq replace
 		outsheet snp if _hapmap_gt != _test_gt using _test.flip, non noq replace
 		}
 	qui di as text"# >> flip/ merge datasets"

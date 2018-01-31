@@ -3,7 +3,7 @@
  bim2frq
 
 *description* 
- ommand to create _frq.dta (plink-format marker files) from plink binaries 
+ command to create _frq.dta (plink-format marker files) from plink binaries 
 
 *syntax*
  bim2frq, bim(-filename-) 
