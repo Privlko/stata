@@ -61,7 +61,7 @@ qui { // 3 - calculate eigenvectors
  bim2eigenvec, bim(bim2hapmap_combined)
  }
 qui { // 4 - plot graphs
- use _combined_eigenval.dta,clear
+ use bim2hapmap_combined_eigenval.dta,clear
  twoway scatter eigenval pc, xtitle("Principle Components") connect(l) xlabel(1(1)10) mfc(red) mlc(black) mlw(vthin) ms(O) saving(bim2hapmap_eigenval-scree.gph, replace) nodraw
  clear
  set obs 25
@@ -119,7 +119,7 @@ qui { // 4 - plot graphs
   window manage close graph
 
   import delim using "`hapmap'.population", clear case(lower)
-  merge 1:1 fid iid using _combined_eigenvec.dta
+  merge 1:1 fid iid using bim2hapmap_combined_eigenvec.dta
   replace pop = "TEST" if pop == ""
   count if pop == "TEST"
   noi di as text"# > bim2hapmap ............. test individuals in analysis "as result`r(N)'  
