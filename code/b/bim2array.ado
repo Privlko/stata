@@ -50,7 +50,7 @@ qui { // 3 - define reference panel
 	outsheet a using _tmp.do, non noq replace
 	do _tmp.do
 	count
-	noi di as text"# > bim2array ......... this can take time - comparing to "as result"`r(N)'" as text "arrays"
+	noi di as text"# > bim2array ......... this can take time - comparing to "as result"`r(N)'" as text " arrays/ datasets"
 	foreach num of num 1 / `r(N)' { 
 		di "${bim2array`num'}"
 		use bim2array.dta, replace 
