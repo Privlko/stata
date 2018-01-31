@@ -16,7 +16,7 @@ program bim2build
 syntax , bim(string asis) ref(string asis)
 noi di as text" "
 noi di as text"#########################################################################"
-noi di as text"# bim2count"
+noi di as text"# bim2build"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
