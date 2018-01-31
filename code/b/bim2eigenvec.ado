@@ -21,9 +21,9 @@ syntax , bim(string asis) [pc(real 10)]
 noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# bim2eigenvec"
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 qui { // 1 - introduction
 	noi di as text"# > bim2eigenvec ................ estimating eigenvec for "as result"`bim'"
 	noi checkfile, file(`bim'.bim)
@@ -60,9 +60,9 @@ qui { // 5 - processing eigenval file to `bim'_eigenval.dta
 qui { // 6 - cleaning temp files
 	!del bim2eigenvec.* long-range-ld.exclude
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 
 
