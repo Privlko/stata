@@ -143,7 +143,7 @@ qui { // 4 - plot graphs
   replace pop = "nr" if pop == "TEST" & nr1 == 1 & nr2 == 1 & nr3 == 1
   count if pop == "nr"
   noi di as text"# > bim2hapmap ...................... ancestry definition "as result "`like'"  
-  noi di as text"# > bim2hapmap ....  individuals defined as like ancestry "as result`r(N)'  
+  noi di as text"# > bim2hapmap ....  individuals defined as like ancestry "as result "`r(N)'"  
   gen a = "`like'"
   replace  a = subinstr(a, " ", "_",.)
   replace  a = subinstr(a, " ", "_",.)
