@@ -219,7 +219,7 @@ qui { // 5 - plot graphs
 				xline(${pc`i'min}, lsty(refline) lw(.1) lc(black) lp(solid)) nodraw
 				}
 			}
-		graph combine bim2hapmap_eigenval-scree  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
+		graph combine bim2hapmap_eigenval-scree.gph   _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
 		noi di as text"# > bim2hapmap ..... graph (selected ancestries) saved to "as result"bim2hapmap_pca-${like}-like.png"
 		graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
 		window manage close graph
@@ -234,6 +234,9 @@ qui { // 6 - clean files
 	!del bim2hapmap_combined*
 	!del bim2hapmap_hapmap*
 	!del bim2hapmap_test*
+	erase bim2hapmap_eigenval-scree.gph
+	erase bim2hapmap_population.dta
+	erase _test.flip
 	erase legend.gph
 	erase overlap.extract
 	}
@@ -241,3 +244,4 @@ noi di as text"#################################################################
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 end; 
+
