@@ -33,15 +33,15 @@ qui { // 2 - check _frq.dta are created / create
 	if !_rc {
 		}
 	else {
-		noi di as text"# > bim2frq_compare ............ create frequency file for "as result"`ref'_frq.dta"
-		bim2frq, bim($`ref')
+		noi di as text"# > bim2frq_compare ........... create frequency file for "as result"`ref'_frq.dta"
+		bim2frq, bim(`ref')
 		}
 	capture confirm file `bim'_frq.dta 
 	if !_rc {
 		}
 	else {
-		noi di as text"# > bim2frq_compare ............ create frequency file for "as result"`bim'_frq.dta"
-		bim2frq, bim($`bim')
+		noi di as text"# > bim2frq_compare ........... create frequency file for "as result"`bim'_frq.dta"
+		bim2frq, bim(`bim')
 		}
 	}
 qui { // 3 - merge frq files
