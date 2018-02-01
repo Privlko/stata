@@ -37,14 +37,14 @@ qui { // 2 - check _bim.dta are created / create
 	if !_rc {
 		}
 	else {
-		noi di as text"# > bim2refid ...................... create reference file "as result"`ref'_bim.dta"
+		noi di as text"# > bim2refid ..................... create reference file "as result"`ref'_bim.dta"
 		bim2dta, bim(`ref')
 		}
 	capture confirm file `bim'_bim.dta 
 	if !_rc {
 		}
 	else {
-		noi di as text"# > bim2refid ......................... create marker file "as result"`bim'_bim.dta"
+		noi di as text"# > bim2refid ........................ create marker file "as result"`bim'_bim.dta"
 		bim2dta, bim(`bim')
 		}
 	}
