@@ -1,48 +1,30 @@
 /*
-#########################################################################
-# graphplinkfrq
-# a command to plot distribution from *frq.counts plink file
-#
-# command: graphplinkfrq, frq(input-file) 
-# options: 
-#          maf(num) ..... minor/major allele frequency line to plot
-#
-# dependencies: 
-# tabbed.pl must be set to be called via ${tabbed}
-#
-# =======================================================================
-# Author: Richard Anney
-# Institute: Cardiff University
-# E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015 
-#########################################################################
+*program*
+ graphplinkfrq
+
+*description* 
+ command to plot distribution from *frq.counts plink file
+
+*syntax*
+ graphplinkfrq, frq(-filename-) 
+ 
+ -filename- the name of the frq.counts file *.frq.counts not required
 */
+
 program graphplinkfrq
 syntax , frq(string asis) 
-
-qui di as text"#########################################################################"
-qui di as text"# graphplinkfrq                                                          "
-qui di as text"# version:       2a                                                      "
-qui di as text"# Creation Date: 21April2017                                             "
-qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-qui di as text"#########################################################################"
-qui di as text"# This is a script to plot the output from frq.counts file from the --freq      "
-qui di as text"# routine in plink.                                                      " 
-qui di as text"# The input data comes in standard format from the frq.counts output.         "
-qui di as text"# -----------------------------------------------------------------------"
-qui di as text"# Dependencies : tabbed.pl via ${tabbed}                                 "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-qui di as text"# > check path of plink *.frq.counts file is true"
-
-qui { 
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# bim2frq"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
 	noi di as text"# > graphplinkfrq ............................. importing "as result"`frq'.frq.counts"
 	noi checkfile, file(`frq'.frq.counts)
-    checktabbed
+    	checktabbed
 	}
-qui di as text"# > processing *.frq.counts"
-qui {
+qui { // 2 - processing *.frq.counts
 	!$tabbed `frq'.frq.counts
 	import delim using `frq'.frq.counts.tabbed, clear case(lower)
 	erase `frq'.frq.counts.tabbed
@@ -60,8 +42,7 @@ qui {
 	sum total
 	global mac5 = 5/`r(max)'
 	}
-qui di as text"# > plotting frequency to tmpFRQ.gph"
-qui {
+qui { // 3-  plotting frequency to tmpFRQ.gph
 	sum maf
 	if `r(min)' != `r(max)' {
 		noi di as text"# > graphplinkfrq ...................... plotting data to "as result "tmpFRQ.gph"
@@ -80,8 +61,8 @@ qui {
 		graph save `i', replace
 		}
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 	
