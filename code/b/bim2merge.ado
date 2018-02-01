@@ -6,13 +6,11 @@
  command to identify / join multiple *.bim files (plink-format marker files) 
 
 *syntax*
- bim2ldexclude, bim(-filename-) 
  bim2merge , bim(-filenames-)  ref_bim(-reference-) project(-project_name- [join(-join-)]
-
 
  -filenames- 	does not require the .bim filetype to be included - this is assumed
 				this includes a comma delimited set of bims
- -reference-	 does not require the .bim filetype to be included - this is assumed
+ -reference-	does not require the .bim filetype to be included - this is assumed
 				this is the bim file that others are strand aligned
  -project_name-	this is the name of the project
  -join-         this can be -yes- and initiates the merge protocol in plink
