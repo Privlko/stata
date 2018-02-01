@@ -77,6 +77,10 @@ qui { // 2 - processing `kin0'.kin0
 								 "2nd Degree Relative Pairs ; N = ${rel2nd}"     ///
 								 "3rd Degree Relative Pairs ; N = ${rel3rd}") nodraw saving(tmpKIN0_2.gph, replace)
 				}
+		noi di as text"# > graphplinkkin0 ........................... duplicates "as result "${reldup}"
+		noi di as text"# > graphplinkkin0 ............... first degree relatives "as result "${rel1st}"
+		noi di as text"# > graphplinkkin0 .............. second degree relatives "as result "${rel2nd}"
+		noi di as text"# > graphplinkkin0 ............... third degree relatives "as result "${rel3rd}"
 		noi di as text"# > graphplinkkin0 ........... exporting related pairs to "as result "tmpKIN0.relPairs"
 		outsheet if rel != "" using tmpKIN0.relPairs, noq replace 
 		}

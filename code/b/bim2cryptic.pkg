@@ -1,0 +1,7 @@
+d bim2cryptic a command to identify cryptic relatedness in plink binaries
+d Richard Anney, Cardiff University
+d Distribution-Date: 1feb2018
+f bim2cryptic.ado
+f ../b/bim2count.ado
+f ../b/bim2ld_subset.ado
+f ../c/checkfile.ado
