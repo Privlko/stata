@@ -29,7 +29,7 @@ qui { // 1 - introduction
 	    bim2count, bim(`bim')
 	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
 	noi di as text"# > bim2refid ............... updating marker names using "as result"`ref'"
-	noi checkfile, file(`ref')
+	noi checkfile, file(`ref'.bim)
 	checkfile, file(${plink})
 	}
 qui { // 2 - check _bim.dta are created / create
