@@ -1,49 +1,31 @@
 /*
-#########################################################################
-# graphplinkhet
-# a command to plot distribution from *hwe plink file
-#
-# command: graphplinkhet, het(input-file) 
-# options: 
-#          sd(num) ..... standard deviations from mean to falg in output file
-#
-# dependencies: 
-# tabbed.pl must be set to be called via ${tabbed}
-#
-# =======================================================================
-# Author: Richard Anney
-# Institute: Cardiff University
-# E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015
-#########################################################################
+*program*
+ graphplinkhet
+
+*description* 
+ command to use plot the distribution of heterozygosity from the plink *.het file
+  
+*syntax*
+ graphplinkhet, het(-filename-) [sd(-sd-)]
+
+ -filename- does not require the .bim filetype to be included - this is assumed
+ -sd-       the sd differences fromteh mean that are considered out of bounds
 */
 
 program graphplinkhet
 syntax , het(string asis) [sd(real 4)]
-
-qui di as text"#########################################################################"
-qui di as text"# graphplinkhet                                                        "
-qui di as text"# version:       2a                                                      "
-qui di as text"# Creation Date: 21April2017                                             "
-qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-qui di as text"#########################################################################"
-qui di as text"# This is a script to plot the output from het file from the --het "
-qui di as text"# routine in plink.                                                      " 
-qui di as text"# The input data comes in standard format from the imiss output          "
-qui di as text"# -----------------------------------------------------------------------"
-qui di as text"# Dependencies : tabbed.pl via ${tabbed}                                 "
-qui di as text"# -----------------------------------------------------------------------"
-qui di as text"# Syntax : graphplinkhet, het(filename) [sd(real 4)]            "
-qui di as text"# for filename, .het is not needed                                     "
-qui di as text"#########################################################################"
-
-qui {
-	noi di as text"# > graphplinkhet ....................................... "as result"`het'.het"
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# graphplinkhet"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > graphplinkhet ............................. importing "as result"`het'.het"
 	noi checkfile, file(`het'.het)
 	checktabbed
 	}
-qui di as text"# > processing `het'.het"
-qui { 
+qui { // 2 - processing `het'.het
 	!$tabbed `het'.het
 	import delim using `het'.het.tabbed, clear case(lower)
 	erase `het'.het.tabbed
@@ -51,7 +33,6 @@ qui {
 	for var ohom   : destring X, replace force
 	for var ohom   : lab var X "Homozygosity (observed)"
 	sum ohom
-	qui di as text"# >> calculating standard deviation of ohom"
 	gen sd   = `r(sd)'
 	gen _ohom = ohom - `r(mean)'
 	gen threshold = 0
@@ -78,8 +59,7 @@ qui {
 	noi di as text"# > graphplinkhet ....... heterozygosity threshold +/- sd "as result "`sd'x"
 	noi di as text"# > graphplinkhet ...... individuals with het > threshold "as result "${nINDlow}"
 	}
-qui di as text"# > plotting heterozygosity to tmpHET.gph"
-qui{
+qui { // 3 - plotting heterozygosity to tmpHET.gph
 	sum ohom
 	if `r(min)' != `r(max)' {
 		noi di as text"# > graphplinkhet ...................... plotting data to "as result "tmpHET.gph"
@@ -98,14 +78,12 @@ qui{
 		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
 		graph save `i', replace
 		}
-	}
 	noi di as text"# > graphplinkhet .............. exporting identifiers to "as result "tmpHET.indlist"
-qui {
 	outsheet fid iid if threshold == 1 using tempHET.indlist, non noq replace
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 	
 
