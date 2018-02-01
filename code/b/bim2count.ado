@@ -32,7 +32,7 @@ qui { // 2 - counting bim observations
 	destring v11, replace
 	sum v11
 	global bim2count_snp `r(max)'
-	noi di as text"# > bim2count .................... number of SNPs in file "as result `r(max)'
+	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
 	}
 qui { // 3 - counting fam observations
 	qui di as text"# > importing *.fam file"
@@ -43,7 +43,7 @@ qui { // 3 - counting fam observations
 	destring v11, replace
 	sum v11
 	global bim2count_ind `r(max)'
-	noi di as text"# > bim2count ............. number of individuals in file "as result `r(max)'
+	noi di as text"# > bim2count ............. number of individuals in file "as result "${bim2count_ind}"
 	}	
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
