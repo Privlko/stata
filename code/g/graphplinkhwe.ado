@@ -73,8 +73,8 @@ qui { // 3 - plotting HWE (P) deviation to tmpHWE.gph"
 		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
 		graph save `i', replace
 		}
-	noi di as text"# > graphplinkhwe .............. exporting identifiers to "as result "tempHWE.snplist"
-	outsheet snp if p <1e-`threshold' using tempHWE.snplist, non noq replace
+	noi di as text"# > graphplinkhwe .............. exporting identifiers to "as result "tmpHWE.snplist"
+	outsheet snp if p <1e-`threshold' using tmpHWE.snplist, non noq replace
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
