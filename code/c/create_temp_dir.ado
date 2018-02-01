@@ -1,48 +1,42 @@
 /*
-#########################################################################
-# create_temp_dir
-# to create a random named temporary directory in the current directory
-#
-# command: create_temp_dir
-#########################################################################
+*program*
+ create_temp_dir
 
-#########################################################################
-# Author:    Richard Anney
-# Institute: Cardiff University
-# E-mail:    AnneyR@cardiff.ac.uk
-# Date:      29nov2017
-#########################################################################
-*/
+*description* 
+ a command to create a temporary sub-directory in working folder
+
+*syntax*
+ create_temp_dir
+ */
 
 program create_temp_dir
 syntax 
-
-qui di as text"#########################################################################"
-qui di as text"# create_temp_dir                                                        "
-qui di as text"# version:       0.1                                                     "
-qui di as text"# Creation Date: 29nov2017                                               "
-qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME                                               "
-qui di as text"#########################################################################"
-noi di as text"# > create_temp_dir ................... current directory " as result"`c(pwd)'"
-qui {
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# create_temp_dir"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > create_temp_dir ....... create temporary directory in "as result"`c(pwd)'"
+	}
+qui { // 2 - set seed
 	clear
 	set obs 52
-	qui { // random seed from - https://www.stata.com/statalist/archive/2008-10/msg00032.html
-		tokenize "`c(current_date)'" ,parse(" ")
-		local seed_1 "`1'"
-		tokenize "`c(current_time)'" ,parse(":")
-		local seed_2 "`1'`3'`5'"
-		local seed_final "`seed_1'`seed_2'"
-		set seed `seed_final'
-		}
 	gen folderRandom = ""
+	qui { // random seed from - https://www.stata.com/statalist/archive/2008-10/msg00032.html
+			tokenize "`c(current_date)'" ,parse(" ")
+			local seed_1 "`1'"
+			tokenize "`c(current_time)'" ,parse(":")
+			local seed_2 "`1'`3'`5'"
+			local seed_final "`seed_1'`seed_2'"
+			set seed `seed_final'
+			}
+	}
+qui { // 3 - generate folder name
 	foreach num of num 1/10 {
-		gen a = uniform()
-		gen b = ""
-		qui {
-			replace b ="a" in 1
+			gen a = uniform()
+			gen b = "a"
 			replace b ="b" in 2
 			replace b ="c" in 3
 			replace b ="d" in 4
@@ -94,24 +88,26 @@ qui {
 			replace b ="X" in 50
 			replace b ="Y" in 51
 			replace b ="Z" in 52
+			sort a
+			replace folderRandom = folderRandom + b[1]
+			drop a b
 			}
-		sort a
-		replace folderRandom = folderRandom + b[1]
-		drop a b
-		}
 	replace folderRandom  = "`c(pwd)'" + "\" + folderRandom
 	gen a = "global temp_dir  " + folderRandom
 	outsheet a using _x.do, non noq replace
 	do _x.do
 	erase _x.do
+	}
+qui { // 4 - create folder
 	di as text"# >> creating random folder"
 	!mkdir ${temp_dir}
 	cd ${temp_dir}
 	}
 noi di as text"# > create_temp_dir ....................... new directory " as result"`c(pwd)'"
 noi di as text"# > create_temp_dir ...... new directory global stored as " as result"\${temp_dir}"
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+
 end;
 	
