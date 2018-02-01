@@ -28,7 +28,7 @@ qui { // 1 - introduction
 	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
 	noi di as text"# > bim2count ............. number of individuals in file "as result "${bim2count_ind}"
 	noi di as text"# > bim2cryptic ................. creating kinship matrix "as result "${bim2count_ind}"as text" x "as result "${bim2count_ind}"	
-	noi bim2ld_subset, bim(`bim')
+	bim2ld_subset, bim(`bim')
 	!$plink2 --bfile `bim' --extract bim2ld_subset50000.extract --make-king square --out `bim'
 	}	
 qui { // 2 - import kinship matrix
