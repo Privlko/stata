@@ -10,8 +10,8 @@
  bim2refid , bim(-filename-) ref(-reference-)
 
  
- -filename-    does not require the .bim filetype to be included - this is assumed
- -reference-   this is the *_bim.dta file for the reference dataset
+ -filename-    this is the test dataset - does not require the .bim filetype to be included - this is assumed
+ -reference-   this is the reference dataset - does not require the .bim filetype to be included - this is assumed
 */
 
 program bim2refid
@@ -32,11 +32,27 @@ qui { // 1 - introduction
 	noi checkfile, file(`ref')
 	checkfile, file(${plink})
 	}
-qui { // 2 - rename markers according to refid
-	bim2dta, bim(`bim')
+qui { // 2 - check _bim.dta are created / create
+	capture confirm file `ref'_bim.dta 
+	if !_rc {
+		}
+	else {
+		noi di as text"# > bim2refid ...................... create reference file "as result"`ref'_bim.dta"
+		bim2dta, bim($`ref')
+		}
+	capture confirm file `bim'_bim.dta 
+	if !_rc {
+		}
+	else {
+		noi di as text"# > bim2refid ......................... create marker file "as result"`bim'_bim.dta"
+		bim2dta, bim($`bim')
+		}
+	}
+qui { // 3 - update identifier 	
+	use `bim'_bim.dta ,clear
 	keep loc_name snp
 	rename snp oldname
-	merge m:1 loc_name using `ref'	
+	merge m:1 loc_name using `ref'_bim.dta	
 	keep if _m == 3
 	keep snp oldname
 	rename snp newname
