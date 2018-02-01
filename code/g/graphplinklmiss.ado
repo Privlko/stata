@@ -1,47 +1,31 @@
 /*
-#########################################################################
-# graphplinklmiss
-# a command to plot distribution from *imiss plink file
-#
-# command: graphplinklmiss, lmiss(input-file) 
-# options: 
-#          geno(num) ..... missingness by genotype threshold
-#
-# dependencies: 
-# tabbed.pl must be set to be called via ${tabbed}
-#
-# =======================================================================
-# Author: Richard Anney
-# Institute: Cardiff University
-# E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015
-#########################################################################
+*program*
+ graphplinklmiss
+
+*description* 
+ command to plot distribution from *lmiss plink file
+
+*syntax*
+ graphplinklmiss, lmiss(-filename-) [geno(-geno-)]
+ 
+ -filename- the name of the imiss file *.imiss not required
+ -geno-     the missingness by marker to be plotted
 */
 
 program graphplinklmiss
 syntax , lmiss(string asis) [geno(real 0.05)]
-
-qui di as text"#########################################################################"
-qui di as text"# graphplinklmiss                                                          "
-qui di as text"# version:       2a                                                      "
-qui di as text"# Creation Date: 21April2017                                             "
-qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-qui di as text"#########################################################################"
-qui di as text"# This is a script to plot the output from lmiss file from the --missing "
-qui di as text"# routine in plink.                                                      " 
-qui di as text"# The input data comes in standard format from the lmiss output.         "
-qui di as text"# -----------------------------------------------------------------------"
-qui di as text"# Dependencies : tabbed.pl via ${tabbed}                                 "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-
-noi di as text"# > graphplinklmiss ..................................... "as result"`lmiss'.lmiss"
-noi checkfile, file(`lmiss'.lmiss)
-noi checktabbed
-
-qui di as text"# > processing *.lmiss"
-qui {
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# graphplinklmiss"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > graphplinklmiss ........................... importing "as result"`lmiss'.lmiss"
+	noi checkfile, file(`lmiss'.lmiss)
+	checktabbed
+	}
+qui { // 2 - processing *.lmiss"
 	!$tabbed `lmiss'.lmiss
 	import delim using `lmiss'.lmiss.tabbed, clear case(lower)
 	erase `lmiss'.lmiss.tabbed
@@ -49,18 +33,18 @@ qui {
 	for var f_miss : lab var X "Frequency of Missing Genotypes per SNP"
 	count
 	global nSNPs `r(N)'
-	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
+	noi di as text"# > graphplinklmiss .............. number of SNPs in file "as result `r(N)'
     count if f_miss > `geno'
 	global nSNPlow `r(N)'
 	global geno_tmp `geno'
-	noi di as text"# >> missingness (by variant) threshold ................. "as result"${geno_tmp}"
-	noi di as text"# >> number of variants with missingness > threshold .... "as result"${nSNPlow}"
-		replace f_miss = 0.1 if f_miss >0.1 & f_miss !=.
+	noi di as text"# > graphplinklmiss ............... missingness threshold "as result `geno'
+	noi di as text"# > graphplinklmiss ..,,,,. markers with miss > threshold "as result "${nSNPlow}"
+	replace f_miss = 0.1 if f_miss >0.1 & f_miss !=.
 	}
-qui di as text"# > plotting missingness to tmpLMISS.gph"
-qui {
+qui { // 3 - plotting missingness to tmpLMISS.gph"
 	sum f_miss
 	if `r(min)' != `r(max)' {
+		noi di as text"# > graphplinklmiss .................... plotting data to "as result "tmpLMISS.gph"
 		tw hist f_miss , width(0.01) start(0) percent ///
 		   xlabel(0(0.01)0.1) ///
 		   xline(`geno'  , lpattern(dash) lwidth(vthin) lcolor(red)) ///
@@ -70,9 +54,14 @@ qui {
 		           "SNPs with missingness > 0.1 are recoded to 0.1 for plotting") ///
 		   nodraw saving(tmpLMISS.gph, replace)
 		}
+	else {
+		noi di as text"# > graphplinklmiss ...... nothing to plot (create blank) "as result "tmpLMISS.gph"
+		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
+		graph save `i', replace
+		}
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 	
