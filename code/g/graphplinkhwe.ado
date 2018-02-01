@@ -1,45 +1,31 @@
 /*
-#########################################################################
-# graphplinkhwe
-# a command to plot distribution from *hwe plink file
-#
-# command: graphplinkhwe, hwe(input-file) 
-# options: 
-#          threshold(num) ..... -log10P to flag in output-file 
-#
-# dependencies: 
-# tabbed.pl must be set to be called via ${tabbed}
-#
-# =======================================================================
-# Author: Richard Anney
-# Institute: Cardiff University
-# E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015
-#########################################################################
+*program*
+ graphplinkhwe
+
+*description* 
+ command to use plot distribution from *hwe plink file
+  
+*syntax*
+ graphplinkhwe, hwe(-filename-) [threshold(-threshold-)]
+
+ -filename- does not require the .bim filetype to be included - this is assumed
+ -sd-       the -log10P to flag in output-file
 */
+
 program graphplinkhwe
-
 syntax , hwe(string asis) [threshold(real 6)]
-qui di as text"#########################################################################"
-qui di as text"# graphplinkhwe                                                          "
-qui di as text"# version:       2a                                                      "
-qui di as text"# Creation Date: 21April2017                                             "
-qui di as text"# Author:        Richard Anney (anneyr@cardiff.ac.uk)                    "
-qui di as text"#########################################################################"
-qui di as text"# This is a script to plot the output from hwe file from the --hardy     "
-qui di as text"# routine in plink.                                                      " 
-qui di as text"# The input data comes in standard format from the hwe output.           "
-qui di as text"# -----------------------------------------------------------------------"
-qui di as text"# Dependencies : tabbed.pl via ${tabbed}                                 "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-
-noi di as text"# > graphplinkhwe ....................................... "as result"`hwe'.hwe"
-noi checkfile, file(`hwe'.hwe)
-
-qui di as text"# > processing `hwe'.hwe"
-qui {
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# graphplinkhwe"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > graphplinkhwe ............................. importing "as result"`hwe'.hwe"
+	noi checkfile, file(`hwe'.hwe)
+	    checktabbed
+	}
+qui { // 2 - processing `hwe'.hwe
 	!$tabbed `hwe'.hwe
 	import delim using `hwe'.hwe.tabbed, clear case(lower)
 	erase `hwe'.hwe.tabbed
@@ -49,30 +35,31 @@ qui {
 	for var p : lab var X "HWE (p)"
 	count
 	global nSNPs `r(N)'
-	noi di as text"# >> number of SNPs in file ............................. "as result `r(N)'
+	noi di as text"# > graphplinkhwe ................ number of SNPs in file "as result `r(N)'
 	count if p <1e-`threshold' 
 	global nSNPslow `r(N)'
 	global threshold_tmp `threshold'
-	noi di as text"# >> HWE threshold .................................. p < "as result "1e-`threshold'"
-	noi di as text"# >> number of SNPs with P < threshold .................. "as result "${nSNPslow}"
+	noi di as text"# > graphplinkhwe ......................... P < threshold "as result "1e-`threshold'"
+	noi di as text"# > graphplinkhwe ..... number of SNPs with P < threshold "as result "${nSNPslow}"
 	}
-qui di as text"# > plotting HWE (P) deviation to tmpHWE.gph"
-qui{
+qui { // 3 - plotting HWE (P) deviation to tmpHWE.gph"
 	sum p
 	gen log10p = -log10(p)
-	qui di as text"# >> pruning dataset for plotting"
-	qui di as text"# >>> pruning if p > 1E-4"
-	sum log10p
-	gen x = round(`r(max)',1)
-	replace x = x -1
-	replace x = 4 if x > 4
-	sum x
-	global hwelimit `r(max)'
-	drop if log10p < ${hwelimit}
-	qui di as text"# >>> applying ceiling to data for p < 1E-20"
-	replace log10p = 20 if log10p >= 20
+	qui { // pruning plot to nearest p or p < 1e-4
+		sum log10p
+		gen x = round(`r(max)',1)
+		replace x = x -1
+		replace x = 4 if x > 4
+		sum x
+		global hwelimit `r(max)'
+		drop if log10p < ${hwelimit}
+		}
+	qui { // applying ceiling to data for p < 1E-20"
+		replace log10p = 20 if log10p >= 20
+		}
 	sum p
 	if `r(min)' != `r(max)' {
+		noi di as text"# > graphplinkhwe ...................... plotting data to "as result "tmpHWE.gph"
 		tw hist log10p , width(1) start(${hwelimit}) percent ///
 		   xlabel(0(5)20) ///
 		   xline(`threshold'  , lpattern(dash) lwidth(vthin) lcolor(red)) ///
@@ -81,13 +68,16 @@ qui{
 		           "SNPs with HWE P < 1e-`threshold' ; N = ${nSNPslow}") ///
 		   nodraw saving(tmpHWE.gph, replace)
 		}
-	}
-qui di as text"# > exporting HWE (P) deviation SNPs to  tmpHWE.snplist"
-qui { 
+	else {
+		noi di as text"# > graphplinkhwe ........ nothing to plot (create blank) "as result "tmpHWE.gph"
+		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
+		graph save `i', replace
+		}
+	noi di as text"# > graphplinkhwe .............. exporting identifiers to "as result "tempHWE.snplist"
 	outsheet snp if p <1e-`threshold' using tempHWE.snplist, non noq replace
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 	
