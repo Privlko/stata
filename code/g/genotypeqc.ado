@@ -193,15 +193,15 @@ qui { // 10 - apply quality-control to binaries
 	qui { // het
 		noi di as text"# > genotypeqc ................................. (round1) "as result "het"
 		global sub_mod_mid ${sub_mod_output}-01
-		!$wc -l tempHET.indlist  > ${sub_mod_mid}.het-count
+		!$wc -l tmpHET.indlist  > ${sub_mod_mid}.het-count
 		import delim using ${sub_mod_mid}.het-count, clear varnames(nonames)
 		erase ${sub_mod_mid}.het-count
 		split v1,p(" ")
 		destring v11, replace
 		sum v11
 		if `r(N)' > 0 {
-			!$plink --bfile ${sub_mod_input} --remove tempHET.indlist --set-hh-missing --make-bed --out ${sub_mod_mid}
-			!del tempHET.indlist
+			!$plink --bfile ${sub_mod_input} --remove tmpHET.indlist --set-hh-missing --make-bed --out ${sub_mod_mid}
+			!del tmpHET.indlist
 			foreach file in bim bed fam log nosex {
 				!del "${sub_mod_input}.`file'"
 				}
@@ -217,15 +217,15 @@ qui { // 10 - apply quality-control to binaries
 		noi di as text"# > genotypeqc ................................. (round1) "as result "hwe"
 		global sub_mod_input  ${sub_mod_output}-01
 		global sub_mod_mid    ${sub_mod_output}-02
-		!$wc -l tempHWE.snplist > ${sub_mod_mid}.hwe-count
+		!$wc -l tmpHWE.snplist > ${sub_mod_mid}.hwe-count
 		import delim using ${sub_mod_mid}.hwe-count, clear varnames(nonames)
 		erase ${sub_mod_mid}.hwe-count
 		split v1,p(" ")
 		destring v11, replace
 		sum v11	
 		if `r(N)' > 0 {
-			!$plink --bfile ${sub_mod_input} --exclude  tempHWE.snplist --make-bed --out ${sub_mod_mid}
-			!del tempHWE.snplist
+			!$plink --bfile ${sub_mod_input} --exclude  tmpHWE.snplist --make-bed --out ${sub_mod_mid}
+			!del tmpHWE.snplist
 			foreach file in bim bed fam log nosex {
 				!del "${sub_mod_input}.`file'"
 				}
@@ -305,15 +305,15 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 			qui { // het
 				noi di as text"# > genotypeqc ................................. (${round1}) "as result "het"
 				global sub_mod_mid    ${sub_mod_output}-01
-				!$wc -l tempHET.indlist  > ${sub_mod_mid}.het-count
+				!$wc -l tmpHET.indlist  > ${sub_mod_mid}.het-count
 				import delim using ${sub_mod_mid}.het-count, clear varnames(nonames)
 				erase ${sub_mod_mid}.het-count
 				split v1,p(" ")
 				destring v11, replace
 				sum v11
 				if `r(N)' > 0 {
-					!$plink --bfile ${sub_mod_input} --remove tempHET.indlist --set-hh-missing --make-bed --out ${sub_mod_mid}
-					!del tempHET.indlist
+					!$plink --bfile ${sub_mod_input} --remove tmpHET.indlist --set-hh-missing --make-bed --out ${sub_mod_mid}
+					!del tmpHET.indlist
 					foreach file in bim bed fam log nosex {
 						!del "${sub_mod_input}.`file'"
 						}
@@ -329,15 +329,15 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 				noi di as text"# > genotypeqc ................................. (${round1}) "as result "hwe"
 				global sub_mod_input  ${sub_mod_output}-01
 				global sub_mod_mid    ${sub_mod_output}-02
-				!$wc -l tempHWE.snplist > ${sub_mod_mid}.hwe-count
+				!$wc -l tmpHWE.snplist > ${sub_mod_mid}.hwe-count
 				import delim using ${sub_mod_mid}.hwe-count, clear varnames(nonames)
 				erase ${sub_mod_mid}.hwe-count
 				split v1,p(" ")
 				destring v11, replace
 				sum v11	
 				if `r(N)' > 0 {
-					!$plink --bfile ${sub_mod_input} --exclude  tempHWE.snplist --make-bed --out ${sub_mod_mid}
-					!del tempHWE.snplist
+					!$plink --bfile ${sub_mod_input} --exclude  tmpHWE.snplist --make-bed --out ${sub_mod_mid}
+					!del tmpHWE.snplist
 					foreach file in bim bed fam log nosex {
 						!del "${sub_mod_input}.`file'"
 						}

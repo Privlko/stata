@@ -79,7 +79,7 @@ qui { // 3 - plotting heterozygosity to tmpHET.gph
 		graph save `i', replace
 		}
 	noi di as text"# > graphplinkhet .............. exporting identifiers to "as result "tmpHET.indlist"
-	outsheet fid iid if threshold == 1 using tempHET.indlist, non noq replace
+	outsheet fid iid if threshold == 1 using tmpHET.indlist, non noq replace
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
