@@ -202,6 +202,7 @@ qui { // 9 - plot metrics
 		}
 	}	
 qui { // 10 - apply quality-control to binaries
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... applying quality control "
 	qui { // het
 		noi di as text"# > genotypeqc ................................. (round1) "as result "het"
@@ -384,8 +385,9 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 		!del tmpHWE.gph tmpHET.gph *.log *.nosex *.hwe *.het
 		}
 	}	
-qui { // 12 - calculate pre-qc metrics
-	noi di as text"# > genotypeqc .......................................... calculate pre-quality control metrics"
+qui { // 12 - calculate post-qc metrics
+	noi di as text""
+	noi di as text"# > genotypeqc .......................................... calculate post-quality control metrics"
 	global sub_mod_input  ${sub_mod_mid}-${round2}
 	!$plink  --bfile ${sub_mod_input} --freq counts    --out ${sub_mod_input}
 	!$plink  --bfile ${sub_mod_input} --maf 0.05 --het --out ${sub_mod_input}
@@ -394,6 +396,7 @@ qui { // 12 - calculate pre-qc metrics
 	!$plink2 --bfile ${sub_mod_input} --extract bim2ld_subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 	}
 qui { // 13 - plot metrics
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... plotting post-quality control metrics"
 	noi graphplinkfrq, frq(${sub_mod_input}) 
 	noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
@@ -412,6 +415,7 @@ qui { // 13 - plot metrics
 	!del *.snplist *.indlist
 	}	
 qui { // 14 - define ancestry
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... define ancestry"
 	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${hapmap_data}) aims(${aims})
 	!rename "bim2hapmap_pca-CEU_TSI-like.png" "${sub_mod_input}_pca-CEU_TSI-like.png"
@@ -419,8 +423,8 @@ qui { // 14 - define ancestry
 	!rename "bim2hapmap_CEU_TSI-like.keep" "${sub_mod_input}_CEU_TSI-like.keep"
 	}
 qui { // 15 - create combined graphs
-	noi di as text"# > genotypeqc .......................................... create quality-control reports"
 	qui { // plotting markers by chromosome by input / output"
+		noi di as text""
 		noi di as text"# > genotypeqc .......................................... plotting histogram of markers per chromosome (pre/post)"
 		bim2dta,bim(${input})
 		count
@@ -478,22 +482,21 @@ qui { // 16 - creating final reports
 		do tempfile.do
 		erase tempfile.do
 		}
-	noi di as text"# > genotypeqc .......................................... creating docx"
+	noi di as text"# > genotypeqc .......................................... creating quality control report (docx)"
 	_sub_genotypeqc_report
-	noi di as text"# > genotypeqc .......................................... creating meta-log"
+	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
 	_sub_genotypeqc_meta
 	}
 qui { // 17 - rename and clean
-	noi di as text"# > genotypeqc .......................................... renaming files"
+	noi di as text"# > genotypeqc .......................................... moving and cleaning"
+
 	!copy "${sub_mod_post}-quality-control-report.docx"   "${output}.quality-control-report.docx"
 	!copy "${sub_mod_post}.meta-log"                      "${output}-genotypeqc.meta-log"
 	!copy "${sub_mod_post}.bed"                           "${output}.bed"
 	!copy "${sub_mod_post}.bim"                           "${output}.bim"
 	!copy "${sub_mod_post}.fam"                           "${output}.fam"
 	!copy "${sub_mod_post}_CEU_TSI-like.keep"             "${output}_CEU_TSI-like.keep"
-	noi di as text"# > genotypeqc .......................................... creating new directory "
 	cd ..
-	noi di as text"# > remove temporary directory"
 	!rmdir  "$temp_dir" /S /Q
 	cd ${data_folder}
 	cd ..
@@ -507,7 +510,6 @@ qui { // 17 - rename and clean
 	!copy "${output}.quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
 	cd ${data_folder}
 	!del ${output_2}* *arraymatch.png *.parameters *_bim.dta
-	
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
