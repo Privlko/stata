@@ -41,15 +41,8 @@ noi di as text"#################################################################
 qui { // 1 - introduction
 	noi di as text"# > genotypeqc .................................. version "as result"${version}"
 	noi checkfile, file(`param')
-	qui { // remove parameters from memory
-		foreach i in bim2hapmap_hapmap bim2hapmap_aims ref  ///
-					 bim2array_ref bim2build_ref bim2frq_compare_ref rounds hwep hetsd maf mind geno1      ///
-					 geno2 kin_d kin_f kin_s kin_t {
-					 macro drop `i'
-					 }
-		}
 	qui { // load parameters to memory
-			do `param'
+			do "`param'"
 			global input    "${data_folder}\\${data_input}"
 			global output   "${data_folder}\\${data_input}-qc-${version}"
 			global output_2 "${data_input}-qc-${version}"
