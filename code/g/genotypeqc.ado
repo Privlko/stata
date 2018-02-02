@@ -315,7 +315,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 			noi di as text"# > genotypeqc .......................................... applying quality control - round `round' "
 			qui { // het
 				noi di as text""
-				noi di as text"# > genotypeqc ................................. (${round1}) "as result "het"
+				noi di as text"# > genotypeqc ................................. (round`round') "as result "het"
 				global sub_mod_mid    ${sub_mod_output}-01
 				!$wc -l tmpHET.indlist  > ${sub_mod_mid}.het-count
 				import delim using ${sub_mod_mid}.het-count, clear varnames(nonames)
@@ -338,7 +338,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 					}
 				}
 			qui {	// hwe
-				noi di as text"# > genotypeqc ................................. (${round1}) "as result "hwe"
+				noi di as text"# > genotypeqc ................................. (round`round') "as result "hwe"
 				global sub_mod_input  ${sub_mod_output}-01
 				global sub_mod_mid    ${sub_mod_output}-02
 				!$wc -l tmpHWE.snplist > ${sub_mod_mid}.hwe-count
@@ -362,7 +362,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 					}
 				}
 			qui {	// imiss
-				noi di as text"# > genotypeqc ................................. (${round1}) "as result "imiss"
+				noi di as text"# > genotypeqc ................................. (round`round') "as result "imiss"
 				global sub_mod_input  ${sub_mod_output}-02
 				global sub_mod_mid    ${sub_mod_output}-03
 				!$plink --bfile ${sub_mod_input} --mind ${mind}  --make-bed --out ${sub_mod_mid}
@@ -371,7 +371,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 					}
 				}
 			qui {	// lmiss 
-				noi di as text"# > genotypeqc ................................. (${round1}) "as result "lmiss"
+				noi di as text"# > genotypeqc ................................. (round`round') "as result "lmiss"
 				global sub_mod_input  ${sub_mod_output}-03
 				global sub_mod_mid tempfile-10
 				!$plink --bfile ${sub_mod_input} --geno ${geno2} --make-bed --out ${sub_mod_mid}-${round2}
