@@ -80,6 +80,7 @@ qui { // 1 - introduction
 qui { // 2 - set working directory
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... "as result"setting working directory"
+	cd ${data_folder}
 	noi create_temp_dir
 	}
 qui { // 3 - determining the original genotyping array
@@ -217,7 +218,7 @@ qui { // 10 - apply quality-control to binaries
 			}
 		else {
 			foreach file in bim bed fam {
-				!del "${sub_mod_output}.`file'"
+				!del "${sub_mod_mid}.`file'"
 				!rename "${sub_mod_input}.`file'" "${sub_mod_mid}.`file'"
 				}
 			}
