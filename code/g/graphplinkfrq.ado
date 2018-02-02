@@ -15,7 +15,7 @@ program graphplinkfrq
 syntax , frq(string asis) 
 noi di as text" "
 noi di as text"#########################################################################"
-noi di as text"# bim2frq"
+noi di as text"# graphplinkfrq"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
