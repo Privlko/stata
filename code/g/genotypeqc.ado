@@ -60,17 +60,19 @@ qui { // 1 - introduction
 		noi checkfile, file(${plink2})
 			checktabbed
 		noi checkfile, file(${bim2build_ref})
-		noi checkfile, file(${ref}.bim)
-		noi checkfile, file(${ref}.bed)
-		noi checkfile, file(${ref}.fam)
-		noi checkfile, file(${bim2frq_compare_ref})
+		foreach file of bim bed fam {
+			noi checkfile, file(${ref}.`file')
+			}
+		foreach file of bim bed fam {
+			noi checkfile, file(${bim2frq_compare_ref}.`file')
+			}
+		foreach file of bim bed fam {
+			noi checkfile, file(${bim2hapmap_hapmap}.`file')
+			}
 		noi checkfile, file(${bim2hapmap_aims})
-		noi checkfile, file(${bim2hapmap_hapmap}.bed)
-		noi checkfile, file(${bim2hapmap_hapmap}.bim)
-		noi checkfile, file(${bim2hapmap_hapmap}.fam)
-		noi checkfile, file(${data_folder}\\${data_input}.bed)
-		noi checkfile, file(${data_folder}\\${data_input}.bim)
-		noi checkfile, file(${data_folder}\\${data_input}.fam)
+		foreach file of bim bed fam {
+			noi checkfile, file(${${data_folder}\\${data_input}}.`file')
+			}
 		noi di as text"# > genotypeqc .................... bim2array_ref folder "as result"${bim2array_ref}"
 		noi di as text"#########################################################################"
 		}
