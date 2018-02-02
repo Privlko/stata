@@ -31,7 +31,7 @@ qui { // version
 }
 global version v7
 program genotypeqc
-syntax , param(string asis) [known_array(string asis)]
+syntax [known_array(string asis)]
 noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc"
@@ -40,9 +40,7 @@ noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 qui { // 1 - introduction
 	noi di as text"# > genotypeqc .................................. version "as result"${version}"
-	noi checkfile, file(`param')
 	qui { // load parameters to memory
-			do "`param'"
 			global input    "${data_folder}\\${data_input}"
 			global output   "${data_folder}\\${data_input}-qc-${version}"
 			global output_2 "${data_input}-qc-${version}"
@@ -62,7 +60,9 @@ qui { // 1 - introduction
 		noi checkfile, file(${plink2})
 			checktabbed
 		noi checkfile, file(${bim2build_ref})
-		noi checkfile, file(${ref})
+		noi checkfile, file(${ref}.bim)
+		noi checkfile, file(${ref}.bed)
+		noi checkfile, file(${ref}.fam)
 		noi checkfile, file(${bim2frq_compare_ref})
 		noi checkfile, file(${bim2hapmap_aims})
 		noi checkfile, file(${bim2hapmap_hapmap}.bed)
