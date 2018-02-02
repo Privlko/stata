@@ -127,6 +127,7 @@ qui { // 4 - pre-cleaning and update build
 qui { // 5 - confirm / update genome build 	
 	noi di as text"# > genotypeqc .......................................... update / confirm hg19 +1"
 	noi bim2build, bim(${sub_mod_output}) ref(${build_ref})
+	!rename "${sub_mod_output}.bim2build.png" "${input}.bim2build.png"
 	clear
 	set obs 1
 	gen build = "${bim2build}"
@@ -492,6 +493,9 @@ qui { // 17 - rename and clean
 	!copy "${output}_CEU_TSI-like.keep"             "${output_2}\\${output_2}_CEU_TSI-like.keep  "
 	!copy "${output}-genotypeqc.meta-log"           "${output_2}\\${output_2}-genotypeqc.meta-log"
 	!copy "${output}.quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
+	cd ${data_folder}
+	!del ${output_2}* *arraymatch.png *.parameters *_bim.dta
+	
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

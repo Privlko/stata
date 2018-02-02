@@ -40,7 +40,7 @@ qui { // 2 - processing *.frq.counts
 	noi di as text"# > graphplinkfrq ........... number of SNPs with mac < 5 "as result `r(N)'
 	gen total = c1 + c2
 	sum total
-	global mac5 = 5/`r(max)'
+	global mac5 = trim("`: display %5.4f 5/r(max)'")
 	}
 qui { // 3-  plotting frequency to tmpFRQ.gph
 	sum maf
@@ -52,7 +52,7 @@ qui { // 3-  plotting frequency to tmpFRQ.gph
 		   legend(off) ///
 		   caption("SNPs in dataset; N = ${nSNPs}" ///
 		           "SNPs with mac < 5 ; N = ${nSNPlow}" ///
-							 "mac 5 = $mac5 %") ///
+							 "mac 5 = $mac5 %" ///
 		   nodraw saving(tmpFRQ.gph, replace)
 		}
 	else {
