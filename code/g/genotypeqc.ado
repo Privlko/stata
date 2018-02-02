@@ -31,7 +31,7 @@ qui { // version
 }
 global version v7
 program genotypeqc
-syntax [known_array(string asis)]
+syntax, [known_array(string asis)]
 noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc"
