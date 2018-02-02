@@ -66,8 +66,9 @@ qui { // 3 - update identifier
 	!$plink --bfile bim2refid-01 --update-name bim2refid.update-name --make-bed --out `bim'-refid
 	!del bim2refid-01.*
 	noi di as text"# > bim2refid ................. updated binaries saved as "as result"`bim'-refid"
-	    bim2count, bim(`bim'-refid)
+	bim2count, bim(`bim'-refid)
 	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
+	!del bim2ref*
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

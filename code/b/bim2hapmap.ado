@@ -96,7 +96,7 @@ qui { // 4 - define ancestries
 	outsheet a in 1 using _temp_.do, non noq replace
 	do _temp_.do
 	erase _temp_.do
-	noi di as text"# > bim2hapmap ................................. saved to "as result"`bim'_${like}-like.keep"
+	noi di as text"# > bim2hapmap ................................. saved to "as result"bim2hapmap_${like}-like.keep"
 	outsheet fid iid if pop == "nr" using bim2hapmap_${like}-like.keep, non noq replace
 	save bim2hapmap_population.dta, replace
 	}

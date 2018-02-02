@@ -13,10 +13,8 @@
 program _sub_genotypeqc_report
 syntax  
 end
-
-	noi di as text"...creating quality-control-report.docx"
 	global toc    "$S_DATE $S_TIME"
-	!del ${sub_mod_output}-quality-control-report.docx
+	!del ${sub_mod_post}-quality-control-report.docx
 	//open document
 	mata:
 	dh = _docx_new()
@@ -41,13 +39,13 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Run Date ......................... $S_DATE $S_TIME")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Quality Control Version .......... v6")
+	_docx_paragraph_add_text(dh, "# > Quality Control Version .......... v7")
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# > Input File: ...................... ${data_input}")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Input Array: ..................... $arrayType")
+	_docx_paragraph_add_text(dh, "# > Input Array: ..................... $bim2array")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Output File ............. ........ ${data_input}-qc-v6")
+	_docx_paragraph_add_text(dh, "# > Output File ............. ........ ${data_input}-qc-v7")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Input Total Markers: ............. $count_markers_1")
 	_docx_paragraph_add_linebreak(dh)
@@ -87,19 +85,14 @@ end
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "This data was created using the program -bim2build-. ")  
-	_docx_paragraph_add_text(dh, "This program reports the genome build of the input data. As part of the QC pipeline all data is converted to hg19 +1. Below is a plot jaccard index for the different genome builds for the input data. The output data is reported as a confirmation/ sanity check.")
+	_docx_paragraph_add_text(dh, "This program reports the genome build of the input data. As part of the QC pipeline all data is converted to hg19 +1. Below is a plot jaccard index for the different genome builds for the input data.")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Genome build of ${data_input} (input binaries)")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${input}.hg-buildmatch.png")
+	_docx_image_add(dh,"${input}.bim2build.png")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, " ")
-	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Genome build of ${data_input}-qc-v6 (output binaries)")
-	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"tempfile-module2-processed.hg-buildmatch.png")
 
 	// REPORTING ARRAY
 	_docx_paragraph_new(dh, "")
@@ -113,11 +106,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Array match for input binaries is  ${arrayType}")
-	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Match metrics (Jaccard Index)    = ${Jaccard}")
-	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, " ")
+	_docx_paragraph_add_text(dh, "# > Array match for input binaries is  ${bim2array}")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Array match of ${data_input}")
 	_docx_image_add(dh,"${input}.arraymatch.png")
@@ -138,7 +127,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"tempfile-module2-allele-frequency-check.png")
+	_docx_image_add(dh,"${sub_mod_pre}-bim2frq_compare.png")
 
 	// DISPLAYING ANCESTRY DISTRIBUTIONS   
 	_docx_paragraph_new(dh, "")
@@ -154,13 +143,13 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > PCA for all ancestries")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"bim2hapmap_pca.png")
+	_docx_image_add(dh,"${sub_mod_post}_pca.png")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > PCA for ancestries (focused aroung ${like}")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"bim2hapmap_pca-${like}-like.png")
+	_docx_image_add(dh,"${sub_mod_post}_pca-${like}-like")
 
 	// DISPLAYING CHROMOSOME DISTRIBUTION  
 	_docx_paragraph_new(dh, "")
@@ -176,7 +165,7 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# > Distribution by chromosome")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-chromosomes.png")
+	_docx_image_add(dh,"${sub_mod_post}-chromosomes.png")
 
 	// REPORTING RELATEDNESS
 	_docx_paragraph_new(dh, "")
@@ -192,11 +181,11 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, "# > Proportion of Zero IBS by Kinship")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-KIN0_1.png")
+	_docx_image_add(dh,"${sub_mod_post}-KIN0_1.png")
 	_docx_add_pagebreak(dh,)
 	_docx_paragraph_add_text(dh, "# > Histogram of Kinship")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-KIN0_2.png")
+	_docx_image_add(dh,"${sub_mod_post}-KIN0_2.png")
 
 	// REPORTING HETEROZYGOSITY
 	_docx_paragraph_new(dh, "")
@@ -224,7 +213,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Distribution of heterozygosity scores per individual")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-HET.png")
+	_docx_image_add(dh,"${sub_mod_post}-HET.png")
 
 	// REPORTING HARDY-WEINBERG EQUILIBRIUM
 	_docx_paragraph_new(dh, "")
@@ -240,7 +229,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Distribution of hardy-weinberg deviation per marker")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-HWE.png")
+	_docx_image_add(dh,"${sub_mod_post}-HWE.png")
 
 	// REPORTING MISSINGNESS
 	_docx_paragraph_new(dh, "")
@@ -256,7 +245,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Distribution of missingness by individual")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-IMISS.png")	
+	_docx_image_add(dh,"${sub_mod_post}-IMISS.png")	
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh) 
@@ -275,7 +264,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Distribution of missingness by variant")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-LMISS.png")	
+	_docx_image_add(dh,"${sub_mod_post}-LMISS.png")	
 
 	// REPORTING ALLELE FREQUENCY
 	_docx_paragraph_new(dh, "")
@@ -289,10 +278,10 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Distribution of minor allele frequencies")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_output}-FRQ.png")
+	_docx_image_add(dh,"${sub_mod_post}-FRQ.png")
 
 	// SAVING DOCX
-	_docx_save(dh, "${sub_mod_output}-quality-control-report.docx", 1)
+	_docx_save(dh, "${sub_mod_post}-quality-control-report.docx", 1)
 	_docx_close(dh)
 	end
 	
