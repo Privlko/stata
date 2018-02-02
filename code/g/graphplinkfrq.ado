@@ -52,7 +52,7 @@ qui { // 3-  plotting frequency to tmpFRQ.gph
 		   legend(off) ///
 		   caption("SNPs in dataset; N = ${nSNPs}" ///
 		           "SNPs with mac < 5 ; N = ${nSNPlow}" ///
-							 "mac 5 = $mac5 %" ///
+							 "mac 5 = $mac5 %") ///
 		   nodraw saving(tmpFRQ.gph, replace)
 		}
 	else {

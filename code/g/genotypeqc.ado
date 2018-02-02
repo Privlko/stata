@@ -83,9 +83,13 @@ qui { // 1 - introduction
 		}
 	}
 qui { // 2 - set working directory
+	noi di as text""
+	noi di as text"# > genotypeqc .......................................... "as result"setting working directory"
 	noi create_temp_dir
 	}
 qui { // 3 - determining the original genotyping array
+	noi di as text""
+	noi di as text"# > genotypeqc .......................................... "as result"determining original genotyping array"
 	clear
 	set obs 1
 	gen known_array = "`known_array'"
@@ -104,6 +108,7 @@ qui { // 3 - determining the original genotyping array
 		}
 	}
 qui { // 4 - pre-cleaning and update build
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... basic pruning (pre-cleaning)"
 	global sub_mod_output tempfile-4-01
 	noi bim2count, bim(${input})
@@ -125,6 +130,7 @@ qui { // 4 - pre-cleaning and update build
 		}	
 	}
 qui { // 5 - confirm / update genome build 	
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... update / confirm hg19 +1"
 	noi bim2build, bim(${sub_mod_output}) ref(${build_ref})
 	!rename "${sub_mod_output}.bim2build.png" "${input}.bim2build.png"
@@ -136,6 +142,8 @@ qui { // 5 - confirm / update genome build
 		}
 	else {
 		noi di as text"# > genotypeqc ......................... build is ${bim2build} "as result"convert to hg19 +1"
+		noi di as text""
+		noi di as text"# > genotypeqc .......................................... update to hg19 +1"		
 		bim2dta, bim(${sub_mod_output})
 		keep snp
 		merge 1:1 snp using $array_ref\\$bim2array.dta
@@ -151,11 +159,13 @@ qui { // 5 - confirm / update genome build
 		}
 	}
 qui { // 6 - convert snp-name to reference
-	noi di as text"# > genotypeqc .......................................... convert snp-name to reference"
+	noi di as text""
+	noi di as text"# > genotypeqc .......................................... converting snp-name to reference"
 	noi bim2refid, bim(${sub_mod_output}) ref(${ref})
 	!del ${sub_mod_output}.*
-		}
+	}
 qui { // 7 - check allele frequencies
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... compare allele frequencies with reference"
 	noi bim2frq_compare, bim(${sub_mod_output}-refid) ref(${bim2frq_compare_ref})
 	!$plink --bfile ${sub_mod_output}-refid --exclude bim2frq_compare.exclude --make-bed --out ${sub_mod_output}-preclean
@@ -163,6 +173,7 @@ qui { // 7 - check allele frequencies
 	!del ${sub_mod_output}-refid.* bim2frq_compare.exclude bim2frq_compare.png
 	}
 qui { // 8 - calculate pre-qc metrics
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... calculate pre-quality control metrics"
 	global sub_mod_input  ${sub_mod_output}-preclean
 	!$plink  --bfile ${sub_mod_input} --freq counts    --out ${sub_mod_input}
@@ -173,6 +184,7 @@ qui { // 8 - calculate pre-qc metrics
 	!$plink2 --bfile ${sub_mod_input} --extract bim2ld_subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 	}
 qui { // 9 - plot metrics
+	noi di as text""
 	noi di as text"# > genotypeqc .......................................... plotting pre-quality control metrics"
 	noi graphplinkfrq, frq(${sub_mod_input}) 
 	noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
