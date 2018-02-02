@@ -42,11 +42,11 @@ qui { // 1 - introduction
 	noi di as text"# > genotypeqc .................................. version "as result"${version}"
 	noi checkfile, file(`param')
 	qui { // remove parameters from memory
-		foreach i in 	data_folder data_input array_ref build_ref kg_ref_frq  ///
-									hapmap_data aims rounds hwep hetsd maf mind geno1      ///
-									geno2 kin_d kin_f kin_s kin_t {
-									macro drop `i'
-									}
+		foreach i in bim2hapmap_hapmap bim2hapmap_aims ref  ///
+					 bim2array_ref bim2build_ref bim2frq_compare_ref rounds hwep hetsd maf mind geno1      ///
+					 geno2 kin_d kin_f kin_s kin_t {
+					 macro drop `i'
+					 }
 		}
 	qui { // load parameters to memory
 			do `param'
@@ -67,18 +67,18 @@ qui { // 1 - introduction
 		noi di as text"# > genotypeqc .......................................... check path"
 		noi checkfile, file(${plink})
 		noi checkfile, file(${plink2})
-				checktabbed
-		noi checkfile, file(${build_ref})
-		noi checkfile, file(${kg_ref})
-		noi checkfile, file(${kg_ref_frq})
-		noi checkfile, file(${aims})
-		noi checkfile, file(${hapmap_data}.bed)
-		noi checkfile, file(${hapmap_data}.bim)
-		noi checkfile, file(${hapmap_data}.fam)
+			checktabbed
+		noi checkfile, file(${bim2build_ref})
+		noi checkfile, file(${ref})
+		noi checkfile, file(${bim2frq_compare_ref})
+		noi checkfile, file(${bim2hapmap_aims})
+		noi checkfile, file(${bim2hapmap_hapmap}.bed)
+		noi checkfile, file(${bim2hapmap_hapmap}.bim)
+		noi checkfile, file(${bim2hapmap_hapmap}.fam)
 		noi checkfile, file(${data_folder}\\${data_input}.bed)
 		noi checkfile, file(${data_folder}\\${data_input}.bim)
 		noi checkfile, file(${data_folder}\\${data_input}.fam)
-		noi di as text"# > genotypeqc ......................... array_ref folder "as result"${array_ref}"
+		noi di as text"# > genotypeqc .................... bim2array_ref folder "as result"${bim2array_ref}"
 		noi di as text"#########################################################################"
 		}
 	}
@@ -95,7 +95,7 @@ qui { // 3 - determining the original genotyping array
 	gen known_array = "`known_array'"
 	if  known_array == "" {
 		noi di as text"# > genotypeqc ...... array unknown - determine array for "as result"${data_input}"
-		noi bim2array, bim(${input}) dir(${array_ref})
+		noi bim2array, bim(${input}) dir(${bim2array_ref})
 		}
 	else {
 		noi di as text"# > genotypeqc ........................ array defined for "as result"${data_input}"
@@ -132,7 +132,7 @@ qui { // 4 - pre-cleaning and update build
 qui { // 5 - confirm / update genome build 	
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... update / confirm hg19 +1"
-	noi bim2build, bim(${sub_mod_output}) ref(${build_ref})
+	noi bim2build, bim(${sub_mod_output}) ref(${bim2build_ref})
 	!rename "${sub_mod_output}.bim2build.png" "${input}.bim2build.png"
 	clear
 	set obs 1
@@ -184,7 +184,6 @@ qui { // 8 - calculate pre-qc metrics
 	!$plink2 --bfile ${sub_mod_input} --extract bim2ld_subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 	}
 qui { // 9 - plot metrics
-	noi di as text""
 	noi di as text"# > genotypeqc .......................................... plotting pre-quality control metrics"
 	noi graphplinkfrq, frq(${sub_mod_input}) 
 	noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
@@ -203,7 +202,8 @@ qui { // 9 - plot metrics
 	}	
 qui { // 10 - apply quality-control to binaries
 	noi di as text""
-	noi di as text"# > genotypeqc .......................................... applying quality control "
+	noi di as text"# > genotypeqc .......................................... applying quality control - round 1 "
+	noi di as text""
 	qui { // het
 		noi di as text"# > genotypeqc ................................. (round1) "as result "het"
 		global sub_mod_mid ${sub_mod_output}-01
@@ -303,6 +303,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 			erase tempfile-round.do
 			}
 		qui { // calculate metrics
+			noi di as text""
 			noi di as text"# > genotypeqc .......................................... calculate quality control metrics - round `round'"
 			global sub_mod_input  ${sub_mod_mid}-${round1}
 			global sub_mod_output ${sub_mod_mid}-${round2}
@@ -315,8 +316,10 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 			noi graphplinkhwe, hwe(${sub_mod_input}) threshold(${hwep}) 
 			}
 		qui { // apply quality-control to binaries
+			noi di as text""
 			noi di as text"# > genotypeqc .......................................... applying quality control - round `round' "
 			qui { // het
+				noi di as text""
 				noi di as text"# > genotypeqc ................................. (${round1}) "as result "het"
 				global sub_mod_mid    ${sub_mod_output}-01
 				!$wc -l tmpHET.indlist  > ${sub_mod_mid}.het-count
@@ -396,7 +399,6 @@ qui { // 12 - calculate post-qc metrics
 	!$plink2 --bfile ${sub_mod_input} --extract bim2ld_subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 	}
 qui { // 13 - plot metrics
-	noi di as text""
 	noi di as text"# > genotypeqc .......................................... plotting post-quality control metrics"
 	noi graphplinkfrq, frq(${sub_mod_input}) 
 	noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
@@ -417,12 +419,17 @@ qui { // 13 - plot metrics
 qui { // 14 - define ancestry
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... define ancestry"
-	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${hapmap_data}) aims(${aims})
+	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${bim2hapmap_hapmap}) aims(${bim2hapmap_aims})
 	!rename "bim2hapmap_pca-CEU_TSI-like.png" "${sub_mod_input}_pca-CEU_TSI-like.png"
 	!rename "bim2hapmap_pca.png" "${sub_mod_input}_pca.png"
 	!rename "bim2hapmap_CEU_TSI-like.keep" "${sub_mod_input}_CEU_TSI-like.keep"
 	}
-qui { // 15 - create combined graphs
+qui { // 15 - creating final reports	
+	noi di as text"#########################################################################"
+	noi di as text"# creating final reports"
+	noi di as text"#########################################################################"
+	noi di as text"# Started: $S_DATE $S_TIME"
+	noi di as text"#########################################################################"
 	qui { // plotting markers by chromosome by input / output"
 		noi di as text""
 		noi di as text"# > genotypeqc .......................................... plotting histogram of markers per chromosome (pre/post)"
@@ -461,8 +468,6 @@ qui { // 15 - create combined graphs
 				}
 			}	
 		}
-	}
-qui { // 16 - creating final reports	
 	qui { // counting markers in pre/post files
 		noi di as text"# > genotypeqc .......................................... counting metrics and storing in memory"
 		!$wc -l "${input}.bim"                          > "${sub_mod_output}.counts"
@@ -487,7 +492,7 @@ qui { // 16 - creating final reports
 	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
 	_sub_genotypeqc_meta
 	}
-qui { // 17 - rename and clean
+qui { // 16 - rename and clean
 	noi di as text"# > genotypeqc .......................................... moving and cleaning"
 
 	!copy "${sub_mod_post}-quality-control-report.docx"   "${output}.quality-control-report.docx"
