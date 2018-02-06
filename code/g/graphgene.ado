@@ -15,7 +15,7 @@
 */
 
 program graphgene
-syntax  ,  chr(string asis) from(string asis) to(string asis) generef(string asis) 
+syntax  ,  chr(string asis) from(string asis) to(string asis) generef(string asis) [save(string asis)]
 
 noi di as text" "
 noi di as text"#########################################################################"
@@ -175,8 +175,16 @@ qui { // 6 - plot and define order of genes
 		graph save temp-graphgene.gph, replace
 		window manage close graph
 		}
-	qui { //clean up tmp files"
+	}
+qui { // 7 - clean up tmp files"
+	clear
+	set obs 1
+	gen save = "`save'"
+	if save == "" {
 		!del graphgene_coordinates.dta graphgene_dummy.dta graphgene_pre-plot.dta
+		}
+	else {
+			!del graphgene_coordinates.dta graphgene_dummy.dta 
 		}
 	}
 noi di as text"#########################################################################"
