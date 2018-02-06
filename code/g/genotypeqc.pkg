@@ -1,6 +1,6 @@
 d genotypeqc - genotype-array quality-control pipeline
 d Richard Anney, Cardiff University
-d Distribution-Date: 2feb2018
+d Distribution-Date: 6feb2018
 f ../b/bim2build.ado
 f ../b/bim2count.ado
 f ../b/bim2cryptic.ado

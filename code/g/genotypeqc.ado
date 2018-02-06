@@ -73,7 +73,7 @@ qui { // 1 - introduction
 		foreach file in bim bed fam {
 			noi checkfile, file(${data_folder}\\${data_input}.`file')
 			}
-		noi di as text"# > genotypeqc .................... bim2array_ref folder "as result"${bim2array_ref}"
+		noi di as text"# > genotypeqc ..................... bim2array_ref folder "as result"${bim2array_ref}"
 		noi di as text"#########################################################################"
 		}
 	}
@@ -146,7 +146,7 @@ qui { // 5 - confirm / update genome build
 		!$plink --bfile ${sub_mod_output} --extract bim2build.extract --make-bed --out bim2build-1 
 		!$plink --bfile bim2build-1 --update-chr bim2build.update-chr --make-bed --out bim2build-2 
 		!$plink --bfile bim2build-2 --update-map  bim2build.update-map  --make-bed --out ${sub_mod_output} 
-		noi bim2build, bim(${sub_mod_output}) ref(${build_ref})
+		noi bim2build, bim(${sub_mod_output}) ref(${bim2build_ref})
 		!del bim2build-1.* bim2build-2.* bim2build.*
 		}
 	}
@@ -403,7 +403,7 @@ qui { // 14 - define ancestry
 	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${bim2hapmap_hapmap}) aims(${bim2hapmap_aims})
 	!rename "bim2hapmap_pca-CEU_TSI-like.png" "${sub_mod_input}_pca-CEU_TSI-like.png"
 	!rename "bim2hapmap_pca.png"              "${sub_mod_input}_pca.png"
-	!rename "bim2hapmap_CEU_TSI-like.keep"    "${output_2}\\${output_2}_CEU_TSI-like.keep"
+	!copy "bim2hapmap_CEU_TSI-like.keep"    "..\..\\${output_2}\\${output_2}_CEU_TSI-like.keep"
 	}
 qui { // 15 - creating final reports	
 	noi di as text"#########################################################################"
@@ -455,7 +455,7 @@ qui { // 15 - creating final reports
 		!$wc -l "${sub_mod_output}.bim"                >> "${sub_mod_output}.counts"
 		!$wc -l "${input}.fam"                         >> "${sub_mod_output}.counts"
 		!$wc -l "${sub_mod_output}.fam"                >> "${sub_mod_output}.counts"
-		!$wc -l "${sub_mod_output}_CEU_TSI-like.keep"  >> "${sub_mod_output}.counts"
+		!$wc -l "bim2hapmap_CEU_TSI-like.keep"         >> "${sub_mod_output}.counts"
 		import delim using ${sub_mod_output}.counts, clear varnames(nonames)
 		erase ${sub_mod_output}.counts
 		split v1,p(" ")
@@ -470,16 +470,16 @@ qui { // 15 - creating final reports
 		}
 	noi di as text"# > genotypeqc .......................................... creating quality control report (docx)"
 	_sub_genotypeqc_report
-	!copy "${sub_mod_post}-quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
+	!copy "${sub_mod_post}-quality-control-report.docx"   "..\..\\${output_2}\\${output_2}.quality-control-report.docx"
 	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
 	_sub_genotypeqc_meta
-	!copy "${sub_mod_post}.meta-log"                      "${output_2}\\${output_2}-genotypeqc.meta-log"
+	!copy "${sub_mod_post}.meta-log"                      "..\..\\${output_2}\\${output_2}-genotypeqc.meta-log"
 	}
 qui { // 16 - rename and clean
 	noi di as text"# > genotypeqc .......................................... moving and cleaning"
-	!copy "${sub_mod_post}.bed"                           "${output_2}\\${output_2}.bed"
-	!copy "${sub_mod_post}.bim"                           "${output_2}\\${output_2}.bim"
-	!copy "${sub_mod_post}.fam"                           "${output_2}\\${output_2}.fam"
+	!copy "${sub_mod_post}.bed"                           "..\..\\${output_2}\\${output_2}.bed"
+	!copy "${sub_mod_post}.bim"                           "..\..\\${output_2}\\${output_2}.bim"
+	!copy "${sub_mod_post}.fam"                           "..\..\\${output_2}\\${output_2}.fam"
 	cd ..
 	!rmdir  "$temp_dir" /S /Q
 	cd ${data_folder}
