@@ -138,7 +138,7 @@ qui { // 5 - confirm / update genome build
 		noi di as text"# > genotypeqc .......................................... update to hg19 +1"		
 		bim2dta, bim(${sub_mod_output})
 		keep snp
-		merge 1:1 snp using $array_ref\\$bim2array.dta
+		merge 1:1 snp using ${bim2array_ref}\\${bim2array}.dta
 		keep if _m == 3
 		outsheet snp using bim2build.extract, non noq replace
 		outsheet snp chr using bim2build.update-chr, non noq replace
