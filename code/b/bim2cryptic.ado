@@ -81,6 +81,11 @@ qui { // 6 - identify individuals with excessive kinship coefficients
 		noi di as text"# > bim2cryptic .......... reporting excessive kinship to "as result "bim2cryptic.remove"	
 		outsheet fid iid if xs > 3 & xs != . using bim2cryptic.remove, replace non noq
 		}
+	else {
+		clear
+		set obs 1
+		outsheet using bim2cryptic.remove, replace non noq
+		}
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

@@ -115,15 +115,8 @@ qui { // 4 - pre-cleaning and update build
 		}
 	keep if keep == 1
 	outsheet snp using ${sub_mod_output}.extract, non noq replace
-	count if chr == "23"
-	if `r(N)' > 1000 {
-		!$plink --bfile ${input} --mac 5 --geno 0.99 --mind 0.99 --extract ${sub_mod_output}.extract --impute-sex --make-founders  --make-bed --out ${sub_mod_output} 
-		noi bim2count, bim(${sub_mod_output})
-		}
-	else {
-		!$plink --bfile ${input} --mac 5 --geno 0.99 --mind 0.99 --extract ${sub_mod_output}.extract --make-founders  --make-bed --out ${sub_mod_output} 
-		noi bim2count, bim(${sub_mod_output})
-		}	
+	!$plink --bfile ${input} --mac 5 --geno 0.99 --mind 0.99 --extract ${sub_mod_output}.extract --make-founders  --make-bed --out ${sub_mod_output} 
+	noi bim2count, bim(${sub_mod_output})
 	}
 qui { // 5 - confirm / update genome build 	
 	noi di as text""
@@ -326,19 +319,15 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 				sum v11
 				if `r(N)' > 0 {
 					!$plink --bfile ${sub_mod_input} --remove tmpHET.indlist --set-hh-missing --make-bed --out ${sub_mod_mid}
-					!del tmpHET.indlist
-					foreach file in bim bed fam log nosex {
-						!del "${sub_mod_input}.`file'"
-						}
+					!del tmpHET.indlist ${sub_mod_input}*
 					}
 				else {
 					foreach file in bim bed fam {
-						!del "${sub_mod_mid}.`file'"
 						!rename "${sub_mod_input}.`file'" "${sub_mod_mid}.`file'"
 						}
 					}
 				}
-			qui {	// hwe
+			qui { // hwe
 				noi di as text"# > genotypeqc ................................. (round`round') "as result "hwe"
 				global sub_mod_input  ${sub_mod_output}-01
 				global sub_mod_mid    ${sub_mod_output}-02
@@ -350,10 +339,7 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 				sum v11	
 				if `r(N)' > 0 {
 					!$plink --bfile ${sub_mod_input} --exclude  tmpHWE.snplist --make-bed --out ${sub_mod_mid}
-					!del tmpHWE.snplist
-					foreach file in bim bed fam log nosex {
-						!del "${sub_mod_input}.`file'"
-						}
+					!del tmpHWE.snplist ${sub_mod_input}.*
 					}
 				else {
 					foreach file in bim bed fam {
@@ -362,23 +348,19 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 						}
 					}
 				}
-			qui {	// imiss
+			qui { // imiss
 				noi di as text"# > genotypeqc ................................. (round`round') "as result "imiss"
 				global sub_mod_input  ${sub_mod_output}-02
 				global sub_mod_mid    ${sub_mod_output}-03
 				!$plink --bfile ${sub_mod_input} --mind ${mind}  --make-bed --out ${sub_mod_mid}
-				foreach file in bim bed fam log nosex {
-					!del "${sub_mod_input}.`file'"
-					}
+				!del ${sub_mod_input}.*
 				}
-			qui {	// lmiss 
+			qui { // lmiss 
 				noi di as text"# > genotypeqc ................................. (round`round') "as result "lmiss"
 				global sub_mod_input  ${sub_mod_output}-03
 				global sub_mod_mid tempfile-10
 				!$plink --bfile ${sub_mod_input} --geno ${geno2} --make-bed --out ${sub_mod_mid}-${round2}
-				foreach file in bim bed fam log nosex {
-					!del "${sub_mod_input}.`file'"
-					}
+				!del ${sub_mod_input}.*
 				}
 			}
 		!del tmpHWE.gph tmpHET.gph *.log *.nosex *.hwe *.het

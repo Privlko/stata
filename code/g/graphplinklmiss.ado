@@ -57,7 +57,7 @@ qui { // 3 - plotting missingness to tmpLMISS.gph"
 	else {
 		noi di as text"# > graphplinklmiss ...... nothing to plot (create blank) "as result "tmpLMISS.gph"
 		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
-		graph save `i', replace
+		graph save tmpLMISS.gph, replace
 		}
 	}
 noi di as text"#########################################################################"

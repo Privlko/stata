@@ -56,7 +56,7 @@ qui { // 3 - plotting missingness to tmpIMISS.gph
 	else {
 		noi di as text"# > graphplinkimiss ...... nothing to plot (create blank) "as result "tmpIMISS.gph"
 		tw scatteri 1 1, msymbol(i) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank))  
-		graph save `i', replace
+		graph save tmpIMISS.gph, replace
 		}	
 	}
 noi di as text"#########################################################################"
