@@ -81,6 +81,9 @@ qui { // 2 - set working directory
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... "as result"setting working directory"
 	cd ${data_folder}
+	cd ..
+	!mkdir "${output_2}"
+	cd ${data_folder}
 	noi create_temp_dir
 	}
 qui { // 3 - determining the original genotyping array
@@ -399,8 +402,8 @@ qui { // 14 - define ancestry
 	noi di as text"# > genotypeqc .......................................... define ancestry"
 	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${bim2hapmap_hapmap}) aims(${bim2hapmap_aims})
 	!rename "bim2hapmap_pca-CEU_TSI-like.png" "${sub_mod_input}_pca-CEU_TSI-like.png"
-	!rename "bim2hapmap_pca.png" "${sub_mod_input}_pca.png"
-	!rename "bim2hapmap_CEU_TSI-like.keep" "${sub_mod_input}_CEU_TSI-like.keep"
+	!rename "bim2hapmap_pca.png"              "${sub_mod_input}_pca.png"
+	!rename "bim2hapmap_CEU_TSI-like.keep"    "${output_2}\\${output_2}_CEU_TSI-like.keep"
 	}
 qui { // 15 - creating final reports	
 	noi di as text"#########################################################################"
@@ -467,30 +470,18 @@ qui { // 15 - creating final reports
 		}
 	noi di as text"# > genotypeqc .......................................... creating quality control report (docx)"
 	_sub_genotypeqc_report
+	!copy "${sub_mod_post}-quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
 	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
 	_sub_genotypeqc_meta
+	!copy "${sub_mod_post}.meta-log"                      "${output_2}\\${output_2}-genotypeqc.meta-log"
 	}
 qui { // 16 - rename and clean
 	noi di as text"# > genotypeqc .......................................... moving and cleaning"
-
-	!copy "${sub_mod_post}-quality-control-report.docx"   "${output}.quality-control-report.docx"
-	!copy "${sub_mod_post}.meta-log"                      "${output}-genotypeqc.meta-log"
-	!copy "${sub_mod_post}.bed"                           "${output}.bed"
-	!copy "${sub_mod_post}.bim"                           "${output}.bim"
-	!copy "${sub_mod_post}.fam"                           "${output}.fam"
-	!copy "${sub_mod_post}_CEU_TSI-like.keep"             "${output}_CEU_TSI-like.keep"
+	!copy "${sub_mod_post}.bed"                           "${output_2}\\${output_2}.bed"
+	!copy "${sub_mod_post}.bim"                           "${output_2}\\${output_2}.bim"
+	!copy "${sub_mod_post}.fam"                           "${output_2}\\${output_2}.fam"
 	cd ..
 	!rmdir  "$temp_dir" /S /Q
-	cd ${data_folder}
-	cd ..
-	!rmdir "${output_2}"  /S /Q
-	!mkdir "${output_2}"
-	!copy "${output}.bed"                           "${output_2}\\${output_2}.bed"
-	!copy "${output}.bim"                           "${output_2}\\${output_2}.bim"
-	!copy "${output}.fam"                           "${output_2}\\${output_2}.fam"
-	!copy "${output}_CEU_TSI-like.keep"             "${output_2}\\${output_2}_CEU_TSI-like.keep  "
-	!copy "${output}-genotypeqc.meta-log"           "${output_2}\\${output_2}-genotypeqc.meta-log"
-	!copy "${output}.quality-control-report.docx"   "${output_2}\\${output_2}.quality-control-report.docx"
 	cd ${data_folder}
 	!del ${output_2}* *arraymatch.png *.parameters *_bim.dta
 	}
