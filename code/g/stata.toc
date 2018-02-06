@@ -13,6 +13,7 @@ t graphplinkimiss  command to plot plink output *.imiss
 t graphplinkkin0   command to plot plink output *.kin0
 t graphplinklmiss  command to plot plink output *.lmiss
 t graphgene        command to plot genes from chromosome location
-t gwas2prs 		   command to prepare gwas-summary statistics for PRS analysis
+t graphlocus       command to plot association at a locus
+t gwas2prs 		     command to prepare gwas-summary statistics for PRS analysis
 
 

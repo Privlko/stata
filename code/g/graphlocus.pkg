@@ -1,0 +1,7 @@
+d graphlocus       command to plot association at a locus
+d Richard Anney, Cardiff University
+d Distribution-Date: 6feb2018
+f graphlocus.ado
+f ../c/checkfile.ado
+f ../g/graphgene.ado
+
