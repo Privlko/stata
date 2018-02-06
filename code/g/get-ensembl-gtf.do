@@ -3,7 +3,7 @@ script to get and process the Homo_sapiens.GRCh37.87.gtf.gz gene/exon location f
 # check for latest release
 */
 qui { // set root
-	global root E:\data\other\ftp-ensembl\data
+	global root D:\github\stata\data\graphgene
 	cd ${root}
 	}
 qui { // get *.gtf file
