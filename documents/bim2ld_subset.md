@@ -4,9 +4,10 @@
 
 ## bim2ld_subset
 **description**
-* command to use *.bim files (plink-format marker files) to generate a subset of linkage disequilibrium independent snps (_subset#.extract)
+* command to use *.bim files (plink-format marker files) to generate a subset of linkage disequilibrium independent snps (```bim2ld_subset#.extract```)
 
 **syntax**
+
 ```bim2ld_subset, bim(-filename-) [n(-n-)]```
 
  * ```-filename-``` does not require the .bim filetype to be included - this is assumed
@@ -18,6 +19,7 @@
 * you can specify the number of SNPs to include in the extract file, the default is 50000
 
 **installation**
+
 ```net install bim2ld_subset, from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
 

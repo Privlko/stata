@@ -8,6 +8,7 @@
 * the script also defines individuals with ancestral similarities to a defined hapmap set
 
 **syntax**
+
 ```bim2hapmap,  bim(-filename-) hapmap(string asis) aims(string asis) like(string asis)```
  
 * ```-filename-``` does not require the .bim filetype to be included - this is assumed
@@ -17,14 +18,15 @@
 
 **notes** 
 * the program creates three files; 
- - ```bim2hapmap_<ancestry>.png``` - non-selected scatter plots
- - ```bim2hapmap_<ancestry>-like.png```  - ancestry-selected scatter plots
- - ```bim2hapmap_<ancestry>-like.keep``` - list of ```fid iid``` of individuals who are similar to the defined ancestry
+ * ```bim2hapmap_<ancestry>.png``` - non-selected scatter plots
+ * ```bim2hapmap_<ancestry>-like.png```  - ancestry-selected scatter plots
+ * ```bim2hapmap_<ancestry>-like.keep``` - list of ```fid iid``` of individuals who are similar to the defined ancestry
 
 ![](../images/bim2hapmap_pca.png)
 ![](../images/bim2hapmap_pca-CEU_TSI-like.png)
 
 **installation**
+
 ```net install bim2hapmap, from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
 

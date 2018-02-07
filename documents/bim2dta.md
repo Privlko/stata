@@ -4,9 +4,10 @@
 
 ## bim2dta
 **description**
- a command to convert *.bim files (plink-format marker files) to *.dta
+* a command to convert *.bim files (plink-format marker files) to *.dta
 
 **syntax**
+
 ```bim2dta, bim(-filename-) ```
  
  * ```-filename-``` does not require the .bim filetype to be included - this is assumed
@@ -16,6 +17,7 @@
 * an additional variable has been included ```loc_name``` to aid in merging (```loc_name``` = ```chr<chr>#:<position>#-<gt>```). the ````gt``` included in the ```loc_name``` is converted to ```R``` if ```Y``` and ```M``` if ```K```. 
 
 **installation**
+
 ```net install bim2dta, from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
 
