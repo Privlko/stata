@@ -72,7 +72,7 @@ qui { // 5 - clean up files
 		!del postKIN0_`i'.gph
 		!del preKIN0_`i'.gph
 		}
-	!del tmpKIN0.relPairs `bim'.kin0 `bim'-unrelated.kin0 _subset50000.extract
+	!del tmpKIN0.relPairs `bim'.kin0 `bim'-unrelated.kin0 bim2ld_subset50000.extract
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
