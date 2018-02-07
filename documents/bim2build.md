@@ -3,21 +3,14 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## bim2build
-**description** - checks the genome build from a plink \*.bim file. 
+**description**
+ - a command to check genome build from plink binaries
 
-**remarks** - to date this only examines hg17 +0/1- hg19 +0/1
+**syntax**
+```bim2build, bim(-filename-) ref(-reference-)```
+ 
+ * ```-filename-``` does not require the .bim filetype to be included - this is assumed
+ * ```-reference-``` this refers to a reference file containing the snp/build, ```bim2build.dta``` can be downloaded from ```github.com/ricanney```
 
-**examples**
-```
-bim2build , bim(temp) ref(bim2build.dta)
-```
 **installation**
-```
-net install bim2build, from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
-
-**auxiliary files**
-[```bim2build.dta```](link)
-
-**dependencies**
-[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md) [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)
+```net install bim2build,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
