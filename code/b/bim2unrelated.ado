@@ -43,7 +43,7 @@ qui { // 3 - make kin0 files / and identify related by threshold"
 	!$plink2 --bfile `bim'           --extract bim2ld_subset50000.extract --king-cutoff `threshold' --out `bim'
 	noi di as text"# > bim2unrelated ........... creating unrelated binaries "as result "`bim'-unrelated"	
 	!$plink --bfile `bim' --keep  `bim'.king.cutoff.in --make-bed --out `bim'-unrelated
-	!$plink2 --bfile `bim'-unrelated --extract bim2ld_subset50000.extract --make-king-table --king-table-filter ${filter} --out `bim'-unrelated
+	!$plink2 --bfile `bim'-unrelated --extract bim2ld_subset50000.extract --make-king-table --king-table-filter ${bim2unrelated_filter} --king-cutoff `threshold' --out `bim'-unrelated
 	bim2count, bim(`bim'-unrelated)
 	noi di as text"# > bim2count ............. individuals in processed file "as result "${bim2count_ind}"
 	}
