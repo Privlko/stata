@@ -3,7 +3,7 @@
  bim2frq_compare
 
 *description* 
- command to compare allelel frequencies by reference using plink binaries 
+ command to compare allele frequencies by reference using plink binaries 
 
 *syntax*
  bim2frq_compare, bim(-filename-) ref(-reference-)
