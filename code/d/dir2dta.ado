@@ -11,8 +11,8 @@ dir2dta , dir(-dir-)
  -dir-    root directory to list directories from
 */
 
-program bim2cryptic
-syntax , bim(string asis) 
+program dir2dta
+syntax , dir(string asis) 
 
 noi di as text" "
 noi di as text"#########################################################################"
