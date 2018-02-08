@@ -166,6 +166,7 @@ qui { // 4 - plotting to tmpManhattan.gph
 		;
 		#delimit cr
 		}
+	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
