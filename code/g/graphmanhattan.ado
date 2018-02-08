@@ -94,7 +94,7 @@ qui { // 4 - plotting to tmpManhattan.gph
 	global tmpmax `r(max)'
 	gen tmpmin = `min'
 	global tmp_symbol "msymbol(o) msize(small)"
-	gen maxchr == $maxchr
+	gen maxchr = $maxchr
 	if maxchr == 22 {
 		#delimit;
 		tw scatter observed location if `chr' == 1 ,  ${tmp_symbol} ${color3}
