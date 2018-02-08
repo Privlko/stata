@@ -26,7 +26,7 @@ noi di as text"#################################################################
 preserve
 qui { // 1 - introduction
 	noi di as text"# > graphqq ............................................. "as result"checking that p is defined correctly"
-	capture confirm var `p'
+	capture confirm numeric var `p'
 	if _rc==0 {
 		noi di as text"# > graphqq ........................................... p "as result"present"
 		}
