@@ -1,76 +1,74 @@
 /*
-#########################################################################
-# graphmanhattan
-# a command to create a publication quality manhattan plot from gwas 
-# summary data
-#
-# command: graphmanhattan, chr(chromosome-variable) bp(base-location-variable) p(p-value-variable)
-# options: 
-# 			max(num) .....maximum -log10P to plot - default = 10
-# 			min(num) .....minimum -log10P to plot - default = 2
-# 			gws(num) .....where to plot gws line - default = 7.3 (5e-8)
-# 			str(num) .....what to consider as a strong association - default = 6
-#
-# dependencies: colorscheme
-# net install colorscheme, from(https://github.com/matthieugomez/stata-colorscheme/raw/master/)
-# =======================================================================
-# Author: Richard Anney
-# Institute: Cardiff University
-# E-mail: AnneyR@cardiff.ac.uk
-# Date: 10th September 2015
-#########################################################################
+*program*
+ graphmanhattan
+
+*description* 
+ a command to create a publication quality manhattan plot from gwas 
+
+*syntax*
+	graphmanhattan , chr(-chr-) bp(-bp-) p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6)]
+ 
+ -chr-    the varname containing the numeric chromosome data
+ -bp-    the varname containing the numeric base-pair position data
+ -p-   		the varname containing p-value
+ -max-   	the maximum observed -log10 p-values to plot (all others limited to `max'; default = 10)
+ -min-   	the minimum observed -log10 p-values to plot (default = 2)
+ -gws-    the -log10 p-value corresponding to genome-wide significance (default = 7.3)
+ -str-    the -log10 p-value corresponding to "strong" significance (default = 6)
 */
 
 program graphmanhattan
 syntax , chr(string asis) bp(string asis) p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6)]
-
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# graphmanhattan"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 preserve
-qui { // checking variable in correct format
-	qui { // chr
-		capture confirm numeric var `chr' 
-		if _rc==0 {
-			noi di as text"# > graphmanhattan"as text" ... the chromosome variable is numeric "as result "continue"
-			}
-		else {
-			noi di as text"# > graphmanhattan"as text" the chromosome variable is not numeric "as error "exit"
-			exit
-			}
+qui { // 1 - introduction
+	noi di as text"# > graphmanhattan ...................................... "as result"checking that chr is defined correctly"
+	capture confirm numeric var `chr'
+	if _rc==0 {
+		noi di as text"# > graphmanhattan .................................. chr "as result"present"
 		}
-	qui { // p
-		capture confirm numeric var `p' 
-		if _rc==0 {
-			noi di as text"# > graphmanhattan"as text" ...... the p-value variable is numeric "as result "continue"
-				}
-		else {
-			noi di as text"# > graphmanhattan"as text" .... the p-value variable is not numeric "as error "exit"
-			exit
-			}
+	else {
+		noi di as text"# > graphmanhattan .................................. chr "as result"absent"
+		exit
 		}
-	qui { // bp
-		capture confirm numeric var `bp' 
-		if _rc==0 {
-			noi di as text"# > graphmanhattan"as text" ..... the location variable is numeric "as result "continue"
-			}
-		else {
-			noi di as text"# > graphmanhattan"as text" . the location variable is not numeric "as error "exit"
-			exit
-			}
+	noi di as text"# > graphmanhattan ...................................... "as result"checking that bp is defined correctly"
+	capture confirm numeric var `bp'
+	if _rc==0 {
+		noi di as text"# > graphmanhattan ................................... bp "as result"present"
+		}
+	else {
+		noi di as text"# > graphmanhattan ................................... bp "as result"absent"
+		exit
+		}
+	noi di as text"# > graphmanhattan ...................................... "as result"checking that p is defined correctly"
+	capture confirm numeric var `p'
+	if _rc==0 {
+		noi di as text"# > graphmanhattan .................................... p "as result"present"
+		}
+	else {
+		noi di as text"# > graphmanhattan .................................... p "as result"absent"
+		exit
 		}
 	}
-qui { // processing variables
+qui { // 2 - processing variables
 	drop if `p' == .
 	gen observed = -log10(`p')
 	count
 	global rN `r(N)'	
-	noi di as text"# > graphmanhattan"as text" .............. plot manhattan data for "as result "`r(N)'" as text " non missing data points"
+	noi di as text"# > graphmanhattan .............. plot manhattan data for "as result "`r(N)'" as text " non missing data points"
 	sum `p'
-	noi di as text"# > graphmanhattan"as text" ............ min observed p in dataset "as result "`r(min)'"
+	noi di as text"# > graphmanhattan ............ min observed p in dataset "as result "`: display %10.4e r(min)'"
 	drop if `chr' > 23		   // drop chromosomes > X (X- XY and other)
-	duplicates drop			 	   // drop any duplicate observations
+	duplicates drop			 	 // drop any duplicate observations
 	drop if observed < `min' // apply floor
 	replace observed = `max' if observed > `max' // apply ceiling
 	}
-qui { // preparing bp for plotting
+qui { // 3 - preparing bp for plotting
 	foreach i of num 1 / 22 {
 		sum `bp' if `chr' == `i'
 		replace `bp' = (`bp' + `r(max)' + 20000000) if `chr' == `i' + 1
@@ -85,8 +83,7 @@ qui { // preparing bp for plotting
 		}
 	}
 qui { // plotting to tmpManhattan.gph
-	noi di as text"# > graphmanhattan"as text" ........................ plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpManhattan.gph"
-
+	noi di as text"# > graphmanhattan ........................ plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpManhattan.gph"
 	colorscheme 8, palette(Blues)
 	global color3	"mlc("`r(color7)'") mfc("`r(color7)'")"
 	global color4	"mlc("`r(color8)'") mfc("`r(color8)'")"
@@ -132,9 +129,9 @@ qui { // plotting to tmpManhattan.gph
 	;
 	#delimit cr
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 restore
 end;
 	
