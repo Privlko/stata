@@ -19,10 +19,7 @@
 
 **notes**
 
-![](../images/example_graphqq.png)
-
-**syntax**	
-```	syntax , p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6)]```
+![](../images/tmpQQ.png)
 
 
 **installation**
