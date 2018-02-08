@@ -2,22 +2,22 @@
 
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
-## bim2count   
-**description** - counts the number of markers and individuals plink \*.bim and \*.fam file and prints to screen.
+## bim2count
+**description**
+* a command to count observations in a plink dataset
 
-**remarks** - requires the [```loadunixreplicas```](https://github.com/ricanney/stata/blob/master/documents/loadunixreplicas.md) to be loaded and working on your system, as it requires the ```wc.exe``` executable to be linked via ```${wc}```. 
+**syntax**
 
-**examples**
-```
-bim2count , bim(temp) 
-```
+```bim2count, bim(-filename-)```
+
+*  ```-filename-``` does not require the .bim filetype to be included - this is assumed
+
+**notes** 
+* requires the [```loadunixreplicas```](https://github.com/ricanney/stata/blob/master/documents/loadunixreplicas.md) to be loaded and working on your system, as it requires the ```wc.exe``` executable to be linked via ```${wc}```. 
+
 **installation**
-```
-net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
 
-**auxiliary files**
+```net install bim2count,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
-**dependencies**
 
 

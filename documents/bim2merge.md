@@ -3,26 +3,32 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## bim2merge
-**description** - merge multiple plink binary files (with quality control and limit to overlap). the program includes; limit to autosome; remove ambiguous markers (W/S); remove incompatible markers; strand flip and limit to intercept over all markers and reference. the resultant binaries are created and named with the tag ```-intercept```.
+**description**
+* command to identify / join multiple *.bim files (plink-format marker files) 
 
-**remarks** 
+**syntax**
 
-**examples** - list comma-seperate binaries in bim(). add the reference binary to ref_bim() - this binary will be used to define strand. add a project-name in project() - the log file will be named using this name. if the join(yes) flag is included - the files in the bim() command will be merged into a new plink binary <project>.bim <project>.bed <project>.fam
+ ```bim2merge , bim(-filename1-,-filename2-,filenameN-)  ref_bim(-reference-) project(-project_name-) [join(-join-)]```
 
-```
-bim2merge , bim(file1,file2,file3) ref_bim(file4) project(project_name) [join(yes)]
-```
+ * ```-filenames-``` 	does not require the .bim filetype to be included - this is assumed. where multiple -filenames- are included these must be comma delimited
+ * ```-reference-```	does not require the .bim filetype to be included - this is assumed. this is the bim file that others are strand aligned to
+ * ```-project_name-```	this is the name of the project
+ * ```-join-```	this can be -yes- and initiates the merge protocol in plink
+
+**notes** 
+* this program was written to facilitate the merge of multiple plink binary files; the program includes quality control checks and limits to the overlapping SNPs
+* the program includes; 
+	* limit to autosome;
+	* remove ambiguous markers (W/S);
+	* remove incompatible markers;
+	* strand flip;
+	* limit to intercept over all markers and reference. 
+* the resultant binaries are created and named with the tag ```-intercept```.
+
 **installation**
 
-```
-net install bim2merge ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
+```net install bim2merge ,         from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
-**auxiliary files**
-
-**dependencies**
-[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
-[```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)
 
 
 

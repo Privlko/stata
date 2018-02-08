@@ -3,30 +3,24 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## bim2ld_subset
-**description** - create a list of N snps that are ld independent from from plink binaries
+**description**
+* command to use *.bim files (plink-format marker files) to generate a subset of linkage disequilibrium independent snps (```bim2ld_subset#.extract```)
 
-the program creates a single file; 
- - _subset<N>.extract
+**syntax**
 
+```bim2ld_subset, bim(-filename-) [n(-n-)]```
 
-**remarks**  - you can specify the number of SNPs to include in the extract file, the default is 50000
+ * ```-filename-``` does not require the .bim filetype to be included - this is assumed
+ * ```-n-``` this refers to the number of SNPs retained in dataset (default - 50000)
 
-**examples**
-```
-bim2ld_subset , bim(temp) 
-bim2ld_subset , bim(temp) n(real 1000)
-```
+**notes** 
+* create a list of N snps that are ld independent from from plink binaries
+* the list is reported to ```bim2ld_subset`n'.extract```
+* you can specify the number of SNPs to include in the extract file, the default is 50000
 
 **installation**
-```
-net install bim2ld_subset, from(https://raw.github.com/ricanney/stata/master/code/b/) replace
-```
 
-**auxiliary files**
-
-**dependencies**
-[```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)
-[```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)
+```net install bim2ld_subset, from(https://raw.github.com/ricanney/stata/master/code/b/) replace```
 
 
 
