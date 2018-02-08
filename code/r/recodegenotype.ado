@@ -24,18 +24,18 @@ qui { // 1 - introduction
 	noi di as text"# > recodegenotype ...................................... "as result"checking that alleles are defined correctly"
 	capture confirm var `a1'
 	if _rc==0 {
-		noi di as text"# > recodestrand ......... allele 1 (reference genotypes) "as result"present"
+		noi di as text"# > recodegenotype ............................. allele 1 "as result"present"
 		}
 	else {
-		noi di as text"# > recodestrand ......... allele 1 (reference genotypes) "as error "absent"
+		noi di as text"# > recodegenotype ............................. allele 1 "as error "absent"
 		exit
 		}
 	capture confirm var `a2'
 	if _rc==0 {
-		noi di as text"# > recodestrand ......... allele 2 (reference genotypes) "as result"present"
+		noi di as text"# > recodegenotype ............................. allele 2 "as result"present"
 		}
 	else {
-		noi di as text"# > recodestrand ......... allele 2 (reference genotypes) "as error "absent"
+		noi di as text"# > recodegenotype ............................. allele 2 "as error "absent"
 		exit
 		}
 	}
