@@ -15,7 +15,7 @@
  -str-    the -log10 p-value corresponding to "strong" significance (default = 6)
 */
 program graphqq
-syntax , p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6)]
+syntax , p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6) version(real 13.1)]
 noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# graphqq"
@@ -57,14 +57,8 @@ qui { // 3 - pruning data bins to speed up plotting
 	}
 qui { // 4 - calculate binomal boundaries
 	clear
-	log using graphqq_version.log, replace
-	version 
-	log close
-	import delim using graphqq_version.log, delim(" ") clear
-	keep if v1 == "version"
-	keep v2
-	destring v2, replace
-	if v2 < 14.2 {
+	set version = `version'
+	if version <= 14.1 {
 		use _tmp_qqgraph.dta, clear
 		append using _tmp_qqgraph.dta
 		append using _tmp_qqgraph.dta
