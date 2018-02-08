@@ -16,3 +16,6 @@ example
 | Program | Installation Command
 | :----- | :------
 |```program``` | ```ssc install program```
+
+**known bugs**
+* does not work if there is a gene desert __fix__
