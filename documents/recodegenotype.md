@@ -1,9 +1,22 @@
 [back to opening page](https://github.com/ricanney/stata)
 
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
+
 ## recodegenotype
 
-**description** - creates single letter IUPAC genotype code from the observed alleles. the program storesthe variable ```gt```. the bim data is preserved in memory (therefore any stored data is cleared from memory), and also saved a new file ```<bimname>_bim.dta```. 
+**description**
+* a command to convert allele codes to genotype codes
+
+**syntax**
+
+```recodegenotype , a1(-allele1-) a2(-allele2-)```
+ 
+* ```-a1-```   the varname containing allele 1 
+* ```-a2-```   the varname containing allele 2 
+
+**notes**
+* this program creates a single letter IUPAC genotype code from the observed alleles stored as the variable ```gt```. 
+
 
 | IUPAC nucleotide code	| Base | IUPAC nucleotide code	| Base
 | -: | :-- | --: | :--
@@ -18,19 +31,14 @@
 | X	| reverse complement of a**N**y base | . | gap |
 | - | gap ||
 
-**remarks** - [```recodegenotype```](#recodegenotype) works with biallelic markers and indels; *indels* - allele codes of I = insert and D = deletion; longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. the D allele code clashes with the IUPAC naming convention -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. the program requires allele1 and allele2 to be varnames to be defined. 
 
-**examples**
-
-```
-recodegenotype, a1(a1) a2(a2) 
-
-```
+* [```recodegenotype```](#recodegenotype) works with biallelic markers and indels; *indels* 
+* - allele codes of I = insert and D = deletion
+* - longer indel allele codes are reduced to single letter with the longer of the 2 alleles being coded the insertion. 
+* __future-proof warning__ the D allele code clashes with the IUPAC naming convention 
+* -  *if* we update the program to deal with triallelic markers, then the D code will be used for "not **C**" and we will update the ID coding for indels. the program requires allele1 and allele2 to be varnames to be defined. 
 
 **installation**
 
-```
-net install recodegenotype,         from(https://raw.github.com/ricanney/stata/master/code/r/) replace
-```
+```net install recodegenotype,         from(https://raw.github.com/ricanney/stata/master/code/r/) replace```
 
-**additional files**
