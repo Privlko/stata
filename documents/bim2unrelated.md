@@ -17,8 +17,8 @@
 **notes**
 * the program uses a greedy algorithm via the --king-cutoff flag in ``` plink2``` - this means that in trios it is often the child who is removed due to their relatedness to >1 individual. the following graphs are created alongside a set of plink binaries (see below)
 
-![](../images/autism-agp2-2-qc-v6-unrelated-kinship-histogram.png)
-![](../images/autism-agp2-2-qc-v6-unrelated-ibs-by-kin.png)
+![](../images/bim2unrelated-ibs-by-kin.png)
+![](../images/bim2unrelated-kinship-histogram.png)
 
 * created files include;
  * ```input.king.cutoff.in```

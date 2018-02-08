@@ -7,7 +7,6 @@
 
 *syntax*
  graphplinkkin0, kin0(-filename-) [d(-d-) f(-f-) s(-s-) t(-t-) ]
- graphplinklmiss, lmiss(-filename-) [geno(-geno-)]
  
  -filename- the name of the kin0 file *.kin0 not required
  -d-        the kinship threshold for duplicates (default = 0.3540)
