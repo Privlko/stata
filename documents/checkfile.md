@@ -3,20 +3,16 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## checkfile
-**description** - check the presence/absence of a file 
+**description** 
+* check the presence/absence of a file 
 
-**remarks** 
+**syntax** 
 
-**examples**
-```
-checkfile , file(temp) 
-```
+```checkfile , file(-filename-)``` 
+
 **installation**
-```
-net install checkfile,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace
-```
 
-**auxiliary files**
+```net install checkfile, from(https://raw.github.com/ricanney/stata/master/code/c/) replace```
 
-**dependencies**
+
 

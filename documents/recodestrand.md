@@ -1,18 +1,26 @@
-# Title
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh.
-# Installation
-```net install xxxxx,                from(https://raw.github.com/ricanney/stata/master/code/x/) replace```
-# Syntax
-```xxxxxx, xxxxx(filename)```
-# Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sem ligula, fermentum at nulla eget, semper scelerisque diam. Mauris id libero vitae massa fringilla placerat ac ut nibh. Donec gravida quam est, at aliquam ex facilisis vel. Etiam quis ex sapien. Nulla sapien sem, auctor et neque egestas, scelerisque aliquet nunc. Vivamus venenatis massa velit, suscipit scelerisque nisi dapibus eget. Morbi commodo elementum ante, vel condimentum purus consectetur vel. Pellentesque efficitur risus in mauris elementum pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet sem urna, sit amet varius leo tristique eu. Ut ultricies bibendum mi, vel convallis nulla egestas at. Integer fermentum nibh eget purus ornare pulvinar. Suspendisse a felis ac elit molestie consequat. Donec ac dui nunc. Vestibulum dapibus lorem non ante sagittis fringilla.
+[back to opening page](https://github.com/ricanney/stata)
 
-# Examples
-```
-example
-```
+[back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
-# Dependencies
-| Program | Installation Command
-| :----- | :------
-|```program``` | ```ssc install program```
+## recodestrand
+
+**description** 
+* a command to define the markers to flip when compared to reference genotypes
+
+**syntax**
+
+```recodestrand , ref_a1(-allele1_reference-) ref_a2(-allele2_reference-) alt_a1(-allele1_test-) alt_a2(-allele2_test-) ```
+ 
+* ```-ref_a1-```  the varname containing allele 1 of the reference genotypes
+* ```-ref_a2-```  the varname containing allele 2 of the reference genotypes
+* ```-alt_a1-```  the varname containing allele 1 of the test genotypes
+* ```-alt_a2-```  the varname containing allele 2 of the test genotypes
+
+**notes**
+* this package creates a ```_tmpflip``` variable and new allele coding ```_tmpb1``` and ```_tmpb2``` for the test alleles to allow recoding and flipping via ```plink```.
+
+**installation**
+
+```net install recodestrand , from(https://raw.github.com/ricanney/stata/master/code/r/) replace```
+
+
