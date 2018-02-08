@@ -6,9 +6,8 @@
  a command to perform quality control of genotyping arrays
 
 *syntax*
-genotypeqc , param(-param-) [known_array(-array_name-)]
+genotypeqc , [known_array(-array_name-)]
 
- -param-      name of the qc parameter file
  -array_name- name of array - if known
 */
 qui { // version
