@@ -8,9 +8,10 @@
 
 **syntax**
  
-```graphplinkhet, het(-filename-) ```
+```graphplinkhet, het(-filename-) [sd(-sd-)]```
  
 * ```-filename-``` the name of the het file *.het not required
+*  ```-sd-```       the sd differences fromteh mean that are considered out of bounds (default = 4)
 
 **notes**
 

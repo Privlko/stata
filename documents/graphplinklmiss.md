@@ -8,9 +8,10 @@
 
 **syntax**
  
-```graphplinklmiss, lmiss(-filename-) ```
+```graphplinklmiss, lmiss(-filename-) [geno(-geno-)]```
  
-* ```-filename-``` the name of the lmiss file *.lmiss not required
+* ```-filename-``` the name of the lmiss file \*.lmiss not required
+* ```-geno-```     the missingness by marker to be plotted (default = .05)
 
 **notes**
 

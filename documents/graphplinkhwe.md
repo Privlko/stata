@@ -8,9 +8,10 @@
 
 **syntax**
  
-```graphplinkhwe, hwe(-filename-) ```
+```graphplinkhwe, hwe(-filename-) [threshold(-threshold-)]```
  
-* ```-filename-``` the name of the hwe file *.hwe not required
+* ```-filename-``` the name of the hwe file \*.hwe not required
+* ```-sd-```       the -log10P to flag in output-file (default = 6)
 
 **notes**
 

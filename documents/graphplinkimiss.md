@@ -8,9 +8,11 @@
 
 **syntax**
  
-```graphplinkimiss, imiss(-filename-) ```
+```graphplinkimiss, imiss(-filename-) [mind(-mind-)]```
  
 * ```-filename-``` the name of the imiss file *.imiss not required
+* ``` -mind- ```    the missingness by individual line to be plotted (default = .02)
+
 
 **notes**
 
