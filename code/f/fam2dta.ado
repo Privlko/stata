@@ -20,7 +20,7 @@ noi di as text"#################################################################
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 qui { // 1 - introduction
-	noi di as text"# > fam2dta ................................... importing "as result"`bim'.fam"
+	noi di as text"# > fam2dta ................................... importing "as result"`fam'.fam"
 	noi checkfile, file(`fam'.fam)
 	}
 qui { // 2 - import file
@@ -30,7 +30,7 @@ qui { // 2 - import file
 	order fid iid fatid motid sex pheno
 	keep  fid iid fatid motid sex pheno
 	compress
-	noi di as text"# > fam2dta .............................. saving file as "as result"`bim'_fam.dta"
+	noi di as text"# > fam2dta .............................. saving file as "as result"`fam'_fam.dta"
 	save `fam'_fam.dta, replace
 	}
 noi di as text"#########################################################################"
