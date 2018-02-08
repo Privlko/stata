@@ -57,7 +57,7 @@ qui { // 3 - pruning data bins to speed up plotting
 	}
 qui { // 4 - calculate binomal boundaries
 	clear
-	set version = `version'
+	gen version = `version'
 	if version <= 14.1 {
 		use _tmp_qqgraph.dta, clear
 		append using _tmp_qqgraph.dta
