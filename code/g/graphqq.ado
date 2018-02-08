@@ -40,7 +40,7 @@ qui { // 2 - calculating observed / expected values
 	global rN `r(N)'
 	noi di as text"# > graphqq ............................ plot qq data for "as result "`r(N)'" as text " non missing data points"
 	sum `p'
-	noi di as text"# > graphqq ................... min observed p in dataset "as result "`r(min)'"
+	noi di as text"# > graphqq ................... min observed p in dataset "as result "`: display %10.4e r(min)'"
 	sort `p'
 	gen n = _n
 	gen  expected    = -log10(_n/${rN})			
