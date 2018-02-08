@@ -69,12 +69,12 @@ qui { // 2 - processing variables
 	replace observed = `max' if observed > `max' // apply ceiling
 	}
 qui { // 3 - preparing bp for plotting
-	foreach i of num 1 / 22 {
+	sum `chr'
+	global maxchr `r(max)'
+	foreach i of num 1 / $maxchr {
 		sum `bp' if `chr' == `i'
 		replace `bp' = (`bp' + `r(max)' + 20000000) if `chr' == `i' + 1
 		}
-	sum `chr'
-	global maxchr `r(max)'
 	gen location = round(`bp'/1000000,0.01)
 	foreach i of num 1 / $maxchr {
 		sum location if `chr' == `i'
@@ -82,7 +82,7 @@ qui { // 3 - preparing bp for plotting
 		di ${mtick`i'}
 		}
 	}
-qui { // plotting to tmpManhattan.gph
+qui { // 4 - plotting to tmpManhattan.gph
 	noi di as text"# > graphmanhattan ........................ plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpManhattan.gph"
 	colorscheme 8, palette(Blues)
 	global color3	"mlc("`r(color7)'") mfc("`r(color7)'")"
