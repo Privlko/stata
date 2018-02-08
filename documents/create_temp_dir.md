@@ -3,19 +3,13 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## create_temp_dir
-**description** - create a temporary directory using the date/time as a random seed generator
+**description** 
+* create a temporary directory using the date/time as a random seed generator
 
-**remarks** 
+**syntax**
 
-**examples**
-```
-create_temp_dir
-```
+```create_temp_dir ```
+
 **installation**
-```
-net install create_temp_dir,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace
-```
 
-**auxiliary files**
-
-**dependencies**
+```net install create_temp_dir,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace```

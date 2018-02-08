@@ -3,19 +3,12 @@
 [back to packages](https://github.com/ricanney/stata/blob/master/documents/packages.md)
 
 ## checktabbed
-**description** - check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
+**description**
+* check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
 
-**remarks** 
+**syntax**
+```checktabbed ```
 
-**examples**
-```
-checktabbed
-```
 **installation**
-```
-net install checktabbed,         from(https://raw.github.com/ricanney/stata/master/code/c/) replace
-```
 
-**auxiliary files**
-
-**dependencies**
+```net install checktabbed, from(https://raw.github.com/ricanney/stata/master/code/c/) replace```

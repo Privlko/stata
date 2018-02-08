@@ -3,15 +3,19 @@
 # information on packages
 |package | description|
 | ------: | :------- |
+|        [```bim2array```](https://github.com/ricanney/stata/blob/master/documents/bim2array.md)        | checks the array from a plink \*.bim file
 |        [```bim2build```](https://github.com/ricanney/stata/blob/master/documents/bim2build.md)        | checks the genome build from a plink \*.bim file
 |        [```bim2count```](https://github.com/ricanney/stata/blob/master/documents/bim2count.md)        | counts the number of markers and individuals plink \*.bim and \*.fam file
+|        [```bim2cryptic```](https://github.com/ricanney/stata/blob/master/documents/bim2cryptic.md)        | identify cryptic relatedness in plink binaries
 |          [```bim2dta```](https://github.com/ricanney/stata/blob/master/documents/bim2dta.md)          | imports plink \*.bim files into stata 
 |     [```bim2eigenvec```](https://github.com/ricanney/stata/blob/master/documents/bim2eigenvec.md)     | create eigenvector and eigenvalues from plink binaries
 |          [```bim2frq```](https://github.com/ricanney/stata/blob/master/documents/bim2frq.md)          | create allele frequency file from plink binaries
+|          [```bim2frq_compare```](https://github.com/ricanney/stata/blob/master/documents/bim2frq_compare.md)          | compares allele frequencies between two plink binaries
 |       [```bim2hapmap```](https://github.com/ricanney/stata/blob/master/documents/bim2hapmap.md)       | create ancestry plots and similarity to hapmap3 classifiers from plink binaries
 |    [```bim2ld_subset```](https://github.com/ricanney/stata/blob/master/documents/bim2ld_subset.md)    | create a list of N snps that are ld independent from from plink binaries
 |    [```bim2ldexclude```](https://github.com/ricanney/stata/blob/master/documents/bim2ldexclude.md)    | create a list of snps that do include those within regions of known extended ld
 |        [```bim2merge```](https://github.com/ricanney/stata/blob/master/documents/bim2merge.md)        | merge multiple plink binary files (with quality control and limit to overlap)
+|        [```bim2refid```](https://github.com/ricanney/stata/blob/master/documents/bim2refid.md)        | convert the marker names from the test binaries to a common (reference) name via the snp location and genotype code
 |    [```bim2unrelated```](https://github.com/ricanney/stata/blob/master/documents/bim2unrelated.md)    | create a subset of unrelated individuals from plink binaries using the --king-cutoff flag in ``` plink2```
 |        [```checkfile```](https://github.com/ricanney/stata/blob/master/documents/checkfile.md)        | check the presence/absence of a file 
 |      [```checktabbed```](https://github.com/ricanney/stata/blob/master/documents/checktabbed.md)      | check that ```tabbed.pl``` is working from the ```${tabbed}``` command and is that perl is working 
