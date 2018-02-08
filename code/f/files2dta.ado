@@ -1,25 +1,30 @@
 /*
-#########################################################################
-# files2dta
-# =======================================================================
-# Author:     Richard Anney
-# Institute:  Cardiff University
-# E-mail:     AnneyR@cardiff.ac.uk
-# Date:       16jan2018
-# #########################################################################
-*/
+*program*
+ files2dta
 
-qui di as text"#########################################################################"
-qui di as text"# files2dta - version 0.1a 16jan2018 richard anney "
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+*description* 
+ a command to create a file listing all the files within a directory
+
+*syntax*
+files2dta , dir(-dir-) 
+
+ -dir-    root directory to list directories from
+*/
 
 program files2dta
 syntax , dir(string asis) 
-noi di as text"# > files2dta "as text" ........................ saving files from" as result" `dir'"
-noi di as text"# > files2dta "as text" ....................................... to" as result" _files2dta.dta"
-qui {
+
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# files2dta"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > files2dta ....................... saving folders from " as result "`dir'"
+	noi di as text"# > files2dta ........................................ to " as result "_files2dta.dta"
+	}
+qui { // 2 - determine files
 	clear
 	set obs 1								
 	gen file = ""							
@@ -36,7 +41,7 @@ qui {
 	drop if file == ""	
 	save _files2dta.dta	,replace	
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;	
