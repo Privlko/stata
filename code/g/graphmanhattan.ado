@@ -94,41 +94,78 @@ qui { // 4 - plotting to tmpManhattan.gph
 	global tmpmax `r(max)'
 	gen tmpmin = `min'
 	global tmp_symbol "msymbol(o) msize(small)"
-	#delimit;
-	tw scatter observed location if `chr' == 1 ,  ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 2 ,  ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 3 ,  ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 4 ,  ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 5 ,  ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 6 ,  ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 7 ,  ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 8 ,  ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 9 ,  ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 10 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 11 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 12 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 13 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 14 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 15 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 16 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 17 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 18 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 19 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 20 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 21 , ${tmp_symbol} ${color3}
-	|| scatter observed location if `chr' == 22 , ${tmp_symbol} ${color4}
-	|| scatter observed location if `chr' == 23 , ${tmp_symbol} ${color3}
-	ytitle("-log10(p)"" ")  ylabel(`min'(1)${tmpmax})
-	xtitle(" ""Chromosome")	xlabel(none)
-	yline(`gws', lp(dash) lc("203 024 029") lw(thin)) 
-	yline(`str', lp(dash) lc("065 171 093") lw(thin)) 
-	xmlabel(${mtick1} "1" ${mtick2} "2" ${mtick3} "3" ${mtick4} "4" ${mtick5} "5" ${mtick6} "6" ${mtick7} "7" ${mtick8} "8" ${mtick9} "9" ${mtick10} "10" ${mtick11} "11" ${mtick12} "12" ${mtick13} "13" ${mtick14} "14" ${mtick15} "15" ${mtick16} "16" ${mtick17} "17" ${mtick18} "18" ${mtick19} "19" ${mtick20} "20" ${mtick21} "21" ${mtick22} "22" ${mtick23} "23" , nogrid)
-	fysize(100) fxsize(500)
-	legend(off)
-	nodraw saving(tmpManhattan.gph, replace)
-	;
-	#delimit cr
-	}
+	gen maxchr == $maxchr
+	if maxchr == 22 {
+		#delimit;
+		tw scatter observed location if `chr' == 1 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 2 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 3 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 4 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 5 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 6 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 7 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 8 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 9 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 10 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 11 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 12 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 13 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 14 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 15 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 16 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 17 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 18 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 19 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 20 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 21 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 22 , ${tmp_symbol} ${color4}
+		ytitle("-log10(p)"" ")  ylabel(`min'(1)${tmpmax})
+		xtitle(" ""Chromosome")	xlabel(none)
+		yline(`gws', lp(dash) lc("203 024 029") lw(thin)) 
+		yline(`str', lp(dash) lc("065 171 093") lw(thin)) 
+		xmlabel(${mtick1} "1" ${mtick2} "2" ${mtick3} "3" ${mtick4} "4" ${mtick5} "5" ${mtick6} "6" ${mtick7} "7" ${mtick8} "8" ${mtick9} "9" ${mtick10} "10" ${mtick11} "11" ${mtick12} "12" ${mtick13} "13" ${mtick14} "14" ${mtick15} "15" ${mtick16} "16" ${mtick17} "17" ${mtick18} "18" ${mtick19} "19" ${mtick20} "20" ${mtick21} "21" ${mtick22} "22" , nogrid)
+		fysize(100) fxsize(500)
+		legend(off)
+		nodraw saving(tmpManhattan.gph, replace)
+		;
+		#delimit cr
+		}
+	else if maxchr == 23 {
+		#delimit;
+		tw scatter observed location if `chr' == 1 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 2 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 3 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 4 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 5 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 6 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 7 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 8 ,  ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 9 ,  ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 10 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 11 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 12 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 13 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 14 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 15 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 16 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 17 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 18 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 19 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 20 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 21 , ${tmp_symbol} ${color3}
+		|| scatter observed location if `chr' == 22 , ${tmp_symbol} ${color4}
+		|| scatter observed location if `chr' == 23 , ${tmp_symbol} ${color3}
+		ytitle("-log10(p)"" ")  ylabel(`min'(1)${tmpmax})
+		xtitle(" ""Chromosome")	xlabel(none)
+		yline(`gws', lp(dash) lc("203 024 029") lw(thin)) 
+		yline(`str', lp(dash) lc("065 171 093") lw(thin)) 
+		xmlabel(${mtick1} "1" ${mtick2} "2" ${mtick3} "3" ${mtick4} "4" ${mtick5} "5" ${mtick6} "6" ${mtick7} "7" ${mtick8} "8" ${mtick9} "9" ${mtick10} "10" ${mtick11} "11" ${mtick12} "12" ${mtick13} "13" ${mtick14} "14" ${mtick15} "15" ${mtick16} "16" ${mtick17} "17" ${mtick18} "18" ${mtick19} "19" ${mtick20} "20" ${mtick21} "21" ${mtick22} "22" ${mtick23} "23" , nogrid)
+		fysize(100) fxsize(500)
+		legend(off)
+		nodraw saving(tmpManhattan.gph, replace)
+		;
+		#delimit cr
+		}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
