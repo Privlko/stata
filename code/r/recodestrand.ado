@@ -70,7 +70,7 @@ qui { // 3 - dropping incompatible genotypes
 			replace drop = 1 if recodestrand_ref_gt == "`xx'"
 			replace drop = 1 if recodestrand_alt_gt == "`xx'"
 			count if drop == 1
-			noi di as text"# > recodestrand ................. dropping markers (`xx') "as result "`r(N)'"
+			noi di as text"# > recodestrand ................... dropping markers (`xx') "as result "`r(N)'"
 			drop if drop == 1
 			drop drop
 			}
@@ -79,7 +79,7 @@ qui { // 3 - dropping incompatible genotypes
 			replace drop = 1 if recodestrand_ref_gt == "`xx'"
 			replace drop = 1 if recodestrand_alt_gt == "`xx'"
 			count if drop == 1
-			noi di as text"# > recodestrand ................ dropping markers (`xx') "as result "`r(N)'"
+			noi di as text"# > recodestrand .................. dropping markers (`xx') "as result "`r(N)'"
 			drop if drop == 1
 			drop drop
 			}
