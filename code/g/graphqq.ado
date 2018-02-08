@@ -22,6 +22,7 @@ noi di as text"# graphqq"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+preserve
 qui { // 1 - introduction
 	noi di as text"# > graphqq ............................................. "as result"checking that p is defined correctly"
 	capture confirm var `p'
