@@ -1,54 +1,39 @@
 /*
-#########################################################################
-# fam2dta
-# a command to convert *.fam file (plink-format) into *.dta files
-#
-# command: fam2dta, fam(<filename>)
-# notes: the filename does not require the .fam to be added
-#
-# =======================================================================
-# Author:     Richard Anney
-# Institute:  Cardiff University
-# E-mail:     AnneyR@cardiff.ac.uk
-# Date:       10th September 2015
-#########################################################################
+*program*
+ fam2dta
+
+*description* 
+ a command to convert *.fam files (plink-format marker files) to *.dta
+
+*syntax*
+ fam2dta, fam(-filename-) 
+ 
+ -filename- does not require the .fam filetype to be included - this is assumed
 */
 
 program fam2dta
 syntax , fam(string asis)
-qui di as text"#########################################################################"
-qui di as text"# fam2dta - version 0.1a 10sept2015 richard anney "
-qui di as text"#########################################################################"
-qui di as text"# A command to convert *.fam files (plink-format fam files) to *.dta     "
-qui di as text"# (stata-format).                                                        " 
-qui di as text"#########################################################################"
-qui di as text"# Started: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
-
-noi di as text"# > fam2dta ............................................. "as result"`fam'.fam"
-
-qui di as text"# > check path of plink *.fam file is true"
-noi checkfile, file(`fam'.fam)
-qui {
-	import delim  using `fam'.fam, clear delim(" ")
-	
+noi di as text" "
+noi di as text"#########################################################################"
+noi di as text"# fam2dta"
+noi di as text"#########################################################################"
+noi di as text"# Started: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
+qui { // 1 - introduction
+	noi di as text"# > fam2dta ................................... importing "as result"`bim'.fam"
+	noi checkfile, file(`fam'.fam)
 	}
-qui di as text"# > naming variables"
-qui { 
+qui { // 2 - import file
+	import delim  using `fam'.fam, clear delim(" ")
 	rename (v1-v6) (fid iid fatid motid sex pheno)
 	for var fid iid fatid motid: tostring X, replace
-	}
-qui di as text"# > cleaning file"
-qui { 
 	order fid iid fatid motid sex pheno
 	keep  fid iid fatid motid sex pheno
 	compress
-	}
-qui di as text"# > saving file as `fam'_fam.dta"
-qui {
+	noi di as text"# > fam2dta .............................. saving file as "as result"`bim'_fam.dta"
 	save `fam'_fam.dta, replace
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;		
