@@ -1,6 +1,6 @@
 d profilescore - polygenic-risk-profile-score-generator
 d Richard Anney, Cardiff University
-d Distribution-Date: 14dec2017
+d Distribution-Date: 9feb2018
 f profilescore.ado
 f ../c/checkfile.ado
 f ../c/checktabbed.ado

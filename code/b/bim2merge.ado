@@ -63,9 +63,11 @@ qui { // 2 - generate metrics
 		foreach num of num 1 / $bim2merge_dataN {
 			capture confirm file ${bim2merge_data`num'}_frq.dta 
 			if !_rc {
+			noi di as text" "
 			noi di as text"# > bim2merge ............. frequency files already exist "as result"${bim2merge_data`num'}_frq.dta"
 			}
 		else {
+			noi di as text" "
 			noi di as text"# > bim2merge .................... create frequency files "as result"${bim2merge_data`num'}_frq.dta"
 			noi bim2frq, bim(${bim2merge_data`num'})
 			}
@@ -74,10 +76,12 @@ qui { // 2 - generate metrics
 	qui { // limit to autosome
 		capture confirm file ${bim2merge_data1}_bim.dta 
 		if !_rc {
+			noi di as text" "
 			noi di as text"# > bim2merge ................ marker files already exist "as result"${bim2merge_data1}_bim.dta"
 			use ${bim2merge_data1}_bim.dta ,clear
 			}
 		else {
+			noi di as text" "
 			noi di as text"# > bim2merge ......................... create marker file "as result"${bim2merge_data1}_bim.dta"
 			noi bim2dta, bim(${bim2merge_data1})
 			}
@@ -117,6 +121,7 @@ qui { // 4 - plot allele frequencies over datasets
 	foreach data of num 2 / $bim2merge_dataN {
 		replace maf_data`data' = 1- maf_data`data' if flip_data`data' == 1
 		replace maf_data`data' = 1- maf_data`data' if a1_data1 != a1_data`data'
+		noi di as text" "
 		noi di as text"# > bim2merge ................ plot allele frequencies of "as result"${bim2merge_newname1}"
 		noi di as text"# > bim2merge .................................... versus "as result"${bim2merge_newname`data'}"
 		noi di as text"# > bim2merge ........................................ to "as result "${bim2merge_newname1}-by-${bim2merge_newname`data'}-sanity-check-allele-frequencies-vs-ref.png"
@@ -126,6 +131,7 @@ qui { // 4 - plot allele frequencies over datasets
 		}
 	}
 qui { // 5 - create meta-log
+	noi di as text" "
 	noi di as text"# > bim2merge ................... reporting processing to "as result"`project'.log"
 	log using `project'.log, replace
 	noi di as text"#########################################################################"
@@ -175,7 +181,7 @@ qui { // 5 - create meta-log
 		noi di as text"# > bim2merge ............................... input array "as result"${data`data'_array}"
 		noi di as text"# > bim2merge ............................ intercept file "as result"${bim2merge_newname`data'}"
 		noi di as text"# > bim2count .................... number of SNPs in file "as result"${bim2count_snp}"
-		noi di as text"# > bim2count ................. overlapping SNPs in model "as result"${bim2count_ind}"
+		noi di as text"# > bim2count ............. number of individuals in file "as result"${bim2count_ind}"
 		}
 	else {
 		}
@@ -187,6 +193,7 @@ qui { // 6 - create data merge and clean up
 	set obs 1
 	gen a = "`join'"
 	if a == "yes" {
+		noi di as text" "
 		noi di as text"# > bim2merge ....................... merging binaries to "as result"`project'.bim/bed/fam"
 		set obs ${bim2merge_dataN}
 		gen b = ""
@@ -197,6 +204,7 @@ qui { // 6 - create data merge and clean up
 		outsheet b using bim2merge.merge-list, non noq replace
 		!$plink --bfile ${bim2merge_newname2} --merge-list bim2merge.merge-list --make-bed --out ..\\`project'
 		erase bim2merge.merge-list
+		noi di as text"#########################################################################"
 		}
 	else {
 		}
@@ -207,9 +215,8 @@ qui { // 6 - create data merge and clean up
 		}
 	!copy "`project'.log"               "..\\`project'-bim2merge.meta-log"
 	cd ..
-	!rmdir ${temp_dir} /S /Q 
+	!rmdir "${temp_dir}" /s /q 
 	}
-noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 end;
