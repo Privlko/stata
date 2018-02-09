@@ -147,7 +147,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > PCA for ancestries (focused aroung ${like}")	
+	_docx_paragraph_add_text(dh, "# > PCA for ancestries (focused around ${like})")	
 	_docx_paragraph_add_linebreak(dh)
 	_docx_image_add(dh,"${sub_mod_post}_pca-CEU_TSI-like")
 
@@ -207,7 +207,7 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
- 	_docx_paragraph_add_text(dh, "Excessive heterozygosity can be indicative of mixed DNA samples, excessive homozygosity can be indicative of poor DNA quality and allele drop-out. In this pipeline, we exclude individuals whose rate of heterozygosity deviates from the population (of genotyping array) mean. Importantly, heterozygosity rates differ on genotyping arrays and within individuals of differing ancestries. Where there are mixed ancestry samples, you may consider relaxing the threshold and excluding only those individuals with extreme deviations from the sample mean")
+ 	_docx_paragraph_add_text(dh, "Excessive heterozygosity can be indicative of mixed DNA samples; excessive homozygosity can be indicative of poor DNA quality and allele drop-out. In this pipeline, we exclude individuals whose rate of heterozygosity deviates from the population (of genotyping array) mean. Importantly, heterozygosity rates differ on genotyping arrays and within individuals of differing ancestries. Where there are mixed ancestry samples, you may consider relaxing the threshold and excluding only those individuals with extreme deviations from the sample mean")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
