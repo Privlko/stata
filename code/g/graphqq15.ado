@@ -1,6 +1,6 @@
 /*
 *program*
- graphqq
+ graphqq15
 
 *description* 
  command to create a publication quality qq-plots from gwas summary data
@@ -14,11 +14,11 @@
  -gws-    the -log10 p-value corresponding to genome-wide significance (default = 7.3)
  -str-    the -log10 p-value corresponding to "strong" significance (default = 6)
 */
-program graphqq
+program graphqq15
 syntax , p(string asis) [max(real 10) min(real 2) gws(real 7.3) str(real 6) ]
 noi di as text" "
 noi di as text"#########################################################################"
-noi di as text"# graphqq"
+noi di as text"# graphqq15"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
@@ -66,7 +66,7 @@ qui { // 4 - calculate binomal boundaries
 	sort n x
 	tostring n, replace
 	gen script = ""
-	replace script = "qui cii $rN " + n if x == 1
+	replace script = "qui cii proportions $rN " + n if x == 1
 	replace script = `"qui replace ub = r(ub) if n == ""' + n + `"""' if x == 2
 	replace script = `"qui replace lb = r(lb) if n == ""' + n + `"""' if x == 3
 	outsheet script using _tmp_qqgraph.do, non noq replace

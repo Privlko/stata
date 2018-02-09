@@ -6,6 +6,7 @@ t get_stata_bundle command to get stata packages from https://github.com/ricanne
 t graphmanhattan   command to draw a simple manhattan plot to tmpManhattan.gph
 t graphmiami       command to draw a miami plot at a region for 2 gwas datasets to tmpMiami.gph
 t graphqq          command to draw a simple qq plot to tmpQQ.gph
+t graphqq15        command to draw a simple qq plot to tmpQQ.gph Statav15
 t graphplinkfrq    command to plot plink output *.frq
 t graphplinkhet    command to plot plink output *.het
 t graphplinkhwe    command to plot plink output *.hwe
