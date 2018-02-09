@@ -174,9 +174,10 @@ qui { // 4 - processing GWAS summary data
 			}
 		qui { // plot allele frequency sanity check
 			noi di as text""
-			noi di as text"# > profilescore . plot maf between gwas and reference to "as result"tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph"
+			noi di as text"# > profilescore . plot maf between gwas and reference to "as result"${gwas_short}-by_reference-frq.png"
 			global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
-			tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${profilescore_kg_ref}") saving(tempfile-gwas_risk_frq_x_kg_ref_risk_frq.gph, replace)
+			tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 =${profilescore_kg_ref}") 
+			graph export "..\\${gwas_short}-by_reference-frq.png", as(png) height(1000) width(3000) replace
 			window manage close graph
 			}
 		qui { // saving data
@@ -354,6 +355,7 @@ qui { // 8 - plot manhattan of intersect
 	if a == "yes" {
 		noi di as text" "
 		noi di as text"#########################################################################"
+		noi di as text"# > profilescore ...... plotting intersect manhattan plot " as result "${gwas_short}-profilescore-manhattan.png"
 		capture confirm file ${profilescore_kg_ref}_bim.dta
 		if !_rc {
 			noi di as text"# > bim2dta .................. marker files already exist " as result "${profilescore_kg_ref}_bim.dta"
@@ -364,9 +366,10 @@ qui { // 8 - plot manhattan of intersect
 			}
 		use tempfile-gwas.dta, clear
 		merge 1:1 snp using ${profilescore_kg_ref}_bim.dta
+		for var chr bp gwas_p: destring X, replace force
 		noi graphmanhattan, chr(chr) bp(bp) p(gwas_p) max(100) min(1) 
 		graph combine tmpManhattan.gph, title("manhattan-plot for PRS processed gwas ")  caption("CREATED: $S_DATE $S_TIME" "INPUT: ${gwas_prePRS}",	size(tiny))
-		noi di as text"# > profilescore ...................... graph exported to "as result"..\\${gwas_short}-profilescore-manhattan.png"
+		noi di as text"# > profilescore ...................... graph exported to "as result"${gwas_short}-profilescore-manhattan.png"
 		graph export "..\\${gwas_short}-profilescore-manhattan.png", as(png) height(2000) width(4000) replace
 		window manage close graph
 		noi di as text"#########################################################################"
