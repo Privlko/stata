@@ -18,7 +18,6 @@ global bim2hapmap_aims      E:\data\methods\bim2hapmap\data\bim2hapmap.aims
 global rounds      4 
 global hwep        10 
 global hetsd       4 
-global maf         0.01 
 global mind        0.02 
 global geno1       0.05 
 global geno2       0.02 
@@ -27,15 +26,13 @@ global kin_f       0.1770
 global kin_s       0.0884 
 global kin_t       0.0442 
 net install genotypeqc, from(https://raw.github.com/ricanney/stata/master/code/g/) replace
-global data_folder	E:\data\genotypes\add\image1\data\add-image1
-global data_input 	add-image1
-noi genotypeqc
+noi genotypeqc, bim("E:\data\genotypes\add\image1\data\add-image1\add-image1")
 ```
 
 * if the genotyping array is known then the flag ```known_array(-array-name-)``` can be added to skip the bim2array package
 
 ```
-genotypeqc, known_array(michigan-imputation-server-v1.0.3-hrc-r1.1-2016)
+genotypeqc, bim(E:\data\genotypes\add\image1\data\add-image1-qc-v5-dose-info-0-8\add-image1-qc-v5-dose-info-0-8) known_array(michigan-imputation-server-v1.0.3-hrc-r1.1-2016)
 ```
 
 
