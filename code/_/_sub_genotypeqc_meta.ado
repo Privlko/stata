@@ -1,5 +1,5 @@
 program _sub_genotypeqc_meta
-syntax  
+syntax
 end
 	
 clear
@@ -55,4 +55,4 @@ replace v2 = "10e-$hwep"           in 29
 replace v2 = "$hetsd"              in 30 
 replace v2 = "$rounds"             in 31
 replace v2 = "$count_European"     in 32
-outsheet using ${sub_mod_post}.meta-log, delim(" ") non noq replace
+outsheet using "${output}.meta-log", delim(" ") non noq replace

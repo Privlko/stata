@@ -11,10 +11,9 @@
 #########################################################################
 */
 program _sub_genotypeqc_report
-syntax  
+syntax
 end
 	global toc    "$S_DATE $S_TIME"
-	!del ${sub_mod_post}-quality-control-report.docx
 	//open document
 	mata:
 	dh = _docx_new()
@@ -41,11 +40,11 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Quality Control Version .......... ${version}")
 	_docx_paragraph_add_linebreak(dh) 
-	_docx_paragraph_add_text(dh, "# > Input File: ...................... ${data_input}")
+	_docx_paragraph_add_text(dh, "# > Input File: ...................... ${input}")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Input Array: ..................... ${bim2array}")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Output File ............. ........ ${data_input}-qc-${version}")
+	_docx_paragraph_add_text(dh, "# > Output File ............. ........ ${output}")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Input Total Markers: ............. ${count_markers_1}")
 	_docx_paragraph_add_linebreak(dh)
@@ -143,13 +142,13 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > PCA for all ancestries")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_post}_pca.png")
+	_docx_image_add(dh,"bim2hapmap_pca.png")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > PCA for ancestries (focused around ${like})")	
+	_docx_paragraph_add_text(dh, "# > PCA for ancestries (focused around ${like}")	
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${sub_mod_post}_pca-CEU_TSI-like")
+	_docx_image_add(dh,"bim2hapmap_pca-CEU_TSI-like.png")
 
 	// DISPLAYING CHROMOSOME DISTRIBUTION  
 	_docx_paragraph_new(dh, "")
@@ -207,7 +206,7 @@ end
 	_docx_paragraph_add_linebreak(dh) 
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
- 	_docx_paragraph_add_text(dh, "Excessive heterozygosity can be indicative of mixed DNA samples; excessive homozygosity can be indicative of poor DNA quality and allele drop-out. In this pipeline, we exclude individuals whose rate of heterozygosity deviates from the population (of genotyping array) mean. Importantly, heterozygosity rates differ on genotyping arrays and within individuals of differing ancestries. Where there are mixed ancestry samples, you may consider relaxing the threshold and excluding only those individuals with extreme deviations from the sample mean")
+ 	_docx_paragraph_add_text(dh, "Excessive heterozygosity can be indicative of mixed DNA samples, excessive homozygosity can be indicative of poor DNA quality and allele drop-out. In this pipeline, we exclude individuals whose rate of heterozygosity deviates from the population (of genotyping array) mean. Importantly, heterozygosity rates differ on genotyping arrays and within individuals of differing ancestries. Where there are mixed ancestry samples, you may consider relaxing the threshold and excluding only those individuals with extreme deviations from the sample mean")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
@@ -281,7 +280,7 @@ end
 	_docx_image_add(dh,"${sub_mod_post}-FRQ.png")
 
 	// SAVING DOCX
-	_docx_save(dh, "${sub_mod_post}-quality-control-report.docx", 1)
+	_docx_save(dh, "${output}-quality-control-report.docx", 1)
 	_docx_close(dh)
 	end
 	
