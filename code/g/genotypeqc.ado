@@ -30,7 +30,7 @@ qui { // version
 }
 global version v7
 program genotypeqc
-syntax, [known_array(string asis)]
+syntax, bim(string asis) [known_array(string asis)]
 noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# genotypeqc"
@@ -39,12 +39,50 @@ noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 qui { // 1 - introduction
 	noi di as text"# > genotypeqc .................................. version "as result"${version}"
+	qui { // define input - output - folders
+		clear
+		set obs 1
+		gen obs = ""
+		gen input = `bim'
+		split input , p("\")
+		gen input999 = ""
+		drop input
+		reshape long input, i(obs) j(n)
+		gen input_folder  = input
+		count 
+		replace input_folder = "" if _n == `r(N)' - 1
+		gen output        = input
+		replace output = output + "-qc-${version}" if input[_n+1] == ""
+		replace output = output + "-qc-${version}" if output == input[_n+1]
+		replace output = "" if output == "-qc-${version}"
+		gen output_folder = output
+		count 
+		replace output_folder = "" if _n == `r(N)' - 1
+		for var input output input_folder output_folder: replace X = "$" if X == ""
+		reshape wide input output input_folder output_folder, i(obs) j(n) 
+		aorder
+		egen loc1 = concat(input1-input999),p("$")
+		egen loc2 = concat(output1-output999),p("$")
+		egen loc3 = concat(input_folder1-input_folder999),p("$")
+		egen loc4 = concat(output_folder1-output_folder999),p("$")
+		keep loc1 loc2 loc3 loc4
+		for var loc1 loc2 loc3 loc4: replace X = subinstr(X,"$$","",.)
+		for var loc1 loc2 loc3 loc4: replace X = subinstr(X,"$","\",.)
+		gen obs = "global"
+		reshape long loc, i(obs) j(n)
+		tostring n, replace
+		replace n = "input" in 1
+		replace n = "output" in 2
+		replace n = "input_folder" in 3
+		replace n = "output_folder" in 4
+		outsheet using tmp_genotypeqc.do, non noq replace
+		do tmp_genotypeqc.do
+		erase tmp_genotypeqc.do
+		!mkdir ${output_folder}
+		}
 	qui { // load parameters to memory
-			global input    "${data_folder}\\${data_input}"
-			global output   "${data_folder}\\${data_input}-qc-${version}"
-			global output_2 "${data_input}-qc-${version}"
-			noi di as text"# > genotypeqc ............................ running qc on "as result"${data_input}"
-			noi di as text"# > genotypeqc ............................. reporting to "as result"${output_2}"
+			noi di as text"# > genotypeqc ............................ running qc on "as result"${input}"
+			noi di as text"# > genotypeqc ............................. reporting to "as result"${output}"
 			noi di as text"# > genotypeqc ........................ --mac (threshold) "as result"5"
 			noi di as text"# > genotypeqc ....................... --geno (threshold) "as result"${geno1}"as text";"as result"${geno2}"
 			noi di as text"# > genotypeqc ....................... --mind (threshold) "as result"${mind}"
@@ -70,7 +108,7 @@ qui { // 1 - introduction
 			}
 		noi checkfile, file(${bim2hapmap_aims})
 		foreach file in bim bed fam {
-			noi checkfile, file(${data_folder}\\${data_input}.`file')
+			noi checkfile, file(${input}.`file')
 			}
 		noi di as text"# > genotypeqc ..................... bim2array_ref folder "as result"${bim2array_ref}"
 		noi di as text"#########################################################################"
@@ -79,10 +117,7 @@ qui { // 1 - introduction
 qui { // 2 - set working directory
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... "as result"setting working directory"
-	cd ${data_folder}
-	cd ..
-	!mkdir "${output_2}"
-	cd ${data_folder}
+	cd ${input_folder}
 	noi create_temp_dir
 	}
 qui { // 3 - determining the original genotyping array
@@ -92,11 +127,11 @@ qui { // 3 - determining the original genotyping array
 	set obs 1
 	gen known_array = "`known_array'"
 	if  known_array == "" {
-		noi di as text"# > genotypeqc ...... array unknown - determine array for "as result"${data_input}"
+		noi di as text"# > genotypeqc ...... array unknown - determine array for "as result"${input}"
 		noi bim2array, bim(${input}) dir(${bim2array_ref})
 		}
 	else {
-		noi di as text"# > genotypeqc ........................ array defined for "as result"${data_input}"
+		noi di as text"# > genotypeqc ........................ array defined for "as result"${input}"
 		noi di as text"# > genotypeqc ................. array defined by user as "as result"`known_array'"
 		global bim2array "`known_array'"
 		noi di as text"# > genotypeqc ................. plotting blank graphs to "as result"${input}.arraymatch.png"
@@ -368,7 +403,12 @@ qui { // 11 - apply quality-control to binaries (rounds 2 through $rounds )
 		!del tmpHWE.gph tmpHET.gph *.log *.nosex *.hwe *.het
 		}
 	}	
-qui { // 12 - calculate post-qc metrics
+qui { // 12 - move quality control data to output_folder
+	!copy "${sub_mod_mid}-${round2}.bed"  "${output}.bed"
+	!copy "${sub_mod_mid}-${round2}.bim"  "${output}.bim"
+	!copy "${sub_mod_mid}-${round2}.fam"  "${output}.fam"
+	}
+qui { // 13 - calculate post-qc metrics
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... calculate post-quality control metrics"
 	global sub_mod_input  ${sub_mod_mid}-${round2}
@@ -378,7 +418,7 @@ qui { // 12 - calculate post-qc metrics
 	!$plink  --bfile ${sub_mod_input} --missing        --out ${sub_mod_input}
 	!$plink2 --bfile ${sub_mod_input} --extract bim2ld_subset50000.extract --make-king-table --king-table-filter .0221 --out ${sub_mod_input}
 	}
-qui { // 13 - plot metrics
+qui { // 14 - plot metrics
 	noi di as text"# > genotypeqc .......................................... plotting post-quality control metrics"
 	noi graphplinkfrq, frq(${sub_mod_input}) 
 	noi graphplinkhet, het(${sub_mod_input}) sd(${hetsd})
@@ -390,19 +430,17 @@ qui { // 13 - plot metrics
 		!copy /y  "tmp`graph'.gph" "${sub_mod_input}_`graph'.gph"
 		erase "tmp`graph'.gph"
 		}
-	!copy /y  "tmpKIN0.relPairs" "${sub_mod_input}.relPairs"
+	!copy /y  "tmpKIN0.relPairs" "${output}.relPairs"
 	foreach file in frq.counts het hwe nosex lmiss imiss log kin0 {
 		!del ${sub_mod_input}.`file' tmpKIN0.relPairs 
 		}
 	!del *.snplist *.indlist
 	}	
-qui { // 14 - define ancestry
+qui { // 15 - define ancestry
 	noi di as text""
 	noi di as text"# > genotypeqc .......................................... define ancestry"
-	noi bim2hapmap, bim (${sub_mod_input}) like(CEU TSI) hapmap(${bim2hapmap_hapmap}) aims(${bim2hapmap_aims})
-	!rename "bim2hapmap_pca-CEU_TSI-like.png" "${sub_mod_input}_pca-CEU_TSI-like.png"
-	!rename "bim2hapmap_pca.png"              "${sub_mod_input}_pca.png"
-	!copy "bim2hapmap_CEU_TSI-like.keep"    "..\..\\${output_2}\\${output_2}_CEU_TSI-like.keep"
+	noi bim2hapmap, bim (${output}) like(CEU TSI) hapmap(${bim2hapmap_hapmap}) aims(${bim2hapmap_aims})
+	!copy /y  "bim2hapmap_CEU_TSI-like.keep" "${output}_CEU_TSI-like.keep"
 	}
 qui { // 15 - creating final reports	
 	noi di as text"#########################################################################"
@@ -450,11 +488,11 @@ qui { // 15 - creating final reports
 		}
 	qui { // counting markers in pre/post files
 		noi di as text"# > genotypeqc .......................................... counting metrics and storing in memory"
-		!$wc -l "${input}.bim"                          > "${sub_mod_output}.counts"
-		!$wc -l "${sub_mod_output}.bim"                >> "${sub_mod_output}.counts"
-		!$wc -l "${input}.fam"                         >> "${sub_mod_output}.counts"
-		!$wc -l "${sub_mod_output}.fam"                >> "${sub_mod_output}.counts"
-		!$wc -l "bim2hapmap_CEU_TSI-like.keep"         >> "${sub_mod_output}.counts"
+		!$wc -l "${input}.bim"                 > "${sub_mod_output}.counts"
+		!$wc -l "${output}.bim"               >> "${sub_mod_output}.counts"
+		!$wc -l "${input}.fam"                >> "${sub_mod_output}.counts"
+		!$wc -l "${output}.fam"               >> "${sub_mod_output}.counts"
+		!$wc -l "${output}_CEU_TSI-like.keep" >> "${sub_mod_output}.counts"
 		import delim using ${sub_mod_output}.counts, clear varnames(nonames)
 		erase ${sub_mod_output}.counts
 		split v1,p(" ")
@@ -469,20 +507,12 @@ qui { // 15 - creating final reports
 		}
 	noi di as text"# > genotypeqc .......................................... creating quality control report (docx)"
 	_sub_genotypeqc_report
-	!copy "${sub_mod_post}-quality-control-report.docx"   "..\..\\${output_2}\\${output_2}.quality-control-report.docx"
 	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
 	_sub_genotypeqc_meta
-	!copy "${sub_mod_post}.meta-log"                      "..\..\\${output_2}\\${output_2}-genotypeqc.meta-log"
 	}
 qui { // 16 - rename and clean
-	noi di as text"# > genotypeqc .......................................... moving and cleaning"
-	!copy "${sub_mod_post}.bed"                           "..\..\\${output_2}\\${output_2}.bed"
-	!copy "${sub_mod_post}.bim"                           "..\..\\${output_2}\\${output_2}.bim"
-	!copy "${sub_mod_post}.fam"                           "..\..\\${output_2}\\${output_2}.fam"
 	cd ..
 	!rmdir  "$temp_dir" /S /Q
-	cd ${data_folder}
-	!del ${output_2}* *arraymatch.png *.parameters *_bim.dta
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
