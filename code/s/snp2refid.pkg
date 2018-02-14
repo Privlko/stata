@@ -1,0 +1,4 @@
+d snp2refid  a command to convert the marker names to a common (reference) name via the snp location and genotype code
+d Richard Anney, Cardiff University
+d Distribution-Date: 14feb2018
+f snp2refid.ado
