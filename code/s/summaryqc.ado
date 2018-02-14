@@ -14,11 +14,7 @@ noi di as text"# summaryqc               "
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
-qui { //
-	!mkdir `out'
-	cd `out'
-}
-qui { // 2 - introduction
+qui { // 1 - introduction
 	noi di as text"# > summaryqc ................................ input data "as result "`input'"
 	count
 	global summaryqc_Nin `r(N)'
@@ -38,7 +34,7 @@ qui { // 2 - introduction
 		bim2frq, bim(`ref')
 		}
 	}
-qui { // 3 - perform quality control
+qui { // 2 - perform quality control
 	qui { // drop if p out-of-bounds
 		count 
 		global summaryqc_runningtotal `r(N)'
@@ -106,14 +102,14 @@ qui { // 3 - perform quality control
 		}
 	}	
 	}
-qui { // 4 - save as
+qui { // 3 - save as
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	save `out'-summaryqc.dta, replace
 	}
-qui { // 5 - report on processing
+qui { // 4 - report on processing
 	qui { // plot manhattan
 		graphmanhattan, chr(chr) bp(bp) p(p)
 		graph use tmpManhattan.gph
@@ -128,7 +124,6 @@ qui { // 5 - report on processing
 		global summaryqc_ref `ref'
 		_sub_summaryqc_meta
 		noi di as text"# > summaryqc .......................... reporting to log "as result "`out'-summaryqc.log"
-		cd ..
 		}
 	}
 noi di as text"#########################################################################"
