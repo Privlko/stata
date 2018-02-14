@@ -76,7 +76,7 @@ qui { // 2 - measure overlap
 		replace a = "global snp2build " + build
 		outsheet a using _tmp.do, non noq replace
 		do _tmp.do
-		noi di as text"# > snp2build ........... build identified as " as result"${snp2build}"
+		noi di as text"# > snp2build ....................... build identified as " as result"${snp2build}"
 		erase _tmp.do
 		}
 	}
