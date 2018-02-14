@@ -443,8 +443,9 @@ qui { // 15 - define ancestry
 	!copy /y  "bim2hapmap_CEU_TSI-like.keep" "${output}_CEU_TSI-like.keep"
 	}
 qui { // 15 - creating final reports	
+	noi di as text" "
 	noi di as text"#########################################################################"
-	noi di as text"# creating final reports"
+	noi di as text"# Creating final reports"
 	noi di as text"#########################################################################"
 	noi di as text"# Started: $S_DATE $S_TIME"
 	noi di as text"#########################################################################"
@@ -505,9 +506,9 @@ qui { // 15 - creating final reports
 		do tempfile.do
 		erase tempfile.do
 		}
-	noi di as text"# > genotypeqc .......................................... creating quality control report (docx)"
+	noi di as text"# > genotypeqc ............................ reporting to "as result"${output}-quality-control-report.docx"
 	_sub_genotypeqc_report
-	noi di as text"# > genotypeqc .......................................... creating quality control report (meta-log)"
+	noi di as text"# > genotypeqc ............................ reporting to "as result"${output}.meta-log"
 	_sub_genotypeqc_meta
 	}
 qui { // 16 - rename and clean
