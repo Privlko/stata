@@ -111,7 +111,9 @@ qui { // 3 - save as
 	}
 qui { // 4 - report on processing
 	qui { // plot manhattan
-		graphmanhattan, chr(chr) bp(bp) p(p)
+		gen logp = round(-log10(p),1) + 2
+		sum logp
+		graphmanhattan, chr(chr) bp(bp) p(p) max(`r(max)')
 		graph use tmpManhattan.gph
 		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.png"
 		graph export `out'-summaryqc-manhattan.png, as(png) height(1000) width(3000) replace
