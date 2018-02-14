@@ -66,9 +66,9 @@ qui { // 4 - calculate binomal boundaries
 	sort graphqq_n x
 	tostring graphqq_n, replace
 	gen script = ""
-	replace script = "qui cii $rN " + n if x == 1
-	replace script = `"qui replace graphqq_ub = r(ub) if graphqq_n == ""' + n + `"""' if x == 2
-	replace script = `"qui replace graphqq_lb = r(lb) if graphqq_n == ""' + n + `"""' if x == 3
+	replace script = "qui cii $rN " + graphqq_n if x == 1
+	replace script = `"qui replace graphqq_ub = r(ub) if graphqq_n == ""' + graphqq_n + `"""' if x == 2
+	replace script = `"qui replace graphqq_lb = r(lb) if graphqq_n == ""' + graphqq_n + `"""' if x == 3
 	outsheet script using _tmp_qqgraph.do, non noq replace
 	gen graphqq_ub = .
 	gen graphqq_lb = .
