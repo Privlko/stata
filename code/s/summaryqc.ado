@@ -16,8 +16,8 @@ noi di as text"#################################################################
 qui { // 1 - introduction
 	noi di as text"# > summaryqc ................................ input data "as result "`input'"
 	count
-	global summaryqc_input `r(N)'
-	noi di as text"# > summaryqc .............. markers in the input dataset "as result ${summaryqc_input}
+	global summaryqc_Nin `r(N)'
+	noi di as text"# > summaryqc .............. markers in the input dataset "as result ${summaryqc_Nin}
 	capture confirm file `ref'_bim.dta 
 	if !_rc {
 		}
@@ -40,7 +40,10 @@ qui { // 2 - perform quality control
 		drop if p > 1
 		drop if p < 0
 		count
-		global summaryqc_oobSNP ${summaryqc_runningtotal} - `r(N)'
+		gen a = ${summaryqc_runningtotal} - `r(N)'
+		sum a
+		global summaryqc_oobSNP `r(max)'
+		drop a
 		noi di as text"# > summaryqc ....... markers with p-values out-of-bounds "as result ${summaryqc_oobSNP} 
 		}
 	qui { // duplicates drop
@@ -49,7 +52,10 @@ qui { // 2 - perform quality control
 		duplicates drop 
 		duplicates drop snp, force
 		count
-		global summaryqc_dupSNP ${summaryqc_runningtotal} - `r(N)'
+		gen a = ${summaryqc_runningtotal} - `r(N)'
+		sum a
+		global summaryqc_dupSNP `r(max)'
+		drop a
 		noi di as text"# > summaryqc ................................ duplicates "as result ${summaryqc_dupSNP} 
 		}
 	qui { // qc-by-info score
@@ -61,7 +67,10 @@ qui { // 2 - perform quality control
 			drop if info < .8
 			drop info
 			count
-			global summaryqc_infoSNP ${summaryqc_runningtotal} - `r(N)'
+			gen a = ${summaryqc_runningtotal} - `r(N)'
+			sum a
+			global summaryqc_infoSNP `r(max)'
+			drop a
 			noi di as text"# > summaryqc .......... info score out-of-bounds or < .8 "as result ${summaryqc_infoSNP} 
 			}
 		else {
@@ -79,7 +88,10 @@ qui { // 2 - perform quality control
 			drop if count > 1
 			drop direction count
 			count
-			global summaryqc_directionSNP ${summaryqc_runningtotal} - `r(N)'
+			gen a = ${summaryqc_runningtotal} - `r(N)'
+			sum a
+			global summaryqc_directionSNP `r(max)'
+			drop a
 			noi di as text"# > summaryqc ... data missing from > 1 study (direction) "as result ${summaryqc_directionSNP} 
 			}
 		else {
@@ -88,67 +100,31 @@ qui { // 2 - perform quality control
 			}
 		}
 	}	
+	}
 qui { // 3 - save as
 	count
-	global summaryqc_output `r(N)'
-	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_output}
+	global summaryqc_Nout `r(N)'
+	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	save `out'-summaryqc.dta, replace
 	}
 qui { // 4 - report on processing
 	qui { // plot manhattan
-		noi graphmanhattan, chr(chr) bp(bp) p(p)
+		graphmanhattan, chr(chr) bp(bp) p(p)
 		graph use tmpManhattan.gph
+		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.png"
 		graph export `out'-summaryqc-manhattan.png, as(png) height(1000) width(3000) replace
+		window manage close graph
 		}
 	qui { // create - log file
-		clear
-		input strL v1
-		"#########################################################################"
-		"# summaryqc"
-		"#########################################################################"
-		"# Started: " 
-		"#########################################################################"
-		"# > summaryqc ................................ input data " 
-		"# > summaryqc ............................... output data "
-		"# > summaryqc .......... reference genotypes (for naming) "
-		"# > summaryqc .............. markers in the input dataset "
-		"# > summaryqc ....... markers with p-values out-of-bounds "
-		"# > summaryqc ................................ duplicates "
-		"# > summaryqc .......... info score out-of-bounds or < .8 "
-		"# > summaryqc ... data missing from > 1 study (direction) "
-		"# > summaryqc .................. markers in final dataset "
-		"# > summaryqc ............................. saved data to "
-		"# > summaryqc ................ exported manhattan plot to "
-		"#########################################################################"
-		end
-		gen v2 = ""
-		gen v3 = .
-		replace v2 = "$S_DATE $S_TIME" in 4 
-		replace v2 = "`input'" in 6
-		replace v2 = "`output'" in 7
-		replace v2 = "`ref'" in 8
-		replace v3 = ${summaryqc_input} in 9 
-		replace v3 = ${summaryqc_oobSNP} in 10 
-		replace v3 = ${summaryqc_dupSNP} in 11
-		replace v3 = ${summaryqc_infoSNP} in 12 
-		replace v3 = ${summaryqc_directionSNP} in 13
-		replace v3 = ${summaryqc_output} in 14
-		replace v2 = "`out'-summaryqc.dta" in 15
-		replace v2 = "`out'-summaryqc-manhattan.png}" in 16
-		tostring v3, replace
-		replace v2 = v3 if v3 != "."
-		drop v3
-		outsheet using "`out'-summaryqc.log", delim("") non noq replace
+	global summaryqc_input  `input'
+	global summaryqc_out `out'
+		_sub_summaryqc_meta
 		}
 	}
-qui di as text"#########################################################################"
-qui di as text"# Completed: $S_DATE $S_TIME"
-qui di as text"#########################################################################"
+noi di as text"#########################################################################"
+noi di as text"# Completed: $S_DATE $S_TIME"
+noi di as text"#########################################################################"
 end;
 
 	
-	
-
-	
-		
