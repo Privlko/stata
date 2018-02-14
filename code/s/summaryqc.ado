@@ -13,7 +13,11 @@ noi di as text"# summaryqc               "
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
-qui { // 1 - introduction
+qui { //
+	!mkdir `out'
+	cd `out'
+}
+qui { // 2 - introduction
 	noi di as text"# > summaryqc ................................ input data "as result "`input'"
 	count
 	global summaryqc_Nin `r(N)'
@@ -33,7 +37,7 @@ qui { // 1 - introduction
 		bim2frq, bim(`ref')
 		}
 	}
-qui { // 2 - perform quality control
+qui { // 3 - perform quality control
 	qui { // drop if p out-of-bounds
 		count 
 		global summaryqc_runningtotal `r(N)'
@@ -85,7 +89,7 @@ qui { // 2 - perform quality control
 			replace direction = subinstr(direction, "-", "",.)
 			replace direction = subinstr(direction, "+", "",.)
 			gen count = length(direction)
-			drop if count > 1
+			drop if count > 2
 			drop direction count
 			count
 			gen a = ${summaryqc_runningtotal} - `r(N)'
@@ -101,25 +105,29 @@ qui { // 2 - perform quality control
 		}
 	}	
 	}
-qui { // 3 - save as
+qui { // 4 - save as
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	save `out'-summaryqc.dta, replace
 	}
-qui { // 4 - report on processing
+qui { // 5 - report on processing
 	qui { // plot manhattan
 		graphmanhattan, chr(chr) bp(bp) p(p)
 		graph use tmpManhattan.gph
 		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.png"
 		graph export `out'-summaryqc-manhattan.png, as(png) height(1000) width(3000) replace
 		window manage close graph
+		erase tmpManhattan.gph
 		}
 	qui { // create - log file
-	global summaryqc_input  `input'
-	global summaryqc_out `out'
+		global summaryqc_input  `input'
+		global summaryqc_out `out'
+		global summaryqc_ref `ref'
 		_sub_summaryqc_meta
+		noi di as text"# > summaryqc .......................... reporting to log "as result "`out'-summaryqc.log"
+		cd ..
 		}
 	}
 noi di as text"#########################################################################"
