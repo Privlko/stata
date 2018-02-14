@@ -78,6 +78,7 @@ qui { // 2 - perform quality control
 			global summaryqc_infoSNP "info score not present"
 			noi di as text"# > summaryqc .......... info score out-of-bounds or < .8 "as result "${summaryqc_infoSNP}"
 			}
+		}
 	qui { // qc-by-direction
 		capture confirm string var direction
 		if !_rc {
@@ -97,10 +98,9 @@ qui { // 2 - perform quality control
 			}
 		else {
 			global summaryqc_directionSNP "direction variable not present"
-			noi di as text"# > summaryqc ... data missing from > 1 study (direction) "as result "${summaryqc_directionSNP}"
+			noi di as text"# > summaryqc ... data missing from > 2 study (direction) "as result "${summaryqc_directionSNP}"
 			}
-		}
-	}	
+		}	
 	}
 qui { // 3 - save as
 	count

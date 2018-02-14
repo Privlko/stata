@@ -16,7 +16,7 @@ clear
 	"# > summaryqc ....... markers with p-values out-of-bounds "
 	"# > summaryqc ................................ duplicates "
 	"# > summaryqc .......... info score out-of-bounds or < .8 "
-	"# > summaryqc ... data missing from > 1 study (direction) "
+	"# > summaryqc ... data missing from > 2 study (direction) "
 	"# > summaryqc .................. markers in final dataset "
 	"# > summaryqc ............................. saved data to "
 	"# > summaryqc ................ exported manhattan plot to "
