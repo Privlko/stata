@@ -1,0 +1,4 @@
+d _sub_summaryqc_report subcommand: subroutine for summaryqc to create report file
+d Richard Anney, Cardiff University
+d Distribution-Date: 14feb2018
+f _sub_summaryqc_report.ado

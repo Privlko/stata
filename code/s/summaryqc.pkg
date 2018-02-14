@@ -2,6 +2,6 @@ d summaryqc - command to process summary gwas data prior to conversion
 d Richard Anney, Cardiff University
 d Distribution-Date: 11jan2018
 f summaryqc.ado
-f ../c/checkfile.ado
+f ../_/_sub_summaryqc_meta.ado
 f ../r/recodestrand.ado
 

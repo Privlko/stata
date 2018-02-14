@@ -1,5 +1,6 @@
-t _sub_genotypeqc_report subcommand: subrouting for genotypeqc to create report file
-t _sub_genotypeqc_meta subcommand: subrouting for genotypeqc to create meta-log file
+t _sub_genotypeqc_report subcommand: subroutine for genotypeqc to create report file
+t _sub_summaryqc_report subcommand: subroutine for summaryqc to create report file
+t _sub_genotypeqc_meta subcommand: subroutine for genotypeqc to create meta-log file
 t _gwas2prePRS subcommand: convert summary file to *.prePRS.tsv.gz
 t _gwas2magma subcommand: convert summary file to *.pval.gz
 t _gwas2sumstat subcommand: convert summary file to *.sumstats.gz
