@@ -98,9 +98,9 @@ qui { // 5 - plotting to tmpQQ.gph
 	tw line graphqq_expected graphqq_expected  , lwidth(vthin) lcolor(black)
 	|| line graphqq_upper graphqq_expected     , lpattern(dash) lwidth(vthin) lcolor(black)
 	|| line graphqq_lower graphqq_expected     , lpattern(dash) lwidth(vthin) lcolor(black)
-	|| scatter graphqq_observed graphqq_expected if (observed <  `str')                   ,	${tmp_symbol} ${level1}
-	|| scatter graphqq_observed graphqq_expected if (observed >= `str' & graphqq_observed < `gws'), ${tmp_symbol} ${level2}
-	|| scatter graphqq_observed graphqq_expected if (observed >= `gws')                   ,	${tmp_symbol} ${level3}
+	|| scatter graphqq_observed graphqq_expected if (graphqq_observed <  `str')                   ,	${tmp_symbol} ${level1}
+	|| scatter graphqq_observed graphqq_expected if (graphqq_observed >= `str' & graphqq_observed < `gws'), ${tmp_symbol} ${level2}
+	|| scatter graphqq_observed graphqq_expected if (graphqq_observed >= `gws')                   ,	${tmp_symbol} ${level3}
 	legend(off) 
 	xtitle(" " "Expected (-log10(P))") 
 	ytitle("Observed -log10(p)"" ")
