@@ -497,11 +497,11 @@ qui { // 15 - creating final reports
 		import delim using ${sub_mod_output}.counts, clear varnames(nonames)
 		erase ${sub_mod_output}.counts
 		split v1,p(" ")
-		replace v1 = "global count_markers_1" in 1 
-		replace v1 = "global count_markers_3" in 2
-		replace v1 = "global count_individ_1" in 3 
-		replace v1 = "global count_individ_3" in 4
-		replace v1 = "global count_European " in 5
+		replace v1 = "global input_snp" in 1 
+		replace v1 = "global output_snp" in 2
+		replace v1 = "global input_ind" in 3 
+		replace v1 = "global output_ind" in 4
+		replace v1 = "global ancestry_ind " in 5
 		outsheet v1 v11 using tempfile.do, non noq replace
 		do tempfile.do
 		erase tempfile.do
