@@ -42,17 +42,17 @@ qui { // 2 - calculating observed / expected values
 	sum `p'
 	noi di as text"# > graphqq ................... min observed p in dataset "as result "`: display %10.4e r(min)'"
 	sort `p'
-	gen n = _n
-	gen  expected    = -log10(_n/${rN})			
-	gen  observed    = -log10(`p')					
-	replace observed  = `max' if observed > `max'
+	gen graphqq_n = _n
+	gen  graphqq_expected    = -log10(_n/${rN})			
+	gen  graphqq_observed    = -log10(`p')					
+	replace graphqq_observed  = `max' if graphqq_observed > `max'
 	}
 qui { // 3 - pruning data bins to speed up plotting
-	egen bin   = cut(observed), at(0(1)`max')
-	gen  random = uniform()
-	sort random
-	egen instance = seq(),by(bin)
-	drop if instance > 500
+	egen graphqq_bin   = cut(graphqq_observed), at(0(1)`max')
+	gen  graphqq_random = uniform()
+	sort graphqq_random
+	egen graphqq_instance = seq(),by(graphqq_bin)
+	drop if graphqq_instance > 500
 	save _tmp_qqgraph.dta, replace
 
 	}
@@ -60,25 +60,25 @@ qui { // 4 - calculate binomal boundaries
 	use _tmp_qqgraph.dta, clear
 	append using _tmp_qqgraph.dta
 	append using _tmp_qqgraph.dta
-	sort expected n
-	keep observed expected n
-	egen x  = seq(),by(n)
-	sort n x
-	tostring n, replace
+	sort graphqq_expected graphqq_n
+	keep graphqq_observed graphqq_expected graphqq_n
+	egen x  = seq(),by(graphqq_n)
+	sort graphqq_n x
+	tostring graphqq_n, replace
 	gen script = ""
 	replace script = "qui cii $rN " + n if x == 1
-	replace script = `"qui replace ub = r(ub) if n == ""' + n + `"""' if x == 2
-	replace script = `"qui replace lb = r(lb) if n == ""' + n + `"""' if x == 3
+	replace script = `"qui replace graphqq_ub = r(ub) if graphqq_n == ""' + n + `"""' if x == 2
+	replace script = `"qui replace graphqq_lb = r(lb) if graphqq_n == ""' + n + `"""' if x == 3
 	outsheet script using _tmp_qqgraph.do, non noq replace
-	gen ub = .
-	gen lb = .
-	sort observed x
+	gen graphqq_ub = .
+	gen graphqq_lb = .
+	sort graphqq_observed x
 	do _tmp_qqgraph.do
-	gen upper = -log10(ub)
-	gen lower = -log10(lb)
-	keep observed expected upper lower
-	for var observed expected: drop if X < `min'
-	sort expected
+	gen graphqq_upper = -log10(graphqq_ub)
+	gen graphqq_lower = -log10(graphqq_lb)
+	keep graphqq_observed graphqq_expected graphqq_upper graphqq_lower
+	for var graphqq_observed graphqq_expected: drop if X < `min'
+	sort graphqq_expected
 	}
 qui { // 5 - plotting to tmpQQ.gph
 	noi di as text"# > graphqq ............................... plotting from "as result "1e-`max'" as text " to "as result "1e-`min'" as text " to " as result "tmpQQ.gph"
@@ -88,19 +88,19 @@ qui { // 5 - plotting to tmpQQ.gph
 	global level1	"mlc("`r(color4)'") mfc("`r(color4)'")"
 	global level2	"mlc("`r(color6)'") mfc("`r(color6)'")"
 	global level3	"mlc("`r(color8)'") mfc("`r(color8)'")"
-	sum observed
+	sum graphqq_observed
 	gen tmpx =  `r(max)' + 1.1
 	replace tmpx = round(tmpx,2)
 	sum tmpx
 	global tmpmax `r(max)'
 	global tmp_symbol "msymbol(o) msize(small)"
 	#delimit;
-	tw line expected expected  , lwidth(vthin) lcolor(black)
-	|| line upper expected     , lpattern(dash) lwidth(vthin) lcolor(black)
-	|| line lower expected     , lpattern(dash) lwidth(vthin) lcolor(black)
-	|| scatter observed expected if (observed <  `str')                   ,	${tmp_symbol} ${level1}
-	|| scatter observed expected if (observed >= `str' & observed < `gws'), ${tmp_symbol} ${level2}
-	|| scatter observed expected if (observed >= `gws')                   ,	${tmp_symbol} ${level3}
+	tw line graphqq_expected graphqq_expected  , lwidth(vthin) lcolor(black)
+	|| line graphqq_upper graphqq_expected     , lpattern(dash) lwidth(vthin) lcolor(black)
+	|| line graphqq_lower graphqq_expected     , lpattern(dash) lwidth(vthin) lcolor(black)
+	|| scatter graphqq_observed graphqq_expected if (observed <  `str')                   ,	${tmp_symbol} ${level1}
+	|| scatter graphqq_observed graphqq_expected if (observed >= `str' & graphqq_observed < `gws'), ${tmp_symbol} ${level2}
+	|| scatter graphqq_observed graphqq_expected if (observed >= `gws')                   ,	${tmp_symbol} ${level3}
 	legend(off) 
 	xtitle(" " "Expected (-log10(P))") 
 	ytitle("Observed -log10(p)"" ")
