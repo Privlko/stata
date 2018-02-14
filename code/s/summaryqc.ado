@@ -8,6 +8,7 @@ perform basic quality control on summary gwas statistics
 
 program summaryqc
 syntax ,  ref(string asis) input(string asis) out(string asis)
+noi di as text" "
 noi di as text"#########################################################################"
 noi di as text"# summaryqc               "
 noi di as text"#########################################################################"
