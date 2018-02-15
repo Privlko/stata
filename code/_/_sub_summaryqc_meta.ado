@@ -41,3 +41,4 @@ gen v2 = ""
 	replace v2 = v3 if v3 != "."
 	drop v3
 	outsheet using "${summaryqc_out}-summaryqc.log", delim("") non noq replace
+	
