@@ -17,7 +17,7 @@
 * ```-bp-``` varname of the bp variable (hg19)
 * ```-p-``` varname of the p variable
 * ```-ldref-``` reference genotype to calculate linkage disequilibrium
-* ```-recombref-``` reference recombination rate (hg19) **-not implemented-**
+* ```-recombref-``` reference recombination rate (hg19) 
 * ```-generef-``` reference gene/exon co-ordinates (hg19)
 * ```-maxp-``` minimum p-value to display (default = 1e-10 (10))
 * ```-gwsp-``` gw-significant p-value (default 5e-8 (7.3)) 
@@ -38,4 +38,4 @@
 
 **known bugs**
 * does not work if there is a gene desert __-fix-__
-* problems encoding recombination rate on yaxis(2) __-removed-__ __-add later-__
+* problems encoding recombination rate on yaxis(2) __-fixed-__ 

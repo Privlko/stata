@@ -22,7 +22,7 @@
 */
 
 program graphlocus
-syntax , index(string asis) snp(string asis) chr(string asis) bp(string asis) p(string asis) ldref(string asis) generef(string asis) [maxp(real 10) gwsp(real 7.3) range(string asis)]
+syntax , index(string asis) snp(string asis) chr(string asis) bp(string asis) p(string asis) ldref(string asis) generef(string asis) recombref(string asis) [maxp(real 10) gwsp(real 7.3) range(string asis)]
 
 noi di as text" "
 noi di as text"#########################################################################"
@@ -43,6 +43,7 @@ qui { // 1 - introduction
 	noi checkfile, file(`ldref'.bed)
 	noi checkfile, file(`ldref'.fam)
 	noi checkfile, file(`generef')
+	noi checkfile, file(`recombref')
 	}
 qui { // 2 - define window and globals
 	gen graphlocus_range = "`range'"
@@ -139,10 +140,27 @@ qui { // 6 - plot genes
 	graphgene, chr(${graphlocus_chr}) from(${graphlocus_lb}) to(${graphlocus_ub}) generef(`generef') save(yes)
 	!del temp-graphgene.gph
 	}
-qui { // 7 - plot graph
+qui { // 7 - plot recombination
+	use `recombref', clear
+	keep if chr == ${graphlocus_chr}
+	drop if bp < ${graphlocus_lb} 
+	drop if bp > ${graphlocus_ub}
+	save recomb_pre-plot.dta, replace
+	}	
+qui { // 8 - plot graph
+	use graphlocus_assoc_r2_recombination_pre-graph.dta,replace
 	append using graphgene_pre-plot.dta
+	append using recomb_pre-plot.dta
+
 	replace order = -order
-	replace order = order -2
+	replace order =  order -3
+	replace recomb_rate = recomb_rate / 10
+	sum order
+	gen a   = `r(min)' 
+	sum graphlocus_uspike
+	replace a = `r(max)' in 2
+	sum graphlocus_dspike
+	replace a = `r(max)' in 3
 	global graphlocus_legend_plot sort msymbol(S) msize(medium) mlwidth(vthin) mlc(gs0) ylabel(0(2)10)
 	global graphlocus_log10p_plot sort msymbol(O)   mlwidth(vthin) mlc(gs0) ylabel(0(2)10)
 	global graphlocus_index_plot sort  mlwidth(vthin) mlc(gs0) ylabel(0(2)10) 
@@ -153,38 +171,42 @@ qui { // 7 - plot graph
 		}	
 	#delimit ;
 	tw scatter graphlocus_p_s0_1 `bp', ${graphlocus_legend_plot} mcolor(white) 
-	||scatter  graphlocus_p_s1_2 `bp', ${graphlocus_legend_plot} mcolor("$color1") 
-	||scatter  graphlocus_p_s2_3 `bp', ${graphlocus_legend_plot} mcolor("$color2") 
-	||scatter  graphlocus_p_s3_4 `bp', ${graphlocus_legend_plot} mcolor("$color3")
-	||scatter  graphlocus_p_s4_5 `bp', ${graphlocus_legend_plot} mcolor("$color4") 
-	||scatter  graphlocus_p_s5_6 `bp', ${graphlocus_legend_plot} mcolor("$color5")
-	||scatter  graphlocus_p_s6_7 `bp', ${graphlocus_legend_plot} mcolor("$color6")
-	||scatter  graphlocus_p_s7_8 `bp', ${graphlocus_legend_plot} mcolor("$color7")
-	||scatter  graphlocus_p_s8_9 `bp', ${graphlocus_legend_plot} mcolor("$color8")
-	||scatter  graphlocus_p_s9_1 `bp', ${graphlocus_legend_plot} mcolor("$color9") 
-	||scatter  graphlocus_p_r0_1 `bp', ${graphlocus_log10p_plot} mcolor(white)     msize(small)
-	||scatter  graphlocus_p_r1_2 `bp', ${graphlocus_log10p_plot} mcolor("$color1") msize(small)
-	||scatter  graphlocus_p_r2_3 `bp', ${graphlocus_log10p_plot} mcolor("$color2") msize(small)
-	||scatter  graphlocus_p_r3_4 `bp', ${graphlocus_log10p_plot} mcolor("$color3") msize(small)
-	||scatter  graphlocus_p_r4_5 `bp', ${graphlocus_log10p_plot} mcolor("$color4") msize(small)
-	||scatter  graphlocus_p_r5_6 `bp', ${graphlocus_log10p_plot} mcolor("$color5") msize(small)
-	||scatter  graphlocus_p_r6_7 `bp', ${graphlocus_log10p_plot} mcolor("$color6") msize(small)
-	||scatter  graphlocus_p_r7_8 `bp', ${graphlocus_log10p_plot} mcolor("$color7") msize(small)
-	||scatter  graphlocus_p_r8_9 `bp', ${graphlocus_log10p_plot} mcolor("$color8") msize(small)
-	||scatter  graphlocus_p_r9_1 `bp', ${graphlocus_log10p_plot} mcolor("$color9") msize(small)
-	||scatter  graphlocus_p_r9_1 `bp' if `snp' == "`index'", ${graphlocus_index_plot} mcolor("107 174 214") msymbol(D) msize(large)
-	||scatter  graphlocus_p_r9_1 `bp' if `snp' == "`index'", ${graphlocus_index_plot} mcolor(black) msymbol(o) msize(small) mlabel(`snp') mlabpos(11) mlabcolor(black) mlabsize(vsmall) 
-	||rspike   graphlocus_uspike graphlocus_dspike `bp', ${graphlocus_spikes_plot}
+	||scatter   graphlocus_p_s1_2 `bp', ${graphlocus_legend_plot} mcolor("$color1") 
+	||scatter   graphlocus_p_s2_3 `bp', ${graphlocus_legend_plot} mcolor("$color2") 
+	||scatter   graphlocus_p_s3_4 `bp', ${graphlocus_legend_plot} mcolor("$color3")
+	||scatter   graphlocus_p_s4_5 `bp', ${graphlocus_legend_plot} mcolor("$color4") 
+	||scatter   graphlocus_p_s5_6 `bp', ${graphlocus_legend_plot} mcolor("$color5")
+	||scatter   graphlocus_p_s6_7 `bp', ${graphlocus_legend_plot} mcolor("$color6")
+	||scatter   graphlocus_p_s7_8 `bp', ${graphlocus_legend_plot} mcolor("$color7")
+	||scatter   graphlocus_p_s8_9 `bp', ${graphlocus_legend_plot} mcolor("$color8")
+	||scatter   graphlocus_p_s9_1 `bp', ${graphlocus_legend_plot} mcolor("$color9") 
+	||scatter   graphlocus_p_r0_1 `bp', ${graphlocus_log10p_plot} mcolor(white)     msize(small)
+	||scatter   graphlocus_p_r1_2 `bp', ${graphlocus_log10p_plot} mcolor("$color1") msize(small)
+	||scatter   graphlocus_p_r2_3 `bp', ${graphlocus_log10p_plot} mcolor("$color2") msize(small)
+	||scatter   graphlocus_p_r3_4 `bp', ${graphlocus_log10p_plot} mcolor("$color3") msize(small)
+	||scatter   graphlocus_p_r4_5 `bp', ${graphlocus_log10p_plot} mcolor("$color4") msize(small)
+	||scatter   graphlocus_p_r5_6 `bp', ${graphlocus_log10p_plot} mcolor("$color5") msize(small)
+	||scatter   graphlocus_p_r6_7 `bp', ${graphlocus_log10p_plot} mcolor("$color6") msize(small)
+	||scatter   graphlocus_p_r7_8 `bp', ${graphlocus_log10p_plot} mcolor("$color7") msize(small)
+	||scatter   graphlocus_p_r8_9 `bp', ${graphlocus_log10p_plot} mcolor("$color8") msize(small)
+	||scatter   graphlocus_p_r9_1 `bp', ${graphlocus_log10p_plot} mcolor("$color9") msize(small)
+	||scatter   graphlocus_p_r9_1 `bp' if `snp' == "`index'", ${graphlocus_index_plot} mcolor("107 174 214") msymbol(D) msize(large)
+	||scatter   graphlocus_p_r9_1 `bp' if `snp' == "`index'", ${graphlocus_index_plot} mcolor(black) msymbol(o) msize(small) mlabel(`snp') mlabpos(11) mlabcolor(black) mlabsize(vsmall) 
+	||rspike    graphlocus_uspike graphlocus_dspike `bp', ${graphlocus_spikes_plot}
 	||rspike start end order , hor lcolor(green) lwidth(vvthin) 
 	||rspike _txs _txe order , hor lcolor(green) lwidth(*4) 	
 	||scatter order start if pos == 11  , msymbol(i) mlabel(symbol) mlabpos(11) mlabcolor(black) mlabsize(vsmall) 
 	||scatter order end   if pos == 1   , msymbol(i) mlabel(symbol) mlabpos(1 ) mlabcolor(black) mlabsize(vsmall) 
+		||line recomb_rate bp, lpattern(solid) lwidth(vthin) lcolor(blue) 
+	||scatter a bp, msymbol(i) yaxis(2) 
+		yline(-1, lpattern(solid) lwidth(vthin) lcolor(black))
+		ylabel(0 "0" 2 "20" 4 "40" 6 "60" 8 "80" 10 "100", axis(2))     
 		legend(region(lc(black)) order(10 "0.9" 9 "0.8" 8 "0.7" 7 "0.6" 6 "0.5" 5 "0.4" 4 "0.3" 3 "0.2" 2 "0.1" 1 "0.0" ) size(vsmall) rowgap(zero) symp(3) textfirst ring(0) bm(tiny) pos(11) row(10) subtitle("rsquare",size(vsmall)))
 		xtitle(" ""Chromosome ${graphlocus_chr}", size(small)) xlabel(${graphlocus_lb} ${graphlocus_ub}, labs(small))
-    ytitle("              -log10 P-value", size(small))
+    ytitle("-log10 P-value", size(small) justification(right))
+		ytitle("Recombination Rate (cM/Mb)", size(small) axis(2) )
 		yline(5, lpattern(dash) lwidth(vthin) lcolor(orange))
 		yline(7.3, lpattern(dash) lwidth(vthin) lcolor(red))
-		yline(-1, lpattern(solid) lwidth(vthin) lcolor(black))
 		ysize(5) xsize(10)
 		fysize(150) fxsize(200)
 		;
