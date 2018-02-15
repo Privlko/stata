@@ -217,7 +217,7 @@ qui { // 8 - plot graph
 		graph export temp-graphlocus.png, as(png) height(1000) width(3000) replace
 		}
 qui { // 8 - clean 
-	!del graphgene_pre-plot.dta graphlocus*
+	!del graphgene_pre-plot.dta graphlocus* recomb_pre-plot.dta
 	}
 restore
 noi di as text"#########################################################################"
