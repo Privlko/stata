@@ -40,6 +40,7 @@ qui { // 2 - perform quality control
 		global summaryqc_runningtotal `r(N)'
 		drop if p > 1
 		drop if p < 0
+		drop if p == .
 		count
 		gen a = ${summaryqc_runningtotal} - `r(N)'
 		sum a
@@ -64,6 +65,7 @@ qui { // 2 - perform quality control
 		if !_rc {
 			count 
 			global summaryqc_runningtotal `r(N)'
+			drop if info == .
 			drop if info > 2 & info ! = .
 			drop if info < .8
 			drop info
