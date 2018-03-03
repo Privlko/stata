@@ -493,6 +493,7 @@ qui { // 15 - creating final reports
 		noi bim2build, bim(${output}) ref(${bim2build_ref})
 		}
 	qui { // counting markers in pre/post files
+		noi di as text""
 		noi di as text"# > genotypeqc .......................................... counting metrics and storing in memory"
 		!$wc -l "${input}.bim"                 > "${sub_mod_output}.counts"
 		!$wc -l "${output}.bim"               >> "${sub_mod_output}.counts"
@@ -517,6 +518,8 @@ qui { // 15 - creating final reports
 	_sub_genotypeqc_meta
 	}
 qui { // 16 - rename and clean
+	!del ${output}.bim2build.png
+	!del ${output}.bim2build
 	cd ..
 	!rmdir  "$temp_dir" /S /Q
 	}
