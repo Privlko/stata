@@ -90,7 +90,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Genome build of ${data_input} (input binaries)")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_image_add(dh,"${input}.bim2build.png")
+	_docx_image_add(dh,"${output}.bim2build.png")
 	_docx_paragraph_add_linebreak(dh)
 
 	// REPORTING ARRAY

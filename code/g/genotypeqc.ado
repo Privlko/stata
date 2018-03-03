@@ -487,6 +487,11 @@ qui { // 15 - creating final reports
 				}
 			}	
 		}
+	qui { // bug fix - re-plot build 
+		noi di as text""
+		noi di as text"# > genotypeqc .......................................... confirm build"
+		noi bim2build, bim(${output}) ref(${bim2build_ref})
+		}
 	qui { // counting markers in pre/post files
 		noi di as text"# > genotypeqc .......................................... counting metrics and storing in memory"
 		!$wc -l "${input}.bim"                 > "${sub_mod_output}.counts"
