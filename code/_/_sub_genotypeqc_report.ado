@@ -88,7 +88,7 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, " ")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Genome build of ${data_input} (output binaries)")
+	_docx_paragraph_add_text(dh, "# > Genome build (output binaries)")
 	_docx_paragraph_add_linebreak(dh)
 	_docx_image_add(dh,"${output}.bim2build.png")
 	_docx_paragraph_add_linebreak(dh)
@@ -107,7 +107,6 @@ end
 	_docx_paragraph_add_linebreak(dh)
 	_docx_paragraph_add_text(dh, "# > Array match for input binaries is ${bim2array}")
 	_docx_paragraph_add_linebreak(dh)
-	_docx_paragraph_add_text(dh, "# > Array match of ${data_input}")
 	_docx_image_add(dh,"${input}.arraymatch.png")
 	
 	// REPORTING ALLELE-FREQUENCY DIFFERENCES
