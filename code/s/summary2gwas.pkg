@@ -1,9 +1,0 @@
-d summary2gwas - command to process summary gwas data prior to conversion to other formats (e.g. magma/ profilescore/ sumstats)
-d Richard Anney, Cardiff University
-d Distribution-Date: 11jan2018
-f summary2gwas.ado
-f ../c/checkfile.ado
-f ../r/recodestrand.ado
-f ../_/_gwas2magma.ado
-f ../_/_gwas2prePRS.ado
-f ../_/_gwas2sumstat.ado
