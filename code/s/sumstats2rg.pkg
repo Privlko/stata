@@ -1,0 +1,6 @@
+d sumstats2rg wrapper for ldsc.py command to calculates rg from pair of sumstats files
+d Richard Anney, Cardiff University
+d Distribution-Date: 22mar2018
+f sumstats2rg.ado
+f ../c/checkfile.ado
+

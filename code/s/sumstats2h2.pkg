@@ -1,0 +1,6 @@
+d sumstats2h2 wrapper for ldsc.py command to calculates h2 from  sumstats
+d Richard Anney, Cardiff University
+d Distribution-Date: 22mar2018
+f sumstats2h2.ado
+f ../c/checkfile.ado
+
