@@ -4,4 +4,5 @@ p symbol2ensembl command to conver gene-symbols to enseml identifiers
 p snp2build  a command to check genome build from snp chr bp variables
 p snp2refid  a command to convert the marker names to a common (reference) name via the snp location and genotype code
 p summaryqc command to process summary gwas data prior to conversion 
+p summaryqc2h2 command to convert summaryqc to snp heritability via ldsc - creates sumstats file in process 
 

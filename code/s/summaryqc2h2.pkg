@@ -1,0 +1,6 @@
+d summaryqc2h2 command to convert summaryqc to snp heritability via ldsc - creates sumstats file in process 
+d Richard Anney, Cardiff University
+d Distribution-Date: 22mar2018
+f summaryqc2h2.ado
+f ../c/checkfile.ado
+
