@@ -96,7 +96,7 @@ qui { // 2 - perform quality control
 			sum a
 			global summaryqc_directionSNP `r(max)'
 			drop a
-			noi di as text"# > summaryqc ... data missing from > 1 study (direction) "as result ${summaryqc_directionSNP} 
+			noi di as text"# > summaryqc ... data missing from > 2 study (direction) "as result ${summaryqc_directionSNP} 
 			}
 		else {
 			global summaryqc_directionSNP "direction variable not present"
@@ -105,7 +105,7 @@ qui { // 2 - perform quality control
 		}	
 	}
 qui { // 3 - save as
-	missings dropobs
+	missings dropobs, force
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
