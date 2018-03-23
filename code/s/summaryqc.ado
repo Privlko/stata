@@ -105,7 +105,6 @@ qui { // 2 - perform quality control
 		}	
 	}
 qui { // 3 - save as
-	missings dropobs, force
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
