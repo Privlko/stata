@@ -41,6 +41,9 @@ qui { // 3 - join files
 		checkloc_name
 		}
 	noi di as text"# > mapfrq .............................................. "as result "merging with reference"
+	duplicates tag loc_name, gen(tag)
+	keep if tag == 0
+	drop tag
 	merge 1:1 loc_name using tempfile-mapfrq.dta
 	drop if _m == 2
 	drop _m
