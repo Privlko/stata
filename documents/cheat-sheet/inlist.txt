@@ -1,0 +1,33 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
+###############################################################################################
+# > inlist
+# > created by AnneyR Monday 09 April 2018
+###############################################################################################
+# > [[+subfolder]] ..........................................
+# > [[+subfolder]] ..........................................
+# > .....................................................
+###############################################################################################
+
+###############################################################################################
+
+from http://statadaily.com/2011/10/20/functions-inlist/
+
+I once was asked what is wrong about the code similar to the one below:
+
+''gen asean4 = 1 if countryname == “Indonesia” | “Malaysia” | “Philippines” | “Thailand”''
+
+This is a common mistake. Understandably, the assumption that repeating the left side of the expression, in this case ‘countryname’, is redundant is not far-off. Alas, Stata requires it and the correct syntax is:
+
+''gen asean4 = 1 if countryname == “Indonesia” | countryname == “Malaysia” | countryname == “Philippines” | countryname == “Thailand”''
+
+But we can do better by using the built-in function inlist(). Learning a little bit more about Stata’s built-in functions can be very convenient (sometimes necessary)—shorter codes, faster processing, more facebook time. Using inlist(), the equivalent code is:
+
+''gen asean4 = 1 if inlist(countryname, “Indonesia”, “Malaysia”, “Philippines”, “Thailand”)''
+
+inlist() may also be used for numeric values. For example:
+
+''gen asean4 = 1 if inlist(countrycode, 360, 458, 608, 764)''
+
+The difference between using numeric and string values is in the number of allowable elements in the list (number of countries in our example). For numeric values, 254 elements are allowed and for string values, only 9. See -help inlist-.

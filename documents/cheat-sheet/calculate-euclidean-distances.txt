@@ -1,0 +1,48 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
+###############################################################################################
+# > calculate-euclidean-distances
+# > created by AnneyR Monday 09 April 2018
+###############################################################################################
+# > [[+subfolder]] ..........................................
+# > [[+subfolder]] ..........................................
+# > .....................................................
+###############################################################################################
+
+###############################################################################################
+
+https://www.stata.com/statalist/archive/2010-06/msg00548.html
+
+clear
+input str1 hospital time patients
+ A 1 456
+ A 2 759
+ A 3 236
+ B 1 214
+ B 2 854
+ B 3 325
+ C 1 250
+ C 2 321
+ C 3 852
+end
+egen g=group(hospital)
+su g, mean
+loc N=r(max)
+forv i=1/`N' {
+ g double d`i'=.
+ }
+levelsof time, loc(ts)
+fillin time g
+sort time g
+g long obs=_n
+qui foreach t of loc ts {
+ su obs if time==`t', mean
+ loc n0=r(min)
+ loc n1=r(max)
+ forv i=`n0'/`n1' {
+  loc n=`i'-`n0'+1
+  replace d`n'=(patients-patients[`i'])^2 if inrange(_n,`n0',`n1')
+  }
+ }
+l, sepby(time) noo

@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-04-09T16:39:42+01:00
+
+###############################################################################################
+# > colorbrewer
+# > created by AnneyR Monday 09 April 2018
+###############################################################################################
+# > [[+subfolder]] ..........................................
+# > [[+subfolder]] ..........................................
+# > .....................................................
+###############################################################################################
+
+###############################################################################################
+
+# colorbrewer
+how to install colorbrewer
+from https://github.com/matthieugomez/stata-colorscheme
+1. download archive from github 
+2. unpack archive
+3. then run the following commands;
+
+```
+cap ado uninstall colorscheme                         
+net install colorscheme, from("folder\stata-colorscheme-master")         
+```

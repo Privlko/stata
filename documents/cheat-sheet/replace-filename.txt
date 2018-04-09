@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
+###############################################################################################
+# > replace-filename
+# > created by AnneyR Monday 09 April 2018
+###############################################################################################
+# > [[+subfolder]] ..........................................
+# > [[+subfolder]] ..........................................
+# > .....................................................
+###############################################################################################
+
+###############################################################################################
+
+'''
+* files
+files2dta, dir(`c(pwd)')
+gen newname = ""
+replace newname = strlower(file)
+replace newname = subinstr(newname , "_","-",.)
+gen a = "rename " + file + " " + newname
+outsheet a using tempfile.bat, non noq replace
+!tempfile.bat
+!del tempfile.*
+'''
+
+'''
+* directories
+dir2dta, dir(`c(pwd)')
+gen newname = ""
+replace newname = strupper(folder)
+replace newname = subinstr(newname , "_","-",.)
+gen a = "rename " + folder + " " + newname
+outsheet a using tempfile.bat, non noq replace
+!tempfile.bat
+!del tempfile.*
+'''
