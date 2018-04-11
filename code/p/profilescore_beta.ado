@@ -189,19 +189,21 @@ qui { // 6 - create profile scores
 	use tempfile-gwas.dta, replace
 	rename (snp gwas_p) (SNP P)
 	keep SNP P
-	qui { // define thresholds based on gwas data
+	qui { // define thresholds for clumping based on gwas data
 		sum P
 		noi di as text"# > profilescore ............... the minimum p in gwas is "as result "`: display %10.4e r(min)'"
 		gen min = `r(min)'
 		gen threshold = ""
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 "  if min < 1E-1
+		replace threshold =  "global thresholds 5E-1 "  if min < 5E-1 
+		replace threshold =  "global thresholds 5E-1 1E-1 "  if min < 1E-1 
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 "  if min < 5E-2 
 		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 "  if min < 1E-2
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 "  if min < 1E-3
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4"  if min < 1E-4
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 "  if min < 1E-3 
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4"  if min < 1E-4 
 		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5" if min < 1E-5
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6"  if min < 1E-6
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7"  if min < 1E-7
-		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8" if min < 1E-8
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6"  if min < 1E-6 
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7"  if min < 1E-7 
+		replace threshold =  "global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8" if min < 1E-8 
 		outsheet threshold in 1 using _tmp.do, non noq replace
 		do _tmp.do
 		erase _tmp.do
@@ -214,7 +216,7 @@ qui { // 6 - create profile scores
 			keep SNP P
 			di as text"# > profilescore .......................... processing P< "as result `threshold'
 			outsheet SNP P if P < `threshold' using tempfile-P`threshold'.input-clump, noq replace
-			!${plink} --bfile ${profilescore_kg_ref} --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
+			!${plink} --bfile ${kg_ref} --clump tempfile-P`threshold'.input-clump ${ldprune} --out tempfile-P`threshold'
 			!${tabbed} tempfile-P`threshold'.clumped
 			import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
 			keep snp
@@ -226,7 +228,52 @@ qui { // 6 - create profile scores
 			set obs 1
 			gen a = "P`threshold'	0	`threshold'"
 			outsheet a using  tempfile-P`threshold'.q-score-range, non noq replace
-			foreach data of num 1 / $Ndata {
+			}
+		}
+	qui { // define threshold for profile scoring based on clumped data
+		foreach threshold in $thresholds {
+			import delim using 	tempfile-P`threshold'.clumped.tabbed, clear
+			keep snp
+			merge 1:1 snp using tempfile-gwas.dta 
+			keep if _m == 3
+			gen threshold = "`threshold'"
+			count
+			if threshold == "5E-1" & `r(N)' >= 5 {
+				global thresholds 5E-1
+			}
+			else if threshold == "1E-1" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1
+				}
+			else if threshold == "5E-2" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2
+			}		
+			else if threshold == "1E-2" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2
+				}
+			else if threshold == "1E-3" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3
+				}
+			else if threshold == "1E-4" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4
+				}
+			else if threshold == "1E-5" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5
+				}
+			else if threshold == "1E-6" & `r(N)' >= 5 { 
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6
+				}
+			else if threshold == "1E-7" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7
+				}
+			else if threshold == "1E-8" & `r(N)' >= 5 {
+				global thresholds 5E-1 1E-1 5E-2 1E-2 1E-3 1E-4 1E-5 1E-6 1E-7 1E-8
+				}
+			}
+		noi di as text"# > profilescore ........ following clumping threshold is "as result `"${thresholds}"'
+		}
+	qui { // calculate scores
+		foreach threshold in $thresholds {
+						foreach data of num 1 / $Ndata {
 				di as text"# > profilescore ............................. processing "as result "${data`data'}"
 				!${plink} --bfile          ${data`data'} ///
 									--score          tempfile-P`threshold'.score  ///
