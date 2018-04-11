@@ -1,5 +1,6 @@
 d Richard Anney, Cardiff University
 t profilescore      polygenic-risk-profile-score-generator
+t profilescore_beta      polygenic-risk-profile-score-generator (beta)
 
 
 
