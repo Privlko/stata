@@ -227,8 +227,8 @@ qui { // 6 - create profile scores
 			gen a = "P`threshold'	0	`threshold'"
 			outsheet a using  tempfile-P`threshold'.q-score-range, non noq replace
 			foreach data of num 1 / $Ndata {
-				di as text"# > profilescore ............................. processing "as result "${profilescore_data`data'}"
-				!${plink} --bfile          ${profilescore_data`data'} ///
+				di as text"# > profilescore ............................. processing "as result "${data`data'}"
+				!${plink} --bfile          ${data`data'} ///
 									--score          tempfile-P`threshold'.score  ///
 									--q-score-file   tempfile-P`threshold'.q-score-file ///
 									--q-score-range  tempfile-P`threshold'.q-score-range ///
