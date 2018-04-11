@@ -23,6 +23,7 @@ noi di as text"# profilescore"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+
 qui { // 1 - introduction
 	noi di as text"# > profilescore ........................................ checking parameters"
 	noi checkfile, file(`param')
@@ -187,7 +188,17 @@ qui { // 4 - processing GWAS summary data
 			}
 		}
 	}
-qui { // 5 - create profile scores
+qui { // 5 - define GWAS and genotype overlapping snps
+	noi di as text" "
+	noi di as text"#########################################################################"
+	noi di as text"# > profilescore ........................................ define overlapping snp list"
+		bim2dta, bim($data1)
+		keep snp
+		merge 1:1 snp using tempfile-gwas.dta
+		keep if _m == 3
+		save tempfile-gwas.dta, replace
+		}
+qui { // 6 - create profile scores
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# > profilescore .......... create profile score based on "as result"${gwas_short}"
@@ -236,13 +247,13 @@ qui { // 5 - create profile scores
 				!${plink} --bfile          ${profilescore_data`data'} ///
 									--score          tempfile-P`threshold'.score  ///
 									--q-score-file   tempfile-P`threshold'.q-score-file ///
-									--q-score-range tempfile-P`threshold'.q-score-range ///
-									--out             data`data'
+									--q-score-range  tempfile-P`threshold'.q-score-range ///
+									--out            data`data'
 					}
 			}
 		}
 	}
-qui { // 6 - combine profile scores into single file
+qui { // 7 - combine profile scores into single file
 	noi di as text" "
 	noi di as text"#########################################################################"
 	foreach data of num 1 / $Ndata {
@@ -274,7 +285,7 @@ qui { // 6 - combine profile scores into single file
 			}
 		}
 	}
-qui { // 7 - make meta-log
+qui { // 8 - make meta-log
 	noi di as text" "
 	noi di as text"#########################################################################"
 	noi di as text"# > profilescore ...................... creating meta-log "as result"${project_name}-profilescore.meta-log"
@@ -348,7 +359,7 @@ qui { // 7 - make meta-log
 		log close
 		}
 	}
-qui { // 8 - plot manhattan of intersect
+qui { // 9 - plot manhattan of intersect
 	clear
 	set obs 1
 	gen a = "`draw_manhattan'"
@@ -377,7 +388,7 @@ qui { // 8 - plot manhattan of intersect
 	else {
 		}
 	}
-qui { // 9 - rename and clean
+qui { // 10 - rename and clean
 	!copy "tempfile.log" "..\\${project_name}-profilescore.meta-log"
 	foreach data of num 1 / $Ndata {
 		clear
