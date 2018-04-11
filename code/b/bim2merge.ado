@@ -25,18 +25,20 @@ noi di as text"#################################################################
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 qui { // 1 - introduction
-	clear
-	set obs 1
-	gen a = "`ref_bim',`bim'"
-	split a,p(",")
-	drop a
-	gen x = 1
-	reshape long a, i(x) j(obs)
-	count
-	noi di as text"# > bim2merge ............... number of binaries to merge "as result"`r(N)'"
+	qui { // count number of binaries to be merged 
+		clear
+		set obs 1
+		gen a = "`ref_bim',`bim'"
+		split a,p(","" ")
+		drop a
+		gen x = 1
+		reshape long a, i(x) j(obs)
+		count
+		noi di as text"# > bim2merge ............... number of binaries to merge "as result"`r(N)'"
+		}
 	gen b = _n
-	tostring b, replace
-	gen c = "global bim2merge_data" + b + " " + a
+		tostring b, replace
+		gen c = "global bim2merge_data" + b + " " + a
 	outsheet c using _tmp.do, non noq replace
 	do _tmp.do
 	erase _tmp.do
