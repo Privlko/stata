@@ -242,8 +242,8 @@ qui { // 7 - combine profile scores into single file
 	noi di as text" "
 	noi di as text"#########################################################################"
 	foreach data of num 1 / $Ndata {
-		noi di as text"# > profilescore . join thresholds files into single file "as result"${profilescore_data`data'}-final-profiles.dta"
-		fam2dta, fam(${profilescore_data`data'})
+		noi di as text"# > profilescore . join thresholds files into single file "as result"${data`data'}-final-profiles.dta"
+		fam2dta, fam(${data`data'})
 		keep fid iid sex
 		save data`data'-final-profiles.dta, replace
 		foreach threshold in $thresholds {
@@ -334,11 +334,11 @@ qui { // 8 - make meta-log
 		noi di as text"# > report on genotype files"
 		qui {
 			foreach data of num 1 / $Ndata {
-				noi di as text"# > profilescore .................................. data`data' "as result"${profilescore_data`data'}"
-				bim2count, bim(${profilescore_data`data'})
+				noi di as text"# > profilescore .................................. data`data' "as result"${data`data'}"
+				bim2count, bim(${data`data'})
 				noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
 				noi di as text"# > bim2count ............. number of individuals in file "as result "${bim2count_ind}"
-				noi di as text"# > profilescore ....................... scores stored in "as result"${gwas_short}-by-${profilescore_data`data'_short}_profiles.dta"
+				noi di as text"# > profilescore ....................... scores stored in "as result"${gwas_short}-by-${data`data'_short}_profiles.dta"
 				}
 			}
 		noi di as text"#########################################################################"	
@@ -375,13 +375,13 @@ qui { // 10 - rename and clean
 		split a, p("\")
 		gen a999 = ""
 		for var a1-a999: replace a999 = X 
-		replace a999 = "global profilescore_data`data'_short " + a999
+		replace a999 = "global data`data'_short " + a999
 		replace a999 = subinstr(a999, "-intersect", "",.)
 		outsheet a999 using tmp.do, non noq replace
 		do tmp.do
 		erase tmp.do
-		!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${profilescore_data`data'_short}_profiles.dta"
-		!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${profilescore_data`data'_short}_profiles.csv"
+		!copy "data`data'-final-profiles.dta"   "..\\${gwas_short}-by-${data`data'_short}_profiles.dta"
+		!copy "data`data'-final-profiles.csv"   "..\\${gwas_short}-by-${data`data'_short}_profiles.csv"
 		}
 	foreach threshold in $thresholds {
 		!mkdir ..\score
