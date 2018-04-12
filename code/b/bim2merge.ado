@@ -199,12 +199,12 @@ qui { // 6 - create data merge and clean up
 		noi di as text"# > bim2merge ....................... merging binaries to "as result"`project'.bim/bed/fam"
 		set obs ${bim2merge_dataN}
 		gen b = ""
-		foreach data of num 3 / $bim2merge_dataN {
+		foreach data of num 2 / $bim2merge_dataN {
 			replace b = "${bim2merge_newname`data'}.bed ${bim2merge_newname`data'}.bim ${bim2merge_newname`data'}.fam" in `data'
 			}
 		drop if b == ""
 		outsheet b using bim2merge.merge-list, non noq replace
-		!$plink --bfile ${bim2merge_newname2} --merge-list bim2merge.merge-list --make-bed --out ..\\`project'
+		!$plink --bfile ${bim2merge_newname1} --merge-list bim2merge.merge-list --make-bed --out ..\\`project'
 		erase bim2merge.merge-list
 		noi di as text"#########################################################################"
 		}
