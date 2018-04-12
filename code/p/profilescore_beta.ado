@@ -131,23 +131,23 @@ qui { // 4 - processing GWAS summary data
 	noi di as text"#########################################################################"
 	}
 qui { // 5 - check allele frequency versus reference (sanity-check/ quality-control)
-	qui { // merging with ${profilescore_kg_ref}
-		capture confirm file  ${profilescore_kg_ref}_frq.dta 
+	qui { // merging with ${kg_ref}
+		capture confirm file  ${kg_ref}_frq.dta 
 		if !_rc {
 			noi di as text""
-			noi di as text"# > profilescore .......... frequency files already exist "as result"${profilescore_kg_ref}_frq.dta"
-			use ${profilescore_kg_ref}_frq.dta, clear
+			noi di as text"# > profilescore .......... frequency files already exist "as result"${kg_ref}_frq.dta"
+			use ${kg_ref}_frq.dta, clear
 			}
 		else {
 			noi di as text""
-			noi di as text"# > profilescore ................. create frequency files "as result"${profilescore_kg_ref}_frq.dta"
-			noi bim2frq, bim(${profilescore_kg_ref})
+			noi di as text"# > profilescore ................. create frequency files "as result"${kg_ref}_frq.dta"
+			noi bim2frq, bim(${kg_ref})
 			}
 		merge 1:1 snp using tempfile-gwas.dta
 		keep if _m == 3
 		drop _m
 		}
-	qui { // map allele code to same strand as ${profilescore_kg_ref}
+	qui { // map allele code to same strand as ${kg_ref}
 			gen flip = .
 			replace flip = 1 if (gwas_gt == gt) 
 			replace flip = 2 if (gwas_gt == "R" & gt == "Y")
@@ -163,7 +163,7 @@ qui { // 5 - check allele frequency versus reference (sanity-check/ quality-cont
 				replace `i' = "T" if gwas_`i' == "A" & flip == 2
 				}
 			}
-	qui { // map frequency of risk to same as a1 in ${profilescore_kg_ref}
+	qui { // map frequency of risk to same as a1 in ${kg_ref}
 		replace maf = 1-maf if flip == 2
 		replace maf = 1-maf if risk != a1
 		}
@@ -171,7 +171,7 @@ qui { // 5 - check allele frequency versus reference (sanity-check/ quality-cont
 			noi di as text""
 			noi di as text"# > profilescore . plot maf between gwas and reference to "as result"${gwas_short}-by_reference-frq.png"
 			global format "mlc(black) mfc(blue) mlw(vvthin) m(o)" 
-			tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 = ${profilescore_kg_ref}") 
+			tw scatter maf gwas_risk_frq, ${format} caption("data1 = ${gwas_prePRS}""data2 = ${kg_ref}") 
 			graph export "..\\${gwas_short}-by_reference-frq.png", as(png) height(1000) width(3000) replace
 			window manage close graph
 			}
