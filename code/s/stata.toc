@@ -7,5 +7,6 @@ p summaryqc command to process summary gwas data prior to conversion
 p sumstats2rg wrapper for ldsc.py command to calculates rg from pair of sumstats files
 p sumstats2h2 wrapper for ldsc.py command to calculates h2 from  sumstats
 p summaryqc2sumstats wrapper for munge_sumstats.py command to convert summaryqc to sumstats
+p summaryqc2prePRS command to convert summaryqc to prePRS
 
 

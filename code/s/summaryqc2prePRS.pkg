@@ -1,0 +1,6 @@
+d summaryqc2prePRS command to convert summaryqc to prePRS
+d Richard Anney, Cardiff University
+d Distribution-Date: 13apr2018
+f summaryqc2prePRS.ado
+f ../c/checkfile.ado
+
