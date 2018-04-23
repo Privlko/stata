@@ -39,6 +39,7 @@ qui { // 4 - convert summaryqc to sumstats
 	keep chr bp snp a1 a2 a1_frq or p
 	rename (snp p) (rsid pval)
 	missings dropobs, force
+	for var chr bp a1_frq or p: tostring X, replace
 	outsheet using	${summaryqc2prePRS_output}-prePRS.tsv, noq replace
 	!$gzip ${summaryqc2prePRS_output}-prePRS.tsv
 	noi checkfile, file(${summaryqc2prePRS_output}-prePRS.tsv.gz)

@@ -44,6 +44,7 @@ qui { // 4 - convert summaryqc to sumstats
 	keep snp a1 a2 z p n
 	renvars, upper
 	missings dropobs, force
+	for var  Z P N : tostring X, replace
 	outsheet SNP A1 A2 Z P N using	tempfile-summaryqc.in, noq replace
 	!python "${temp_munge}" --sumstats tempfile-summaryqc.in --out ${summaryqc2sumstats_output}_hw3 --merge-alleles `w_hm3'w_hm3.snplist
 	erase tempfile-summaryqc.in
