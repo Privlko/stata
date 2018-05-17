@@ -66,7 +66,7 @@ qui { // 3 - identify genes in region
 	*drop if biotype == "misc_RNA"
 	*drop if biotype == "polymorphic_pseudogene"
 	*drop if biotype == "processed_transcript"
-	* drop if biotype == "protein_coding"
+	drop if biotype != "protein_coding"
 	*drop if biotype == "pseudogene"
 	*drop if biotype == "rRNA"
 	*drop if biotype == "sense_intronic"

@@ -64,35 +64,35 @@ qui {
 	}
 qui di as text"# > plot genes in region"
 qui { 
-	noi graphgene, chr(${chr}) from(${start}) to(${stop}) generef(`exons')
+	noi graphgene, chr(${chr}) from(${start}) to(${stop}) generef(`exons') save(yes)
 	}
 qui di as text"# > load/limit reference"
 qui { 
 	use `ref', clear
-	keep if chr == ${chr}
+	keep if chr == "${chr}"
+	destring bp, replace
 	drop if bp < ${start}
 	drop if bp > ${stop}
-	rename snp rsid
-	keep rsid chr bp
+	keep snp chr bp
 	rename (chr bp) (chr_ bp_)
 	}
-qui di as text"# > merge rsid and p from `gwas1'"
+qui di as text"# > merge snp and p from `gwas1'"
 qui { 
-	merge 1:1 rsid using `gwas1'
+	merge 1:1 snp using `gwas1'
 	keep if _m == 3
 	gen gwas1_log10p = -log10(p)
-	keep rsid chr_ bp_ gwas1_log10p
+	keep snp chr_ bp_ gwas1_log10p
 	}
-qui di as text"# > merge rsid and p from `gwas2'"
+qui di as text"# > merge snp and p from `gwas2'"
 qui {
-	merge 1:1 rsid using `gwas2'
+	merge 1:1 snp using `gwas2'
 	keep if _m == 3
 	gen gwas2_log10p = log10(p)
-	keep rsid chr_ bp_ gwas1_log10p gwas2_log10p
+	keep snp chr_ bp_ gwas1_log10p gwas2_log10p
 	}
 qui di as text"# > plot regions to tmpMiami.gph"
 qui { 
-	append using temp-graphgene-data.dta
+	append using graphgene_pre-plot.dta
 	for var gwas1_log10p : replace X = 15  if X > 15
 	for var gwas2_log10p : replace X = -15 if X < -15
 	for var gwas2_log10p : replace X = X -20
@@ -119,7 +119,7 @@ qui {
 qui di as text"# > cleaning"
 qui {
 	erase temp-graphgene.gph
-	erase temp-graphgene-data.dta
+	erase graphgene_pre-plot.dta
 	}
 clear 
 qui di as text"#########################################################################"
