@@ -64,7 +64,7 @@ qui {
 	}
 qui di as text"# > plot genes in region"
 qui { 
-	noi graphgene, chr(${chr}) start(${start}) end(${stop}) gene_file(`exons')
+	noi graphgene, chr(${chr}) from(${start}) to(${stop}) generef(`exons')
 	}
 qui di as text"# > load/limit reference"
 qui { 
