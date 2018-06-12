@@ -1,5 +1,5 @@
 qui di as text"#########################################################################"
-qui di as text"# loadUnixReplicas - version 0.1a 02oct2015 richard anney "
+qui di as text"# loadunixreplicas - version 0.1a 02oct2015 richard anney "
 qui di as text"#########################################################################"
 qui di as text"# Creates global link to unix executables "
 qui di as text"# as an alternative to unix executable use "as result`"!bash -c "<unix code>""'
@@ -8,7 +8,7 @@ qui di as text"# Started: $S_DATE $S_TIME"
 qui di as text"#########################################################################"
 qui di as text"# > scan `folder' for *.exe "
 
-program loadUnixReplicas
+program loadunixreplicas
 syntax , folder(string asis) 
 
 qui {
