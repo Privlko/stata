@@ -98,7 +98,6 @@ qui { // 3 - save as
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	order chr bp snp a1 a2 beta se z or l95 u95 p
 	sort  chr bp
-	save `out'-summaryqc.dta, replace
 	}
 qui { // 4 - plot manhattan
 		gen logp = round(-log10(p),1) + 2
@@ -136,13 +135,14 @@ sum p
 file write myfile "# > .................................. minimum p `r(min)' " _n
 count if p < 5e-8
 file write myfile "# > .. genomewide significany (p < 5e-8) markers `r(N)' " _n
-sum N
+sum n
 file write myfile "# > .......................... sample size range `r(min)' , `r(max)'" _n
 file write myfile "#########################################################################" _n
 file write myfile "# Completed: $S_DATE $S_TIME" _n
 file write myfile "#########################################################################" _n
 file close myfile
 for var chr bp: tostring X, replace
+save `out'-summaryqc.dta, replace
 end;
 
 	
