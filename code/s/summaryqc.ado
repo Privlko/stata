@@ -91,15 +91,7 @@ qui { // 2 - perform quality control
 			}
 		}	
 	}
-qui { // 3 - save as
-	count
-	global summaryqc_Nout `r(N)'
-	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
-	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
-	order chr bp snp a1 a2 beta se z or l95 u95 p
-	sort  chr bp
-	}
-qui { // 4 - plot manhattan
+qui { // 3 - plot manhattan
 		gen logp = round(-log10(p),1) + 2
 		sum logp
 		graphmanhattan, chr(chr) bp(bp) p(p) max(`r(max)')
@@ -110,39 +102,48 @@ qui { // 4 - plot manhattan
 		window manage close graph
 		erase tmpManhattan.gph
 		}
-noi di as text"#########################################################################"
-noi di as text"# Completed: $S_DATE $S_TIME"
-noi di as text"#########################################################################"
-file open myfile using "`out'-summaryqc.log", write replace
-file write myfile "#########################################################################" _n 
-file write myfile "# summaryqc - log" _n 
-file write myfile "#########################################################################" _n 
-file write myfile "# This log file was generated as part of the -summaryqc- program. " _n 
-file write myfile "# please note - some pre-processing may have been performed to get these " _n
-file write myfile "# data into the correct format for -summaryqc- " _n 
-file write myfile "#########################################################################" _n 
-file write myfile "# > ................................ input data `input'" _n
-file write myfile "# > .............. markers in the input dataset ${summaryqc_Nin}" _n 
-file write myfile "# > ....... markers with p-values out-of-bounds ${summaryqc_oobSNP}" _n 
-file write myfile "# > ................................ duplicates ${summaryqc_dupSNP}" _n
-file write myfile "# > .......... info score out-of-bounds or < .8 ${summaryqc_infoSNP}" _n
-file write myfile "# > ... data missing from > 2 study (direction) ${summaryqc_directionSNP}" _n
-file write myfile "# > .................. markers in final dataset ${summaryqc_Nout}" _n
-file write myfile "#########################################################################" _n 
-sum chr
-file write myfile "# > ........................... chromosome range `r(min)' , `r(max)'" _n
-sum p
-file write myfile "# > .................................. minimum p `r(min)' " _n
-count if p < 5e-8
-file write myfile "# > .. genomewide significany (p < 5e-8) markers `r(N)' " _n
-sum n
-file write myfile "# > .......................... sample size range `r(min)' , `r(max)'" _n
-file write myfile "#########################################################################" _n
-file write myfile "# Completed: $S_DATE $S_TIME" _n
-file write myfile "#########################################################################" _n
-file close myfile
-for var chr bp: tostring X, replace
-save `out'-summaryqc.dta, replace
+qui { // 4 - log and save as
+	count
+	global summaryqc_Nout `r(N)'
+	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
+	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
+	order chr bp snp a1 a2 beta se z or l95 u95 p
+	sort  chr bp
+	noi di as text"#########################################################################"
+	noi di as text"# Completed: $S_DATE $S_TIME"
+	noi di as text"#########################################################################"
+	
+	file open myfile using "`out'-summaryqc.log", write replace
+	file write myfile "#########################################################################" _n 
+	file write myfile "# summaryqc - log" _n 
+	file write myfile "#########################################################################" _n 
+	file write myfile "# This log file was generated as part of the -summaryqc- program. " _n 	
+	file write myfile "# please note - some pre-processing may have been performed to get these " _n
+	file write myfile "# data into the correct format for -summaryqc- " _n 
+	file write myfile "#########################################################################" _n 
+	file write myfile "# > ................................ input data `input'" _n
+	file write myfile "# > .............. markers in the input dataset ${summaryqc_Nin}" _n 
+	file write myfile "# > ....... markers with p-values out-of-bounds ${summaryqc_oobSNP}" _n 
+	file write myfile "# > ................................ duplicates ${summaryqc_dupSNP}" _n
+	file write myfile "# > .......... info score out-of-bounds or < .8 ${summaryqc_infoSNP}" _n
+	file write myfile "# > ... data missing from > 2 study (direction) ${summaryqc_directionSNP}" _n
+	file write myfile "# > .................. markers in final dataset ${summaryqc_Nout}" _n
+	file write myfile "#########################################################################" _n 
+	sum chr
+	file write myfile "# > ........................... chromosome range `r(min)' , `r(max)'" _n
+	sum p
+	file write myfile "# > .................................. minimum p `r(min)' " _n
+	count if p < 5e-8
+	file write myfile "# > .. genomewide significany (p < 5e-8) markers `r(N)' " _n
+	sum n
+	file write myfile "# > .......................... sample size range `r(min)' , `r(max)'" _n
+	file write myfile "#########################################################################" _n
+	file write myfile "# Completed: $S_DATE $S_TIME" _n
+	file write myfile "#########################################################################" _n
+	file close myfile
+	for var chr bp: tostring X, replace	
+	save `out'-summaryqc.dta, replace
+	}
 end;
 
 	
