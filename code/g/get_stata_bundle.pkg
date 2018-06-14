@@ -1,6 +1,6 @@
 d get_stata_bundle - command to get stata packages from https://github.com/ricanney/stata
 d Richard Anney  Cardiff University
-d Distribution-Date: 12jun2018
+d Distribution-Date: 14jun2018
 
 f get_stata_bundle.ado
   

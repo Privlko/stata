@@ -36,7 +36,7 @@ foreach p in profilescore_beta {
 foreach r in recodegenotype recodestrand {
 	net install `r',              from(https://raw.github.com/ricanney/stata/master/code/r/) replace
 	}
-foreach s in snp2build snp2refid summaryqc summaryqc2prePRS summaryqc2sumstats sumstats2h2 sumstats2rg {
+foreach s in snp2build snp2refbuild snp2refid summaryqc summaryqc2prePRS summaryqc2sumstats sumstats2h2 sumstats2rg {
 	net install `s',              from(https://raw.github.com/ricanney/stata/master/code/s/) replace
 	}
 
