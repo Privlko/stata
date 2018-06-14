@@ -17,9 +17,14 @@ noi di as text"#################################################################
 qui { // 1 - introduction
 	file open myfile using "`out'-summaryqc.log", write replace
 	file write myfile "#########################################################################" _n 
-	file write myfile "# summaryqg - log" _n 
+	file write myfile "# summaryqc - log" _n 
 	file write myfile "#########################################################################" _n 
+	file write myfile "# This log file was generated as part of the -summaryqc- program. " _n 
+	file write myfile "# The program uses data from the original GWAS summary file: " _n 
 	noi di as text"# > summaryqc ................................ input data "as result "`input'"
+	file write myfile "# > summaryqc ................................ input data `input'" _n
+	file write myfile "# please note - some pre-processing may have been performed to get these data" _n
+	file write myfile "# into the correct format for -summaryqc- " _n 
 	count
 	global summaryqc_Nin `r(N)'
 	noi di as text"# > summaryqc .............. markers in the input dataset "as result ${summaryqc_Nin}
@@ -107,10 +112,9 @@ qui { // 3 - save as
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
-	file write myfile "# > summaryqc .................. markers in final dataset ${summaryqc_Nout}}" _n
+	file write myfile "# > summaryqc .................. markers in final dataset ${summaryqc_Nout}" _n
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	save `out'-summaryqc.dta, replace
-	file close myfile
 	}
 qui { // 4 - plot manhattan
 		gen logp = round(-log10(p),1) + 2
@@ -126,7 +130,10 @@ qui { // 4 - plot manhattan
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
-
+file write myfile "#########################################################################" _n
+file write myfile "# Completed: $S_DATE $S_TIME" _n
+file write myfile "#########################################################################" _n
+file close myfile
 end;
 
 	
