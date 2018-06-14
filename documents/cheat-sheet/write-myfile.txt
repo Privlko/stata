@@ -1,0 +1,31 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-06-14T15:09:10+01:00
+
+###############################################################################################
+# > write-myfile
+# > created by AnneyR Thursday 14 June 2018
+###############################################################################################
+# > [[+subfolder]] ..........................................
+# > [[+subfolder]] ..........................................
+# > .....................................................
+###############################################################################################
+
+###############################################################################################
+
+	file open myfile using "/home/mdnra/packages/summaryqc/code/_convert2hrc.do", write replace
+	file write myfile "drop snp" _n 
+	file write myfile "for var a1 a2: replace X = strupper(X)" _n 
+	file write myfile "checkloc_name" _n 
+	file write myfile "drop chr bp" _n 
+	file write myfile "rename (a1 a2) (_a1 _a2)" _n 
+	file write myfile "duplicates drop" _n 
+	file write myfile "egen x = seq(), by(loc_name)" _n 
+	file write myfile "drop if x != 1" _n 
+	file write myfile "drop x" _n 
+	file write myfile "merge 1:1 loc_name using ${ref}_bim.dta" _n 
+	file write myfile "keep if _m == 3" _n 
+	file write myfile "drop a1 a2 gt _m loc_name" _n 
+	file write myfile "rename (_a1 _a2) (a1 a2)" _n 
+	file write myfile "for var chr bp: destring X, replace" _n 
+	file close myfile

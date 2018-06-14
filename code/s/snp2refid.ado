@@ -22,8 +22,8 @@ noi di as text"# snp2refid"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+
 qui { // 1 - introduction
-	save tmp_snp2refid.dta,replace
 	count
 	noi di as text"# > snp2refid .................... number of SNPs in file "as result "`r(N)'"
 	noi di as text"# > snp2refid ............... updating marker names using "as result"`ref'"
@@ -31,44 +31,42 @@ qui { // 1 - introduction
 	checkfile, file(${plink})
 	}
 qui { // 2 - check _bim.dta are created / create
-	capture confirm file `ref'_bim.dta 
+	preserve
+	capture confirm file `ref'_loc_name.dta 
 	if !_rc {
 		}
 	else {
-		noi di as text"# > snp2refid ..................... create reference file "as result"`ref'_bim.dta"
-		bim2dta, bim(`ref')
+		noi di as text"# > snp2refid ..................... create reference file "as result"`ref'_loc_name.dta "
+		capture confirm file `ref'_loc_name.dta 
+		if !_rc {
+				use `ref'_bim.dta, clear
+			keep snp loc_name
+			save `ref'_loc_name.dta, replace
+			}
+		else {
+			bim2dta, bim(`ref')
+			use `ref'_bim.dta, clear
+			keep snp loc_name
+			save `ref'_loc_name.dta, replace
+			}
 		}
+	restore
 	}
 qui { // 3 - update identifier 	
+	drop snp
+	for var a1 a2: replace X = strupper(X)
 	use tmp_snp2refid ,clear
-	recodegenotype , a1(a1) a2(a2)
-	rename _gt_tmp gt
-	compress
-	for var chr bp: tostring X, replace force
-	replace chr = subinstr(chr,"chr","",.)
-	replace chr = strupper(chr)	
-	replace chr = "23" if chr == "X"
-	replace chr = "23" if chr == "X_nonPAR"
-	replace chr = "24" if chr == "Y"
-	replace chr = "25" if chr == "XY"
-	replace chr = "26" if chr == "MT"
-	gen _gt = gt
-	replace _gt = "R" if gt == "Y"
-	replace _gt = "M" if gt == "K"
-	gen loc_name = "chr" + chr + ":" + bp + "-" + _gt
-	drop chr bp _gt
-	rename snp oldname
-	merge m:1 loc_name using `ref'_bim.dta	
+	noi checkloc_name
+	egen x = seq(), by(loc_name)
+	drop if x != 1
+	drop x
+	noi di as text"# > snp2refid .................... merging with reference "as result"`ref'_loc_name.dta"
+	merge 1:1 loc_name using `ref'_loc_name.dta
 	keep if _m == 3
-	compress
-	duplicates tag snp, gen(tag)
-	egen keep = seq(),by(snp tag)
-	keep if keep == 1
-	drop _m gt loc_name oldname tag keep 
-	order chr bp snp
+	drop _m loc_name
 	for var chr bp: destring X, replace
-	sort chr bp
-	erase tmp_snp2refid.dta
+	count
+	noi di as text"# > snp2refid ........ number of SNPs in file post rename "as result "`r(N)'"
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
