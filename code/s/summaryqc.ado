@@ -15,24 +15,15 @@ noi di as text"#################################################################
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
 qui { // 1 - introduction
+	file open myfile using "`out'-summaryqc.log", write replace
+	file write myfile "#########################################################################" _n 
+	file write myfile "# summaryqg - log" _n 
+	file write myfile "#########################################################################" _n 
 	noi di as text"# > summaryqc ................................ input data "as result "`input'"
 	count
 	global summaryqc_Nin `r(N)'
 	noi di as text"# > summaryqc .............. markers in the input dataset "as result ${summaryqc_Nin}
-	capture confirm file `ref'_bim.dta 
-	if !_rc {
-		}
-	else {
-		noi di as text"# > summaryqc .................. create reference file "as result"`ref'_bim.dta"
-		bim2dta, bim(`ref')
-		}
-	capture confirm file `ref'_frq.dta 
-	if !_rc {
-		}
-	else {
-		noi di as text"# > summaryqc .................. create reference file "as result"`ref'_frq.dta"
-		bim2frq, bim(`ref')
-		}
+	file write myfile "# > summaryqc .............. markers in the input dataset ${summaryqc_Nin}" _n 
 	}
 qui { // 2 - perform quality control
 	qui { // drop if p out-of-bounds
@@ -47,6 +38,7 @@ qui { // 2 - perform quality control
 		global summaryqc_oobSNP `r(max)'
 		drop a
 		noi di as text"# > summaryqc ....... markers with p-values out-of-bounds "as result ${summaryqc_oobSNP} 
+		file write myfile "# > summaryqc ....... markers with p-values out-of-bounds ${summaryqc_oobSNP}" _n 
 		}
 	qui { // duplicates drop
 		count 
@@ -59,6 +51,7 @@ qui { // 2 - perform quality control
 		global summaryqc_dupSNP `r(max)'
 		drop a
 		noi di as text"# > summaryqc ................................ duplicates "as result ${summaryqc_dupSNP} 
+		file write myfile "# > summaryqc ................................ duplicates ${summaryqc_dupSNP}" _n
 		}
 	qui { // qc-by-info score
 		capture confirm numeric var info
@@ -75,10 +68,12 @@ qui { // 2 - perform quality control
 			global summaryqc_infoSNP `r(max)'
 			drop a
 			noi di as text"# > summaryqc .......... info score out-of-bounds or < .8 "as result ${summaryqc_infoSNP} 
+			file write myfile "# > summaryqc .......... info score out-of-bounds or < .8 ${summaryqc_infoSNP}" _n
 			}
 		else {
 			global summaryqc_infoSNP "info score not present"
 			noi di as text"# > summaryqc .......... info score out-of-bounds or < .8 "as result "${summaryqc_infoSNP}"
+			file write myfile "# > summaryqc .......... info score out-of-bounds or < .8 ${summaryqc_infoSNP}" _n
 			}
 		}
 	qui { // qc-by-direction
@@ -97,10 +92,14 @@ qui { // 2 - perform quality control
 			global summaryqc_directionSNP `r(max)'
 			drop a
 			noi di as text"# > summaryqc ... data missing from > 2 study (direction) "as result ${summaryqc_directionSNP} 
+			file write myfile "# > summaryqc ... data missing from > 2 study (direction) ${summaryqc_directionSNP}" _n
+
 			}
 		else {
 			global summaryqc_directionSNP "direction variable not present"
 			noi di as text"# > summaryqc ... data missing from > 2 study (direction) "as result "${summaryqc_directionSNP}"
+			file write myfile "# > summaryqc ... data missing from > 2 study (direction) ${summaryqc_directionSNP}" _n
+
 			}
 		}	
 	}
@@ -108,11 +107,12 @@ qui { // 3 - save as
 	count
 	global summaryqc_Nout `r(N)'
 	noi di as text"# > summaryqc .................. markers in final dataset "as result ${summaryqc_Nout}
+	file write myfile "# > summaryqc .................. markers in final dataset ${summaryqc_Nout}}" _n
 	noi di as text"# > summaryqc ............................ saving data to "as result "`out'-summaryqc.dta"
 	save `out'-summaryqc.dta, replace
+	file close myfile
 	}
-qui { // 4 - report on processing
-	qui { // plot manhattan
+qui { // 4 - plot manhattan
 		gen logp = round(-log10(p),1) + 2
 		sum logp
 		graphmanhattan, chr(chr) bp(bp) p(p) max(`r(max)')
@@ -123,17 +123,10 @@ qui { // 4 - report on processing
 		window manage close graph
 		erase tmpManhattan.gph
 		}
-	qui { // create - log file
-		global summaryqc_input  `input'
-		global summaryqc_out `out'
-		global summaryqc_ref `ref'
-		_sub_summaryqc_meta
-		noi di as text"# > summaryqc .......................... reporting to log "as result "`out'-summaryqc.log"
-		}
-	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+
 end;
 
 	
