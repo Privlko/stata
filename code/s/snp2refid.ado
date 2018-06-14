@@ -59,6 +59,7 @@ qui { // 3 - update identifier
 	egen x = seq(), by(loc_name)
 	drop if x != 1
 	drop x
+	noi di as text""
 	noi di as text"# > snp2refid .................... merging with reference "as result"`ref'_loc_name.dta"
 	merge 1:1 loc_name using `ref'_loc_name.dta
 	keep if _m == 3
