@@ -30,7 +30,7 @@ qui { // 1 - introduction
 	noi checkfile, file(`ref'.bim)
 	checkfile, file(${plink})
 	}
-qui { // 2 - check _bim.dta are created / create
+qui { // 2 - check _loc_name (_bim.dta) are created / create
 	preserve
 	capture confirm file `ref'_loc_name.dta 
 	if !_rc {
@@ -39,7 +39,7 @@ qui { // 2 - check _bim.dta are created / create
 		noi di as text"# > snp2refid ..................... create reference file "as result"`ref'_loc_name.dta "
 		capture confirm file `ref'_loc_name.dta 
 		if !_rc {
-				use `ref'_bim.dta, clear
+			use `ref'_bim.dta, clear
 			keep snp loc_name
 			save `ref'_loc_name.dta, replace
 			}
@@ -55,7 +55,6 @@ qui { // 2 - check _bim.dta are created / create
 qui { // 3 - update identifier 	
 	drop snp
 	for var a1 a2: replace X = strupper(X)
-	use tmp_snp2refid ,clear
 	noi checkloc_name
 	egen x = seq(), by(loc_name)
 	drop if x != 1
