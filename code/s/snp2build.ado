@@ -19,20 +19,25 @@ noi di as text"# snp2build"
 noi di as text"#########################################################################"
 noi di as text"# Started: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+preserve
 qui { // 1 - introduction
 	noi di as text"# > snp2build .............. checking build against (ref) "as result"`ref'"
 	noi checkfile, file(`ref')
 	}
-qui { // 2 - measure overlap
+qui { // 2 - limit sample size
+	drop if _n > 50000
+	}
+qui { // 3 - measure overlap
 	keep snp chr bp
-	qui { // merge against reference 
+	}
+qui { // 4 - merge against reference 
 		duplicates drop snp, force
 		merge 1:1 snp using `ref'
 		keep if _m == 3
 		tostring bp, replace
 		compress
 		}
-	qui { // measure overlap with reference
+qui { // 5 - measure overlap with reference
 		foreach i in 17 18 19 { 
 			gen hg`i'_0 = .
 			gen hg`i'_1 = .
@@ -63,11 +68,11 @@ qui { // 2 - measure overlap
 		replace MostLikely = "++" if p > 0.9 & MostLikely == ""
 		replace MostLikely = "+" if p > 0.8 & MostLikely == ""
 		}
-	qui { // report findings 
+qui { // 6 - report findings 
 		noi di as text"# > snp2build ................. build overlap reported in " as result"snp2build.report"
 		outsheet using snp2build.report, replace noq	
 		graph hbar percentMatched , over(build,sort(percentMatched) lab(labs(large))) title("Percentage Match Genome Build") yline(.9, lcol(red))  
-		graph export snp2build.png, as(png) height(1000) width(4000) replace
+		graph export snp2build.png, as(png) height(300) width(1000) replace
 		window manage close graph
 		noi di as text"# > snp2build .................. build overlap plotted to " as result"snp2build.png"
 		keep in 1 
@@ -78,9 +83,11 @@ qui { // 2 - measure overlap
 		do _tmp.do
 		noi di as text"# > snp2build ....................... build identified as " as result"${snp2build}"
 		erase _tmp.do
+		erase snp2build.png
+		erase snp2build.report
 		}
-	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
+restore
 end;	
