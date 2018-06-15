@@ -58,6 +58,7 @@ qui { // 3 - update identifier
 	drop _m 
 	count
 	noi di as text"# > snp2refbuild ..... number of SNPs in file post rename "as result "`r(N)'"
+	for var chr bp: destring X, replace
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
