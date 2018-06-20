@@ -98,7 +98,7 @@ qui { // 3 - plot manhattan
 		drop logp
 		graph use tmpManhattan.gph
 		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.png"
-		graph export `out'-summaryqc-manhattan.png, as(png) height(1000) width(3000) replace
+		graph export `out'-summaryqc-manhattan.svg, as(svg) height(1000) width(3000) replace
 		window manage close graph
 		erase tmpManhattan.gph
 		}
