@@ -97,10 +97,12 @@ qui { // 3 - plot manhattan
 		graphmanhattan, chr(chr) bp(bp) p(p) max(`r(max)')
 		drop logp
 		graph use tmpManhattan.gph
-		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.svg"
-		graph export `out'-summaryqc-manhattan.svg, height(1000) width(3000) replace
+		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.eps"
+		graph export `out'-summaryqc-manhattan.eps, replace
+		!convert `out'-summaryqc-manhattan.eps `out'-summaryqc-manhattan.png -resize 1000x3000
 		window manage close graph
 		erase tmpManhattan.gph
+		erase `out'-summaryqc-manhattan.eps
 		}
 qui { // 4 - log and save as
 	count

@@ -73,6 +73,7 @@ qui { // 6 - report findings
 		outsheet using snp2build.report, replace noq	
 		graph hbar percentMatched , over(build,sort(percentMatched) lab(labs(large))) title("Percentage Match Genome Build") yline(.9, lcol(red))  
 		graph export snp2build.eps, as(eps) replace
+		!convert snp2build.eps snp2build.png
 		window manage close graph
 		noi di as text"# > snp2build .................. build overlap plotted to " as result"snp2build.png"
 		keep in 1 
@@ -84,6 +85,7 @@ qui { // 6 - report findings
 		noi di as text"# > snp2build ....................... build identified as " as result"${snp2build}"
 		erase _tmp.do
 		erase snp2build.eps
+		erase snp2build.png
 		erase snp2build.report
 		}
 noi di as text"#########################################################################"
