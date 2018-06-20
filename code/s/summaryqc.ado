@@ -98,11 +98,11 @@ qui { // 3 - plot manhattan
 		drop logp
 		graph use tmpManhattan.gph
 		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.eps"
-		graph export `out'-summaryqc-manhattan.eps, replace
-		!convert `out'-summaryqc-manhattan.eps `out'-summaryqc-manhattan.png -resize 1000x3000
+		graph export summaryqc-manhattan.eps, replace
+		!convert     -density 1000 summaryqc-manhattan.eps -resize 2000x1000! `out'-summaryqc-manhattan.png
 		window manage close graph
 		erase tmpManhattan.gph
-		erase `out'-summaryqc-manhattan.eps
+		erase summaryqc-manhattan.eps
 		}
 qui { // 4 - log and save as
 	count
