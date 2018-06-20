@@ -83,7 +83,7 @@ qui { // 6 - report findings
 		do _tmp.do
 		noi di as text"# > snp2build ....................... build identified as " as result"${snp2build}"
 		erase _tmp.do
-		erase snp2build.svg
+		erase snp2build.pdf
 		erase snp2build.report
 		}
 noi di as text"#########################################################################"
