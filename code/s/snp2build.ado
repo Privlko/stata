@@ -72,7 +72,7 @@ qui { // 6 - report findings
 		noi di as text"# > snp2build ................. build overlap reported in " as result"snp2build.report"
 		outsheet using snp2build.report, replace noq	
 		graph hbar percentMatched , over(build,sort(percentMatched) lab(labs(large))) title("Percentage Match Genome Build") yline(.9, lcol(red))  
-		graph export snp2build.svg, height(300) width(1000) replace
+		graph export snp2build.pdf, height(300) width(1000) replace
 		window manage close graph
 		noi di as text"# > snp2build .................. build overlap plotted to " as result"snp2build.png"
 		keep in 1 
