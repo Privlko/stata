@@ -100,7 +100,6 @@ qui { // 3 - plot manhattan
 		noi di as text"# > summaryqc .............. exporting manhattan graph to "as result "`out'-summaryqc-manhattan.eps"
 		graph export summaryqc-manhattan.eps, replace
 		!convert     -density 1000 summaryqc-manhattan.eps -resize 2000x1000! `out'-summaryqc-manhattan.png
-		window manage close graph
 		erase tmpManhattan.gph
 		erase summaryqc-manhattan.eps
 		}
