@@ -217,7 +217,20 @@ qui { // 8 - plot graph
 		graph export temp-graphlocus.png, as(png) height(1000) width(3000) replace
 		}
 qui { // 8 - clean 
-	!del graphgene_pre-plot.dta graphlocus* recomb_pre-plot.dta
+	erase graphgene_pre-plot.dta 
+	erase temp-graphgene.gph
+	erase temp-graphlocus.gph
+	erase graphgene_coordinates.dta
+	erase graphlocus_assoc_r2_recombination_pre-graph.dta
+	erase graphlocus_assoc_r2.dta
+	erase graphgene_dummy.dta
+	erase graphlocus_ld.log
+	erase graphlocus_ld.ld
+	erase graphlocus_ld.ld.tabbed
+	erase graphlocus_ld.nosex
+	erase graphlocus_assoc.extract
+	erase graphlocus_assoc.dta
+	erase recomb_pre-plot.dta
 	}
 restore
 noi di as text"#########################################################################"
