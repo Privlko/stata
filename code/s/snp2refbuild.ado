@@ -52,17 +52,19 @@ qui { // 2 - check _min (_bim.dta) are created / create
 	}
 qui { // 3 - update identifier 	
 	capture confirm variable chr {
-	if !_rc {
-		drop chr
-		}
-	else {
+		if !_rc {
+			drop chr
+			}
+		else {
+			}
 		}
 	capture confirm variable bp {
-	if !_rc {
-		drop bp
+		if !_rc {
+			drop bp
+			}
+		else {
+			}	
 		}
-	else {
-		}	
 	noi di as text"# > snp2refbuild ................. merging with reference "as result"`ref'_min.dta"
 	merge 1:1 snp using `ref'_min.dta
 	keep if _m == 3
