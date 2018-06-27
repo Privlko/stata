@@ -33,11 +33,10 @@ qui { // 3 - convert summaryqc to sumstats
 	missings dropobs, force
 	for var  Z P N : tostring X, replace
 	outsheet SNP A1 A2 Z P N     using tempfile-summaryqc.in, noq replace
-	!python "${temp_munge}" --sumstats tempfile-summaryqc.in --out `summaryqc'-summaryqc_hw3 --merge-alleles `w_hm3'w_hm3.snplist
+	!python "${temp_munge}" --sumstats tempfile-summaryqc.in --out `summaryqc'-summaryqc-hw3 --merge-alleles `w_hm3'w_hm3.snplist
 	erase tempfile-summaryqc.in
-	noi checkfile, file(`summaryqc'-summaryqc_hw3.sumstats.gz)
+	noi checkfile, file(`summaryqc'-summaryqc-hw3.sumstats.gz)
 	}
-
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
