@@ -26,6 +26,7 @@ qui { // 1 - introduction
 	}
 qui { // 2 - counting bim observations
 	!$wc -l `bim'.bim  > bim.count
+	!wc -l `bim'.bim  > bim.count
 	import delim using bim.count, clear varnames(nonames)
 	erase bim.count
 	split v1,p(" ")
@@ -37,6 +38,7 @@ qui { // 2 - counting bim observations
 qui { // 3 - counting fam observations
 	qui di as text"# > importing *.fam file"
 	!$wc -l `bim'.fam  > fam.count
+	!wc -l `bim'.fam  > fam.count
 	import delim using fam.count, clear varnames(nonames)
 	erase fam.count
 	split v1,p(" ")

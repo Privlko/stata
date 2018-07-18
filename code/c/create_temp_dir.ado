@@ -92,7 +92,6 @@ qui { // 3 - generate folder name
 			replace folderRandom = folderRandom + b[1]
 			drop a b
 			}
-	replace folderRandom  = "`c(pwd)'" + "\" + folderRandom
 	gen a = "global temp_dir  " + folderRandom
 	outsheet a using _x.do, non noq replace
 	do _x.do
@@ -104,7 +103,7 @@ qui { // 4 - create folder
 	cd ${temp_dir}
 	}
 noi di as text"# > create_temp_dir ....................... new directory " as result"`c(pwd)'"
-noi di as text"# > create_temp_dir ...... new directory global stored as " as result"\${temp_dir}"
+noi di as text"# > create_temp_dir ...... new directory global stored as " as result"${temp_dir}"
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
