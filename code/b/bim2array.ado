@@ -88,17 +88,17 @@ qui { // 4 - define most likely and jaccard globals
 	noi di as text"# > bim2array ........................ with jaccard index "as result "${Jaccard}" 
 	}
 qui { // 5 - plot most likely 
-	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
-	erase bim2array.out
-	duplicates drop
-	gsort -j
-	keep if _n <10
-	graph hbar jaccard , over(array,sort(jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) ylabel(0(.1)1) fxsize(200) fysize(100) ///
-			caption("Based on overlap with our reference data the best matched ARRAY is ${bim2array}" ///
-							"Jaccard Index of  ${bim2array} = ${Jaccard}")
-	noi di as text"# > bim2array .................. build overlap plotted to "as result"`bim'.arraymatch.png"
-	graph export  `bim'.arraymatch.png, height(1000) width(4000) as(png) replace 
-	window manage close graph
+	*import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
+	*erase bim2array.out
+	*duplicates drop
+	*gsort -j
+	*keep if _n <10
+	*graph hbar jaccard , over(array,sort(jaccard) lab(labs(large))) title("Jaccard Index") yline(.9, lcol(red)) ylabel(0(.1)1) fxsize(200) fysize(100) ///
+	*		caption("Based on overlap with our reference data the best matched ARRAY is ${bim2array}" ///
+	*						"Jaccard Index of  ${bim2array} = ${Jaccard}")
+	*noi di as text"# > bim2array .................. build overlap plotted to "as result"`bim'.arraymatch.png"
+	*graph export  `bim'.arraymatch.png, height(1000) width(4000) as(png) replace 
+	*window manage close graph
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

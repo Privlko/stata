@@ -74,9 +74,9 @@ qui { // 2 - measure overlap
 	qui { // report findings 
 		noi di as text"# > bim2build ................. build overlap reported in " as result"`bim'.bim2build"
 		outsheet using `bim'.bim2build, replace noq	
-		graph hbar percentMatched , over(build,sort(percentMatched) lab(labs(large))) title("Percentage Match Genome Build") yline(.9, lcol(red))  
-		graph export `bim'.bim2build.png, as(png) height(1000) width(4000) replace
-		window manage close graph
+		*graph hbar percentMatched , over(build,sort(percentMatched) lab(labs(large))) title("Percentage Match Genome Build") yline(.9, lcol(red))  
+		*graph export `bim'.bim2build.png, as(png) height(1000) width(4000) replace
+		*window manage close graph
 		noi di as text"# > bim2build .................. build overlap plotted to " as result"`bim'.bim2build.png"
 		keep in 1 
 		tostring per, replace force

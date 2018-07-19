@@ -470,13 +470,13 @@ qui { // 15 - creating final reports
 			global sub_mod_post ${output_folder}/${output}
 			foreach i in FRQ HET HWE IMISS LMISS KIN0_1 KIN0_2{
 				noi checkfile, file(${sub_mod_pre}_`i'.gph)
-				noi checkfile, file(${output}_`i'.gph)
+				noi checkfile, file(${sub_mod_post}_`i'.gph)
 				graph combine ${sub_mod_pre}_`i'.gph,  title("pre-quality-control")  nodraw saving(x_`i'.gph, replace) 
-				graph combine ${output}_`i'.gph, title("post-quality-control") nodraw saving(y_`i'.gph, replace)
+				graph combine ${sub_mod_post}_`i'.gph, title("post-quality-control") nodraw saving(y_`i'.gph, replace)
 				graph combine x_`i'.gph y_`i'.gph, xcommon caption("CREATED: $S_DATE $S_TIME" "INPUT: ${input_folder}/${input}" "OUTPUT: ${output}", size(tiny)) col(1) 
 				graph export ${output}-`i'.png, as(png) replace width(4000) height(2000)
 				window manage close graph
-				!rm x_`i'* y_`i'* ${sub_mod_pre}_`i'.gph ${output}_`i'.gph
+				!rm x_`i'* y_`i'* ${sub_mod_post_`i'.gph ${sub_mod_pre}_`i'.gph 
 				}
 			}	
 		}
@@ -505,8 +505,10 @@ qui { // 15 - creating final reports
 		do tempfile.do
 		erase tempfile.do
 		}
-	noi di as text"# > genotypeqc ............................ reporting to "as result"${output_folder}/${output}-quality-control-report.docx"
-	_sub_genotypeqc_report
+	noi di as text"# > genotypeqc ............................ reporting to "as result"${output}-quality-control-report.docx"
+	qui { // write meta-docx
+		do $report
+		}
 	noi di as text"# > genotypeqc ............................ reporting to "as result"${output_folder}/${output}.meta-log"
 	qui { // write meta log
 		file open myfile using "${output_folder}/${output}.genotypeqc-meta.log", write replace
@@ -541,12 +543,13 @@ qui { // 15 - creating final reports
 		file write myfile "#########################################################################" _n
 		file close myfile	
 		}
+	!mv ${output}-quality-control-report.docx ${output_folder}/${output}-quality-control-report.docx
 	}
 qui { // 16 - rename and clean
-	!rm ${output}.bim2build.png
-	!rm ${output}.bim2build
 	cd ..
 	!rm -r  "$temp_dir"
+	cd ../${output}
+	!rm *.gph *bim2build*
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

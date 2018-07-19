@@ -58,7 +58,7 @@ qui { // 5 - processing eigenval file to `bim'_eigenval.dta
 	save `bim'_eigenval.dta,replace
 	}
 qui { // 6 - cleaning temp files
-	!del bim2eigenvec.* bim2ldexclude.exclude
+	!rm bim2eigenvec.* bim2ldexclude.exclude
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

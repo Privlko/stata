@@ -159,7 +159,6 @@ qui { // 5 - plot graphs
 		|| scatter y x if POP == " "                   , msymbol(none)                   ///
 		legend(off) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank)) 
 		graph save legend.gph, replace
-		window manage close graph
 		}
 	qui { // pca - all
 		use bim2hapmap_population.dta, clear
@@ -188,8 +187,11 @@ qui { // 5 - plot graphs
 			}
 		graph combine bim2hapmap_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
 		noi di as text"# > bim2hapmap .......... graph (all ancestries) saved to "as result"bim2hapmap_pca.png"
-		graph export  bim2hapmap_pca.png, height(2500) width(8000) replace
-		window manage close graph
+	        *graph export  bim2hapmap_pca.png, height(2500) width(8000) replace
+		*window manage close graph
+		graph export  bim2hapmap_pca.eps, replace
+		!convert     -density 1000 bim2hapmap_pca.eps -resize 8000x2500! bim2hapmap_pca.png 
+		!rm bim2hapmap_pca.eps
 		}
 	qui { // pca -like  
 		foreach i of num 1/3{
@@ -221,8 +223,11 @@ qui { // 5 - plot graphs
 			}
 		graph combine bim2hapmap_eigenval-scree.gph   _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
 		noi di as text"# > bim2hapmap ..... graph (selected ancestries) saved to "as result"bim2hapmap_pca-${like}-like.png"
-		graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
+	        graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
 		window manage close graph
+	        *graph export  bim2hapmap_pca-${like}-like.eps, replace
+		*!convert     -density 1000 bim2hapmap_pca-${like}-like.eps -resize 2500x8000! bim2hapmap_pca-${like}-like.png
+		*!rm bim2hapmap_pca-${like}-like.eps
 		} 
 	}
 qui { // 6 - clean files
@@ -231,9 +236,9 @@ qui { // 6 - clean files
 			erase _cpc`i'pc`j'.gph
 			}
 		}
-	!del bim2hapmap_combined*
-	!del bim2hapmap_hapmap*
-	!del bim2hapmap_test*
+	!rm bim2hapmap_combined*
+	!rm bim2hapmap_hapmap*
+	!rm bim2hapmap_test*
 	erase bim2hapmap_eigenval-scree.gph
 	erase bim2hapmap_population.dta
 	erase _test.flip
