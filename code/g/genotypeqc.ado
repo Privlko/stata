@@ -452,8 +452,8 @@ qui { // 15 - creating final reports
 		graph save _1.gph, replace
 		window manage close graph
 		bim2dta,bim(${output_folder}/${output})
-		count
 		destring chr, replace
+		count
 		hist chr,  xlabel(1(1)25) xtitle("Chromosome") caption("count based on `r(N)' SNPs") discrete freq ylabel(#4,format(%9.0g))
 		graph save _2.gph, replace
 		window manage close graph

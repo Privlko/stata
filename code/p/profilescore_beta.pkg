@@ -1,6 +1,6 @@
 d profilescore_beta - polygenic-risk-profile-score-generator (beta)
 d Richard Anney, Cardiff University
-d Distribution-Date: 11apr2018
+d Distribution-Date: 20jul2018
 f profilescore_beta.ado
 f ../c/checkfile.ado
 f ../c/checktabbed.ado
