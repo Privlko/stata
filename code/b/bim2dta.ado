@@ -25,6 +25,12 @@ qui { // 1 - introduction
 	}
 qui { // 2 - importing bim file
 	import delim  using `bim'.bim, clear
+	capture confirm v2
+	if r(N) == 0 { 
+		rename v1 v
+		split v,p(" ")
+		drop v
+		}
 	rename (v1 v2 v4 v5 v6) (chr snp bp a1 a2)
 	recodegenotype , a1(a1) a2(a2)
 	rename _gt_tmp gt
