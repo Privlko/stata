@@ -53,12 +53,12 @@ qui { // 3 - merge frq files
 	drop _m
 	}
 qui { // 4 - drop incompatible genotypes and fix strand
-		recodestrand, ref_a1(ref_a1) ref_a2(ref_a2) alt_a1(in_a1) alt_a2(in_a2) 
-		replace in_a1 = _tmpb1 if _tmpflip == 1
-		replace in_a2 = _tmpb2 if _tmpflip == 1
-		keep snp in_a1 in_maf ref_a1 ref_maf
-		replace in_maf = 1-in_maf if in_a1 != ref_a1
-		}
+	recodestrand, ref_a1(ref_a1) ref_a2(ref_a2) alt_a1(in_a1) alt_a2(in_a2) 
+	replace in_a1 = _tmpb1 if _tmpflip == 1
+	replace in_a2 = _tmpb2 if _tmpflip == 1
+	keep snp in_a1 in_maf ref_a1 ref_maf
+	replace in_maf = 1-in_maf if in_a1 != ref_a1
+	}
 qui { // 5 - plot comparison
 	global format mlc(black) mfc(blue) mlw(vvthin) m(o) xtitle("allele-frequency-array") ytitle("allele-frequency-1000-genomes") ylabel(0(.1)1) xlabel(0(.1)1)
 	tw scatter ref_maf in_maf , $format saving(bim2frq_compare-1.gph,replace) nodraw
@@ -66,14 +66,15 @@ qui { // 5 - plot comparison
 	replace drop = 1 if in_maf > ref_maf + .1 
 	replace drop = 1 if in_maf < ref_maf - .1  
 	tw scatter ref_maf in_maf if drop == . , $format saving(bim2frq_compare-2.gph,replace) nodraw
-	graph combine bim2frq_compare-1.gph bim2frq_compare-2.gph, ycommon 
-	noi di as text"# > bim2frq_compare ............... comparison plotted to "as result"bim2frq_compare.png"
-	graph export  bim2frq_compare.png, as(png) height(500) width(2000) replace
-	window manage close graph
-	noi di as text"# > bim2frq_compare ....... divergent markers reported in "as result"bim2frq_compare.exclude"
+	graph combine bim2frq_compare-1.gph bim2frq_compare-2.gph, ycommon nodraw
+	graph save bim2frq_compare.gph, replace
 	outsheet snp if drop == 1 using bim2frq_compare.exclude, non noq replace
-	erase bim2frq_compare-1.gph
-	erase bim2frq_compare-2.gph
+	*noi di as text"# > bim2frq_compare ............... comparison plotted to "as result"bim2frq_compare.png"
+	*graph export  bim2frq_compare.png, as(png) height(500) width(2000) replace
+	*window manage close graph
+	*noi di as text"# > bim2frq_compare ....... divergent markers reported in "as result"bim2frq_compare.exclude"
+*	erase bim2frq_compare-1.gph
+*	erase bim2frq_compare-2.gph
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
