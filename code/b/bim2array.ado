@@ -26,6 +26,14 @@ qui { // 1 - introduction
 	}
 qui { // 2 - import snps from bim file
 	import delim using `bim'.bim, clear
+	capture confirm variable v2
+	if !_rc { 
+		}
+	else {
+		rename v1 v
+		split v,p(" ")
+		drop v
+		}
 	keep v2
 	tostring v2, replace
 	rename v2 snp
@@ -35,7 +43,7 @@ qui { // 3 - define reference panel
 	clear
 	set obs 1
 	gen a = "array jaccard-index"
-	outsheet a using bim2array.out, non noq replace
+	outsheet a using `bim'.array, non noq replace
 	files2dta, dir(`dir')
 	erase _files2dta.dta
 	drop if file == "_files2dta.dta"
@@ -65,27 +73,28 @@ qui { // 3 - define reference panel
 		keep array jaccard
 		sum jaccard
 		di as text"# > bim2array .................... jaccard index = " as result trim("`: display %5.4f r(min)'") as text " for array " as result "${bim2array`num'}" 
-		filei + "${bim2array`num'} `r(min)'" bim2array.out
+		filei + "${bim2array`num'} `r(min)'" `bim'.array
 		}
 	erase bim2array.dta
 	}
-qui { // 4 - define most likely and jaccard globals
-	import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)
+qui { // 4 - display output
+	import delim using "`bim'.array", clear delim(" ") varnames(1) case(preserve)
 	duplicates drop
 	gsort -j
-	gen a1 = "global bim2array " + array in 1
+	gen a1 = "global bim2array_array " + array in 1
 	gen str6 jaccard2 = string(jaccard, "%5.4f") 
-	gen a2 = "global Jaccard " + jaccard2 in 1 
+	gen a2 = "global bim2array_jaccard " + jaccard2 in 1 
 	keep a1 a2
 	gen n = 1
 	keep in 1
 	reshape long a, j(x) i(n)
 	keep a
-	outsheet a using _tmp.do, non noq replace
-	do _tmp.do
-	erase _tmp.do
-	noi di as text"# > bim2array ......................... most likely array "as result "${bim2array}" 
-	noi di as text"# > bim2array ........................ with jaccard index "as result "${Jaccard}" 
+	outsheet a using bim2array_array_tmp.do, non noq replace
+	do bim2array_array_tmp.do
+	erase bim2array_array_tmp.do
+	noi di as text"# > bim2array ...................................... from "as result "`bim'.array" 
+	noi di as text"# > bim2array ......................... most likely array "as result "${bim2array_array}" 
+	noi di as text"# > bim2array ........................ with jaccard index "as result "${bim2array_jaccard}" 
 	}
 qui { // 5 - plot most likely 
 	*import delim using "bim2array.out", clear delim(" ") varnames(1) case(preserve)

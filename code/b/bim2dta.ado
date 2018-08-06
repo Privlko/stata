@@ -25,8 +25,10 @@ qui { // 1 - introduction
 	}
 qui { // 2 - importing bim file
 	import delim  using `bim'.bim, clear
-	capture confirm v2
-	if r(N) == 0 { 
+		capture confirm variable v2
+	if !_rc { 
+		}
+	else {
 		rename v1 v
 		split v,p(" ")
 		drop v
