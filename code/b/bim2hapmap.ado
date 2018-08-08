@@ -35,6 +35,14 @@ qui { // 1 - introduction
 	noi checkfile, file(`hapmap'.population)
 	noi checkfile, file(`aims')
 	noi checkfile, file(${plink})
+	clear
+	set obs 1
+	gen a = "global like "
+	gen b = `""`like'""'
+	replace b = subinstr(b," ","+",.)
+	outsheet a b using _temp.do, non noq replace
+	do _temp.do
+	erase _temp.do	
 	}
 qui { // 2 - limit genotypes to aims and merge
 	!$plink --bfile `bim'    --extract `aims' --make-founders --make-bed --out bim2hapmap_test
@@ -67,7 +75,7 @@ qui { // 4 - define ancestries
 	count if pop == "TEST"
 	noi di as text"# > bim2hapmap ............. test individuals in analysis "as result"`r(N)'"  
 	gen like = .
-	foreach i in `like'  {
+	foreach i in `like' {
 		replace like = 1 if pop =="`i'"
 		}
 	foreach i of num 1/3 {
@@ -86,16 +94,8 @@ qui { // 4 - define ancestries
 	replace pop = "nr" if pop == "TEST" & nr1 == 1 & nr2 == 1 & nr3 == 1
 	count if pop == "nr"
 	noi di as text"# > bim2hapmap ...................... ancestry definition "as result "`like'"  
-	noi di as text"# > bim2hapmap ....  individuals defined as like ancestry "as result "`r(N)'"  
-	gen a = "`like'"
-	replace  a = subinstr(a, " ", "_",.)
-	replace  a = subinstr(a, " ", "_",.)
-	replace  a = subinstr(a, " ", "_",.)
-	replace  a = subinstr(a, " ", "_",.)
-	replace a = "global like " + a
-	outsheet a in 1 using _temp_.do, non noq replace
-	do _temp_.do
-	erase _temp_.do
+	global bim2hapmap_nlike `r(N)' 
+	noi di as text"# > bim2hapmap ....  individuals defined as like ancestry "as result "${bim2hapmap_nlike}"  
 	noi di as text"# > bim2hapmap ................................. saved to "as result"bim2hapmap_${like}-like.keep"
 	outsheet fid iid if pop == "nr" using bim2hapmap_${like}-like.keep, non noq replace
 	save bim2hapmap_population.dta, replace
@@ -157,8 +157,7 @@ qui { // 5 - plot graphs
 		|| scatter y x if POP == "CHD"                 , $format $chd  ///
 		|| scatter y x if POP == "JPT"                 , $format $jpt  ///
 		|| scatter y x if POP == " "                   , msymbol(none)                   ///
-		legend(off) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank)) 
-		graph save legend.gph, replace
+		legend(off) ylab("") xlab("") ytitle("") xtitle("") yscale(off) xscale(off) plotregion(lpattern(blank)) saving(legend.gph, replace) nodraw
 		}
 	qui { // pca - all
 		use bim2hapmap_population.dta, clear
@@ -185,13 +184,8 @@ qui { // 5 - plot graphs
 				xline(${pc`i'min}, lw(.1) lc(black) lp(solid)) nodraw
 				}
 			}
-		graph combine bim2hapmap_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
-		noi di as text"# > bim2hapmap .......... graph (all ancestries) saved to "as result"bim2hapmap_pca.png"
-	        graph export  bim2hapmap_pca.png, height(2500) width(8000) replace
-		window manage close graph
-		*graph export  bim2hapmap_pca.eps, replace
-		*!convert     -density 1000 bim2hapmap_pca.eps -resize 8000x2500! bim2hapmap_pca.png 
-		*!rm bim2hapmap_pca.eps
+		noi di as text"# > bim2hapmap .......... graph (all ancestries) saved to "as result"bim2hapmap_pca.gph"
+		graph combine bim2hapmap_eigenval-scree.gph  _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted") nodraw saving(bim2hapmap_pca.gph, replace)
 		}
 	qui { // pca -like  
 		foreach i of num 1/3{
@@ -221,29 +215,35 @@ qui { // 5 - plot graphs
 				xline(${pc`i'min}, lsty(refline) lw(.1) lc(black) lp(solid)) nodraw
 				}
 			}
-		graph combine bim2hapmap_eigenval-scree.gph   _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted")
-		noi di as text"# > bim2hapmap ..... graph (selected ancestries) saved to "as result"bim2hapmap_pca-${like}-like.png"
-	        graph export  bim2hapmap_pca-${like}-like.png, height(2500) width(8000) replace
-		window manage close graph
-	        *graph export  bim2hapmap_pca-${like}-like.eps, replace
-		*!convert     -density 1000 bim2hapmap_pca-${like}-like.eps -resize 2500x8000! bim2hapmap_pca-${like}-like.png
-		*!rm bim2hapmap_pca-${like}-like.eps
+		noi di as text"# > bim2hapmap ..... graph (selected ancestries) saved to "as result"bim2hapmap_pca-${like}-like.gph"
+		graph combine bim2hapmap_eigenval-scree.gph   _cpc1pc2.gph _cpc1pc3.gph _cpc2pc3.gph legend.gph , col(5) title("All HapMap Ancestries Plotted") nodraw saving(bim2hapmap_pca-${like}-like.gph, replace)
 		} 
 	}
 qui { // 6 - clean files
+	files2dta, dir(`c(pwd)')
+	split file, p("bim2hapmap")
+	gen drop = .
+	replace drop = 1 if file1 == ""
+	keep file drop
 	foreach i of num 1/3 {
 		foreach j of num 1/3 {
-			erase _cpc`i'pc`j'.gph
+			replace drop = 1 if file == "_cpc`i'pc`j'.gph"
 			}
 		}
-	!rm bim2hapmap_combined*
-	!rm bim2hapmap_hapmap*
-	!rm bim2hapmap_test*
-	erase bim2hapmap_eigenval-scree.gph
-	erase bim2hapmap_population.dta
-	erase _test.flip
-	erase legend.gph
-	erase overlap.extract
+	replace drop = 1 if file == "_test.flip"
+	replace drop = 1 if file == "overlap.extract"
+	replace drop = 1 if file == "legend.gph"
+	replace drop = 1 if file == "_files2dta.dta"
+	replace drop = . if file == "bim2hapmap_pca.gph"
+	replace drop = . if file == "bim2hapmap_pca-${like}-like.gph"
+	replace drop = . if file == "bim2hapmap_${like}-like.keep"
+	split file, p("bim2ld")
+	replace drop = 1 if file1 == ""
+	gen a = ""
+	replace a = "erase " + file if drop == 1
+	outsheet a using tmp.do, non noq replace
+	do tmp.do
+	erase tmp.do
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"

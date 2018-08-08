@@ -47,9 +47,15 @@ qui { // 2 - check _frq.dta are created / create
 qui { // 3 - merge frq files
 	use `bim'_frq.dta, clear
 	for var a1 a2 maf gt: rename X in_X
+	drop if in_a1 == ""
+	drop if in_a2 == ""
+	destring in_maf, replace force
 	merge 1:1 snp using `ref'_frq.dta
 	keep if _m == 3
 	for var a1 a2 maf gt: rename X ref_X
+	drop if ref_a1 == ""
+	drop if ref_a2 == ""
+	destring ref_maf, replace force
 	drop _m
 	}
 qui { // 4 - drop incompatible genotypes and fix strand
@@ -60,11 +66,14 @@ qui { // 4 - drop incompatible genotypes and fix strand
 	replace in_maf = 1-in_maf if in_a1 != ref_a1
 	}
 qui { // 5 - plot comparison
-	global format mlc(black) mfc(blue) mlw(vvthin) m(o) xtitle("allele-frequency-array") ytitle("allele-frequency-1000-genomes") ylabel(0(.1)1) xlabel(0(.1)1)
+	for var in_maf ref_maf: replace X = round(X,.001)
+	egen x = seq(),by(in_maf ref_maf)
+	drop if x!=1
+	global format mlc(black) mfc(blue) mlw(vvthin) m(o) xtitle("allele-frequency-array") ytitle("allele-frequency-ref") ylabel(0(.1)1) xlabel(0(.1)1)
 	tw scatter ref_maf in_maf , $format saving(bim2frq_compare-1.gph,replace) nodraw
 	gen drop = .
 	replace drop = 1 if in_maf > ref_maf + .1 
-	replace drop = 1 if in_maf < ref_maf - .1  
+	replace drop = 1 if in_maf < ref_maf - .1 
 	tw scatter ref_maf in_maf if drop == . , $format saving(bim2frq_compare-2.gph,replace) nodraw
 	graph combine bim2frq_compare-1.gph bim2frq_compare-2.gph, ycommon nodraw
 	graph save bim2frq_compare.gph, replace

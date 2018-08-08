@@ -26,7 +26,7 @@ noi di as text"#################################################################
 qui { // 1 - introduction
 	noi di as text"# > bim2refid ................. updating marker names for "as result"`bim'"
 	noi checkfile, file(`bim'.bim)
-	    bim2count, bim(`bim')
+	bim2count, bim(`bim')
 	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
 	noi di as text"# > bim2refid ............... updating marker names using "as result"`ref'"
 	noi checkfile, file(`ref'.bim)
@@ -64,11 +64,19 @@ qui { // 3 - update identifier
 	outsheet oldname newname using bim2refid.update-name, non noq replace
 	!$plink --bfile `bim'        --extract bim2refid.extract         --make-bed --out bim2refid-01
 	!$plink --bfile bim2refid-01 --update-name bim2refid.update-name --make-bed --out `bim'-refid
-	!del bim2refid-01.*
 	noi di as text"# > bim2refid ................. updated binaries saved as "as result"`bim'-refid"
 	bim2count, bim(`bim'-refid)
 	noi di as text"# > bim2count .................... number of SNPs in file "as result "${bim2count_snp}"
-	!del bim2ref*
+	}
+qui { // 4 - clean 
+	files2dta, dir(`c(pwd)')
+	split file, p("bim2refid")
+	gen a = ""
+	replace a = "erase " + file if file1 == ""
+	outsheet a if a != "" using tmp.do, non noq replace
+	do tmp.do
+	erase tmp.do
+	erase _files2dta.dta
 	}
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
