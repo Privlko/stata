@@ -1,5 +1,5 @@
 d bim2build -  a command to create check genome build from plink binaries
 d Richard Anney, Cardiff University
-d Distribution-Date: 06dec2017
+d Distribution-Date: 8aug2018
 f bim2build.ado
 f ../c/checkfile.ado

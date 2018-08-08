@@ -1,6 +1,6 @@
 d bim2refid - convert snp/marker name to common reference 
 d Richard Anney, Cardiff University
-d Distribution-Date: 29jan2018
+d Distribution-Date: 8aug2018
 f bim2refid.ado
 f ../b/bim2count.ado
 f ../b/bim2dta.ado
