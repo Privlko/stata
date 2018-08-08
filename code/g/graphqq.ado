@@ -48,18 +48,12 @@ qui { // 2 - calculating observed / expected values
 	replace graphqq_observed  = `max' if graphqq_observed > `max'
 	}
 qui { // 3 - pruning data bins to speed up plotting
-	egen graphqq_bin   = cut(graphqq_observed), at(0(1)`max')
-	gen  graphqq_random = uniform()
-	sort graphqq_random
-	egen graphqq_instance = seq(),by(graphqq_bin)
-	drop if graphqq_instance > 500
-	save _tmp_qqgraph.dta, replace
-
+	for var graphqq_observed graphqq_expected: replace X = round(X,0.01)
+	egen x = seq(),by(graphqq_observed graphqq_expected)
+	drop if x !=1
+	expand 3
 	}
 qui { // 4 - calculate binomal boundaries
-	use _tmp_qqgraph.dta, clear
-	append using _tmp_qqgraph.dta
-	append using _tmp_qqgraph.dta
 	sort graphqq_expected graphqq_n
 	keep graphqq_observed graphqq_expected graphqq_n
 	egen x  = seq(),by(graphqq_n)
@@ -112,7 +106,6 @@ qui { // 5 - plotting to tmpQQ.gph
 	#delimit cr
 	}
 qui { // cleaning up temporary files
-	erase _tmp_qqgraph.dta
 	erase _tmp_qqgraph.do
 	}
 noi di as text"#########################################################################"

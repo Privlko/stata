@@ -65,6 +65,10 @@ qui { // 2 - processing variables
 	noi di as text"# > graphmanhattan ............ min observed p in dataset "as result "`: display %10.4e r(min)'"
 	drop if `chr' > 23		   // drop chromosomes > X (X- XY and other)
 	duplicates drop			 	 // drop any duplicate observations
+	replace observed = round(observed,0.01)
+	replace bp       = round(bp,200000)
+	egen x = seq(),by(chr bp observed)
+	keep if x == 1
 	drop if observed < `min' // apply floor
 	replace observed = `max' if observed > `max' // apply ceiling
 	}
