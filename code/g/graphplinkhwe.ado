@@ -36,7 +36,7 @@ qui { // 2 - processing `hwe'.hwe
 	count
 	global nSNPs `r(N)'
 	noi di as text"# > graphplinkhwe ................ number of SNPs in file "as result `r(N)'
-	count if p <1e-`threshold' 
+	count if p < 1e-`threshold' 
 	global nSNPslow `r(N)'
 	global threshold_tmp `threshold'
 	noi di as text"# > graphplinkhwe ......................... P < threshold "as result "1e-`threshold'"
