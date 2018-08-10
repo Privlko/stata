@@ -177,8 +177,8 @@ qui { // B
 			else {
 				noi di as text"# > genotypeqc .................................. version "as result"${version}"
 				noi di as text"# > genotypeqc ........................... file not found "as result"${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array"
-				bim2array, bim(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}) dir(${bim2array_ref})
-				noi di as text"# > bim2array ...................................... from "as result "${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array" 
+				bim2array, bim(${path2file_folder}${delimit}${path2file_file}) dir(${bim2array_ref})
+				noi di as text"# > bim2array ...................................... from "as result "${path2file_folder}${delimit}${path2file_file}.array" 
 				noi di as text"# > bim2array ......................... most likely array "as result "${bim2array_array}" 
 				noi di as text"# > bim2array ........................ with jaccard index "as result "${bim2array_jaccard}" 
 				}
