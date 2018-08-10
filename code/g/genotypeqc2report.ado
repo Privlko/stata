@@ -40,10 +40,10 @@ qui { // A
 		noi di as text"#########################################################################"
 		}
 	qui { // A4 - define parameters
-		noi di as text"# > genotypeqc2report ............ define parameters from "as result"..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log "
-		noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log)
+		noi di as text"# > genotypeqc2report ............ define parameters from "as result"${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log "
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log)
 		qui { // parse log file and recreate globals
-			import delim using ..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log, clear
+			import delim using ${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log, clear
 			replace v1 = subinstr(v1," +1","+1",.)
 			replace v1 = subinstr(v1,"..","$",.)
 			replace v1 = subinstr(v1,"$.","$",.)
@@ -98,6 +98,7 @@ qui { // A
 			reshape long a , i(obs)
 			keep a
 			drop if a == ""
+			replace a = subinstr(a,"global hwep 1e-","global hwep ",.)
 			outsheet a using tmp.do, non noq replace
 			do tmp.do
 			erase tmp.do
@@ -105,19 +106,24 @@ qui { // A
 		}
 	qui { // A5 - locate files
 		noi di as text"#########################################################################"
-		noi checkfile, file(${path2file_folder}${path2file_file}.bim)
+		noi checkfile, file(${path2file_folder}${delimit}${path2file_file}.bim)
+		noi checkfile, file(${path2file_folder}${delimit}${path2file_file}.bed)
+		noi checkfile, file(${path2file_folder}${delimit}${path2file_file}.fam)
+		noi checkfile, file(${path2file_folder}${delimit}${path2file_file}.array)
 		noi checkfile, file(${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.gph)
 		foreach i in FRQ HET HWE IMISS KIN0_1 KIN0_2 LMISS {
-			noi checkfile, file(${path2file_folder}genotypeqc_data${delimit}temp-preqc_`i'.gph)
+			noi checkfile, file(${path2file_folder}${delimit}genotypeqc_data${delimit}${path2file_file}_`i'.gph)
 			}
-		cd ${path2file_folder}
-		noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}.bim)
-		noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.bim)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.bed)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.fam)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}-${like}-like.keep)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log)
 		foreach i in FRQ HET HWE IMISS KIN0_1 KIN0_2 LMISS {
-			noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph)
+			noi checkfile, file(${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph)
 			}
-		noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph)
-		noi checkfile, file(..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${ancestry_like}-like.gph)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph)
+		noi checkfile, file(${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${ancestry_like}-like.gph)
 		}
 	noi di as text"#########################################################################"
 	noi di as text""
@@ -127,39 +133,39 @@ noi di as text"# SECTION - B: create /join graphs"
 noi di as text"#########################################################################"
 qui { // B
 	qui { // B1 - plot number of markers per bim file
-		noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png "
-		capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png"
+		noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png "
+		capture confirm file "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png"
 			if _rc == 0 {
 				}
 			else {
 				qui { // input
-					bim2count, bim(${path2file_folder}${path2file_file})
-					capture confirm file "${path2file_folder}${path2file_file}_bim.dta"
+					bim2count, bim(${path2file_folder}${delimit}${path2file_file})
+					capture confirm file "${path2file_folder}${delimit}${path2file_file}_bim.dta"
 					if _rc == 0 {
 						}
 					else {
-						bim2dta, bim(${path2file_folder}${path2file_file})
+						bim2dta, bim(${path2file_folder}${delimit}${path2file_file})
 						}
-					use ${path2file_folder}${path2file_file}_bim.dta, clear
+					use ${path2file_folder}${delimit}${path2file_file}_bim.dta, clear
 					destring chr, replace
 					sum chr
 					hist chr,  xlabel(1(1)`r(max)') title("${path2file_file}") xtitle("Chromosome") caption("count based on ${bim2count_snp} SNPs") discrete freq ylabel(#4,format(%9.0g)) nodraw saving(temp-hist-chr-1.gph, replace)
 					}
 				qui { // output
-					bim2count, bim(..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version})
-					capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}_bim.dta"
+					bim2count, bim(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version})
+					capture confirm file "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}_bim.dta"
 					if _rc == 0 {
 						}
 					else {
-						bim2dta, bim(..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version})
+						bim2dta, bim(${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version})
 						}
-					use ..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}_bim.dta, clear
+					use ${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}_bim.dta, clear
 					destring chr, replace
 					sum chr
 					hist chr,  xlabel(1(1)`r(max)') title("${path2file_file}-qc-${version}") xtitle("Chromosome") caption("count based on ${bim2count_snp} SNPs") discrete freq ylabel(#4,format(%9.0g)) nodraw saving(temp-hist-chr-2.gph, replace)
 					}
 				graph combine temp-hist-chr-1.gph  temp-hist-chr-2.gph, caption("CREATED: $S_DATE $S_TIME",	size(tiny)) col(1) ycommon xcommon
-				graph export  ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png, as(png) replace width(8000) height(4000)
+				graph export  ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-chromosomes.png, as(png) replace width(8000) height(4000)
 				window manage close graph
 				erase temp-hist-chr-1.gph 
 				erase temp-hist-chr-2.gph
@@ -167,30 +173,30 @@ qui { // B
 			}
 	qui { // B2 - combine quality control plots
 		foreach i in FRQ HET HWE IMISS LMISS {
-			noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
-			capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
+			noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
+			capture confirm file "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
 			if _rc == 0 {
 					}
 			else {
-				graph combine ${path2file_folder}genotypeqc_data${delimit}temp-preqc_`i'.gph,  title("${path2file_file}") nodraw saving(temp-1-`i'.gph, replace)
-				graph combine ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph,  title("${path2file_file}-qc-${version}") nodraw saving(temp-2-`i'.gph, replace)
+				graph combine ${path2file_folder}${delimit}genotypeqc_data${delimit}${path2file_file}_`i'.gph,  title("${path2file_file}") nodraw saving(temp-1-`i'.gph, replace)
+				graph combine ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph,  title("${path2file_file}-qc-${version}") nodraw saving(temp-2-`i'.gph, replace)
 				graph combine temp-1-`i'.gph temp-2-`i'.gph, xcommon caption("CREATED: $S_DATE $S_TIME", size(tiny)) col(1) 
-				graph export  ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png, as(png) replace width(8000) height(4000)
+				graph export  ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png, as(png) replace width(8000) height(4000)
 				window manage close graph
 				erase temp-1-`i'.gph
 				erase temp-2-`i'.gph
 				}
 			}
 		foreach i in KIN0_1 KIN0_2 {
-			noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
-			capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
+			noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
+			capture confirm file "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png"
 			if _rc == 0 {
 					}
 			else {
-				graph combine ${path2file_folder}genotypeqc_data${delimit}temp-preqc_`i'.gph,  title("${path2file_file}") nodraw saving(temp-1-`i'.gph, replace)
-				graph combine ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph,  title("${path2file_file}-qc-${version}") nodraw saving(temp-2-`i'.gph, replace)
+				graph combine ${path2file_folder}${delimit}genotypeqc_data${delimit}${path2file_file}_`i'.gph,  title("${path2file_file}") nodraw saving(temp-1-`i'.gph, replace)
+				graph combine ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`i'.gph,  title("${path2file_file}-qc-${version}") nodraw saving(temp-2-`i'.gph, replace)
 				graph combine temp-1-`i'.gph temp-2-`i'.gph, xcommon caption("CREATED: $S_DATE $S_TIME", size(tiny)) col(1) 
-				graph export  ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png, as(png) replace width(8000) height(3000)
+				graph export  ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-hist-`i'.png, as(png) replace width(8000) height(3000)
 				window manage close graph
 				erase temp-1-`i'.gph
 				erase temp-2-`i'.gph
@@ -198,26 +204,26 @@ qui { // B
 			}
 		}
 	qui { // B3 - convert gph to png
-		noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2frq_compare.png"
-		capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2frq_compare.png"
+		noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.png"
+		capture confirm file "${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.png"
 		if _rc == 0 {
-					}
+			}
 			else {
-				graph combine ${path2file_folder}genotypeqc_data${delimit}bim2frq_compare.gph,  title("${path2file_file}") nodraw saving(temp-1.gph, replace)
+				graph combine ${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.gph,  title("${path2file_file}") nodraw saving(temp-1.gph, replace)
 				graph combine temp-1.gph,  caption("CREATED: $S_DATE $S_TIME", size(tiny)) col(1) 
-				graph export  ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2frq_compare.png, as(png) replace width(8000) height(4000)
+				graph export  ${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.png, as(png) replace width(8000) height(4000)
 				window manage close graph
 				erase temp-1.gph
 				}
-		noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2hapmap.png"
-		capture confirm file "..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2hapmap.png"
+		noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}${delimit}genotypeqc_data${delimit}bim2hapmap.png"
+		capture confirm file "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}bim2hapmap.png"
 		if _rc == 0 {
 				}
 		else {		
-			graph combine ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph, title("All HapMap3") nodraw saving(temp-1.gph, replace)
-			graph combine ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${like}-like.gph, title("${like}") nodraw saving(temp-2.gph, replace)
+			graph combine ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph, title("All HapMap3") nodraw saving(temp-1.gph, replace)
+			graph combine ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${like}-like.gph, title("${like}") nodraw saving(temp-2.gph, replace)
 			graph combine temp-1.gph temp-2.gph, xcommon title("${path2file_file}") caption("CREATED: $S_DATE $S_TIME", size(tiny)) col(1) 
-			graph export ..${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data${delimit}bim2hapmap.png, as(png) replace width(8000) height(4000)
+			graph export ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}bim2hapmap.png, as(png) replace width(8000) height(4000)
 			window manage close graph	
 			}
 		}
@@ -228,7 +234,7 @@ noi di as text"#################################################################
 noi di as text"# SECTION - C: create report"
 noi di as text"#########################################################################"
 qui { // C
-	noi di as text"# > genotypeqc2report ............................ create "as result"..${delimit}${path2file_file}-qc-${version}${delimit}${path2file_file}-qc-${version}-quality-control-report.docx"
+	noi di as text"# > genotypeqc2report ............................ create "as result"${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}-quality-control-report.docx"
 	genotypeqc2report_subroutine
 	noi di as text"#########################################################################"
 	noi di as text""
