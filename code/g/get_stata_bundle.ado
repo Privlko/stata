@@ -18,7 +18,7 @@ foreach d in datestamp dir2dta {
 foreach f in fam2dta files2dta {
 	net install `f',              from(https://raw.github.com/ricanney/stata/master/code/f/) replace
 	}
-foreach g in genotypeqc genotypeqc_parameter genotypeqc_setarray graphgene graphlocus graphmanhattan graphmiami graphplinkfrq graphplinkhet graphplinkhwe graphplinkimiss graphplinkkin0 graphplinklmiss graphqq {
+foreach g in genotypeqc genotypeqc_setarray graphgene graphlocus graphmanhattan graphmiami graphplinkfrq graphplinkhet graphplinkhwe graphplinkimiss graphplinkkin0 graphplinklmiss graphqq {
 	net install `g',              from(https://raw.github.com/ricanney/stata/master/code/g/) replace
 	}
 foreach k in kin0filter {
