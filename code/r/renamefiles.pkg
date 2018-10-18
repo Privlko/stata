@@ -1,0 +1,8 @@
+d renamefiles - command to convert filenames to lowercase and hyphen seperated
+d Richard Anney, Cardiff University
+d Distribution-Date: 18oct2018
+f renamefiles.ado
+f ../f/file2dta.ado
+f ../d/dir2dta.ado
+
+

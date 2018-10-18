@@ -1,0 +1,17 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
+*! program to convert dates yyyymmdd to standard Stata form
+program define dconvert
+version 11
+syntax varlist (min=1 max=1) [if] [in], GENerate(string)
+tokenize `varlist'
+tempvar day month year tmp
+qui generate `year'= int(`1'/10000)
+qui generate `tmp'=`1'-`year'*10000
+qui generate `month'=int(`tmp'/100)
+qui gen `day'=`tmp'-`month'*100
+qui gen `generate'=mdy(`month',`day',`year')
+format `generate' %d
+end
+

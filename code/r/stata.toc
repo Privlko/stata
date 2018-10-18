@@ -2,3 +2,4 @@ v 1
 d Richard Anney, Cardiff University
 p recodegenotype command to convert allele codes into genotype codes
 p recodestrand command to flip alleles to a refrence strand
+p renamefiles command to convert filenames to lowercase and hyphen seperated

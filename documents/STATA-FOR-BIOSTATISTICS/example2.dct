@@ -1,0 +1,8 @@
+dictionary {
+id time grp str1 sex
+}
+ 6 21.7 2 f
+ 7  6.2 2 m
+ 8 35.4 1 m
+ 9 20.0 1 f
+10  9.3 2 m
