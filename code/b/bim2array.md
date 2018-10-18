@@ -2,24 +2,29 @@
 
 **description**
 
-This function determines the overlap between the marker list present in a plink binary marker file ```*.bim``` and a set of reference datasets based on known arrays.
+This function determines the overlap of markers within a plink binary ```*.bim``` file with a set of reference datasets. This can be used to predict the most likley array that was used to genotype the study.
 
 **syntax**
 
 ```bim2array, bim(-filename-) dir(-folder-)```
  
  * ```-filename-``` does not require the .bim filetype to be included - this is assumed
- * ```-folder-``` this refers to a folder containing the reference arrays 
+ * ```-folder-``` this refers to a folder containing the reference arrays - an archive of formatted arrays
+ 
+** creating the reference folder **
 
-** reference arrays **
+under construction
 
-The reference arrays were derived from data available at http://www.well.ox.ac.uk/~wrayner/strand/
+https://github.com/ricanney/stata/blog/how-to-create-bim2array-reference.md 
 
-Additional arrays including Perlegen were curated locally or from dbGAP builds. All downloads were limited to the b37 version of strand files.
+The working code to create the reference array files can be found in the rocks home directory ```/packages/bim2array/code/```.
+This code has been adapted to report arrays using 3x marker identifiers
+* _"as is"_
+* _"as rsid"_ 
+* _"as loc_name"_
 
-The working code to convert strand to _array_.dta is available locally in ```/home/mdnra/github/packages/bim2array/code```
-The reference arrays are available to MRC CNGG users of ROCKS in ```/neurocluster/databank/3-packages/bim2array/data/original```
-For non- MRC CNGG users please contact AnneyR@cardiff.ac.uk for additional information.
+For MRC CNGG users the local folder to implement bim2array is ```/databank/3-packages/bim2array/data/original/```
+For non- MRC CNGG users please contact AnneyR@cardiff.ac.uk for more details
 
 **installation**
 
