@@ -11,7 +11,7 @@ This function determines the overlap of markers within a plink binary ```*.bim``
  * ```-filename-``` does not require the .bim filetype to be included - this is assumed
  * ```-folder-``` this refers to a folder containing the reference arrays - an archive of formatted arrays
  
-** creating the reference folder **
+**creating the reference folder**
 
 under construction
 
