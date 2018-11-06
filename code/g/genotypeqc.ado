@@ -1,62 +1,27 @@
-/*
-*program*
- genotypeqc
-
-*description* 
- a command to perform quality control of genotyping arrays
-
-*syntax*
-genotypeqc , [known_array(-array_name-)]
-
- -array_name- name of array - if known
-*/
-qui { // version
-/*
-# version 5
-# =======================================================================
-# change maf to mac5
-# remove allele freq check if data is imputed against hrc - mixed ancestry of samples removes non-eur alleles
-# retain W/S and ID
-
-# version 6
-# =======================================================================
-# update speed - ignore/rename where rebuild of plink not necessary
-
-# version 7
-# =======================================================================
-# update speed - convert sub-routine to programs e.g. bim2build
-
-*/
-}
-global version v7
+*! 1.0.7 Richard Anney 05nov2018
 program genotypeqc
 syntax, bim(string asis) [known_array(string asis)]
-noi di as text" "
-noi di as text"#########################################################################"
-noi di as text"# genotypeqc"
-noi di as text"#########################################################################"
-noi di as text"# Started:             $S_DATE $S_TIME"
-noi di as text"# Username:            `c(username)'"
-noi di as text"# Operating System:    `c(os)'"
-noi di as text"# Version:             "as result"${version}"
-noi di as text"#########################################################################"
-noi di as text""
+
+qui { // hard coded path / functions
+	global version v7
+	}
+qui { // print boiler plate to screen
+	noi di as text" "
+	noi di as text"#########################################################################"
+	noi di as text"# genotypeqc"
+	noi di as text"#########################################################################"
+	noi di as text"# Started:             $S_DATE $S_TIME"
+	noi di as text"# Username:            `c(username)'"
+	noi di as text"# Version:             "as result"${version}"
+	noi di as text"#########################################################################"
+	noi di as text""
+	}
 noi di as text"#########################################################################"
 noi di as text"# SECTION - A: set files/ folders"
 noi di as text"#########################################################################"
 qui { // A
 	qui { // A1 - define operating system
-		clear
-		set obs 1
-		gen os = "`c(os)'"
-		if os == "Unix" { 
-			noi di as text"# > genotypeqc ...................... operating system is "as result "Unix"
-			global delimit "/"
-			}
-		else if os == "Windows" { 
-			noi di as text"# > genotypeqc ...................... operating system is "as result "Windows"
-			global delimit "\"	
-			}
+		noi di as text"# Operating System:    `c(os)'"
 		}
 	qui { // A2 - define folders and files for analysis
 		noi di as text"# > genotypeqc .......................................... define folders and files for analysis form path using path2file"
@@ -67,7 +32,7 @@ qui { // A
 		noi di as text"# > genotypeqc .......................... output binaries "as result"${path2file_file}-qc-${version}"
 		noi di as text"#########################################################################"
 		}
-	qui { // A3 - report parameters to screen
+	qui { // A3 - report soft coded parameters to screen
 		noi di as text"# > genotypeqc ........................ --mac (threshold) "as result"5"
 		noi di as text"# > genotypeqc ....................... --geno (threshold) "as result"${geno1}"as text";"as result"${geno2}"
 		noi di as text"# > genotypeqc ....................... --mind (threshold) "as result"${mind}"
@@ -93,54 +58,50 @@ qui { // A
 			}
 		noi checkfile, file(${bim2hapmap_aims})
 		foreach file in bim bed fam {
-			noi checkfile, file(${path2file_folder}${delimit}${path2file_file}.`file')
+			noi checkfile, file(${path2file_folder}/${path2file_file}.`file')
 			}
 		noi di as text"# > genotypeqc ..................... bim2array_ref folder "as result"${bim2array_ref}"
 		noi di as text"#########################################################################"
 		}
-	qui { // A5 - make directories
-		noi di as text"# > genotypeqc .......................................... make directories "
-		cd ${home_folder}
-		!mkdir ${home_folder}${delimit}${path2file_file}
-		!mkdir ${home_folder}${delimit}${path2file_file}${delimit}genotypeqc_data
-		!mkdir ${home_folder}${delimit}${path2file_file}-qc-${version}
-		!mkdir ${home_folder}${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data
-		!mkdir ${path2file_folder}${delimit}genotypeqc_data
-		!mkdir ${path2file_folder}-qc-${version}
-		!mkdir ${path2file_folder}-qc-${version}${delimit}genotypeqc_data
-		noi di as text"# > genotypeqc .................................. created "as result"${home_folder}${delimit}${path2file_file}"
-		noi di as text"# > genotypeqc .................................. created "as result"${home_folder}${delimit}${path2file_file}${delimit}genotypeqc_data"
-		noi di as text"# > genotypeqc .................................. created "as result"${home_folder}${delimit}${path2file_file}-qc-${version}"
-		noi di as text"# > genotypeqc .................................. created "as result"${home_folder}${delimit}${path2file_file}-qc-${version}${delimit}genotypeqc_data"
-		cd ${home_folder}${delimit}${path2file_file}
-		noi di as text"# > genotypeqc .......................................... make temporary working directory using create_temp_dir"
-		create_temp_dir
+	qui { // A5 - create temporary working directory
+		qui { // define temporary working directory
+			cd ${path2file_folder}
+			cd ..
+			create_temp_dir
+			!mkdir ${path2file_file}
+			!mkdir ${path2file_file}/genotypeqc_data
+			!mkdir ${path2file_file}-qc-${version}
+			!mkdir ${path2file_file}-qc-${version}/genotypeqc_data
+			}
+		qui { // create output folder
+			!mkdir ${path2file_folder}/genotypeqc_data
+			!mkdir ${path2file_folder}-qc-${version}
+			!mkdir ${path2file_folder}-qc-${version}/genotypeqc_data
+			}
 		noi di as text"# > genotypeqc .................................. created "as result"`c(pwd)'"
 		noi di as text"#########################################################################"
 		noi di as text""
+		global home_folder `c(pwd)'
 		}
 	qui { // A6 - copy files to temp folder
 		clear
 		set obs 1
 		gen os = "`c(os)'"
 		if os == "Unix" { 
-			!cp ${path2file_folder}${delimit}${path2file_file}.bed   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.bed
-			!cp ${path2file_folder}${delimit}${path2file_file}.bim   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.bim
-			!cp ${path2file_folder}${delimit}${path2file_file}.fam   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.fam
-			!cp ${path2file_folder}${delimit}${path2file_file}.array ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array
-			foreach file in bim bed fam array {
-				noi checkfile, file(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.`file')
-				}	
+			!cp ${path2file_folder}/${path2file_file}.bed   ${home_folder}/${path2file_file}/${path2file_file}.bed
+			!cp ${path2file_folder}/${path2file_file}.bim   ${home_folder}/${path2file_file}/${path2file_file}.bim
+			!cp ${path2file_folder}/${path2file_file}.fam   ${home_folder}/${path2file_file}/${path2file_file}.fam
+			!cp ${path2file_folder}/${path2file_file}.array ${home_folder}/${path2file_file}/${path2file_file}.array
 			}
-		else if os == "Windows" { 
-			!copy ${path2file_folder}${delimit}${path2file_file}.bed   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.bed
-			!copy ${path2file_folder}${delimit}${path2file_file}.bim   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.bim
-			!copy ${path2file_folder}${delimit}${path2file_file}.fam   ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.fam
-			!copy ${path2file_folder}${delimit}${path2file_file}.array ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array
-			foreach file in bim bed fam array {
-				noi checkfile, file(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.`file')
-				}
+		else if os == "Windows" {
+			!copy ${path2file_folder}/${path2file_file}.bed   ${home_folder}/${path2file_file}/${path2file_file}.bed
+			!copy ${path2file_folder}/${path2file_file}.bim   ${home_folder}/${path2file_file}/${path2file_file}.bim
+			!copy ${path2file_folder}/${path2file_file}.fam   ${home_folder}/${path2file_file}/${path2file_file}.fam
+			!copy ${path2file_folder}/${path2file_file}.array ${home_folder}/${path2file_file}/${path2file_file}.array
 			}
+		foreach file in bim bed fam array {
+			noi checkfile, file(${home_folder}/${path2file_file}/${path2file_file}.`file')
+			}	
 		noi di as text""	
 		}
 	}
@@ -154,9 +115,9 @@ qui { // B
 		gen known_array = "`known_array'"
 		if  known_array == "" {	
 			noi di as text"# > genotypeqc .......................................... "as result"determining original genotyping array"
-			capture confirm file "${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array"
+			capture confirm file "${home_folder}/${path2file_file}/${path2file_file}.array"
 			if _rc==0 {
-				import delim using "${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array", clear delim(" ") varnames(1) case(preserve)
+				import delim using "${home_folder}/${path2file_file}/${path2file_file}.array", clear delim(" ") varnames(1) case(preserve)
 				duplicates drop
 				gsort -j
 				gen a1 = "global bim2array_array " + array in 1
@@ -170,21 +131,21 @@ qui { // B
 				outsheet a using bim2array_array_tmp.do, non noq replace
 				do bim2array_array_tmp.do
 				erase bim2array_array_tmp.do
-				noi di as text"# > bim2array ...................................... from "as result "${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array" 
+				noi di as text"# > bim2array ...................................... from "as result "${home_folder}/${path2file_file}/${path2file_file}.array" 
 				noi di as text"# > bim2array ......................... most likely array "as result "${bim2array_array}" 
 				noi di as text"# > bim2array ........................ with jaccard index "as result "${bim2array_jaccard}" 
 				}
 			else {
 				noi di as text"# > genotypeqc .................................. version "as result"${version}"
-				noi di as text"# > genotypeqc ........................... file not found "as result"${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}.array"
-				bim2array, bim(${path2file_folder}${delimit}${path2file_file}) dir(${bim2array_ref})
-				noi di as text"# > bim2array ...................................... from "as result "${path2file_folder}${delimit}${path2file_file}.array" 
+				noi di as text"# > genotypeqc ........................... file not found "as result"${home_folder}/${path2file_file}/${path2file_file}.array"
+				bim2array, bim(${path2file_folder}/${path2file_file}) dir(${bim2array_ref})
+				noi di as text"# > bim2array ...................................... from "as result "${path2file_folder}/${path2file_file}.array" 
 				noi di as text"# > bim2array ......................... most likely array "as result "${bim2array_array}" 
 				noi di as text"# > bim2array ........................ with jaccard index "as result "${bim2array_jaccard}" 
 				}
 			}
 		else {
-			noi di as text"# > genotypeqc ........................ array defined for "as result"${home_folder}${delimit}${path2file_file}${delimit}${path2file_file}"
+			noi di as text"# > genotypeqc ........................ array defined for "as result"${home_folder}/${path2file_file}/${path2file_file}"
 			noi di as text"# > genotypeqc ................. array defined by user as "as result"`known_array'"
 			global bim2array_array "`known_array'"
 			}
@@ -201,10 +162,10 @@ qui { // C
 		noi di as text"# > genotypeqc .......................................... pre-clean plink binaries"
 		}
 	qui { // C2 - count markers and individuals in binary using bim2count
-		noi bim2count, bim(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file})
+		noi bim2count, bim(${home_folder}/${path2file_file}/${path2file_file})
 		}
 	qui { // C3 - define snps on chromosomes 1-23
-		qui bim2dta, bim(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file})
+		qui bim2dta, bim(${home_folder}/${path2file_file}/${path2file_file})
 		gen keep = .
 		foreach i of num 1/23 {
 			replace keep = 1 if chr == "`i'"
@@ -240,12 +201,12 @@ qui { // C
 			keep if keep == 1
 			outsheet rsid using affy-to-rsid.extract, non noq replace
 			outsheet snp rsid using affy-to-rsid.update-name, non noq replace		
-			!$plink --bfile ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file} --mac 5 --geno 0.99 --mind 0.99 --extract affy-to-rsid.extract --update-name affy-to-rsid.update-name --make-founders --make-bed --out ${sub_} 		
+			!$plink --bfile ${home_folder}/${path2file_file}/${path2file_file} --mac 5 --geno 0.99 --mind 0.99 --extract affy-to-rsid.extract --update-name affy-to-rsid.update-name --make-founders --make-bed --out ${sub_} 		
 			erase affy-to-rsid.extract
 			erase affy-to-rsid.update-name
 			}
 		else {
-			!$plink --bfile ${home_folder}${delimit}${path2file_file}${delimit}${path2file_file} --mac 5 --geno 0.99 --mind 0.99 --extract ${sub_}.extract --make-founders  --make-bed --out ${sub_} 
+			!$plink --bfile ${home_folder}/${path2file_file}/${path2file_file} --mac 5 --geno 0.99 --mind 0.99 --extract ${sub_}.extract --make-founders  --make-bed --out ${sub_} 
 			erase ${sub_}.extract
 			}
 		}
@@ -313,7 +274,7 @@ qui { // D
 		noi bim2frq_compare, bim(${sub_}-refid) ref(${bim2frq_compare_ref})
 		!$plink --bfile ${sub_}-refid --exclude bim2frq_compare.exclude --make-bed --out ${sub_}
 		graph combine bim2frq_compare.gph, nodraw
-		graph save ${path2file_folder}${delimit}genotypeqc_data${delimit}bim2frq_compare.gph, replace
+		graph save ${path2file_folder}/genotypeqc_data/bim2frq_compare.gph, replace
 		files2dta, dir(`c(pwd)')
 		split file, p("${sub_}")
 		drop if file1 == ""
@@ -354,10 +315,10 @@ qui { // E
 			set obs 1
 			gen os = "`c(os)'"
 			if os == "Unix" { 
-				!cp tmp`graph'.gph ${path2file_folder}${delimit}genotypeqc_data${delimit}${path2file_file}_`graph'.gph
+				!cp tmp`graph'.gph ${path2file_folder}/genotypeqc_data/${path2file_file}_`graph'.gph
 				}
 			else if os == "Windows" { 
-				!copy tmp`graph'.gph ${path2file_folder}${delimit}genotypeqc_data${delimit}${path2file_file}_`graph'.gph
+				!copy tmp`graph'.gph ${path2file_folder}/genotypeqc_data/${path2file_file}_`graph'.gph
 				}
 			}
 		}
@@ -365,7 +326,7 @@ qui { // E
 		insheet using tmpKIN0.relPairs, clear
 		for var fid1-rel: tostring X, replace
 		renvars, upper
-		outsheet using ${home_folder}${delimit}${path2file_file}${delimit}genotypeqc_data${delimit}${sub_}.relPairs, noq replace
+		outsheet using ${home_folder}/${path2file_file}/genotypeqc_data/${sub_}.relPairs, noq replace
 		}
 		
 	noi di as text"#########################################################################"
@@ -739,12 +700,12 @@ qui { // H
 		gen os = "`c(os)'"
 		if os == "Unix" { 
 			foreach file in bim bed fam  {
-				!cp   "${sub_}-${round2}.`file'"         "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.`file'"
+				!cp   "${sub_}-${round2}.`file'"         "${path2file_folder}-qc-${version}/${path2file_file}-qc-${version}.`file'"
 				}
 			}
 		else if os == "Windows" { 
 			foreach file in bim bed fam  {
-				!copy   "${sub_}-${round2}.`file'"         "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.`file'"
+				!copy   "${sub_}-${round2}.`file'"         "${path2file_folder}-qc-${version}/${path2file_file}-qc-${version}.`file'"
 				}
 			}
 		noi di as text""	
@@ -779,10 +740,10 @@ qui { // I
 			set obs 1
 			gen os = "`c(os)'"
 			if os == "Unix" { 
-				!cp tmp`graph'.gph ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`graph'.gph
+				!cp tmp`graph'.gph ${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}_`graph'.gph
 				}
 			else if os == "Windows" { 
-				!copy tmp`graph'.gph ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}_`graph'.gph
+				!copy tmp`graph'.gph ${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}_`graph'.gph
 				}
 			}
 		}
@@ -790,7 +751,7 @@ qui { // I
 		insheet using tmpKIN0.relPairs, clear
 		for var fid1-rel: tostring X, replace
 		renvars, upper
-		outsheet using ${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}.relPairs, noq replace
+		outsheet using ${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}.relPairs, noq replace
 		}	
 	noi di as text"#########################################################################"
 	noi di as text""	
@@ -806,14 +767,14 @@ qui { // J
 		set obs 1
 		gen os = "`c(os)'"
 		if os == "Unix" { 	
-			!cp  "bim2hapmap_${like}-like.keep"     "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}-${like}-like.keep"
-			!cp  "bim2hapmap_pca.gph"               "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph"
-			!cp  "bim2hapmap_pca-${like}-like.gph"  "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${like}-like.gph"
+			!cp  "bim2hapmap_${like}-like.keep"     "${path2file_folder}-qc-${version}/${path2file_file}-qc-${version}-${like}-like.keep"
+			!cp  "bim2hapmap_pca.gph"               "${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}-pca.gph"
+			!cp  "bim2hapmap_pca-${like}-like.gph"  "${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}-${like}-like.gph"
 			}
 		else if os == "Windows" { 
-			!copy  "bim2hapmap_${like}-like.keep"     "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}-${like}-like.keep"
-			!copy  "bim2hapmap_pca.gph"               "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-pca.gph"
-			!copy  "bim2hapmap_pca-${like}-like.gph"  "${path2file_folder}-qc-${version}${delimit}genotypeqc_data${delimit}${path2file_file}-qc-${version}-${like}-like.gph"
+			!copy  "bim2hapmap_${like}-like.keep"     "${path2file_folder}-qc-${version}/${path2file_file}-qc-${version}-${like}-like.keep"
+			!copy  "bim2hapmap_pca.gph"               "${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}-pca.gph"
+			!copy  "bim2hapmap_pca-${like}-like.gph"  "${path2file_folder}-qc-${version}/genotypeqc_data/${path2file_file}-qc-${version}-${like}-like.gph"
 			}
 		}
 	}
@@ -822,7 +783,7 @@ noi di as text"# SECTION - K: create *.genotypeqc-meta.log"
 noi di as text"#########################################################################"
 qui { // K
 	qui { // K1 - write meta-log
-		file open myfile using "${path2file_folder}-qc-${version}${delimit}${path2file_file}-qc-${version}.genotypeqc-meta.log", write replace
+		file open myfile using "${path2file_folder}-qc-${version}/${path2file_file}-qc-${version}.genotypeqc-meta.log", write replace
 		file write myfile `"#########################################################################"' _n
 		file write myfile `"# genotypeqc"' _n
 		file write myfile `"#########################################################################"' _n
@@ -846,7 +807,7 @@ qui { // K
 		file write myfile `"#########################################################################"' _n
 		file write myfile `"# > bim2array ............................... input array ${bim2array_array}; jaccard = ${bim2array_jaccard}"' _n
 		file write myfile `"# > bim2build ............................... input build $input_bim2build"' _n
-		bim2count, bim(${home_folder}${delimit}${path2file_file}${delimit}${path2file_file})
+		bim2count, bim(${home_folder}/${path2file_file}/${path2file_file})
 		file write myfile `"# > bim2count .............. markers in the input dataset ${bim2count_snp}"' _n
 		file write myfile `"# > bim2count .......... individuals in the input dataset ${bim2count_ind}"' _n
 		file write myfile `"#########################################################################"' _n

@@ -1,22 +1,15 @@
-/*
-*program*
- create_temp_dir
-
-*description* 
- a command to create a temporary sub-directory in working folder
-
-*syntax*
- create_temp_dir
- */
-
+*! 1.0.0 Richard Anney 05nov2018
 program create_temp_dir
 syntax 
-noi di as text" "
-noi di as text"#########################################################################"
-noi di as text"# create_temp_dir"
-noi di as text"#########################################################################"
-noi di as text"# Started: $S_DATE $S_TIME"
-noi di as text"#########################################################################"
+
+qui { // print bioler plate to screen
+	noi di as text" "
+	noi di as text"#########################################################################"
+	noi di as text"# create_temp_dir"
+	noi di as text"#########################################################################"
+	noi di as text"# Started: $S_DATE $S_TIME"
+	noi di as text"#########################################################################"
+	}
 qui { // 1 - introduction
 	noi di as text"# > create_temp_dir ....... create temporary directory in "as result"`c(pwd)'"
 	}
@@ -103,7 +96,7 @@ qui { // 4 - create folder
 	cd ${temp_dir}
 	}
 noi di as text"# > create_temp_dir ....................... new directory " as result"`c(pwd)'"
-noi di as text"# > create_temp_dir ...... new directory global stored as " as result"${temp_dir}"
+noi di as text"# > create_temp_dir ........................ \${temp_dir} " as result"${temp_dir}"
 noi di as text"#########################################################################"
 noi di as text"# Completed: $S_DATE $S_TIME"
 noi di as text"#########################################################################"
